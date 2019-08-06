@@ -171,7 +171,7 @@ getmune(){
 this.$apis.common.menu_list(parms).then(res=>{
   if(res.data.code==1){
         this.rolemenu=res.data.data
-    console.log(this.rolemenu[0].children[2].children)
+    console.log(this.rolemenu[0])
   }else{
      this.$router.push({path:'/login'})
   }
