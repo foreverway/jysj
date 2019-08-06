@@ -31,4 +31,8 @@ export default {
     let url='/api/api_salepro_add'
     return shuju.postdata(url,params)
    },
+   salepro_del(params) {
+    let url='/api/api_salepro_del'
+    return shuju.deletedata(url,params)
+   },
 }

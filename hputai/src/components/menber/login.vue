@@ -3,11 +3,15 @@
    <div class="header">
       <img src="../../assets/login_title.png" alt="">
    </div>
+   <div class="imgandlogin">
+   <div class="logo_index"><img src="../../images/logo_index.png"></div>
     <div class="main1" v-show="dialogFormVisible==false">
 			<iframe scrolling="no" frameborder="0" height="100%" width="100%" :src="backg_url"></iframe>
+      
 			<div class="login">
-                <!-- <img src="../../assets/logo.png" alt=""> -->
+               <div class="logo_from_bgc"></div>
 <p class="login_title" ></p>
+                 
               <div class="form">
                       <el-form ref="form" :model="form" label-width="60px">
                             <el-form-item label="账号:" >
@@ -55,7 +59,7 @@
               
 			</div>
 		</div>
-
+</div>
 
 
     <div class="footer">
@@ -144,7 +148,13 @@ export default {
 }else{
     this.$message.error(res.data.msg);
 }
-        })
+        }
+        ).catch(() => {
+          this.$message({
+            // type: 'info',
+            message: '登录失败'
+          });          
+        });
 
         
       },
@@ -163,10 +173,15 @@ export default {
 </script>
 
 <style scoped>
+
+
 .login_title{
  border-radius: 5px;
-  height:5px;background: #e6563a;
+  /* height:5px;background: #e6563a; */
   margin-bottom: 50px;
+  /* position:absolute;
+right:50px;
+top:200px; */
 }
 .footer{
   height: 50px;
@@ -188,20 +203,51 @@ export default {
 	width: 100%;
  
 }
+.imgandlogin{
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  margin:0;
+  width: 1200px;
+}
 .main1 .login{
-	height: 250px;
-	width: 350px;
-	top: 20%;
-	right: 10%;
-
-	/* background: rgba(225,225,225,0.9); */
-	position: fixed;
+	height: 350px;
+	width: 320px;
+  	position: fixed;
+	top: 28%;
+	right: 18%;
+	background: white;
+  padding-top:10px;
     text-align: center;
-    border-radius: 10px;
-    border: 1px solid #ddd;
+    border-radius: 3%;
+    box-shadow: 2px 2px 5px #333333;
+    /* border: 1px solid #ddd; */
+}
+.logo_index{
+  width:700px;
+height:393px;
+background:rgba(255,74,22,1);
+position: fixed;
+	top: 25%;
+  	right: 42%;
+    
+    /* margin:0 auto; */
+border-radius:14px;
+}
+.logo_from_bgc{
+  background-image: url("../../images/login_index2.png");
+  background-size: 100% 100% ;
+
+  width: 320px;
+  margin:0 auto;
+  height: 100px;
+  border-radius: 3%;
 }
 .form{
   width: 300px;
+  /* height:250px; */
   margin: 0  auto;
 }
 

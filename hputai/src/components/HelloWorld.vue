@@ -175,7 +175,12 @@ this.$apis.common.menu_list(parms).then(res=>{
   }else{
      this.$router.push({path:'/login'})
   }
-})
+}).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '登录失败'
+          });          
+        });
 },
     },mounted () {
      

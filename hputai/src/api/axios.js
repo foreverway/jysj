@@ -13,7 +13,7 @@ var root = process.env.API_ROOT
 axios.interceptors.request.use(
 	config => {
 
- // config.url = root + config.url.slice(4)
+ config.url = root + config.url.slice(4)
 		return config
 	},
 	error => {
