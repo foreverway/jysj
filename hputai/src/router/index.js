@@ -10,7 +10,7 @@ import AdminEdit from '@/components/menber/admin_edit'
 //操作
 import AddLink from '@/components/operation/addlink'
 import ApplicationAdd from '@/components/operation/application_add'
-
+import SalesList from '@/components/operation/sale_list.vue'
 import Addsalepro from '@/components/operation/addsalepro'
 //学生路由
 import StudentsAdd from '@/components/students/students_add'
@@ -74,6 +74,10 @@ export default new Router({
         {
           path: '/Addsalepro',//
           component: Addsalepro
+        },
+        {
+          path: '/SalesList',//
+          component:SalesList
         },
         {
           path: '/StudentsAdd',  //
