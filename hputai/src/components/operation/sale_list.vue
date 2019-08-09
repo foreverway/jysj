@@ -1,11 +1,11 @@
  <template>
  <div class="main">
-   <el-page-header @back="goBack" content="销售进程管控表">
+   <el-page-header content="销售进程管控表">
 </el-page-header>
 
 <el-input placeholder="模糊搜索" v-model="parms.search" @input="getdata" clearable style="width:300px"></el-input> <el-button type="primary" >搜索</el-button>
  <router-link to="/Addsalepro">
-  <el-button type="primary" style="float:right">新建学员账户</el-button>
+  <el-button type="primary" style="float:right">新建销售情况列表</el-button>
  </router-link>
 
         <el-table 
@@ -99,10 +99,11 @@
             label="客户反馈">
         </el-table-column>
            <el-table-column
+            fixed="right"
             prop=""
             label="操作" width="140">
                <template slot-scope="scope">
-                  <router-link :to="'/StudentsEdit/'+ scope.row.id">
+                  <router-link :to="'/SalelistEdit/'+ scope.row.id">
         <el-button type="text" size="small">编辑 </el-button>
                   </router-link>
          <el-button @click="salepro_del(scope.row)" type="text" size="small">删除</el-button>

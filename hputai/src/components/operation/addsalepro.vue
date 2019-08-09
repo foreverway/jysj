@@ -1,7 +1,7 @@
 <template>
     <div class="main">
                     <!-- 设置充值链接 -->
-         <el-page-header content="添加销售进程管控">
+         <el-page-header @back="goBack" content="添加销售进程管控">
 </el-page-header>
 <!-- 
       <el-input  style="width:200px" v-model="money"  placeholder="请输入充值金额" ></el-input>

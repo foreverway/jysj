@@ -193,7 +193,7 @@
         banzhuren:'',//班主任选择
         address:'',//地区选择
         sizeForm: {
-            id:this.$route.params.id,//用户id
+            id:this.$route.query.id,//用户id
             username:'',//用户名
             password:'',//密码
             tel:'',//手机号
@@ -252,6 +252,7 @@
                   this.$message.error(res.data.msg);
             }
         })
+        this.$router.push({path:'/StudentsList'})
           } else {
              this.$message.error('提交失败请联系研发部');
             return false;
@@ -262,8 +263,8 @@
       getdata(){
         //编辑获取数据
         this.$apis.students.students_edit(this.sizeForm).then(res=>{
-          if(res.data.code==1){
-            this.sizeForm=res.data.data
+          if(res.code==1){
+            this.sizeForm=res.data
             this.sizeForm.address_type=res.data.data.address_type.toString()
             this.sizeForm.sex=res.data.data.sex.toString()
             this.sizeForm.always_area=res.data.data.always_area.map(Number)
