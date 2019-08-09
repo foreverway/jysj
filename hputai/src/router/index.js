@@ -85,7 +85,7 @@ export default new Router({
           component: StudentsAdd
         },
         {
-          path: '/SalelistEdit',  //
+          path: '/SalelistEdit/:id',  //
           component: SalelistEdit
         },
         {

@@ -233,7 +233,6 @@
       this.getdata()  
     },
     methods: {
-
       resetForm(formName) {
         this.$refs[formName].resetFields();
       },

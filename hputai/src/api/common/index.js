@@ -27,12 +27,24 @@ export default {
     let url='/api/api_salepro_list'
     return shuju.getdata(url,params)
    },
+   //添加销售情况表
    salepro_add (params) {
     let url='/api/api_salepro_add'
     return shuju.postdata(url,params)
    },
+   //删除销售情况表
    salepro_del(params) {
     let url='/api/api_salepro_del'
     return shuju.deletedata(url,params)
+   },
+   //编辑时获取销售情况表
+   salepro_edit(params) {
+    let url='/api/api_salepro_edit'
+    return shuju.getdata(url,params)
+   },
+   //编辑后提交数据
+   salepro_edit_put(params) {
+    let url='/api/api_salepro_edit'
+    return shuju.getdata(url,params)
    },
 }
