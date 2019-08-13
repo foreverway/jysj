@@ -47,4 +47,10 @@ export default {
     let url='/api/api_salepro_edit'
     return shuju.getdata(url,params)
    },
+   //获取编辑科目配置列表 /api_subject_list
+   subject_list (params) {
+    let url='/api/api_subject_list'
+    return shuju.getdata(url,params)
+   },
+
 }

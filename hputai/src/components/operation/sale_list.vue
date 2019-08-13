@@ -1,9 +1,21 @@
  <template>
  <div class="main">
-   <el-page-header content="销售进程管控表">
-</el-page-header>
+  
+ <div class="main_head">|&nbsp;销售进程管控表</div> 
+<el-input placeholder="模糊搜索" v-model="parms.search" @input="getdata" clearable style="width:300px"></el-input> 
 
-<el-input placeholder="模糊搜索" v-model="parms.search" @input="getdata" clearable style="width:300px"></el-input> <el-button type="primary" >搜索</el-button>
+  
+    <el-date-picker
+      v-model="value2"
+      type="datetimerange"
+      :picker-options="pickerOptions"
+      range-separator="至"
+      start-placeholder="开始日期"
+      end-placeholder="结束日期"
+      align="right">
+    </el-date-picker>
+  
+  <el-button type="primary" >搜索</el-button>
  <router-link to="/Addsalepro">
   <el-button type="primary" style="float:right">新建销售情况列表</el-button>
  </router-link>
@@ -107,7 +119,7 @@
         <el-button type="text" size="small">编辑 </el-button>
                   </router-link>
          <el-button @click="salepro_del(scope.row)" type="text" size="small">删除</el-button>
-           <el-button type="text" size="small"  @click="dialogFormVisible1=1">复制链接</el-button>
+           <!-- <el-button type="text" size="small"  @click="dialogFormVisible1=1">复制链接</el-button> -->
            </template>
         </el-table-column>
 
@@ -152,13 +164,44 @@
             search:'',
             page:1,
           },
-            tableData: ''
-        }
-        
+            tableData: '',
+               pickerOptions: {
+          shortcuts: [{
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit('pick', [start, end]);
+            }
+          }]
+        },
+        value1: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
+        value2: ''
+        };
       },
       created () {
         this.getdata()
         // console.log( this.getdata())
+      },
+        mounted(){
+          console.log(this.tableData)
       },
       methods: {
             //序号排列
@@ -170,12 +213,8 @@
               return index+page
             }
       },
-      mounted(){
-          console.log(this.tableData)
-      },
-                  // 复制链接
+      // 复制链接
       copyUrl(data){
-       
  let url = data+'/'+this.money;
         let oInput = document.createElement('input');
         oInput.value = url;
@@ -212,7 +251,6 @@
                }else{
                      this.$message.error( res.data.msg);
                }
-              
                 })
         }).catch(() => {
           this.$message({
@@ -221,20 +259,7 @@
           });          
         });
         },
-  //           getdata(){
-  //                let parms={
-  //   admin_id:this.getdataCookie('admin_id')
-  // }
-  //     // this.$apis.students.api_salepro_list(this.parms).then(res=>{
-  //     this.$apis.operation.application_list(parms).then(res=>{
-  //         // console.log(this.tableData)
-  //            if(res.data.code==1){
-  //               this.msg=res.data
-  //               this.tableData=res.data.data.list
-              
-  //             }
-  //     })
-  //   }
+
     getdataCookie (cname) {
     // return 1
     var name = cname + '='
@@ -243,10 +268,7 @@
       var c = ca[i].trim()
       if (c.indexOf(name) == 0) return c.substring(name.length, c.length)
     }
-    // 路由跳转
-   // window.location.href = ''
     this.$router.push({path:'/login'})
-    // Router.push("/")
   },
   getdata(){
       let parms={
@@ -268,3 +290,14 @@
       }
     }
   </script>
+<style scoped>
+     .main_head{
+       margin:0 2;
+       /* width: 1200px; */
+       width: 96%;
+       height:40px;
+       font-size: 22px;
+       font-weight: 900;
+       /* line-height: 30px; */
+     }
+</style>

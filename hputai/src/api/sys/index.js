@@ -47,11 +47,6 @@ export default {
     return shuju.putdata(url,params)
    },
 
-   //获取编辑科目配置列表 /api_subject_list
-   subject_list (params) {
-    let url='/api/api_subject_list'
-    return shuju.getdata(url,params)
-   },
 
    // 添加编辑获取上级科目数据 /api_subject_plist
    subject_plist (params) {

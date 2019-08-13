@@ -118,11 +118,11 @@
     },
     methods: {
       handleOpen(key, keyPath) {
-        console.log(key, keyPath);
+       // console.log(key, keyPath);
         //用于打开页面，通过key
       },
       handleClose(key, keyPath) {
-        console.log(key, keyPath);
+       // console.log(key, keyPath);
       },
         // 读取缓存
   getdataCookie (cname) {
@@ -139,13 +139,11 @@
     // Router.push("/")
   },
  delCookie(name){
-
   this.$confirm('此操作将退出当前用户, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-
 var exp = new Date();
 exp.setTime(exp.getTime() - 1);
 var cval=this.getdataCookie(name);
@@ -169,18 +167,14 @@ getmune(){
   }
   //获取用户的列表之前，先获取用户的id用于后台返回数据
 this.$apis.common.menu_list(parms).then(res=>{
+  //console.log(parms)
   if(res.data.code==1){
         this.rolemenu=res.data.data
-    console.log(this.rolemenu[0])
+    //console.log(this.rolemenu[0])
   }else{
      this.$router.push({path:'/login'})
   }
-}).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '登录失败'
-          });          
-        });
+})
 },
     },mounted () {
      

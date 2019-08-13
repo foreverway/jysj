@@ -1,8 +1,11 @@
 <template>
     <div class="main">
                     <!-- 设置充值链接 -->
-         <el-page-header @back="goBack" content="编辑销售情况表">
-</el-page-header>
+         <!-- <el-page-header @back="goBack" content="编辑销售情况表">
+</el-page-header> -->
+<div class="main_head">
+编辑销售情况表
+</div>
 <!-- 
       <el-input  style="width:200px" v-model="money"  placeholder="请输入充值金额" ></el-input>
     <el-button type="primary" v-show="money>0" @click="copyUrl">生成并复制充值链接</el-button> -->
@@ -174,4 +177,14 @@ export default {
    
 }
 </script>
-
+<style scoped>
+     .main_head{
+       margin:auto;
+       width: 96%;
+       height:40px;
+       font-size: 22px;
+       font-weight: 900;
+       margin:0 2%;
+       /* line-height: 30px; */
+     }
+</style>
