@@ -2,8 +2,6 @@
 
 > A Vue.js project
 
-
-shuju:使用axios进行的数据请求
 ## Build Setup
 
 ``` bash

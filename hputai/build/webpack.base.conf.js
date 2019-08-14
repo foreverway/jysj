@@ -1,3 +1,4 @@
+var webpack=require('webpack')
 'use strict'
 const path = require('path')
 const utils = require('./utils')
@@ -22,6 +23,7 @@ module.exports = {
       ? config.build.assetsPublicPath
       : config.dev.assetsPublicPath
   },
+ 
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
@@ -29,6 +31,15 @@ module.exports = {
       '@': resolve('src'),
     }
   },
+  plugins: [
+    new webpack.optimize.CommonsChunkPlugin('common.js'),
+    new webpack.ProvidePlugin({
+      jQuery: "jquery",
+      $: "jquery",
+      'window.jQuery': 'jquery',
+    })
+  ],
+  
   module: {
     rules: [
       {
