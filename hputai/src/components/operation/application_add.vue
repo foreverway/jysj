@@ -125,7 +125,8 @@
 			<!--item是值，index是下标，从0开始计数-->
 			<div v-for="(item,i) in items_add">
 				    <label for="">姓名</label>
-			     <input type="text" v-bind:id="'name' + i" />
+			     <input type="text"  v-bind:id="'name' + i" />
+            <p><el-input v-model="input" placeholder="请输入内容"></el-input></p>
 			     <label for="">年龄</label>
 			     <input type="text" v-bind:id="'age' + i"/>
 			     <label for="">性别</label>
@@ -250,10 +251,13 @@ export default {
       //获取报读科目列表
       addTest(){
         // alert()
-					this.items_add .push(this.text++)
+				
         },
+        deleteTest(){
+					this.items_add.pop(this.text)
+				},
         result(){
-					for(var i=0 ; i<this.items_add .length; i++){
+					for(let i=0 ; i<this.items_add.length; i++){
 						console.log($("#name"+i).val() + "  " + $("#age"+i).val() + "  " + $("#sex"+i).val())
 					}
 				},
@@ -314,10 +318,7 @@ export default {
       },
       //选择报读科目的函数
        handleChange1(targetName) {
-      alert(targetName);
-   var oDiv2 = document.getElementById('div2');
-   var oB2 = document.getElementById('b2');
-      oDiv2.appendChild(oB2);//将b2追加到div2里面的最后面
+      	this.items_add.push(this.text++)
       },
       //学生姓名选择产生的变化
        handleChange(targetName) {
