@@ -123,8 +123,38 @@
   </el-form-item>
 
 			<!--item是值，index是下标，从0开始计数-->
-			<div v-for="(item,i) in items_add">
-				    <label for="">姓名</label>
+			<div v-for="(item,i) in items_add" class="add_ul_new">
+         <p><el-input v-model="input" placeholder="请输入内容"></el-input></p>
+     <p><el-input v-model="input1" placeholder="请输入内容"></el-input></p>
+     <p><el-input v-model="input2" placeholder="请输入内容"></el-input></p>
+     <p><el-button>总额</el-button></p>
+     <p> 
+       <el-select v-model="form.m1" placeholder="课程性质">
+          <el-option label="试听" value="试听"></el-option>
+          <el-option label="正课" value="正课"></el-option>
+           <el-option label="辅导" value="辅导"></el-option>
+       </el-select>
+    </p>
+     <p>
+       <el-select v-model="form.m1" placeholder="班课">
+          <el-option label="待补充" value="已建立"></el-option>
+          <el-option label="未建立" value="未建立"></el-option>
+       </el-select>
+     </p>
+     <p>
+       <el-select v-model="form.m1" placeholder="一对一">
+          <el-option label="否" value="否"></el-option>
+          <el-option label="是" value="是"></el-option>
+       </el-select>
+     </p>
+     <p>
+       <el-select v-model="form.m1" placeholder="自组班课">
+          <el-option label="否" value="否"></el-option>
+          <el-option label="是" value="是"></el-option>
+       </el-select>
+     </p>
+     <p><el-button>操作</el-button></p>
+				    <!-- <label for="">姓名</label>
 			     <input type="text"  v-bind:id="'name' + i" />
             <p><el-input v-model="input" placeholder="请输入内容"></el-input></p>
 			     <label for="">年龄</label>
@@ -135,7 +165,7 @@
 			     	<option value="男">男</option>
 			     	<option value="女">女</option>
 			     </select>
-			     <button @click="deleteTest">删除</button>
+			     <button @click="deleteTest">删除</button> -->
 			</div>
 			<button @click="addTest">新增</button>
 			<br /><br />
