@@ -1,37 +1,33 @@
 <template>
     <div class="main">
                     <!-- 设置充值链接 -->
-         <el-page-header content="添加销售进程管控">
-</el-page-header>
-<!-- 
-      <el-input  style="width:200px" v-model="money"  placeholder="请输入充值金额" ></el-input>
+         <!-- <el-page-header content="添加销售进程管控">
+</el-page-header> -->
+<!-- <el-row>
+  <el-button type="primary">添加销售进程管控</el-button>
+</el-row> -->
+        <div class="main_head">|&nbsp;添加报名需求</div> 
+<!--  <el-input  style="width:200px" v-model="money"  placeholder="请输入充值金额" ></el-input>
     <el-button type="primary" v-show="money>0" @click="copyUrl">生成并复制充值链接</el-button> -->
-<el-form ref="form" :model="form" label-width="120px">
-  <el-form-item label="活动时间">
-    <el-col :span="11">
-      <el-date-picker type="date" placeholder="选择日期" v-model="form.dtime" style="width: 100%;"></el-date-picker>
-    </el-col>
-  </el-form-item>
-  <el-form-item label="周次">
-    <el-input v-model="form.week"></el-input>
-  </el-form-item>
-  <el-form-item label="跟进人">
-    <el-input v-model="form.follow_man"></el-input>
-  </el-form-item>
-  <el-form-item label="所属战队">
-    <el-input v-model="form.team"></el-input>
-  </el-form-item>
-  <el-form-item label="战队负责人">
-    <el-input v-model="form.team_leader"></el-input>
-  </el-form-item>
-  <el-form-item label="编号">
+    <el-steps :active="active" finish-status="success" >
+        <el-step title="填写报名情况" ></el-step>
+        <el-step title="填写需求情况" ></el-step>
+        <el-step title="填写完成" ></el-step>
+    </el-steps>
+<el-form ref="form" :model="form" label-width="120px" v-if="active==1">
+
+ <el-form-item label="报名编号">
+   <!-- 报名编号每次从后台拉取+1 -->
     <el-input v-model="form.data_number"></el-input>
+  </el-form-item>
+  <el-form-item label="报名标题">
+    <el-input v-model="form.title"></el-input>
   </el-form-item>
   <el-form-item label="学生姓名">
     <el-input v-model="form.data_student_name"></el-input>
   </el-form-item>
-  <el-form-item label="数据标签">
-    <el-select v-model="form.data_tag" placeholder="请选择活动区域">
+  <el-form-item :inline="true" label="报读科目">
+    <el-select v-model="form.data_tag" placeholder="请选择活动区域" :inline="true" >
       <el-option label="弱需求" value="弱需求"></el-option>
       <el-option label="中需求" value="中需求"></el-option>
        <el-option label="强需求" value="强需求"></el-option>
@@ -39,6 +35,47 @@
        <el-option label="退回" value="退回"></el-option>
       <el-option label="无效" value="无效"></el-option>
     </el-select>
+     <el-select v-model="form.data_tag" placeholder="请选择活动区域" :inline="true" >
+      <el-option label="弱需求" value="弱需求"></el-option>
+      <el-option label="中需求" value="中需求"></el-option>
+       <el-option label="强需求" value="强需求"></el-option>
+      <el-option label="七天跟进" value="七天跟进"></el-option>
+       <el-option label="退回" value="退回"></el-option>
+      <el-option label="无效" value="无效"></el-option>
+    </el-select>
+  </el-form-item>
+   <el-form-item :inline="true" label="已选科目">
+     <el-table
+    :data="tableData"
+    border
+    show-summary
+    size="mini"
+    style="width: 100%">
+    <el-table-column
+      prop="id"
+      label="ID"
+      width="180">
+    </el-table-column>
+    <el-table-column
+      prop="name"
+      label="姓名">
+    </el-table-column>
+    <el-table-column
+      prop="amount1"
+      sortable
+      label="数值 1">
+    </el-table-column>
+    <el-table-column
+      prop="amount2"
+      sortable
+      label="数值 2">
+    </el-table-column>
+    <el-table-column
+      prop="amount3"
+      sortable
+      label="数值 3">
+    </el-table-column>
+  </el-table>
   </el-form-item>
 <el-form-item label="建立了有效联系">
     <el-select v-model="form.m1" placeholder="请选择活动区域">
@@ -114,7 +151,8 @@
   </el-form-item>
 </el-form>
 
-
+<el-button style="margin-top: 12px;" @click="next" v-if="active==1">下一步</el-button>
+<el-button style="margin-top: 12px;" @click="pre" v-if="active==2">上一步</el-button>
 <!-- 设置充值链接 -->
          <div style="display:none" cols="20" id="biao1">{{copyurl1}}</div>
     </div>
@@ -125,6 +163,7 @@ import studens_url from '../../config/config'
 export default {
     data () {
         return {
+          active: 1,
              form: {
           dtime: '',
           week: '',
@@ -150,6 +189,12 @@ export default {
         }
     },
     methods: {
+       next() {
+        if (this.active++ > 2) this.active = 0;
+      },
+        pre() {
+        if (this.active-- < 2) this.active = 1},
+
          onSubmit(formName) {
         console.log('submit!');
         //        this.$refs[formName].validate((valid) => {
@@ -195,5 +240,15 @@ export default {
     }
 }
 </script>
-
+<style scoped>
+     .main_head{
+       margin:auto;
+       width: 96%;
+       height:40px;
+       font-size: 22px;
+       font-weight: 900;
+       margin:0 2%;
+       /* line-height: 30px; */
+     }
+</style>
 

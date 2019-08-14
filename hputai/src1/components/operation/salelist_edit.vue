@@ -1,8 +1,11 @@
 <template>
     <div class="main">
                     <!-- 设置充值链接 -->
-         <el-page-header @back="goBack" content="添加销售进程管控">
-</el-page-header>
+         <!-- <el-page-header @back="goBack" content="编辑销售情况表">
+</el-page-header> -->
+<div class="main_head">
+编辑销售情况表
+</div>
 <!-- 
       <el-input  style="width:200px" v-model="money"  placeholder="请输入充值金额" ></el-input>
     <el-button type="primary" v-show="money>0" @click="copyUrl">生成并复制充值链接</el-button> -->
@@ -109,7 +112,7 @@
     <el-input type="textarea" v-model="form.feedback"></el-input>
   </el-form-item>
   <el-form-item>
-    <el-button type="primary" @click="onSubmit">立即创建</el-button>
+    <el-button type="primary" @click="onSubmit">编辑保存</el-button>
     <el-button>取消</el-button>
   </el-form-item>
 </el-form>
@@ -126,6 +129,7 @@ export default {
     data () {
         return {
              form: {
+         id:this.$route.query.id,
           dtime: '',
           week: '',
           follow_man: '',
@@ -149,50 +153,38 @@ export default {
               money:'',
         }
     },
+    created(){
+        this.getdata()
+    },
     methods: {
-         onSubmit(formName) {
-        console.log('submit!');
-        //        this.$refs[formName].validate((valid) => {
-        //   if (valid) {
-                this.$apis.common.salepro_add(this.form).then(res=>{
-            if(res.data.code==1){
-    this.$message({
-          message: '添加成功',
-          type: 'success'
-        })
-       this.$router.push({path:'/ApplicationAdd'})
+     onSubmit(){
+
+     },
+      getdata(){
+        this.$apis.common.salepro_edit(this.form).then(res=>{
+            if(res.code==1){
+                this.form =res.data
+                console.log(this.form )
             }
-            // else{
-            //       this.$message.error(res.data.msg);
-            // }
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '添加失败'
-          });          
-        });},
-          goBack() {
-         history.back(-1)
-      }
-    //      
-    ,                  // 复制链接
-      copyUrl(){
-       
- let url = studens_url.student_url+'login/1/'+this.money;
-        let oInput = document.createElement('input');
-        oInput.value = url;
-        document.body.appendChild(oInput);
-        oInput.select(); // 选择对象;
-        console.log(oInput.value)
-        document.execCommand("Copy"); // 执行浏览器复制命令
-        this.$message({
-          message: url +'已成功复制到剪切板',
-          type: 'success'
-        });
-        this.money=''
-        oInput.remove()
-      },
+        })
+    },
+      goBack(){
+        history.back(-1)
     }
+
+    },
+   
+   
 }
 </script>
-
+<style scoped>
+     .main_head{
+       margin:auto;
+       width: 96%;
+       height:40px;
+       font-size: 22px;
+       font-weight: 900;
+       margin:0 2%;
+       /* line-height: 30px; */
+     }
+</style>
