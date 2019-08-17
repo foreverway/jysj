@@ -1,11 +1,23 @@
  <template>
  <div class="main">
-   <el-page-header @back="goBack" content="销售进程管控表">
-</el-page-header>
+  
+ <div class="main_head">|&nbsp;销售进程管控表</div> 
+<el-input placeholder="模糊搜索" v-model="parms.search" @input="getdata" clearable style="width:300px"></el-input> 
 
-<el-input placeholder="模糊搜索" v-model="parms.search" @input="getdata" clearable style="width:300px"></el-input> <el-button type="primary" >搜索</el-button>
+  
+    <el-date-picker
+      v-model="value2"
+      type="datetimerange"
+      :picker-options="pickerOptions"
+      range-separator="至"
+      start-placeholder="开始日期"
+      end-placeholder="结束日期"
+      align="right">
+    </el-date-picker>
+  
+  <el-button type="primary" >搜索</el-button>
  <router-link to="/Addsalepro">
-  <el-button type="primary" style="float:right">新建学员账户</el-button>
+  <el-button type="primary" style="float:right">新建销售情况列表</el-button>
  </router-link>
 
         <el-table 
@@ -99,14 +111,15 @@
             label="客户反馈">
         </el-table-column>
            <el-table-column
+            fixed="right"
             prop=""
             label="操作" width="140">
                <template slot-scope="scope">
-                  <router-link :to="'/StudentsEdit/'+ scope.row.id">
+                  <router-link :to="'/SalelistEdit/'+ scope.row.id">
         <el-button type="text" size="small">编辑 </el-button>
                   </router-link>
          <el-button @click="salepro_del(scope.row)" type="text" size="small">删除</el-button>
-           <el-button type="text" size="small"  @click="dialogFormVisible1=1">复制链接</el-button>
+           <!-- <el-button type="text" size="small"  @click="dialogFormVisible1=1">复制链接</el-button> -->
            </template>
         </el-table-column>
 
@@ -151,9 +164,37 @@
             search:'',
             page:1,
           },
-            tableData: ''
-        }
-        
+            tableData: '',
+               pickerOptions: {
+          shortcuts: [{
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit('pick', [start, end]);
+            }
+          }]
+        },
+        value1: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
+        value2: ''
+        };
       },
       created () {
         this.getdata()
@@ -267,3 +308,14 @@
       }
     }
   </script>
+<style scoped>
+     .main_head{
+       margin:0 2;
+       /* width: 1200px; */
+       width: 96%;
+       height:40px;
+       font-size: 22px;
+       font-weight: 900;
+       /* line-height: 30px; */
+     }
+</style>
