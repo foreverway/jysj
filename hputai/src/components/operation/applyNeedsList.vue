@@ -28,7 +28,7 @@
       <el-table-column prop="number" label="编号"></el-table-column>
       <el-table-column prop="title" label="标题"></el-table-column>
       <el-table-column prop="amount" label="价格"></el-table-column>
-      <el-table-column prop="expiry_date" label="	课程有效期"></el-table-column>
+      <el-table-column prop="expiry_date" label="课程有效期"></el-table-column>
       <el-table-column prop="student_name" label="报名学员"></el-table-column>
       <el-table-column prop="admin_name" label="添加者" width="100"></el-table-column>
       <el-table-column prop="addtime" label="添加时间"></el-table-column>

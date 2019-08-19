@@ -5,6 +5,7 @@ import $ from 'jquery'
 import VCharts from 'v-charts'
 import App from './App'
 import router from './router'
+import store from './store'//引入store
 // [ 可选组件 ] 图表
 
 import apis from './api/apiList'
@@ -23,6 +24,7 @@ new Vue({
   el: '#app',
   router,
   $,
+  store,//使用store  全局注入一下，这样一来就可以在任何一个组件里面使用this.$store了
   components: { App },
   template: '<App/>'
 })

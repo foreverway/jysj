@@ -6,25 +6,17 @@
     <!-- <el-row>
   <el-button type="primary">添加销售进程管控</el-button>
     </el-row>-->
-    <div class="main_head">|&nbsp;添加报名需求</div>
+    <div class="main_head">|&nbsp;添加排课信息</div>
     <!--  <el-input  style="width:200px" v-model="money"  placeholder="请输入充值金额" ></el-input>
     <el-button type="primary" v-show="money>0" @click="copyUrl">生成并复制充值链接</el-button>-->
-    <el-steps :active="active" finish-status="success">
-      <el-step title="填写报名情况"></el-step>
-      <el-step title="填写需求情况"></el-step>
-      <el-step title="填写完成"></el-step>
-    </el-steps>
+
     <el-form ref="form" :model="form" label-width="120px" v-if="active==1">
-      <el-form-item label="报名编号">
-        <!-- 报名编号每次从后台拉取+1 -->
+      <el-form-item label="标题">
+        <!-- 标题是从上一个页面拉去过来的信息 -->
         <p>{{this.writeCurrentDate()}}</p>
         <!-- <el-input v-model="form.data_number" ></el-input> -->
       </el-form-item>
-      <el-form-item label="报名标题">
-        <el-input v-model="title"></el-input>
-      </el-form-item>
-
-      <el-form-item :inline="true" label="报读科目">
+      <el-form-item :inline="true" label="直播平台">
         <!-- <span class="demonstration">hover 触发子菜单</span> -->
         <!-- 用el-autocomplete -->
         <el-cascader
@@ -35,17 +27,88 @@
           @change="handleChange_1"
         ></el-cascader>
       </el-form-item>
+            <el-form-item :inline="true" label="讲师">
+        <!-- <span class="demonstration">hover 触发子菜单</span> -->
+        <!-- 用el-autocomplete -->
+        <el-cascader
+          v-model="value"
+          :options="options"
+          :props="{ expandTrigger: 'hover' }"
+          :show-all-levels="false"
+          @change="handleChange_1"
+        ></el-cascader>
+      </el-form-item>
+            <el-form-item :inline="true" label="班主任">
+        <!-- <span class="demonstration">hover 触发子菜单</span> -->
+        <!-- 用el-autocomplete -->
+        <el-cascader
+          v-model="value"
+          :options="options"
+          :props="{ expandTrigger: 'hover' }"
+          :show-all-levels="false"
+          @change="handleChange_1"
+        ></el-cascader>
+      </el-form-item>
+            <el-form-item :inline="true" label="助教">
+        <!-- <span class="demonstration">hover 触发子菜单</span> -->
+        <!-- 用el-autocomplete -->
+        <el-cascader
+          v-model="value"
+          :options="options"
+          :props="{ expandTrigger: 'hover' }"
+          :show-all-levels="false"
+          @change="handleChange_1"
+        ></el-cascader>
+      </el-form-item>
+            <el-form-item :inline="true" label="财务专员">
+        <!-- <span class="demonstration">hover 触发子菜单</span> -->
+        <!-- 用el-autocomplete -->
+        <el-cascader
+          v-model="value"
+          :options="options"
+          :props="{ expandTrigger: 'hover' }"
+          :show-all-levels="false"
+          @change="handleChange_1"
+        ></el-cascader>
+      </el-form-item>
+      <el-form-item label="上课地点" v-model="radio">
+          <el-radio v-model="radio" label="线上">线上</el-radio>
+          <el-radio v-model="radio" label="线下">线下</el-radio>
+        </el-form-item>
 
-      <el-form-item :inline="true" label="已选科目">
+      <el-form-item label="学生姓名">
+        <!-- <el-cascader
+          placeholder="输入学生姓名"
+          v-model="value_1"
+          :options="options1"
+          @change="handleChange"
+          filterable
+        ></el-cascader> -->
         <div class="add_ul">
-          <p id="sss">科目</p>
-          <p>课时</p>
-          <p>单价(元)</p>
+          <p>学生姓名</p>
+          <p>课表</p>
+        </div>
+         <div class="add_ul">
+          <p>学生姓名在这里刷新</p>
+          <p>课表</p>
+        </div>
+        <div class="add_ul_new" v-for="(item,i) in editableTabs" :key="i">
+          <span style="display:none;" v-bind:id="'students'+ i">{{item.id}}</span>
+          <p>{{item.name}}</p>
+          <p>{{item.tel}}</p>
+          <p @click=" deleteTest" style="cursor:pointer;">撤销</p>
+        </div>
+      </el-form-item>
+
+     <el-form-item :inline="true" label="已选科目">
+        <div class="add_ul">
+          <p id="sss">课时</p>
+          <p>开始时间</p>
+          <p>星期</p>
           <!-- <p @click="milti">总额</p> -->
-          <p>课程性质</p>
-          <p>班课</p>
-          <p>一对一</p>
-          <p>自组班课</p>
+          <p>直播类型</p>
+          <p>观看端</p>
+          <p>状态</p>
           <p>操作</p>
         </div>
         <div class="add_ul_new" v-for="(item,i) in editableTabs_1" :key="i">
@@ -86,99 +149,10 @@
           <p @click=" deleteTest_1" style="cursor:pointer;">撤销</p>
         </div>
       </el-form-item>
-      <el-form-item label="学生姓名">
-        <!-- <el-cascader
-    v-model="value_1"
-    :options="options1"
-    @change="handleChange">
-      filterable
-        </el-cascader>-->
-        <el-cascader
-          placeholder="输入学生姓名"
-          v-model="value_1"
-          :options="options1"
-          @change="handleChange"
-          filterable
-        ></el-cascader>
-        <div class="add_ul">
-          <p>学生姓名</p>
-          <p>手机号</p>
-          <p>操作</p>
-        </div>
-        <div class="add_ul_new" v-for="(item,i) in editableTabs" :key="i">
-          <span style="display:none;" v-bind:id="'students'+ i">{{item.id}}</span>
-          <p>{{item.name}}</p>
-          <p>{{item.tel}}</p>
-          <p @click=" deleteTest" style="cursor:pointer;">撤销</p>
-        </div>
-      </el-form-item>
-
-      <el-form-item label="有效期限">
-        <p>：{{ this.valueDate }}</p>
-
-        <!-- <el-date-picker
-      v-model="value1"
-      type="date"
-      placeholder="选择日期">
-        </el-date-picker>-->
-        <el-date-picker v-model="valueDate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
-      </el-form-item>
-      <el-form-item label="备注说明">
-        <el-input type="textarea" v-model="feedback"></el-input>
-      </el-form-item>
+    
     </el-form>
-    <!-- 步骤二 -->
-    <div v-if="active==2">
-      <el-form>
-        <el-form-item label="上课地点" v-model="radio">
-          <el-radio v-model="radio" label="线上">线上</el-radio>
-          <el-radio v-model="radio" label="线下">线下</el-radio>
-        </el-form-item>
-        <el-form-item label="需求1">
-          <el-input
-            type="textarea"
-            v-model="need_one"
-            maxlength="100"
-            show-word-limit
-            placeholder="学生排课项目、科目、考局（A-level必写）及课时"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="需求2">
-          <el-input
-            type="textarea"
-            v-model="need_two"
-            placeholder="学生学习需求是什么？（零基础先修、同步辅导、巩固复习、强化冲刺）"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="需求3">
-          <el-input
-            type="textarea"
-            v-model="need_three"
-            placeholder="学生之前的学习经历和学习基础（之前在那里上的学？学习基础怎么样？）"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="需求4">
-          <el-input type="textarea" v-model="need_four" placeholder="学生希望跟什么样的老师学习？"></el-input>
-        </el-form-item>
-        <el-form-item label="需求5">
-          <el-input type="textarea" v-model="need_five" placeholder="学生上课时间期限，可排课时间？（北京时间）每次课上几小时？"></el-input>
-        </el-form-item>
-      </el-form>
-    </div>
-    <!-- 步骤三 -->
-    <div v-if="active==3">
-      <div class="succ_tip">
-        提交成功
-        <i class="el-icon-circle-check" type="success"></i>
-      </div>
-      <div class="succ_word">
-        <el-link icon="el-icon-edit" type="primary" href="./ApplicationAdd">继续添加排课需求</el-link>
-        <el-link type="primary" href="./ApplicationAdd">
-          查看排课需求列表
-          <i class="el-icon-view el-icon--right"></i>
-        </el-link>
-      </div>
-    </div>
+
+
 
     <el-button @click="goBack" v-if="active==1||active==2">取消</el-button>
     <el-button style="margin-top: 12px;" @click="pre" v-if="active==2||active==3">上一步</el-button>
@@ -531,7 +505,7 @@ option {
   background-color: #fff;
   padding: 0;
   margin-right: -5px;
-  width: 8%;
+  width: 10%;
   border: 1px solid silver;
   text-align: center;
 }
