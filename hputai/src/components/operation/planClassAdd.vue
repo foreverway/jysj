@@ -13,7 +13,7 @@
     <el-form ref="form" :model="form" label-width="120px" v-if="active==1">
       <el-form-item label="标题">
         <!-- 标题是从上一个页面拉去过来的信息 -->
-        <p>{{this.writeCurrentDate()}}</p>
+        <p>{{live_list}}</p>
         <!-- <el-input v-model="form.data_number" ></el-input> -->
       </el-form-item>
       <el-form-item :inline="true" label="直播平台">
@@ -165,6 +165,8 @@
 
 <script>
 import studens_url from "../../config/config";
+import { mapState, mapActions, mapGetters } from "vuex";
+// import 
 export default {
   data() {
     return {
@@ -206,29 +208,46 @@ export default {
       need_two: "",
       need_three: "",
       need_four: "",
-      need_five: ""
+      need_five: "",
     };
   },
   created() {
     this.getdata();
     this.getStudent();
+    let parms = {
+        admin_id: this.getdataCookie("admin_id")
+      };
+      this.get_live_list({
+      url: "/api/api_live_list",
+      params:parms
+    });
+     
   },
-  computed: {
-    //     sum:function () {
-    //       for(let i=0 ; i<this.editableTabsValue_1.length; i++){
-    //           return $("#time"+i).val()*$("#mach"+i).val()
-    //               }
-    //  }
+ computed: {
+ ...mapState(["live_list"]),
+    // live_list () {
+    //             return this.$store.state.live_list
+    //         }
   },
-  mounted() {},
-  methods: {
-    // milti(){
-    //   alert(222)
-    //     for(let i=0 ; i<this.editableTabsValue_1.length; i++){
-    //  document.getElementById("'all_mach' + i").innerHTML=$("#time"+i).val()*$("#mach"+i).val()
+  mounted() {
+    // console.log(this.$store.state.live_list)
+   
+  },
 
-    //       }
-    // },
+  methods: {
+
+       getdataCookie(cname) {
+      // return 1
+      var name = cname + "=";
+      var ca = document.cookie.split(";");
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i].trim();
+        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+      }
+      this.$router.push({ path: "/login" });
+    },
+        ...mapActions(["get_live_list"]),//发送actions this.store.dispatch
+
     //生成学员编号
     writeCurrentDate() {
       var now = new Date();

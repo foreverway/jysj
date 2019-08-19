@@ -37,7 +37,7 @@ const actions = {
     }
 };
 export default {
-   namespaced: true, //当你需要在别的文件里面使用( mapGetters、mapActions)时，
+   // namespaced: true, //当你需要在别的文件里面使用( mapGetters、mapActions)时，
    //               里面的方法需要注明来自哪一个模块的方法
    state,
    getters,
