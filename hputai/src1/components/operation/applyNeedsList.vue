@@ -34,26 +34,33 @@
       <el-table-column prop="addtime" label="添加时间"></el-table-column>
       <el-table-column prop="app_status" label="状态" width="100"></el-table-column>
 
-      <el-table-column fixed="right" prop label="操作"   width="300" >
-        <template :slot-scope="scope">
-          <span v-for="(item,index) in rolemenu" :key="index">
-              <!-- <router-link :to="'/SalelistEdit/'+ scope.row.id"> -->
-        <el-button type="text" size="small" index="index" link="item.menu_url">{{item.menu_name}}</el-button>
-              <!-- </router-link> -->
-          </span>
-           <!-- <el-button type="text" size="small">审核</el-button>
+      <el-table-column fixed="right" prop label="操作"  width="250" >
+        <template slot-scope="scope">
+          <router-link :to="'/SalelistEdit/'+ scope.row.id">
+            <el-button type="text" size="small">编辑</el-button>
+          </router-link>
+           <el-button type="text" size="small">审核</el-button>
               <router-link :to="'/PlanClassAdd/'+ scope.row.id">
             <el-button type="text" size="small">排课</el-button>
                </router-link>
             <el-button type="text" size="small">确认</el-button>
-            <el-button type="text" size="small">查看详情</el-button> -->
+            <el-button type="text" size="small">查看详情</el-button>
           <!-- <el-button @click="salepro_del(scope.row)" type="text" size="small">删除</el-button> -->
           <!-- <el-button type="text" size="small"  @click="dialogFormVisible1=1">复制链接</el-button> -->
         </template>
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-
+    <!-- <el-pagination style="margin-top:30px; float: right;margin-bottom: 30px;"
+  background
+  layout="prev, pager, next"
+  @prev-click="prev"
+  @next-click="next"
+  @current-change="current"
+  page-size=10
+  :total="msg.data.count">
+    </el-pagination>-->
+    <!-- 设置充值链接 -->
     <el-dialog
       title="设置充值金额"
       :visible.sync="dialogFormVisible1"
@@ -92,7 +99,6 @@
 </template>
 
   <script>
-  import { mapState, mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -117,21 +123,14 @@ export default {
   created() {
     this.getdata();
     this.getAdviser()
-    this.getRolenenu()
     //this.searchAdviser()
     
-     
-  },
-  computed:{
-       ...mapState(['rolemenu']),
+    // console.log( this.getdata())
   },
   mounted() {
     // console.log(this.tableData);
   },
   methods: {
-        getRolenenu(){
-           console.log(this.rolemenu[0].children[3])
-        },
            handleSizeChange(val) {   //分页设置
         console.log(`每页 ${val} 条`);
       },
