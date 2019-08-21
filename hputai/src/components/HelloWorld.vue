@@ -94,12 +94,12 @@ export default {
     };
   },
   created() {
-     let parms = {
+     let params = {
       admin_id: this.getdataCookie("admin_id")
     };
     this.get_mune_list({
       url: "/api/api_menu_list",
-      params: parms
+      params
     });
     // this.getmune();
     //在创建的时候获取菜单

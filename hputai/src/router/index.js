@@ -76,7 +76,7 @@ export default new Router({
           component: ApplyNeedsList
         },
         {
-          path: '/PlanClassAdd/:id',//PlanClassAdd添加报名需求列表
+          path: '/PlanClassAdd',//PlanClassAdd添加报名需求列表
           component: PlanClassAdd
         },
         {
