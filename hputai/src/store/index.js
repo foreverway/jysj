@@ -17,7 +17,6 @@ const store = new Vuex.Store({
   },
   getters: {
     doneTodos: state => {
-        console.log(state.live_list.filter(todo => todo.live_name))
       return state.live_list.filter(todo => todo)
     }
   },
@@ -28,17 +27,17 @@ const store = new Vuex.Store({
     get_mune_list(state, all_goods) {  //获取菜单列表
       state.rolemenu = all_goods;
     },
-    get_banzhuren_list(state,all_data){  //获取班主任列表
-      state.banzhuren_list=all_data
+    get_banzhuren_list(state,all_goods){  //获取班主任列表
+      state.banzhuren_list=all_goods
     },
-    get_teacher_data(state,all_data){  //获取讲师列表
-      state.banzhuren_list=all_data
+    get_teacher_data(state,all_goods){  //获取讲师列表
+      state.banzhuren_list=all_goods
     },
-    get_zhujiao_data(state,all_data){  //获取助教列表
-      state.banzhuren_list=all_data
+    get_zhujiao_data(state,all_goods){  //获取助教列表
+      state.banzhuren_list=all_goods
     },
-    get_jiaowu_data(state,all_data){  //取教务专员列表
-      state.banzhuren_list=all_data
+    get_jiaowu_data(state,all_goods){  //取教务专员列表
+      state.banzhuren_list=all_goods
     },
   },
   actions: { //context与store实例具有相同的方法和属性，所以它可以执行context.commit(' ')

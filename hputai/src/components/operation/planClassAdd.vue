@@ -260,41 +260,10 @@ export default {
     let params = {
       admin_id: this.getdataCookie("admin_id")
     };//
- this.get_apply_data();
-    this.get_live_list({
-      //获取直播列表
-      url: "/api/api_live_list",
-      params
-    });
-    this.get_banzhuren_list({
-      //获取班主任列表
-      url: "/api/api_banzhuren_list",
-      params
-    });
-    this.get_teacher_data({
-      //获取讲师列表
-      url: "/api/api_teacher_data",
-      params
-    });
-    this.get_zhujiao_data({
-      //获取助教列表
-      url: "/api/api_zhujiao_data",
-      params
-    });
-    this.get_jiaowu_data({
-      //获取教务专员列表
-      url: "/api/api_jiaowu_data",
-      params
-    });
+   this.get_apply_data();
   },
   computed: {
-    ...mapState([
-      "live_list",
-      "banzhuren_list",
-      "teacher_data",
-      "zhujiao_data",
-      "jiaowu_data"
-    ]),
+   
     ...mapGetters(["doneTodos"])
   },
   updated() {
@@ -308,14 +277,7 @@ export default {
   },
 
   methods: {
-    ...mapActions([
-       "get_banzhuren_list",
-      "get_live_list",
-     
-      "get_teacher_data",
-      "get_zhujiao_data",
-      "get_jiaowu_data"
-    ]), //获取直播列表发送actions this.store.dispatch
+    
     //获取直播列表
     getLiveName() {
       //筛选直播列表

@@ -71,18 +71,20 @@
   :visible.sync="centerDialogVisible_shenghe"
   width="30%"
   center>
+   <el-form ref="form" :model="form">
     <el-form-item label="上课地点" v-model="radio">
         <el-radio v-model="radio" label="线上">线上</el-radio>
         <el-radio v-model="radio" label="线下">线下</el-radio>
     </el-form-item>
-         <el-form-item :inline="true" label="班主任">
-        <el-cascader
+        <el-form-item :inline="true" label="班主任">
+          <p>{{this.banzhuren_list}}</p>
+        <!-- <el-cascader
           v-model="banzhuren_live"
           :options="this.banzhuren_list_new"
           :props="{ expandTrigger: 'hover' }"
           :show-all-levels="false"
-           @change="handleChange_banzhuren" 
-        ></el-cascader>
+          @change="handleChange_banzhuren"
+        ></el-cascader> -->
       </el-form-item>
       <el-form-item :inline="true" label="助教">
         <el-cascader
@@ -90,10 +92,19 @@
           :options="this.helpTeacher_list_new"
           :props="{ expandTrigger: 'hover' }"
           :show-all-levels="false"
-          @change="handleChange_help"
         ></el-cascader>
       </el-form-item>
-  
+      <el-form-item :inline="true" label="财务专员">
+        <!-- <span class="demonstration">hover 触发子菜单</span> -->
+        <!-- 用el-autocomplete -->
+        <el-cascader
+          v-model="moneymen_live"
+          :options="this.moneymen_list_new"
+          :props="{ expandTrigger: 'hover' }"
+          :show-all-levels="false"
+        ></el-cascader>
+      </el-form-item>
+</el-form>
   <span slot="footer" class="dialog-footer">
     <el-button @click="centerDialogVisible_shenghe = false">取 消</el-button>
     <el-button type="primary" @click="centerDialogVisible_shenghe = false">确 定</el-button>
@@ -113,11 +124,8 @@
         :total="400"
       ></el-pagination>
     </div>
-    <template>
 
-    </template>
-  </div>
-</template>
+
 
   </div>
 </template>
@@ -132,6 +140,8 @@ export default {
       centerDialogVisible_shenghe:false,
       copyurl1: "",
       msg: "",
+      form:{},//审核的弹出层
+      radio:"", //上课地点
           banzhuren_list_new: [], //班主任数据
       banzhuren_live: "",
         moneymen_list_new: [
@@ -162,6 +172,7 @@ export default {
     this.getdata();
     this.getAdviser();
     this.getRolenenu();
+   
     //this.searchAdviser()
   },
   computed: {
@@ -170,11 +181,13 @@ export default {
       "banzhuren_list",
       "teacher_data",
       "zhujiao_data",
-      "jiaowu_data"
+      "jiaowu_data",
+      "rolemenu"
     ]),
-    ...mapState(["rolemenu"])
+    // ...mapState()
   },
   mounted() {
+    
     console.log($(".status_color").prop());
   },
   watch: {},
@@ -182,7 +195,6 @@ export default {
         ...mapActions([
        "get_banzhuren_list",
       "get_live_list",
-     
       "get_teacher_data",
       "get_zhujiao_data",
       "get_jiaowu_data"
@@ -199,9 +211,11 @@ export default {
     mommonAction(a, b) {
       switch (a) {
         case "click_edit":
+           console.log(this.tableData)
           break;
         case "click_test":
       this.centerDialogVisible_shenghe= true
+      console.log(this.$store.state.banzhuren_list)
           break;
         case "click_sure":
           break;
@@ -226,6 +240,7 @@ export default {
     },
     //获取顾问列表adviser_list
     getAdviser() {
+          
       let parms = {
         admin_id: this.getdataCookie("admin_id")
       };
@@ -250,7 +265,6 @@ export default {
     },
     //根据顾问老师生成列表
     showAdviser(targetName) {
-      console.log(targetName);
       //   console.log(this.options_all)
       this.adviserList = this.options_all.filter(
         item => item.adviser == targetName
@@ -265,7 +279,6 @@ export default {
         .application_list(parms)
         .then(res => {
           if (res.data.code == 1) {
-            console.log(res.data.data);
             this.msg = res.data;
             this.tableData = res.data.data.list;
           }
