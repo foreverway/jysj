@@ -24,7 +24,8 @@ new Vue({
   el: '#app',
   router,
   $,
-  store,//使用store  全局注入一下，这样一来就可以在任何一个组件里面使用this.$store了
+  store,//使用store  全局注入，这样一来就可以在任何一个组件里面使用this.$store了
   components: { App },
   template: '<App/>'
 })
+//注册成为Vue对象的方法 
