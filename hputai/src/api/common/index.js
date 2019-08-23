@@ -45,7 +45,7 @@ export default {
    //编辑后提交数据
    salepro_edit_put(params) {
     let url='/api/api_salepro_edit'
-    return shuju.getdata(url,params)
+    return shuju.putdata(url,params)
    },
    //获取编辑科目配置列表 /api_subject_list
    subject_list (params) {
@@ -66,9 +66,18 @@ export default {
    adviser_list(params){
     let url ="/api/api_adviser_list"
     return shuju.getdata(url,params)},
+
     ///api_application_arrange  报名需求排课获取数据
     application_arrange(params){
       let url ="/api/api_application_arrange"
       return shuju.getdata(url,params)},
+
+       application_audit(params){    //排课审核
+      let url ="/api/api_application_audit"
+      return shuju.postdata(url,params)},
+
+      application_arrange_post(params){    //报名需求排课提交数据
+        let url ="/api/api_application_arrange"
+        return shuju.postdata(url,params)},
  
 }

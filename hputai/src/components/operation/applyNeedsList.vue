@@ -41,8 +41,8 @@
       <el-table-column prop="app_status" class="status_color" label="状态" width="100">
         <template slot-scope="scope">
           <span v-if="scope.row.app_status== '待审核'" style="color:rgb(245, 108, 108)">待审核</span>
-          <span v-else-if="scope.row.app_status== '待排课 '" style="color:rgb(230, 162, 60)">待排课</span>
-          <span v-if="scope.row.app_status== '待确认排课中 '" style="color:#009688">待确认排课中</span>
+          <span v-else-if="scope.row.app_status== '待排课'" style="color:rgb(230, 162, 60)">待排课</span>
+          <span v-if="scope.row.app_status== '待确认排课中'" style="color:#009688">待确认排课中</span>
           <span v-else-if="scope.row.app_status== '已确认'" style="color:#303133">已确认</span>
           <span v-if="scope.row.app_status== '授课考勤'" style="color:#409EFF">授课考勤</span>
           <span v-else-if="scope.row.app_status== '已结课'" style="color:#67C23A">已结课</span>
@@ -71,22 +71,21 @@
   :visible.sync="centerDialogVisible_shenghe"
   width="30%"
   center>
-   <el-form ref="form" :model="form">
+   <el-form ref="form" :model="shenghe">
     <el-form-item label="上课地点" v-model="radio">
         <el-radio v-model="radio" label="线上">线上</el-radio>
         <el-radio v-model="radio" label="线下">线下</el-radio>
     </el-form-item>
-        <el-form-item :inline="true" label="班主任">
-          <p>{{this.banzhuren_list}}</p>
-        <!-- <el-cascader
+        <el-form-item :inline="true" label="班主任 ">
+          <!-- <p>{{this.banzhuren_list_new}}</p> -->
+        <el-cascader
           v-model="banzhuren_live"
           :options="this.banzhuren_list_new"
           :props="{ expandTrigger: 'hover' }"
           :show-all-levels="false"
-          @change="handleChange_banzhuren"
-        ></el-cascader> -->
+        ></el-cascader>
       </el-form-item>
-      <el-form-item :inline="true" label="助教">
+      <el-form-item :inline="true" label=" 助教 ">
         <el-cascader
           v-model="helpTeacher_live"
           :options="this.helpTeacher_list_new"
@@ -104,15 +103,22 @@
           :show-all-levels="false"
         ></el-cascader>
       </el-form-item>
+      <el-form-item :inline="true" label=" 意见 ">
+        <el-input
+        type="textarea"
+        :rows="2"
+        placeholder="请输入内容"
+        v-model="textarea">
+      </el-input>
+      </el-form-item>
 </el-form>
   <span slot="footer" class="dialog-footer">
     <el-button @click="centerDialogVisible_shenghe = false">取 消</el-button>
-    <el-button type="primary" @click="centerDialogVisible_shenghe = false">确 定</el-button>
+    <el-button type="primary" @click="submit_think">提交意见</el-button>
   </span>
 </el-dialog>
     
     <!-- 设置充值链接 -->
-    <div style="display:none" cols="20" id="biao1">{{copyurl1}}</div>
     <div class="block">
       <el-pagination
         @size-change="handleSizeChange"
@@ -138,9 +144,8 @@ export default {
       money: "", //设置充值金额
       dialogFormVisible1: false,
       centerDialogVisible_shenghe:false,
-      copyurl1: "",
+      textarea:"", //审核的输入框
       msg: "",
-      form:{},//审核的弹出层
       radio:"", //上课地点
           banzhuren_list_new: [], //班主任数据
       banzhuren_live: "",
@@ -159,13 +164,21 @@ export default {
         page: 1
       },
       currentPage4: 4, //分页数据
-      tableData: "",
+      tableData: [],
       options: [],
       options_all: [], //顾问的所有数据
       value: "", //选定的顾问
       adviserList: "", //选定顾问的信息
       value1: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
-      value2: ""
+      value2: "",
+      shenghe:{   //审核的弹出层
+        app_id:16,
+        banzhuren_id:1,
+        jiaowu_id:1,
+        zhujiao_id:1,
+        is_pass	:1,
+        remarks:'nini'
+      },
     };
   },
   created() {
@@ -175,8 +188,8 @@ export default {
    
     //this.searchAdviser()
   },
-  computed: {
-       ...mapState([
+  computed: 
+       mapState([
       "live_list",
       "banzhuren_list",
       "teacher_data",
@@ -185,20 +198,15 @@ export default {
       "rolemenu"
     ]),
     // ...mapState()
-  },
+  
   mounted() {
-    
+        this.getbanzhurenName();
+
     console.log($(".status_color").prop());
   },
   watch: {},
   methods: {
-        ...mapActions([
-       "get_banzhuren_list",
-      "get_live_list",
-      "get_teacher_data",
-      "get_zhujiao_data",
-      "get_jiaowu_data"
-    ]), //获取直播列表发送actions this.store.dispatch
+        //获取直播列表发送actions this.store.dispatch
     tableRowClassName({ row, rowIndex, columnIndex, column }) {   //改变数组的颜色
       if (columnIndex === 8) {
         if (row.app_status == "待审核") {
@@ -207,7 +215,15 @@ export default {
       return "";
       }
     },
-
+    getbanzhurenName() {
+      //筛选班主任列表
+      // if(this.banzhuren_list.length>0){
+      for (let i = 0; i < this.banzhuren_list.length; i++) {
+        var val = this.banzhuren_list[i];
+        this.banzhuren_list_new.push({ value: val.id, label: val.banzhuren });
+        console.log(this.banzhuren_list_new);
+      }
+    },
     mommonAction(a, b) {
       switch (a) {
         case "click_edit":
@@ -231,6 +247,15 @@ export default {
       return this.rolemenu[0].children[3].children;
       //  console.log()
     },
+    submit_think(){   //提交审核意见
+        this.$apis.common.application_audit(this.shenghe).then(res=>{
+          if(res.data.code==1){
+            alert(11)
+          }
+        })
+        this.centerDialogVisible_shenghe = false
+       
+    },
     handleSizeChange(val) {
       //分页设置
       console.log(`每页 ${val} 条`);
@@ -240,7 +265,6 @@ export default {
     },
     //获取顾问列表adviser_list
     getAdviser() {
-          
       let parms = {
         admin_id: this.getdataCookie("admin_id")
       };
@@ -292,22 +316,7 @@ export default {
     },
     //序号排列
 
-    // 复制链接
-    copyUrl(data) {
-      let url = data + "/" + this.money;
-      let oInput = document.createElement("input");
-      oInput.value = url;
-      document.body.appendChild(oInput);
-      oInput.select(); // 选择对象;
-      console.log(oInput.value);
-      document.execCommand("Copy"); // 执行浏览器复制命令
-      this.$message({
-        message: url + "已成功复制到剪切板",
-        type: "success"
-      });
-      this.money = "";
-      oInput.remove();
-    },
+
 
     //删除用户
     salepro_del(row) {

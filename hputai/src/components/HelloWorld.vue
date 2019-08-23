@@ -128,14 +128,13 @@ export default {
       params
     });
   },
-  computed:{
-        ...mapState(["rolemenu","live_list",
+  computed:
+        mapState(["rolemenu","live_list",
       "banzhuren_list",
       "teacher_data",
       "zhujiao_data",
       "jiaowu_data"]),
-  }
-  ,
+ 
   methods: {
     ...mapActions(["get_mune_list" ,"get_banzhuren_list",
       "get_live_list",

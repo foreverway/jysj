@@ -2,11 +2,11 @@ import shuju from '../axios'
 
 export default {
       //获取菜单 /api_menu_list
-      menu_list (params) {
-        //此处的params是用户的账户id，用于获取用户的信息
-    let url='/api/api_menu_list'
-    return shuju.getdata(url,params)
-   },
+  //     menu_list (params) {
+  //       //此处的params是用户的账户id，用于获取用户的信息
+  //   let url='/api/api_menu_list'
+  //   return shuju.getdata(url,params)
+  //  },
    //省市数据  /api_region_list
    region_list (params) {
     let url='/api/api_region_list'
@@ -65,6 +65,10 @@ export default {
    ///api_adviser_list获取课程顾问列表
    adviser_list(params){
     let url ="/api/api_adviser_list"
-    return shuju.getdata(url,params)
- }
+    return shuju.getdata(url,params)},
+    ///api_application_arrange  报名需求排课获取数据
+    application_arrange(params){
+      let url ="/api/api_application_arrange"
+      return shuju.getdata(url,params)},
+ 
 }

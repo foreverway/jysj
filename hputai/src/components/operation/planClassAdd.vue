@@ -66,8 +66,8 @@
         <p>{{parseInt(this.$route.query.classhour)}}</p>
       </el-form-item>
       <el-form-item label="上课地点" v-model="radio">
-        <el-radio v-model="radio" label="线上">线上</el-radio>
-        <el-radio v-model="radio" label="线下">线下</el-radio>
+        <el-radio v-model="radio"  label="1">线上</el-radio>
+        <el-radio v-model="radio"  label="2">线下</el-radio>
       </el-form-item>
 
       <el-form-item label="学生姓名">
@@ -75,7 +75,7 @@
           <p>学生姓名</p>
           <p>课表</p>
         </div>
-        <div class="add_ul">
+        <div class="add_ul" v-for="(item,i) in " :key="index">
           <p>{{this.$route.query.student_name}}</p>
           <p>
             <el-button type="text" @click="stu_centerDialogVisible = true">查看课表</el-button>
@@ -104,10 +104,10 @@
         <div class="add_ul">
           <p><el-input v-model="input_twice" placeholder="排几节课?"></el-input></p>
           <p>
-            <el-date-picker v-model="value_data_start" type="date" placeholder="开始日期"></el-date-picker>
+            <el-date-picker v-model.number="value_data_start" value-format="timestamp" type="date" placeholder="开始日期"></el-date-picker>
           </p>
           <p>
-            <el-date-picker v-model="value_data_end" type="date" placeholder="结束日期"></el-date-picker>
+            <el-date-picker v-model.number="value_data_end" value-format="timestamp" type="date" placeholder="结束日期"></el-date-picker>
           </p>
           <!-- <p @click="milti">总额</p> -->
           <p>    
@@ -138,15 +138,15 @@
         <div class="add_ul_new" v-for="(item,i) in editableTabs_1" :key="i">
           <span style="display:none;" v-bind:id="'course_id'+ i">{{item.course_id}}</span>
           <p>
-            <el-input v-model.number="item.times" v-bind:id="'time' + i" placeholder="排几节课?"></el-input>
+            <el-input v-model.number="item.times" v-bind:id="'classhour' + i" placeholder="排几节课?"></el-input>
           </p>
           <p>
             <!-- <el-input v-model.number="item.price" v-bind:id="'mach' + i" placeholder="单价(元)"></el-input> -->
-            <el-date-picker v-model="item.value_data_start" type="date" placeholder="开始日期"></el-date-picker>
+            <el-date-picker v-model="item.start_time" v-bind:id="'start_time' + i" type="date" placeholder="开始日期"></el-date-picker>
           </p>
-         <p><el-date-picker v-model="item.value_data_end" type="date" placeholder="结束日期"></el-date-picker></p>
+         <p><el-date-picker v-model="item.end_time" v-bind:id="'end_time' + i" type="date" placeholder="结束日期"></el-date-picker></p>
           <p>
-            <select v-model="item.course_type" v-bind:id="'clas' + i" placeholder="班课" style="height:36px;border:none;">
+            <select v-model="item.course_type" v-bind:id="'course_type' + i" placeholder="班课" style="height:36px;border:none;">
                 <option label="直播类型是什么" value="8"></option>
               <option label="大班课" value="2">否</option>
               <option label="小班课" value="3">是</option>
@@ -154,7 +154,7 @@
             </select>
           </p>
            <p>
-            <select v-model="item.course_wey" v-bind:id="'clas' + i" placeholder="班课" style="height:36px;border:none;">
+            <select v-model="item.play_type" v-bind:id="'play_type' + i" placeholder="班课" style="height:36px;border:none;">
               <option label="在哪里观看" value="8"></option>
               <option label="WEB端" value="2">否</option>
               <option label="客户端" value="1">是</option>
@@ -185,11 +185,14 @@ import { mapState, mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
-      value_data_start: "", //选择日期
-      value_data_end:'',
+      value_data_start: "", //默认form开始日期
+      value_data_end:'',    //结束时间
+      input_twice:"",   //排几节课?
+      live_type:"",//直播类型
+      study_wey:'' , //观看端
       live_list_new: [], //直播数据
       value_live: "",   //
-      input_twice:"",   //排几节课?
+       radio: "", //上课地点的选择
       teacher_list_new: [
         { value: 10911, label: "飞扬", id: 1 },
         { value: 10811, label: "朝夕", id: 4 }
@@ -227,16 +230,23 @@ export default {
       ],
       options: [], //课程名称的数据
       options_: [], //总数据的数据
-      radio: "", //上课地点的选择
       editableTabsValue_1: [],
       editableTabs_1: [],
       tabIndex: 1,
       subjects_data: [], //学科数据
       title: "", //标题
       value_data: "", //排课的日期
-      input_week:'',  //排课的星期数
-      live_type:"",//直播类型
-      study_wey:'' , //观看端
+
+      form:{     //总表格
+          value_live:'',
+          teacher_live:'',
+          banzhuren_live:'',
+          helpTeacher_live:'',
+          moneymen_live:'',
+          radio:'',
+
+      },   
+      apply_data:{},  //根据报名表id获取的数据
       options_type:[{
           value: '2',
           label: '大班课'
@@ -263,15 +273,13 @@ export default {
    this.get_apply_data();
   },
   computed: {
-   
     ...mapGetters(["doneTodos"])
   },
   updated() {
     //  this.getLiveName();
     //   this.getbanzhurenName();
   },
-  mounted() {
-      
+  mounted() {  
     this.getbanzhurenName();
     this.getLiveName();
   },
@@ -319,46 +327,63 @@ export default {
       // var val = this.options_[i];
       let newTabName = ++this.tabIndex_1 + "";
       this.editableTabs_1.push({
-        value_data_start: "",  //选择开始日期
-        value_data_end: "",  //选择结束日期
+        classhour:"",
+        start_time: "",  //选择开始日期
+        end_time: "",  //选择结束日期
        input_week: "",   //周几
         course_type: "", //课程类型
-        course_wey:''
+        play_type:''
       });
       this.editableTabsValue_1 = newTabName;
       // }
     },
     onSubmit() {
-      if(this.input_twice*1==this.$route.query.classhour*1){
-          alert(66)
-      }else{
-        alert("dd")
-      }
-      // for (let i = 0; i < this.editableTabsValue_1.length; i++) {}
-      let parms = {
+      // if(this.input_twice*1==this.$route.query.classhour*1){
+      //     alert(66)
+      // }else{
+      //   alert("dd")
+      // }
+         this.subjects_data.push({
+     start_time: this.value_data_start, //默认form开始日期
+      end_time:this.value_data_end,    //结束时间
+      classhour:this.input_twice,   //排几节课?
+      course_type:this.live_type,//直播类型
+      play_type:this.study_wey, //观看端
+         })
+            for (let i = 0; i < this.editableTabsValue_1.length; i++) {
+        this.subjects_data.push({
+          classhour: $("#classhour" + i).val() * 1,
+          start_time: $("#start_time" + i).val(),
+          end_time: $("#end_time" + i).val(),
+          course_type: $("#course_type" + i).val() ,
+          play_type: $("#play_type" + i).val(),
+        });   
+     
+            }
+           let parms = {
         app_id:this.$route.query.id,  //报名表id
-        live_id: this.value_live,  //直播平台id
-        teacher_id: this.teacher_live,  //讲师id
-        banzhuren_id: this.banzhuren_live,   //班主任id
-        zhujiao_id: this.helpTeacher_live,   //助教id
-        jiaowu_id: this.moneymen_live,   //教务id
-        students_id: this.need_three,  //学生id  string
-        classhour: this.need_four,     //课时
-        course_address: this.need_five   //1线上，2线下
+        live_id: 1,  //直播平台id
+        teacher_id: 1,  //讲师id
+        banzhuren_id:1,   //班主任id
+        zhujiao_id:1,   //助教id
+        jiaowu_id: 1,   //教务id
+        students_id: "this.need_three",  //学生id  string
+        classhour:this.$route.query.classhour*1,     //课时
+        course_address: this.radio*1   //1线上，2线下
                    
       };
       //course_data:[]   // {"classhour":2,"start_time":1564560000,"end_time":1564567200,"course_type":1,"play_type":1},
-      // parms.subjects_data = this.subjects_data;
-      // parms.students_data = this.students_data;
-      // this.$apis.common.application_add(parms).then(res => {
-      //   if (res.data.code == 1) {
-      //     this.$message({
-      //       message: "添加成功",
-      //       type: "success"
-      //     });
-      //     this.active = 3;
-      //   }
-      // });
+       parms.course_data = this.subjects_data;
+         console.log(parms)
+      this.$apis.common.application_arrange_post(parms).then(res => {
+        if (res.data.code == 1) {
+          this.$message({
+            message: "添加成功",
+            type: "success"
+          });
+          this.$router.go(-1)
+        }
+      });
     },
      open4() {
         this.$notify({
@@ -411,8 +436,7 @@ export default {
       }
       this.$apis.common.application_arrange(parms).then(res=>{
         if(res.data.code==1){
-         
-          console.log(res.data)
+          this.apply_data=res.data.data
         }
       })
     },
@@ -424,7 +448,6 @@ export default {
         var c = ca[i].trim();
         if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
       }
-      // this.$router.push({path:'/login'})
     }
   }
 };
