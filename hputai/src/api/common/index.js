@@ -12,11 +12,7 @@ export default {
     let url='/api/api_region_list'
     return shuju.getdata(url,params)
    },
-   //班主任数据 /api_banzhuren_list
-   banzhuren_list (params) {
-    let url='/api/api_banzhuren_list'
-    return shuju.getdata(url,params)
-   },
+
    // 顾问数据 /api_adviser_list
    adviser_list (params) {
     let url='/api/api_adviser_list'

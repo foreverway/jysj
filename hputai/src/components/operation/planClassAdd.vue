@@ -75,10 +75,10 @@
           <p>学生姓名</p>
           <p>课表</p>
         </div>
-        <div class="add_ul" v-for="(item,i) in " :key="index">
-          <p>{{this.$route.query.student_name}}</p>
+          <div class="add_ul" v-for="(item,index) in this.apply_data.students" :key="index">
+          <p>{{item.student_name}}</p>
           <p>
-            <el-button type="text" @click="stu_centerDialogVisible = true">查看课表</el-button>
+            <el-button type="text" @click="stu_centerDialogVisible = true" >查看课表</el-button>
           </p>
         </div>
         <!-- <div class="add_ul_new" v-for="(item,i) in editableTabs_1" :key="i">
@@ -88,7 +88,7 @@
           <p @click=" deleteTest" style="cursor:pointer;">撤销</p>
         </div>-->
       </el-form-item>
-
+    
       <el-form-item :inline="true" label="已选科目">
         <div class="add_ul">
           <p id="sss">课时</p>
@@ -266,15 +266,29 @@ export default {
         }],   //观看数组
     };
   },
+  updated(){
+    mapState(["banzhuren_list"])
+  },
   created() {
     let params = {
       admin_id: this.getdataCookie("admin_id")
     };//
+       this.get_banzhuren_list({
+      //获取班主任列表
+      url: "/api/api_banzhuren_list",
+      params
+    });
+        this.get_live_list({
+      //获取直播列表
+      url: "/api/api_live_list",
+      params
+    });
+  
    this.get_apply_data();
   },
-  computed: {
-    ...mapGetters(["doneTodos"])
-  },
+  computed: 
+  mapState(["rolemenu","live_list","banzhuren_list","teacher_data","zhujiao_data","jiaowu_data"])
+  ,
   updated() {
     //  this.getLiveName();
     //   this.getbanzhurenName();
@@ -285,7 +299,11 @@ export default {
   },
 
   methods: {
-    
+     ...mapActions(["get_mune_list" ,"get_banzhuren_list",
+      "get_live_list",
+      "get_teacher_data",
+      "get_zhujiao_data",
+      "get_jiaowu_data"]),
     //获取直播列表
     getLiveName() {
       //筛选直播列表
@@ -338,6 +356,8 @@ export default {
       // }
     },
     onSubmit() {
+         console.log(this.live_list)
+         console.log(this.banzhuren_list)
       // if(this.input_twice*1==this.$route.query.classhour*1){
       //     alert(66)
       // }else{
@@ -358,7 +378,6 @@ export default {
           course_type: $("#course_type" + i).val() ,
           play_type: $("#play_type" + i).val(),
         });   
-     
             }
            let parms = {
         app_id:this.$route.query.id,  //报名表id
@@ -374,16 +393,15 @@ export default {
       };
       //course_data:[]   // {"classhour":2,"start_time":1564560000,"end_time":1564567200,"course_type":1,"play_type":1},
        parms.course_data = this.subjects_data;
-         console.log(parms)
-      this.$apis.common.application_arrange_post(parms).then(res => {
-        if (res.data.code == 1) {
-          this.$message({
-            message: "添加成功",
-            type: "success"
-          });
-          this.$router.go(-1)
-        }
-      });
+      // this.$apis.common.application_arrange_post(parms).then(res => {
+      //   if (res.data.code == 1) {
+      //     this.$message({
+      //       message: "添加成功",
+      //       type: "success"
+      //     });
+      //     this.$router.go(-1)
+      //   }
+      // });
     },
      open4() {
         this.$notify({
@@ -437,6 +455,7 @@ export default {
       this.$apis.common.application_arrange(parms).then(res=>{
         if(res.data.code==1){
           this.apply_data=res.data.data
+          
         }
       })
     },

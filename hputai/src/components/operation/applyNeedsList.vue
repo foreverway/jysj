@@ -78,6 +78,7 @@
     </el-form-item>
         <el-form-item :inline="true" label="班主任 ">
           <!-- <p>{{this.banzhuren_list_new}}</p> -->
+          <!-- this.tip_banzhuren -->
         <el-cascader
           v-model="banzhuren_live"
           :options="this.banzhuren_list_new"
@@ -141,6 +142,7 @@ import { mapState, mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
+      tip_banzhuren:[],//弹出层班主任
       money: "", //设置充值金额
       dialogFormVisible1: false,
       centerDialogVisible_shenghe:false,
@@ -185,7 +187,19 @@ export default {
     this.getdata();
     this.getAdviser();
     this.getRolenenu();
-   
+      let params = {
+      admin_id: this.getdataCookie("admin_id")
+    };//
+       this.get_banzhuren_list({
+      //获取班主任列表
+      url: "/api/api_banzhuren_list",
+      params
+    });
+        this.get_live_list({
+      //获取直播列表
+      url: "/api/api_live_list",
+      params
+    });
     //this.searchAdviser()
   },
   computed: 
@@ -198,14 +212,22 @@ export default {
       "rolemenu"
     ]),
     // ...mapState()
-  
+  updated(){
+    mapState(["banzhuren_list"])
+    // this.getbanzhurenName();
+  },
   mounted() {
         this.getbanzhurenName();
-
+        // this.tip_banzhuren=JSON.stringfy(this.banzhuren_list)
     console.log($(".status_color").prop());
   },
   watch: {},
   methods: {
+     ...mapActions(["get_mune_list" ,"get_banzhuren_list",
+      "get_live_list",
+      "get_teacher_data",
+      "get_zhujiao_data",
+      "get_jiaowu_data"]),
         //获取直播列表发送actions this.store.dispatch
     tableRowClassName({ row, rowIndex, columnIndex, column }) {   //改变数组的颜色
       if (columnIndex === 8) {
@@ -231,7 +253,9 @@ export default {
           break;
         case "click_test":
       this.centerDialogVisible_shenghe= true
-      console.log(this.$store.state.banzhuren_list)
+      this.getbanzhurenName();
+      console.log(this.banzhuren_list)
+      console.log(this.banzhuren_list_new)
           break;
         case "click_sure":
           break;
