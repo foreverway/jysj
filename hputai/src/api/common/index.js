@@ -2,11 +2,11 @@ import shuju from '../axios'
 
 export default {
       //获取菜单 /api_menu_list
-  //     menu_list (params) {
-  //       //此处的params是用户的账户id，用于获取用户的信息
-  //   let url='/api/api_menu_list'
-  //   return shuju.getdata(url,params)
-  //  },
+      menu_list (params) {
+        //此处的params是用户的账户id，用于获取用户的信息
+    let url='/api/api_menu_list'
+    return shuju.getdata(url,params)
+   },
    //省市数据  /api_region_list
    region_list (params) {
     let url='/api/api_region_list'

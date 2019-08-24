@@ -7,7 +7,7 @@
       <el-input  style="width:200px" v-model="money"  placeholder="请输入充值金额" ></el-input>
     <el-button type="primary" v-show="money>0" @click="copyUrl">生成并复制充值链接</el-button> -->
 <el-form ref="form" :model="form" label-width="120px">
-  <el-form-item label="活动时间">
+  <el-form-item label="日期">
     <el-col :span="11">
       <el-date-picker type="date" placeholder="选择日期" v-model="form.dtime" style="width: 100%;"></el-date-picker>
     </el-col>

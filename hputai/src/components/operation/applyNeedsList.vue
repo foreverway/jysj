@@ -42,7 +42,7 @@
         <template slot-scope="scope">
           <span v-if="scope.row.app_status== '待审核'" style="color:rgb(245, 108, 108)">待审核</span>
           <span v-else-if="scope.row.app_status== '待排课'" style="color:rgb(230, 162, 60)">待排课</span>
-          <span v-if="scope.row.app_status== '待确认排课中'" style="color:#009688">待确认排课中</span>
+          <span v-if="scope.row.app_status== '已排课待确认'" style="color:#009688">已排课待确认</span>
           <span v-else-if="scope.row.app_status== '已确认'" style="color:#303133">已确认</span>
           <span v-if="scope.row.app_status== '授课考勤'" style="color:#409EFF">授课考勤</span>
           <span v-else-if="scope.row.app_status== '已结课'" style="color:#67C23A">已结课</span>
@@ -65,60 +65,51 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-  <!-- 审核意见 -->
- <el-dialog    
-  title="提示"
-  :visible.sync="centerDialogVisible_shenghe"
-  width="30%"
-  center>
-   <el-form ref="form" :model="shenghe">
-    <el-form-item label="上课地点" v-model="radio">
-        <el-radio v-model="radio" label="线上">线上</el-radio>
-        <el-radio v-model="radio" label="线下">线下</el-radio>
-    </el-form-item>
+    <!-- 审核意见 -->
+    <el-dialog title="审核意见" :visible.sync="centerDialogVisible_shenghe" width="30%" center>
+      <el-form ref="form" >
+        <el-form-item label="审核意见" v-model="is_pass">
+          <el-radio v-model="is_pass" label=1>同意</el-radio>
+          <el-radio v-model="is_pass" label=2>不同意</el-radio>
+        </el-form-item>
         <el-form-item :inline="true" label="班主任 ">
           <!-- <p>{{this.banzhuren_list_new}}</p> -->
           <!-- this.tip_banzhuren -->
-        <el-cascader
-          v-model="banzhuren_live"
-          :options="this.banzhuren_list_new"
-          :props="{ expandTrigger: 'hover' }"
-          :show-all-levels="false"
-        ></el-cascader>
-      </el-form-item>
-      <el-form-item :inline="true" label=" 助教 ">
-        <el-cascader
-          v-model="helpTeacher_live"
-          :options="this.helpTeacher_list_new"
-          :props="{ expandTrigger: 'hover' }"
-          :show-all-levels="false"
-        ></el-cascader>
-      </el-form-item>
-      <el-form-item :inline="true" label="财务专员">
-        <!-- <span class="demonstration">hover 触发子菜单</span> -->
-        <!-- 用el-autocomplete -->
-        <el-cascader
-          v-model="moneymen_live"
-          :options="this.moneymen_list_new"
-          :props="{ expandTrigger: 'hover' }"
-          :show-all-levels="false"
-        ></el-cascader>
-      </el-form-item>
-      <el-form-item :inline="true" label=" 意见 ">
-        <el-input
-        type="textarea"
-        :rows="2"
-        placeholder="请输入内容"
-        v-model="textarea">
-      </el-input>
-      </el-form-item>
-</el-form>
-  <span slot="footer" class="dialog-footer">
-    <el-button @click="centerDialogVisible_shenghe = false">取 消</el-button>
-    <el-button type="primary" @click="submit_think">提交意见</el-button>
-  </span>
-</el-dialog>
-    
+          <el-cascader
+            v-model="banzhuren_live"
+            :options="this.banzhuren_list_new"
+            :props="{ expandTrigger: 'hover' }"
+            :show-all-levels="false"
+          ></el-cascader>
+        </el-form-item>
+        <el-form-item :inline="true" label=" 助教 ">
+          <el-cascader
+            v-model="helpTeacher_live"
+            :options="this.helpTeacher_list_new"
+            :props="{ expandTrigger: 'hover' }"
+            :show-all-levels="false"
+          ></el-cascader>
+        </el-form-item>
+        <el-form-item :inline="true" label="教务专员">
+          <!-- <span class="demonstration">hover 触发子菜单</span> -->
+          <!-- 用el-autocomplete -->
+          <el-cascader
+            v-model="moneymen_live"
+            :options="this.moneymen_list_new"
+            :props="{ expandTrigger: 'hover' }"
+            :show-all-levels="false"
+          ></el-cascader>
+        </el-form-item>
+        <el-form-item :inline="true" label=" 意见 ">
+          <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="textarea"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="centerDialogVisible_shenghe = false">取 消</el-button>
+        <el-button type="primary" @click="submit_think">提交意见</el-button>
+      </span>
+    </el-dialog>
+
     <!-- 设置充值链接 -->
     <div class="block">
       <el-pagination
@@ -131,9 +122,6 @@
         :total="400"
       ></el-pagination>
     </div>
-
-
-
   </div>
 </template>
 
@@ -142,19 +130,20 @@ import { mapState, mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
-      tip_banzhuren:[],//弹出层班主任
+     app_id:"",//维持一个点击表的id
+      tip_banzhuren: [], //弹出层班主任
       money: "", //设置充值金额
       dialogFormVisible1: false,
-      centerDialogVisible_shenghe:false,
-      textarea:"", //审核的输入框
+      centerDialogVisible_shenghe: false,
+      textarea: "", //审核的输入框
       msg: "",
-      radio:"", //上课地点
-          banzhuren_list_new: [], //班主任数据
+      is_pass: "", //审核意见
+      banzhuren_list_new: [], //班主任数据
       banzhuren_live: "",
-        moneymen_list_new: [
+      moneymen_list_new: [
         { value: 10141, label: "飞扬", id: 1 },
         { value: 10511, label: "朝夕", id: 7 }
-      ], //财务专员
+      ], //教务专员
       moneymen_live: "",
       helpTeacher_list_new: [
         { value: 10141, label: "飞扬", id: 1 },
@@ -173,68 +162,62 @@ export default {
       adviserList: "", //选定顾问的信息
       value1: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
       value2: "",
-      shenghe:{   //审核的弹出层
-        app_id:16,
-        banzhuren_id:1,
-        jiaowu_id:1,
-        zhujiao_id:1,
-        is_pass	:1,
-        remarks:'nini'
-      },
     };
   },
   created() {
     this.getdata();
     this.getAdviser();
     this.getRolenenu();
-      let params = {
+    let params = {
       admin_id: this.getdataCookie("admin_id")
-    };//
-       this.get_banzhuren_list({
+    }; //
+    this.get_banzhuren_list({
       //获取班主任列表
       url: "/api/api_banzhuren_list",
       params
     });
-        this.get_live_list({
+    this.get_live_list({
       //获取直播列表
       url: "/api/api_live_list",
       params
     });
     //this.searchAdviser()
   },
-  computed: 
-       mapState([
-      "live_list",
-      "banzhuren_list",
-      "teacher_data",
-      "zhujiao_data",
-      "jiaowu_data",
-      "rolemenu"
-    ]),
-    // ...mapState()
-  updated(){
-    mapState(["banzhuren_list"])
+  computed: mapState([
+    "live_list",
+    "banzhuren_list",
+    "teacher_data",
+    "zhujiao_data",
+    "jiaowu_data",
+    "rolemenu"
+  ]),
+  // ...mapState()
+  updated() {
+    mapState(["banzhuren_list"]);
     // this.getbanzhurenName();
   },
   mounted() {
-        this.getbanzhurenName();
-        // this.tip_banzhuren=JSON.stringfy(this.banzhuren_list)
-    console.log($(".status_color").prop());
+    this.getbanzhurenName();       
+    // this.tip_banzhuren=JSON.stringfy(this.banzhuren_list)
   },
   watch: {},
   methods: {
-     ...mapActions(["get_mune_list" ,"get_banzhuren_list",
+    ...mapActions([
+      "get_mune_list",
+      "get_banzhuren_list",
       "get_live_list",
       "get_teacher_data",
       "get_zhujiao_data",
-      "get_jiaowu_data"]),
-        //获取直播列表发送actions this.store.dispatch
-    tableRowClassName({ row, rowIndex, columnIndex, column }) {   //改变数组的颜色
+      "get_jiaowu_data"
+    ]),
+    //获取直播列表发送actions this.store.dispatch
+    tableRowClassName({ row, rowIndex, columnIndex, column }) {
+      //改变数组的颜色
       if (columnIndex === 8) {
         if (row.app_status == "待审核") {
           return "warning-row";
         }
-      return "";
+        return "";
       }
     },
     getbanzhurenName() {
@@ -243,27 +226,96 @@ export default {
       for (let i = 0; i < this.banzhuren_list.length; i++) {
         var val = this.banzhuren_list[i];
         this.banzhuren_list_new.push({ value: val.id, label: val.banzhuren });
-        console.log(this.banzhuren_list_new);
       }
     },
     mommonAction(a, b) {
       switch (a) {
         case "click_edit":
-           console.log(this.tableData)
+    this.$router.push({ path: "/ApplicationEdit", query:{id: b.id }});
+          console.log(this.tableData);
+           this.$message({
+            message:"确定成功",
+            type:"success"
+          })
           break;
-        case "click_test":
-      this.centerDialogVisible_shenghe= true
-      this.getbanzhurenName();
-      console.log(this.banzhuren_list)
-      console.log(this.banzhuren_list_new)
+        case "click_test": //审核
+         if (b.app_status == "待审核") {
+          this.centerDialogVisible_shenghe = true;
+          mapState(["banzhuren_list"]);
+          //  console.log(this.banzhuren_list_new)
+          this.app_id=b.id
+          this.getbanzhurenName();}else{
+                this.$message({
+            message:"请按流程操作",
+            type:"warning"
+          })
+          }
           break;
         case "click_sure":
+         this.$confirm('确认课表后无法更改课表的信息, 是否确定?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+                  let parms = {
+            app_id:b.id
+          };
+          this.$apis.menber.application_operate(parms).then(res => {
+            if (res.data.code == 1) {
+              this.$message({
+                type: "success",
+                message: b.student_name + " 的报名表已确定成功"
+              });
+              this.getdata();
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消确定'
+          });          
+        });
           break;
         case "click_delete":
+        this.$confirm('此操作将永久删除该需求, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+             let parms = {
+            id: b.id
+          };
+          this.$apis.menber.application_del(parms).then(res => {
+            if (res.data.code == 1) {
+              this.$message({
+                type: "success",
+                message: b.student_name + " 的报名表已删除成功"
+              });
+              this.getdata();
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          });
+        }).catch(() => {
+          this.$message({ 
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
           break;
         case "cilck_plan_class":
-          // {path:'/home',query: {id:'1'}}
-          this.$router.push({ path: "/PlanClassAdd", query: b });
+          // 排课
+          if (b.app_status == "待排课") {
+            this.$router.push({ path: "/PlanClassAdd", query: b });
+          } else {
+            this.$message({
+              type: "warning",
+              message: "不是排课的时候"
+            });
+          }
+
           break;
       }
     },
@@ -271,14 +323,25 @@ export default {
       return this.rolemenu[0].children[3].children;
       //  console.log()
     },
-    submit_think(){   //提交审核意见
-        this.$apis.common.application_audit(this.shenghe).then(res=>{
-          if(res.data.code==1){
-            alert(11)
-          }
-        })
-        this.centerDialogVisible_shenghe = false
-       
+    submit_think() {
+      //提交审核意见
+           let shenghe={
+                 app_id: this.app_id,
+                  banzhuren_id:this.banzhuren_live,
+                  jiaowu_id: this.moneymen_live,
+                  zhujiao_id: this.helpTeacher_live,
+                  is_pass: this.is_pass,
+                  remarks:this.textarea
+           }
+      this.$apis.common.application_audit(shenghe).then(res => {
+        if (res.data.code == 1) {
+          this.$message({
+            message:"审核成功",
+            type:"success"
+          })
+        }
+      });
+      this.centerDialogVisible_shenghe = false;
     },
     handleSizeChange(val) {
       //分页设置
@@ -340,8 +403,6 @@ export default {
     },
     //序号排列
 
-
-
     //删除用户
     salepro_del(row) {
       this.$confirm("此操作将永久删除该用户, 是否继续?", "提示", {
@@ -391,7 +452,6 @@ export default {
         .application_list(parms)
         .then(res => {
           if (res.data.code == 1) {
-            //console.log(res.data.data);
             this.msg = res.data;
             this.tableData = res.data.data.list;
           }

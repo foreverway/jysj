@@ -2,15 +2,14 @@ import Vue from 'vue'; //引入vue
 import Vuex from 'vuex'; //引入vuex
 import shuju from '../api/axios'
 import createVuexAlong from 'vuex-along'  //防止数据刷新丢失
+
 Vue.use(Vuex); //使用vuex
-
-
 
 const store = new Vuex.Store({
   state: { //要设置的全局访问的state对象
-    banzhuren_list:[],
     live_list: [],
     rolemenu:[], // 菜单列表
+    banzhuren_list:[],
     teacher_data:[],  //讲师列表
     zhujiao_data:[],   //助教列表
     jiaowu_data:[],     //教务专员列表
