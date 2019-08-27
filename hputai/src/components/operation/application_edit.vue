@@ -41,10 +41,10 @@
           <p>操作</p>
         </div>
         <div class="add_ul_new" v-for="(item,i) in editableTabs_1" :key="i">
-          <p>{{item.title}}</p>
+          <p>{{item.subject_name}}</p>
           <span style="display:none;" v-bind:id="'course_id'+ i">{{item.course_id}}</span>
           <p>
-            <el-input v-model.number="item.times" v-bind:id="'time' + i" placeholder="课时"></el-input>
+            <el-input v-model.number="item.classhour" v-bind:id="'time' + i" placeholder="课时"></el-input>
           </p>
           <p>
             <el-input v-model.number="item.price" v-bind:id="'mach' + i" placeholder="单价(元)"></el-input>
@@ -93,7 +93,7 @@
         </div>
         <div class="add_ul_new" v-for="(item,i) in editableTabs" :key="i">
           <span style="display:none;" v-bind:id="'students'+ i">{{item.id}}</span>
-          <p>{{item.name}}</p>
+          <p>{{ item.student_name}}</p>
           <p>{{item.tel}}</p>
           <p @click=" deleteTest" style="cursor:pointer;">撤销</p>
         </div>
@@ -327,8 +327,8 @@ export default {
               let newTabName = ++this.tabIndex_1 + "";
               console.log(oneArr_1[0].id);
               this.editableTabs_1.push({
-                title: oneArr_1[0].subject_name,
-                times: 10,
+                subject_name: oneArr_1[0].subject_name,
+                classhour: 10,
                 price: 1000,
                 course_type: "", //课程类型
                 course_id: oneArr_1[0].id, //课程id
@@ -344,8 +344,8 @@ export default {
         console.log(oneArr[0].id);
         let newTabName = ++this.tabIndex_1 + "";
         this.editableTabs_1.push({
-          title: lastName,
-          times: 10,
+          subject_name: lastName,
+          classhour: 10,
           price: 1000,
           course_type: "", //课程类型
           course_id: oneArr[0].id, //课程id
@@ -364,7 +364,7 @@ export default {
       );
       let newTabName = ++this.tabIndex + "";
       this.editableTabs.push({
-        name: targetName[0],
+        student_name: targetName[0],
         tel: checkOne[0].tel,
         id: checkOne[0].id
       });

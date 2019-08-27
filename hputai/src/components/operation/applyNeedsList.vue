@@ -122,43 +122,48 @@
         :total="400"
       ></el-pagination>
     </div>
-<el-dialog title="收货地址" :visible.sync="dialogTableVisible_table">
+<el-dialog title="查看排课" :visible.sync="dialogTableVisible_table">
     <el-form ref="form"  label-width="80px">
-      <el-form-item v-nodel="gridData" label="标题">
+      <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;"  label="标题:">
         <p>{{gridData.title}}</p>
       </el-form-item>
-       <el-form-item label="讲师">
+       <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="讲师:">
         <p>{{gridData.teacher_name?gridData.teacher_name:"未安排"}}</p>
       </el-form-item>
-       <el-form-item label="直播平台">
+       <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;"  label="直播平台:">
         <p>{{gridData.live_name?gridData.live_name:"未安排"}}</p>
       </el-form-item>
-       <el-form-item label="班主任">
+       <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="班主任:">
         <p>{{gridData.banzhuren_name?gridData.banzhuren_name:"未安排"}}</p>
       </el-form-item>
-       <el-form-item label="助教老师">
+       <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="助教老师:">
         <p>{{gridData.zhujiao_name?gridData.zhujiao_name:"未安排"}}</p>
       </el-form-item>
-       <el-form-item label="教务专员">
+       <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="教务专员:">
         <p>无数据</p>
       </el-form-item>
-       <el-form-item label="课时">
+       <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="课时:">
         <p>{{gridData.classhour}}</p>
       </el-form-item>
-       <el-form-item label="线上/线下">
+       <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="线上/线下:">
         <p>{{gridData.course_address}}</p>
       </el-form-item>
-       <el-form-item label="上课地址">
+       <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="上课地址:">
         <p>无数据</p>
       </el-form-item>
-       <el-form-item label="学生">
-        <p>{{gridData.student_name}}</p>
+       <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="学生:">
+       <el-table :data="gridData.students" style="border:1px solid silver;margin: 0; border-bottom:none;" >
+         <el-table-column property="student_name" label="学生姓名"></el-table-column>
+
+       </el-table>
       </el-form-item>
-      <el-form-item label="排课">
-          <el-table :data="gridData">
-          <el-table-column property="date" label="日期" width="150"></el-table-column>
-          <el-table-column property="name" label="姓名" width="200"></el-table-column>
-          <el-table-column property="address" label="地址"></el-table-column>
+      <el-form-item style="border:1px solid silver;border:1px solid silver;margin: 0; border-bottom:none;" label="排课">
+          <el-table :data="gridData_class" style="border:1px solid silver;margin: 0; border-bottom:none;">
+          <el-table-column property="classhour" label="课时" width="150"></el-table-column>
+          <el-table-column property="start_time" label="开始时间" width="200"></el-table-column>
+          <el-table-column property="week" label="星期"></el-table-column>
+           <el-table-column property="live_type" label="直播类型"></el-table-column>
+               <el-table-column property="play_type" label="观看端"></el-table-column>
         </el-table>
       </el-form-item>
     </el-form>
@@ -208,6 +213,8 @@ export default {
       gridData:{
     
       },  //查看排课的数据
+      gridData_class:[],//排课的数组
+
       dialogTableVisible_table: false,
     };
   },
@@ -372,7 +379,8 @@ export default {
            this.$apis.menber.look_arrange(parms).then(res=>{
              if(res.data.code==1){
               this.gridData=res.data.data
-              console.log(gridData)
+               this.gridData_class=res.data.data.course_data
+              console.log(this.gridData)
              }
            })
           break;
