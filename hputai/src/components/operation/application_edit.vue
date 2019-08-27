@@ -110,9 +110,9 @@
     <!-- 步骤二 -->
     <div v-if="active==2">
       <el-form>
-        <el-form-item label="上课地点" v-model="radio">
-          <el-radio v-model="radio" label="线上">线上</el-radio>
-          <el-radio v-model="radio" label="线下">线下</el-radio>
+        <el-form-item label="上课地点" >
+          <el-radio v-model="radio" label="1">线上</el-radio>
+          <el-radio v-model="radio" label="2">线下</el-radio>
         </el-form-item>
         <el-form-item label="需求1">
           <el-input
@@ -194,7 +194,7 @@ export default {
       options_1: [], //学生数组总数据
       options: [], //课程名称的数据
       options_: [], //总数据的数据
-      radio: "", //上课地点的选择
+      radio: '1', //上课地点的选择
       editableTabsValue: "0",
       editableTabsValue_1: "0", //增添项的长度
       editableTabs_1: [],
@@ -244,13 +244,23 @@ export default {
        id:this.$route.query.id
       };
       this.$apis.menber.application_edit(parms1).then(res=>{
-        if(res.data.code==1){
-          console.log(res.data.data)
+        if(res.data.code==1){   //从编辑的位置获取之前的信息
+   
             this.edit_data=res.data.data
             this.title=this.edit_data.title
             this.feedback=this.edit_data.remarks
-            this.editableTabs_1=this.edit_data.subjects_data
-            this.editableTabs=this.edit_data.students_data
+
+              this.need_one=this.edit_data.needs_data.need_one
+              this.need_two=this.edit_data.needs_data.need_two
+              this.need_three=this.edit_data.needs_data.need_three
+              this.need_four=this.edit_data.needs_data.need_four
+              this.need_five=this.edit_data.needs_data.need_five
+            // this.radio=this.edit_data.needs_data.course_address  这里是用户在线上还是线下
+               this.editableTabs_1=this.edit_data.subjects_data  //学科数据
+            this.editableTabs=this.edit_data.students_data    //学生数据
+            let subArr =this.edit_data.subjects_data  //原学科数据的数组
+                console.log(subArr)   //需要用户科目  手机号  学生姓名的id
+                console.log(this.editableTabs)//在这里循环得到想要的数据
         }
       })
       //获取科目的数据

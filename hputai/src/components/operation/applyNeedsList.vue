@@ -122,6 +122,48 @@
         :total="400"
       ></el-pagination>
     </div>
+<el-dialog title="收货地址" :visible.sync="dialogTableVisible_table">
+    <el-form ref="form"  label-width="80px">
+      <el-form-item v-nodel="gridData" label="标题">
+        <p>{{gridData.title}}</p>
+      </el-form-item>
+       <el-form-item label="讲师">
+        <p>{{gridData}}</p>
+      </el-form-item>
+       <el-form-item label="直播平台">
+        <p>{{gridData}}</p>
+      </el-form-item>
+       <el-form-item label="班主任">
+        <p>{{gridData}}</p>
+      </el-form-item>
+       <el-form-item label="助教老师">
+        <p>{{gridData}}</p>
+      </el-form-item>
+       <el-form-item label="教务专员">
+        <p>{{gridData}}</p>
+      </el-form-item>
+       <el-form-item label="课时">
+        <p>{{gridData.classhour}}</p>
+      </el-form-item>
+       <el-form-item label="线上/线下">
+        <p>{{gridData.course_address}}</p>
+      </el-form-item>
+       <el-form-item label="上课地址">
+        <p>{{gridData}}</p>
+      </el-form-item>
+       <el-form-item label="学生">
+        <p>{{gridData.student_name}}</p>
+      </el-form-item>
+      <el-form-item label="排课">
+          <el-table :data="gridData">
+          <el-table-column property="date" label="日期" width="150"></el-table-column>
+          <el-table-column property="name" label="姓名" width="200"></el-table-column>
+          <el-table-column property="address" label="地址"></el-table-column>
+        </el-table>
+      </el-form-item>
+    </el-form>
+
+</el-dialog>
   </div>
 </template>
 
@@ -162,6 +204,11 @@ export default {
       adviserList: "", //选定顾问的信息
       value1: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
       value2: "",
+      dialogTableVisible_table:'',  //点击查看排课
+      gridData:{
+    
+      },  //查看排课的数据
+      dialogTableVisible_table: false,
     };
   },
   created() {
@@ -228,6 +275,7 @@ export default {
         this.banzhuren_list_new.push({ value: val.id, label: val.banzhuren });
       }
     },
+   
     mommonAction(a, b) {
       switch (a) {
         case "click_edit":
@@ -315,7 +363,18 @@ export default {
               message: "不是排课的时候"
             });
           }
-
+          break;
+          case 'click_see_plan':  //查看排课
+           this.dialogTableVisible_table = true
+               let parms = {
+            app_id: b.id
+          };
+           this.$apis.menber.look_arrange(parms).then(res=>{
+             if(res.data.code==1){
+              this.gridData=res.data.data
+              console.log(gridData)
+             }
+           })
           break;
       }
     },

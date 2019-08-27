@@ -85,4 +85,8 @@ export default {
     let url='/api/api_application_edit'
     return shuju.getdata(url,params)
    },
+   look_arrange(params){         //获取排课信息
+     let url='/api/api_look_arrange'
+     return shuju.getdata(url,params)
+   }
 }
