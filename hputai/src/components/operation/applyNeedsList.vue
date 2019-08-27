@@ -128,19 +128,19 @@
         <p>{{gridData.title}}</p>
       </el-form-item>
        <el-form-item label="讲师">
-        <p>{{gridData}}</p>
+        <p>{{gridData.teacher_name?gridData.teacher_name:"未安排"}}</p>
       </el-form-item>
        <el-form-item label="直播平台">
-        <p>{{gridData}}</p>
+        <p>{{gridData.live_name?gridData.live_name:"未安排"}}</p>
       </el-form-item>
        <el-form-item label="班主任">
-        <p>{{gridData}}</p>
+        <p>{{gridData.banzhuren_name?gridData.banzhuren_name:"未安排"}}</p>
       </el-form-item>
        <el-form-item label="助教老师">
-        <p>{{gridData}}</p>
+        <p>{{gridData.zhujiao_name?gridData.zhujiao_name:"未安排"}}</p>
       </el-form-item>
        <el-form-item label="教务专员">
-        <p>{{gridData}}</p>
+        <p>无数据</p>
       </el-form-item>
        <el-form-item label="课时">
         <p>{{gridData.classhour}}</p>
@@ -149,7 +149,7 @@
         <p>{{gridData.course_address}}</p>
       </el-form-item>
        <el-form-item label="上课地址">
-        <p>{{gridData}}</p>
+        <p>无数据</p>
       </el-form-item>
        <el-form-item label="学生">
         <p>{{gridData.student_name}}</p>
