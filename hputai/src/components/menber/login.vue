@@ -6,7 +6,7 @@
    <div class="imgandlogin">
    <div class="logo_index"><img src="../../images/logo_index.png"></div>
     <div class="main1" v-show="dialogFormVisible==false">
-			<iframe scrolling="no" frameborder="0" height="100%" width="100%" :src="backg_url"></iframe>
+			<!-- <iframe scrolling="no" frameborder="0" height="100%" width="100%" :src="backg_url"></iframe> -->
       
 			<div class="login">
                <div class="logo_from_bgc"></div>
@@ -31,7 +31,7 @@
 
 
     <div class="main1" v-show="dialogFormVisible">
-			<iframe scrolling="no" frameborder="0" height="100%" width="100%" :src="backg_url"></iframe>
+		<!-- //	<iframe scrolling="no" frameborder="0" height="100%" width="100%" :src="backg_url"></iframe> -->
 			<div class="login zhuce">
                 <!-- <img src="../../assets/logo.png" alt=""> -->
 <p class="login_title" ></p>

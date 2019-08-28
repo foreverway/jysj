@@ -15,9 +15,9 @@
         <!-- 标题是从上一个页面拉去过来的信息 -->
         <p>{{this.$route.query.title}}</p>
       </el-form-item>
-      <el-form-item :inline="true" label="直播平台">  
+      <el-form-item :inline="true" label="直播平台">
         <el-cascader
-          v-model="value_live"
+          v-model="form.value_live"
           :options="this.live_list_new"
           :props="{ expandTrigger: 'hover' }"
           :show-all-levels="false"
@@ -26,7 +26,7 @@
       </el-form-item>
       <el-form-item :inline="true" label="讲师">
         <el-cascader
-          v-model="teacher_live"
+          v-model="form.teacher_live"
           :options="this.teacher_list_new"
           :props="{ expandTrigger: 'hover' }"
           :show-all-levels="false"
@@ -35,7 +35,7 @@
       </el-form-item>
       <el-form-item :inline="true" label="班主任">
         <el-cascader
-          v-model="banzhuren_live"
+          v-model="form.banzhuren_live"
           :options="this.banzhuren_list_new"
           :props="{ expandTrigger: 'hover' }"
           :show-all-levels="false"
@@ -44,19 +44,19 @@
       </el-form-item>
       <el-form-item :inline="true" label="助教">
         <el-cascader
-          v-model="helpTeacher_live"
+          v-model="form.helpTeacher_live"
           :options="this.helpTeacher_list_new"
           :props="{ expandTrigger: 'hover' }"
           :show-all-levels="false"
           @change="handleChange_help"
         ></el-cascader>
       </el-form-item>
-      <el-form-item :inline="true" label="财务专员">
+      <el-form-item :inline="true" label="教务专员">
         <!-- <span class="demonstration">hover 触发子菜单</span> -->
         <!-- 用el-autocomplete -->
         <el-cascader
-          v-model="moneymen_live"
-          :options="this.moneymen_list_new"
+          v-model="form.jiaowu_live"
+          :options="this.jiaowu_list_new"
           :props="{ expandTrigger: 'hover' }"
           :show-all-levels="false"
           @change="handleChange_money"
@@ -66,8 +66,8 @@
         <p>{{parseInt(this.$route.query.classhour)}}</p>
       </el-form-item>
       <el-form-item label="上课地点" v-model="radio">
-        <el-radio v-model="radio" label="线上">线上</el-radio>
-        <el-radio v-model="radio" label="线下">线下</el-radio>
+        <el-radio v-model="radio" label="1">线上</el-radio>
+        <el-radio v-model="radio" label="2">线下</el-radio>
       </el-form-item>
 
       <el-form-item label="学生姓名">
@@ -75,8 +75,8 @@
           <p>学生姓名</p>
           <p>课表</p>
         </div>
-        <div class="add_ul">
-          <p>{{this.$route.query.student_name}}</p>
+        <div class="add_ul" v-for="(item,index) in this.apply_data.students" :key="index">
+          <p>{{item.student_name}}</p>
           <p>
             <el-button type="text" @click="stu_centerDialogVisible = true">查看课表</el-button>
           </p>
@@ -92,8 +92,8 @@
       <el-form-item :inline="true" label="已选科目">
         <div class="add_ul">
           <p id="sss">课时</p>
-          <p width="250px">开始时间</p>
-          <p width="250px">结束时间</p>
+          <p width="300px">开始时间</p>
+          <p width="300px">结束时间</p>
           <p>直播类型</p>
           <p>观看端</p>
           <p>操作</p>
@@ -102,59 +102,93 @@
           </p>
         </div>
         <div class="add_ul">
-          <p><el-input v-model="input_twice" placeholder="排几节课?"></el-input></p>
           <p>
-            <el-date-picker v-model="value_data_start" type="date" placeholder="开始日期"></el-date-picker>
+            <el-input v-model="input_twice" placeholder="排几节课?"></el-input>
           </p>
           <p>
-            <el-date-picker v-model="value_data_end" type="date" placeholder="结束日期"></el-date-picker>
+            <el-date-picker
+              v-model="value_data_start"
+              value-format="timestamp"
+               type="datetime"
+              placeholder="开始日期"
+            ></el-date-picker>
+          </p>
+          <p>
+            <el-date-picker
+              v-model="value_data_end"
+              value-format="timestamp"
+               type="datetime"
+              placeholder="结束日期"
+            ></el-date-picker>
           </p>
           <!-- <p @click="milti">总额</p> -->
-          <p>    
+          <p>
             <el-select v-model="live_type" placeholder="直播类型是什么">
               <el-option
                 v-for="item in options_type"
                 :key="item.value"
                 :label="item.label"
-                :value="item.value">
-              </el-option>
+                :value="item.value"
+              ></el-option>
             </el-select>
           </p>
           <p>
-           <el-select v-model="study_wey" placeholder="在哪看呢">
+            <el-select v-model="study_wey" placeholder="在哪看呢">
               <el-option
                 v-for="item in options_wey"
                 :key="item.value"
                 :label="item.label"
-                :value="item.value">
-              </el-option>
+                :value="item.value"
+              ></el-option>
             </el-select>
           </p>
-           <p @click="deleteTest_1" style="cursor:pointer;">撤销</p>
+          <p @click="deleteTest_1" style="cursor:pointer;">撤销</p>
         </div>
-        <template>
-
-        </template>
+        <template></template>
         <div class="add_ul_new" v-for="(item,i) in editableTabs_1" :key="i">
           <span style="display:none;" v-bind:id="'course_id'+ i">{{item.course_id}}</span>
           <p>
-            <el-input v-model.number="item.times" v-bind:id="'time' + i" placeholder="排几节课?"></el-input>
+            <el-input v-model.number="item.times" v-bind:id="'classhour' + i" placeholder="排几节课?"></el-input>
           </p>
           <p>
             <!-- <el-input v-model.number="item.price" v-bind:id="'mach' + i" placeholder="单价(元)"></el-input> -->
-            <el-date-picker v-model="item.value_data_start" type="date" placeholder="开始日期"></el-date-picker>
+            <el-date-picker
+              v-model="item.start_time"
+              v-bind:id="'start_time' + i"
+              value-format="timestamp"
+               type="datetime"
+              placeholder="开始日期"
+            ></el-date-picker>
           </p>
-         <p><el-date-picker v-model="item.value_data_end" type="date" placeholder="结束日期"></el-date-picker></p>
           <p>
-            <select v-model="item.course_type" v-bind:id="'clas' + i" placeholder="班课" style="height:36px;border:none;">
-                <option label="直播类型是什么" value="8"></option>
+            <el-date-picker
+              v-model="item.end_time"
+              v-bind:id="'end_time' + i"
+              value-format="timestamp"
+               type="datetime"
+              placeholder="结束日期"
+            ></el-date-picker>
+          </p>
+          <p>
+            <select
+              v-model="item.course_type"
+              v-bind:id="'course_type' + i"
+              placeholder="班课"
+              style="height:36px;border:none;"
+            >
+              <option label="直播类型是什么" value="8"></option>
               <option label="大班课" value="2">否</option>
               <option label="小班课" value="3">是</option>
               <option label="一对一" value="1">是</option>
             </select>
           </p>
-           <p>
-            <select v-model="item.course_wey" v-bind:id="'clas' + i" placeholder="班课" style="height:36px;border:none;">
+          <p>
+            <select
+              v-model="item.play_type"
+              v-bind:id="'play_type' + i"
+              placeholder="班课"
+              style="height:36px;border:none;"
+            >
               <option label="在哪里观看" value="8"></option>
               <option label="WEB端" value="2">否</option>
               <option label="客户端" value="1">是</option>
@@ -166,7 +200,7 @@
     </el-form>
 
     <el-button @click="goBack">取消</el-button>
-    <el-button type="primary" @click="onSubmit" >就这样吧</el-button>
+    <el-button type="primary" @click="onSubmit">就这样吧</el-button>
     <el-dialog title="提示" :visible.sync="stu_centerDialogVisible" width="30%" center>
       <span>这里查看的课表，是大于等于当前时间的课表</span>
       <span slot="footer" class="dialog-footer">
@@ -174,7 +208,6 @@
         <el-button type="primary" @click="stu_centerDialogVisible = false">确 定</el-button>
       </span>
     </el-dialog>
-     
   </div>
 </template>
 
@@ -185,28 +218,31 @@ import { mapState, mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
-      value_data_start: "", //选择日期
-      value_data_end:'',
+      value_data_start: "", //默认form开始日期
+      value_data_end: "", //结束时间
+      input_twice: "", //排几节课?
+      live_type: "", //直播类型
+      study_wey: "", //观看端
       live_list_new: [], //直播数据
-      value_live: "",   //
-      input_twice:"",   //排几节课?
+      value_live: "", //
+      radio: "", //上课地点的选择
       teacher_list_new: [
         { value: 10911, label: "飞扬", id: 1 },
         { value: 10811, label: "朝夕", id: 4 }
       ], //讲师数据
-      teacher_live: "",
+      // teacher_live: "",
       banzhuren_list_new: [], //班主任数据
-      banzhuren_live: "",
+      // banzhuren_live: "",
       helpTeacher_list_new: [
         { value: 10141, label: "飞扬", id: 1 },
         { value: 1011, label: "朝夕", id: 2 }
       ], //助教数据
-      helpTeacher_live: "",
-      moneymen_list_new: [
+      // helpTeacher_live: "",
+      jiaowu_list_new: [
         { value: 10141, label: "飞扬", id: 1 },
         { value: 10511, label: "朝夕", id: 7 }
       ], //财务专员
-      moneymen_live: "",
+      // jiaowu_live: "",
       input_class_time: "", //课时
       stu_centerDialogVisible: false, //学生课表的弹出层
       apply_centerDialogVisible: false, //查看报名表的弹出层
@@ -227,57 +263,91 @@ export default {
       ],
       options: [], //课程名称的数据
       options_: [], //总数据的数据
-      radio: "", //上课地点的选择
       editableTabsValue_1: [],
       editableTabs_1: [],
       tabIndex: 1,
       subjects_data: [], //学科数据
       title: "", //标题
       value_data: "", //排课的日期
-      input_week:'',  //排课的星期数
-      live_type:"",//直播类型
-      study_wey:'' , //观看端
-      options_type:[{
-          value: '2',
-          label: '大班课'
-        }, {
-          value: '3',
-          label: '小班课'
-        }, {
-          value: '1',
-          label: '一对一'
-        }],  //直播数组
-      options_wey:[{
-          value: '2',
-          label: 'WEB端'
-        }, {
-          value: '1',
-          label: '服务端'
-        }],   //观看数组
+
+      form: {
+        //总表格
+        value_live: "",
+        teacher_live: "",
+        banzhuren_live: "",
+        helpTeacher_live: "",
+        jiaowu_live: "",
+        radio: ""
+      },
+      apply_data: {}, //根据报名表id获取的数据
+      options_type: [
+        {
+          value: "2",
+          label: "大班课"
+        },
+        {
+          value: "3",
+          label: "小班课"
+        },
+        {
+          value: "1",
+          label: "一对一"
+        }
+      ], //直播数组
+      options_wey: [
+        {
+          value: "2",
+          label: "WEB端"
+        },
+        {
+          value: "1",
+          label: "服务端"
+        }
+      ] //观看数组
     };
+  },
+  updated() {
+    mapState(["banzhuren_list"]);
   },
   created() {
     let params = {
       admin_id: this.getdataCookie("admin_id")
-    };//
-   this.get_apply_data();
+    }; //
+    this.get_banzhuren_list({
+      //获取班主任列表
+      url: "/api/api_banzhuren_list",
+      params
+    });
+    this.get_live_list({
+      //获取直播列表
+      url: "/api/api_live_list",
+      params
+    });
+
+    this.get_apply_data();
   },
-  computed: {
-   
-    ...mapGetters(["doneTodos"])
-  },
-  updated() {
-    //  this.getLiveName();
-    //   this.getbanzhurenName();
-  },
+  computed: mapState([
+    "rolemenu",
+    "live_list",
+    "banzhuren_list",
+    "teacher_data",
+    "zhujiao_data",
+    "jiaowu_data"
+  ]),
   mounted() {
-      
     this.getbanzhurenName();
     this.getLiveName();
   },
 
   methods: {
-    
+    ...mapActions([
+      "get_mune_list",
+      "get_banzhuren_list",
+      "get_live_list",
+      "get_teacher_data",
+      "get_zhujiao_data",
+      "get_jiaowu_data"
+    ]),
     //获取直播列表
     getLiveName() {
       //筛选直播列表
@@ -292,7 +362,6 @@ export default {
       for (let i = 0; i < this.banzhuren_list.length; i++) {
         var val = this.banzhuren_list[i];
         this.banzhuren_list_new.push({ value: val.id, label: val.banzhuren });
-        console.log(this.banzhuren_list_new);
       }
     },
     getdataCookie(cname) {
@@ -319,62 +388,81 @@ export default {
       // var val = this.options_[i];
       let newTabName = ++this.tabIndex_1 + "";
       this.editableTabs_1.push({
-        value_data_start: "",  //选择开始日期
-        value_data_end: "",  //选择结束日期
-       input_week: "",   //周几
+        classhour: "",
+        start_time: "", //选择开始日期
+        end_time: "", //选择结束日期
+        input_week: "", //周几
         course_type: "", //课程类型
-        course_wey:''
+        play_type: ""
       });
       this.editableTabsValue_1 = newTabName;
       // }
     },
     onSubmit() {
-      if(this.input_twice*1==this.$route.query.classhour*1){
-          alert(66)
-      }else{
-        alert("dd")
+      // if(this.input_twice*1==this.$route.query.classhour*1){
+      // }else{
+      // }
+      this.subjects_data.push({
+        start_time: this.value_data_start.toString().slice(0,10), //默认form开始日期
+        end_time: this.value_data_end.toString().slice(0,10), //结束时间
+        classhour: this.input_twice, //排几节课?
+        course_type: this.live_type, //直播类型
+        play_type: this.study_wey //观看端
+      });
+      for (let i = 0; i < this.editableTabsValue_1.length; i++) {
+        this.subjects_data.push({
+          classhour: $("#classhour" + i).val() * 1,
+          start_time: $("#start_time" + i).val(),
+          end_time: $("#end_time" + i).val(),
+          course_type: $("#course_type" + i).val(),
+          play_type: $("#play_type" + i).val()
+        }); 
       }
-      // for (let i = 0; i < this.editableTabsValue_1.length; i++) {}
+   console.log(this.subjects_data)
       let parms = {
-        app_id:this.$route.query.id,  //报名表id
-        live_id: this.value_live,  //直播平台id
-        teacher_id: this.teacher_live,  //讲师id
-        banzhuren_id: this.banzhuren_live,   //班主任id
-        zhujiao_id: this.helpTeacher_live,   //助教id
-        jiaowu_id: this.moneymen_live,   //教务id
-        students_id: this.need_three,  //学生id  string
-        classhour: this.need_four,     //课时
-        course_address: this.need_five   //1线上，2线下
-                   
+        app_id: this.$route.query.id, //报名表id
+        live_id: this.form.value_live[0], //直播平台id
+        teacher_id: this.form.teacher_live[0], //讲师id
+        banzhuren_id: this.form.banzhuren_live[0], //班主任id
+        zhujiao_id: this.form.helpTeacher_live[0], //助教id
+        jiaowu_id: this.form.jiaowu_live[0], //教务id
+        // students_id: this.apply_data.students,  //学生id  string
+        classhour: this.$route.query.classhour * 1, //课时
+        course_address: this.radio * 1 //1线上，2线下
       };
+
+      var studentStr = this.apply_data.students.map((item, index, arr) => {
+        return item.student_id;
+      });
+      parms.students_id = studentStr.join();
+        console.log(parms)
+      //console.log(Object.prototype.toString.call(studentStr.join()))
       //course_data:[]   // {"classhour":2,"start_time":1564560000,"end_time":1564567200,"course_type":1,"play_type":1},
-      // parms.subjects_data = this.subjects_data;
-      // parms.students_data = this.students_data;
-      // this.$apis.common.application_add(parms).then(res => {
+      parms.course_data = this.subjects_data;
+     
+      // this.$apis.common.application_arrange_post(parms).then(res => {
       //   if (res.data.code == 1) {
       //     this.$message({
       //       message: "添加成功",
       //       type: "success"
       //     });
-      //     this.active = 3;
+      //     this.$router.go(-1);
       //   }
       // });
     },
-     open4() {
-        this.$notify({
-          title: '忘记说了',
-          message: '最少要有一个排课计划',
-          position: 'top-left',
-           type: 'warning'
-        })
-      },
+    open4() {
+      this.$notify({
+        title: "忘记说了",
+        message: "最少要有一个排课计划",
+        position: "top-left",
+        type: "warning"
+      });
+    },
     deleteTest_1() {
       this.editableTabs_1.pop(this.editableTabsValue_1);
-      if(this.editableTabs_1.length==0){
-               this.open4() 
+      if (this.editableTabs_1.length == 0) {
+        this.open4();
       }
-      
-
     },
     next() {
       for (let i = 0; i < this.editableTabsValue.length; i++) {
@@ -405,16 +493,30 @@ export default {
     goBack() {
       history.back(-1);
     }, // 复制链接
-    get_apply_data(){
-      let parms={
-        app_id:this.$route.query.id
-      }
-      this.$apis.common.application_arrange(parms).then(res=>{
-        if(res.data.code==1){
-         
-          console.log(res.data)
-        }
-      })
+
+    get_apply_data() {
+      //获取该报名表的信息
+      let parms = {
+        app_id: this.$route.query.id
+      };
+      this.$apis.common
+        .application_arrange(parms)
+        .then(res => {
+          if (res.data.code == 1) {
+            this.apply_data = res.data.data;
+          } else {
+            this.$message({
+              type: "info",
+              message: "请求失败"
+            });
+          }
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "请求失败"
+          });
+        });
     },
     getdataCookie(cname) {
       // return 1
@@ -424,7 +526,6 @@ export default {
         var c = ca[i].trim();
         if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
       }
-      // this.$router.push({path:'/login'})
     }
   }
 };
@@ -462,7 +563,7 @@ option {
   background-color: #fff;
   padding: 0;
   margin-right: -5px;
-  width: 10%;
+  width: 12%;
   border: 1px solid silver;
   text-align: center;
   overflow: hidden;
@@ -474,10 +575,10 @@ option {
   background-color: #fff;
   padding: 0;
   margin-right: -5px;
-  width: 10%;
+  width: 12%;
   border: 1px solid silver;
   text-align: center;
-   overflow: hidden;
+  overflow: hidden;
 }
 .stap_3 {
   width: 100%;

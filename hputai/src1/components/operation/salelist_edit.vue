@@ -1,16 +1,16 @@
 <template>
     <div class="main">
                     <!-- 设置充值链接 -->
-         <!-- <el-page-header @back="goBack" content="编辑销售情况表">
-</el-page-header> -->
-<div class="main_head">
-编辑销售情况表
-</div>
+         <el-page-header  @back="goBack" content="编辑销售情况表">
+</el-page-header>
+<!-- <div >
+
+</div> -->
 <!-- 
       <el-input  style="width:200px" v-model="money"  placeholder="请输入充值金额" ></el-input>
     <el-button type="primary" v-show="money>0" @click="copyUrl">生成并复制充值链接</el-button> -->
 <el-form ref="form" :model="form" label-width="120px">
-  <el-form-item label="活动时间">
+  <el-form-item label="日期">
     <el-col :span="11">
       <el-date-picker type="date" placeholder="选择日期" v-model="form.dtime" style="width: 100%;"></el-date-picker>
     </el-col>
@@ -112,14 +112,13 @@
     <el-input type="textarea" v-model="form.feedback"></el-input>
   </el-form-item>
   <el-form-item>
-    <el-button type="primary" @click="onSubmit">编辑保存</el-button>
-    <el-button>取消</el-button>
+    <el-button type="primary" @click=onSubmit>编辑保存</el-button>
+    <el-button @click="goBack">取消</el-button>
   </el-form-item>
 </el-form>
 
 
 <!-- 设置充值链接 -->
-         <div style="display:none" cols="20" id="biao1">{{copyurl1}}</div>
     </div>
 </template>
 
@@ -129,7 +128,7 @@ export default {
     data () {
         return {
              form: {
-         id:this.$route.query.id,
+         id:this.$route.query.id*1,
           dtime: '',
           week: '',
           follow_man: '',
@@ -150,21 +149,37 @@ export default {
           advance_amount: '',
           feedback: '',
         },
+
               money:'',
         }
     },
     created(){
-        this.getdata()
+          this.getdata()
+    },
+    mounted(){
+             
     },
     methods: {
      onSubmit(){
-
+      //  let parms ={
+      //    form:this.form
+      //  }
+       console.log(this.form)
+       this.$apis.common.salepro_edit_put(this.form).then(res=>{
+            if(res.data.code==1){
+   this.$router.push({path:'/SalesList'})
+            }
+        })
      },
       getdata(){
-        this.$apis.common.salepro_edit(this.form).then(res=>{
-            if(res.code==1){
-                this.form =res.data
-                console.log(this.form )
+        let params ={
+          id:this.$route.params.id
+        }
+        this.$apis.common.salepro_edit(params).then(res=>{
+            if(res.data.code==1){
+              console.log(res.data)
+                this.form =res.data.data
+         
             }
         })
     },

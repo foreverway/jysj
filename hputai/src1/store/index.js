@@ -1,10 +1,9 @@
 import Vue from 'vue'; //引入vue
 import Vuex from 'vuex'; //引入vuex
 import shuju from '../api/axios'
+import createVuexAlong from 'vuex-along'  //防止数据刷新丢失
 
 Vue.use(Vuex); //使用vuex
-
-
 
 const store = new Vuex.Store({
   state: { //要设置的全局访问的state对象
@@ -65,8 +64,19 @@ const store = new Vuex.Store({
               shuju.getdata(url, params).then
               (res => { commit("get_jiaowu_data", res.data.data.list);})
               },
-  }
-
+  },
+  plugins: [createVuexAlong(
+    // {
+    //   name: "hello-vuex-along", // 设置保存的集合名字，避免同站点下的多项目数据冲突
+    //   local: {
+    //     list: ["rolemenu"],
+    //     isFilter: true // 过滤模块 ma 数据， 将其他的存入 localStorage
+    //   },
+    //   session: {
+    //     list: ["live_list",'banzhuren_list'] // 保存 count 和模块 ma 中的 a1 到 sessionStorage
+    //   }
+    // }
+  )]
 }); //声明store
 
 export default store; //暴露store

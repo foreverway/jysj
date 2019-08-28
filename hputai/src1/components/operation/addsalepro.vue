@@ -7,7 +7,7 @@
       <el-input  style="width:200px" v-model="money"  placeholder="请输入充值金额" ></el-input>
     <el-button type="primary" v-show="money>0" @click="copyUrl">生成并复制充值链接</el-button> -->
 <el-form ref="form" :model="form" label-width="120px">
-  <el-form-item label="活动时间">
+  <el-form-item label="日期">
     <el-col :span="11">
       <el-date-picker type="date" placeholder="选择日期" v-model="form.dtime" style="width: 100%;"></el-date-picker>
     </el-col>
@@ -110,7 +110,7 @@
   </el-form-item>
   <el-form-item>
     <el-button type="primary" @click="onSubmit">立即创建</el-button>
-    <el-button>取消</el-button>
+    <el-button @click="aaa">取消</el-button>
   </el-form-item>
 </el-form>
 
@@ -150,21 +150,20 @@ export default {
         }
     },
     methods: {
+          aaa(){
+//  history.back(-1)
+      this.$router.go(-1);        
+      },
          onSubmit(formName) {
-        console.log('submit!');
-        //        this.$refs[formName].validate((valid) => {
-        //   if (valid) {
                 this.$apis.common.salepro_add(this.form).then(res=>{
             if(res.data.code==1){
     this.$message({
           message: '添加成功',
           type: 'success'
         })
-       this.$router.push({path:'/ApplicationAdd'})
+       this.$router.push({path:'/SalesList'})
             }
-            // else{
-            //       this.$message.error(res.data.msg);
-            // }
+  
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -176,22 +175,22 @@ export default {
       }
     //      
     ,                  // 复制链接
-      copyUrl(){
+//       copyUrl(){
        
- let url = studens_url.student_url+'login/1/'+this.money;
-        let oInput = document.createElement('input');
-        oInput.value = url;
-        document.body.appendChild(oInput);
-        oInput.select(); // 选择对象;
-        console.log(oInput.value)
-        document.execCommand("Copy"); // 执行浏览器复制命令
-        this.$message({
-          message: url +'已成功复制到剪切板',
-          type: 'success'
-        });
-        this.money=''
-        oInput.remove()
-      },
+//  let url = studens_url.student_url+'login/1/'+this.money;
+//         let oInput = document.createElement('input');
+//         oInput.value = url;
+//         document.body.appendChild(oInput);
+//         oInput.select(); // 选择对象;
+//         console.log(oInput.value)
+//         document.execCommand("Copy"); // 执行浏览器复制命令
+//         this.$message({
+//           message: url +'已成功复制到剪切板',
+//           type: 'success'
+//         });
+//         this.money=''
+//         oInput.remove()
+//       },
     }
 }
 </script>

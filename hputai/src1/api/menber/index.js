@@ -72,4 +72,21 @@ export default {
     let url='/api/api_role_del'
     return shuju.deletedata(url,params)
    },
+   //报名需求表删除
+   application_del(params){
+    let url='/api/api_application_del'
+    return shuju.deletedata(url,params)
+   },
+   application_operate(params) {    //报名需求确认
+    let url='/api/api_application_operate'
+    return shuju.postdata(url,params)
+   },
+   application_edit(params) {    //编辑报名需求获取信息
+    let url='/api/api_application_edit'
+    return shuju.getdata(url,params)
+   },
+   look_arrange(params){         //获取排课信息
+     let url='/api/api_look_arrange'
+     return shuju.getdata(url,params)
+   }
 }

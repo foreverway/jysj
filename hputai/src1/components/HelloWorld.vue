@@ -26,8 +26,9 @@
           <!-- <el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">
               <el-radio-button :label="false">展开</el-radio-button>
               <el-radio-button :label="true">收起</el-radio-button>
-          </el-radio-group>-->
+          </el-radio-group> -->
           <el-menu
+           :unique-opened=true
             :default-active="ActiveMenu"
             class="el-menu-vertical-demo"
             @open="handleOpen"
@@ -97,21 +98,21 @@ export default {
      let params = {
       admin_id: this.getdataCookie("admin_id")
     };
+      this.get_banzhuren_list({
+      //获取班主任列表
+      url: "/api/api_banzhuren_list",
+      params
+    });
     this.get_mune_list({
       url: "/api/api_menu_list",
       params
     });
-  
     this.get_live_list({
       //获取直播列表
       url: "/api/api_live_list",
       params
     });
-    this.get_banzhuren_list({
-      //获取班主任列表
-      url: "/api/api_banzhuren_list",
-      params
-    });
+  
     this.get_teacher_data({
       //获取讲师列表
       url: "/api/api_teacher_data",
@@ -128,14 +129,12 @@ export default {
       params
     });
   },
-  computed:{
-        ...mapState(["rolemenu","live_list",
-      "banzhuren_list",
+  computed:
+        mapState(["banzhuren_list","rolemenu","live_list",
       "teacher_data",
       "zhujiao_data",
       "jiaowu_data"]),
-  }
-  ,
+ 
   methods: {
     ...mapActions(["get_mune_list" ,"get_banzhuren_list",
       "get_live_list",

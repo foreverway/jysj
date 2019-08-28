@@ -101,43 +101,41 @@ export default {
       this.get_banzhuren_list({
       //获取班主任列表
       url: "/api/api_banzhuren_list",
-      params
     });
     this.get_mune_list({
       url: "/api/api_menu_list",
-      params
     });
     this.get_live_list({
       //获取直播列表
       url: "/api/api_live_list",
-      params
     });
-  
     this.get_teacher_data({
       //获取讲师列表
       url: "/api/api_teacher_data",
-      params
     });
     this.get_zhujiao_data({
       //获取助教列表
       url: "/api/api_zhujiao_data",
-      params
     });
     this.get_jiaowu_data({
       //获取教务专员列表
       url: "/api/api_jiaowu_data",
-      params
     });
+
+
   },
   computed:
         mapState(["banzhuren_list","rolemenu","live_list",
       "teacher_data",
       "zhujiao_data",
-      "jiaowu_data"]),
+      "jiaowu_data",
+      "region_list",
+      ]),
  
   methods: {
     ...mapActions(["get_mune_list" ,"get_banzhuren_list",
       "get_live_list",
+      "get_region_list",
       "get_teacher_data",
       "get_zhujiao_data",
       "get_jiaowu_data"]), //发送actions this.store.dispatch

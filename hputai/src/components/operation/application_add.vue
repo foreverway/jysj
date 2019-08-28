@@ -131,9 +131,17 @@
     <div v-if="active==2">
       <el-form>
         <el-form-item label="上课地点" v-model="radio">
-          <el-radio v-model="radio" label="线上">线上</el-radio>
-          <el-radio v-model="radio" label="线下">线下</el-radio>
+          <el-radio-group v-model="radio"  @change=whereGo(radio)>
+        <el-radio v-model="radio" label="1" >线上</el-radio>
+        <el-radio v-model="radio" label="2">线下</el-radio>
+         </el-radio-group>
         </el-form-item>
+   <el-form-item label="上课地址" v-if="show==true">
+      <el-cascader
+        placeholder="支持到地级市"
+        :options="address_check"
+        filterable></el-cascader>
+      </el-form-item>
         <el-form-item label="需求1">
           <el-input
             type="textarea"
