@@ -1,119 +1,234 @@
 <template>
-    <div class="main">
-            <div class="data_main">
-                <el-calendar v-model="value" >
-                     <template
-                            slot="dateCell"
-                            slot-scope="{date, data}">
-                            <p :class="msg.indexOf(data.day)!=-1? 'is-selected' : ''">
-                            {{ data.day.slice(8)}}
-                         
-                         {{ msg.indexOf(data.day)!=-1 ? '✔️' : ''}}
-                            </p>
-  </template>
-                </el-calendar>
-            </div>
-            <div class="data_list">
-                   <el-table 
+  <div class="main" heigth="800px">
+    <div class="data_main" v-if="change_value=='1'">
+       <el-cascader
+          placeholder="输入学生姓名"
+          v-model="value_stu"
+          :options="options1"
+          @change="handleChange(value_stu)"
+          filterable
+        ></el-cascader>
+           <!-- 用el-autocomplete -->
+        <el-cascader
+         placeholder="选择科目"
+          v-model="value_sub"
+          :options="options"
+          :props="{ expandTrigger: 'hover' }"
+          :show-all-levels="false"
+          @change="handleChange_1"
+        ></el-cascader>
+      <el-calendar v-model="value" width="49%" style="inline-block">
+        <template slot="dateCell" slot-scope="{date, data}">
+          <p >
+            {{data.day.slice(8)}}
+          </p>
+           <!-- <p :class="msg.indexOf(data.day)!=-1? 'is-selected' : ''">
+            {{ data.day.slice(8)}}
+            <!-- 显示当天 -->
+            <!-- {{ msg.indexOf(data.day)!=-1 ? '✔️' : ''}}
+          </p> --> 
+        </template>
+      </el-calendar>
+      <el-table class="data_list" 
+      width="30%"
         :data="tableData"
-         :header-cell-style="{background:'#f4f4f4'}"
-         :row-class-name="tableRowClassName"
-        style="margin-top:20px">
-        <el-table-column
-            prop="date"
-            label="日期"
-            width="100">
-        </el-table-column>
-           <el-table-column
-            prop="name"
-            label="时长"
-            >
-        </el-table-column>
-        <el-table-column
-            prop="name"
-            label="姓名"
-            >
-        </el-table-column>
-        <el-table-column
-            prop="address"
-            label="地点">
-        </el-table-column>
-           
-             <el-table-column
-            prop="name"
-            label="科目"
-            >
-        </el-table-column>
-             <el-table-column
-            prop="name"
-            label="反馈"
-           >
-        </el-table-column>
-        </el-table>
-            </div>
+        :header-cell-style="{background:'#f4f4f4'}"
+        :row-class-name="tableRowClassName"
+        style="margin-top:20px"
+      >
+        <el-table-column prop="date" label="日期" width="100"></el-table-column>
+        <el-table-column prop="name" label="时长"></el-table-column>
+        <el-table-column prop="name" label="姓名"></el-table-column>
+        <el-table-column prop="address" label="地点"></el-table-column>
+        <el-table-column prop="name" label="科目"></el-table-column>
+        <el-table-column prop="name" label="反馈"></el-table-column>
+      </el-table>
     </div>
+
+  </div>
 </template>
 <script>
-  export default {
-    data() {
-      return {
+export default {
+  props:{
+   changeTab:{
+     type:String
+   } 
+  },
+  data() {
+    return {
+      value: "",
+      msg: ["2019-06-13 ", "2019-06-18", "2019-06-16"],
+      options1: [
+        //学生姓名的数据
+        // label:"username",
+      ],
+      value_stu:'',
+      value_sub:'',
+      options_1: [], //学生数组总数据
+      options: [], //课程名称的数据
+      options_: [], //总数据的数据
+      tableData: [],
+      change_value:'1',  //Tab的值  
+    };
+  },
+  created() {
+    this.$watch("value", function() {
+      //this.artdata()
+      let myTime = this.dateToMs(this.value);
+      console.log(this.msToDate(myTime).hasTime);//--->2017-09-19
+    });
+    this.getdata();
+    this.getStudent();
+    this.getClassList()
+  },
+  computed:{  
 
-        value: '',
-        msg:['2019-06-13','2019-06-18','2019-06-16'],
-                tableData: [{
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '线上'
-          }, {
-            date: '2016-05-04',
-            name: '王小虎',
-            address: '线上'
-          }, {
-            date: '2016-05-01',
-            name: '王小虎',
-            address: '线上'
-          }, {
-            date: '2016-05-03',
-            name: '王小虎',
-            address: '线上'
-          }]
+  },
+    watch:{
+    changeTab:function(value){
+      console.log(value)
+      this.change_value=value
+      this.getClassList()
+    }
+  },
+  methods: {
+    getClassList(){
+ let parms = {
+        admin_id: this.getdataCookie("admin_id"),
+      };
+        this.$apis.common.student_course(parms).then(res => {
+    if (res.data.code == 1) {
+        this.tableData=res.data.data.list
+    }
+    })
+    },
+    tableRowClassName({ row, rowIndex }) {
+      if (rowIndex === 1) {
+        return "warning-row";
+      } else if (rowIndex === 3) {
+        return "success-row";
       }
+      return "";
     },
-    created () {
-        this.$watch("value", function ( ) {
- //this.artdata()
-    })  
+    artdata() {
+      // alert(this.value);
     },
+    dateToMs (date) {
+    let result = new Date(date).getTime();
+    return result;
+},
+     msToDate (msec) {  //转化标准时间为年月日格式
+    let datetime = new Date(msec);
+    let year = datetime.getFullYear();
+    let month = datetime.getMonth();
+    let date = datetime.getDate();
+    let hour = datetime.getHours();
+    let minute = datetime.getMinutes();
+    let second = datetime.getSeconds();
+    let result1 = year +   //带秒钟需求
+                 '-' + 
+                 ((month + 1) >= 10 ? (month + 1) : '0' + (month + 1)) + 
+                 '-' + 
+                 ((date + 1) < 10 ? '0' + date : date) + 
+                 ' ' + 
+                 ((hour + 1) < 10 ? '0' +0 : 0) +
+                 ':' + 
+                 ((minute + 1) < 10 ? '0' + minute : minute) + 
+                 ':' + 
+                 ((second + 1) < 10 ? '0' + second : second);
 
-    methods: {
-        tableRowClassName({row, rowIndex}) {
-        if (rowIndex === 1) {
-          return 'warning-row';
-        } else if (rowIndex === 3) {
-          return 'success-row';
+    let result2 = year +  //仅年月日需求
+                 '-' + 
+                 ((month + 1) >= 10 ? (month + 1) : '0' + (month + 1)) + 
+                 '-' + 
+                 ((date + 1) < 10 ? '0' + date : date);
+
+    let result = {
+        hasTime: result1,
+        withoutTime: result2
+    };
+
+    return result;
+},
+    handleChange_1(targetName) {
+      let a,b=null
+   this.getClassList(a,b,targetName)
+    },
+     handleChange(targetName) {  //学生
+     this.getClassList(a,targetName,c)
+     },
+   getdata() {
+      let parms = {
+        admin_id: this.getdataCookie("admin_id")
+      };
+      //获取科目的数据
+      this.$apis.common.subject_list(parms).then(res => {
+        if (res.data.code == 1) {
+          this.msg = res.data;
+          this.options_ = res.data.data;
+          for (let i = 0; i < this.options_.length; i++) {
+            var val = this.options_[i];
+            var children = [];
+            if (val.children) {
+              for (let j = 0; j < val.children.length; j++) {
+                var val1 = val.children[j];
+                children.push({
+                  value: val1.id,
+                  label: val1.subject_name
+                });
+              }
+              this.options.push({
+                value: val.id,
+                label: val.subject_name,
+                children: children
+              });
+            } else {
+              this.options.push({
+                value: val.id,
+                label: val.subject_name
+              });
+            }
+          }
         }
-        return '';
-      },
-        artdata(){
-        
-                alert(this.value)
-          
-          
+      });
+    },
+    //获取学生列表
+    getStudent() {
+      let parms = {
+        admin_id: this.getdataCookie("admin_id")
+      };
+      this.$apis.students.students_list(parms).then(res => {
+        if (res.data.code == 1) {
+          this.options_1 = res.data.data.list;
+          for (let i = 0; i < this.options_1.length; i++) {
+            var val = this.options_1[i];
+            this.options1.push({ value: val.id, label: val.username });
+          }
         }
+      });
+    },
+        getdataCookie(cname) {
+      // return 1
+      var name = cname + "=";
+      var ca = document.cookie.split(";");
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i].trim();
+        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+      }
+      // this.$router.push({path:'/login'})
     }
   }
+};
 </script>
 <style scoped>
+.data_main {
+  width: 600px;
 
-.data_main{
-    width: 600px;
-  
-    float: left;
+  float: left;
 }
-.data_list{
+.data_list {
   width: 505px;
   margin-left: 10px;
   float: left;
 }
-
 </style>
