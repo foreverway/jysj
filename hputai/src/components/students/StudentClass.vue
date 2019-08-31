@@ -17,7 +17,9 @@
           :show-all-levels="false"
           @change="handleChange_1"
         ></el-cascader>
-      <el-calendar v-model="value" width="49%" style="inline-block">
+        <div  style="height:50px"></div>
+
+   <el-calendar v-model="value" width="400px"  >
         <template slot="dateCell" slot-scope="{date, data}">
           <p >
             {{data.day.slice(8)}}
@@ -29,12 +31,12 @@
           </p> --> 
         </template>
       </el-calendar>
-      <el-table class="data_list" 
-      width="30%"
+      <div class="table_div data_list posi_right" style=''>
+      <el-table class=""
         :data="tableData"
         :header-cell-style="{background:'#f4f4f4'}"
         :row-class-name="tableRowClassName"
-        style="margin-top:20px"
+        style="margin-top:20px ,"
       >
         <el-table-column prop="date" label="日期" width="100"></el-table-column>
         <el-table-column prop="name" label="时长"></el-table-column>
@@ -43,7 +45,9 @@
         <el-table-column prop="name" label="科目"></el-table-column>
         <el-table-column prop="name" label="反馈"></el-table-column>
       </el-table>
-    </div>
+      </div>
+        </div>
+   
 
   </div>
 </template>
@@ -95,6 +99,7 @@ export default {
     getClassList(){
  let parms = {
         admin_id: this.getdataCookie("admin_id"),
+        page:5,
       };
         this.$apis.common.student_course(parms).then(res => {
     if (res.data.code == 1) {
@@ -230,5 +235,22 @@ export default {
   width: 505px;
   margin-left: 10px;
   float: left;
+}
+/* .flex_div{
+  width:100%;
+  height: 600px;
+  display:flex;
+  justify-content:space-around;
+  align-items: center;
+} */
+.posi_right{
+  position: absolute;
+  left:820px;
+  top:225px; border:1px solid block ;
+    border:1px solid silver;
+    height: 400px;
+}
+.table_div{
+ 
 }
 </style>
