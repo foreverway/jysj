@@ -1,6 +1,6 @@
 <template>
   <div class="main" heigth="800px">
-    <div class="data_main" v-if="change_value=='1'">
+    <div class="data_main" >
        <el-cascader
           placeholder="输入学生姓名"
           v-model="value_stu"
@@ -21,7 +21,7 @@
 
    <el-calendar v-model="value" width="400px"  >
         <template slot="dateCell" slot-scope="{date, data}">
-          <p >
+          <p width="50px" height="50px">
             {{data.day.slice(8)}}
           </p>
            <!-- <p :class="msg.indexOf(data.day)!=-1? 'is-selected' : ''">
@@ -31,20 +31,49 @@
           </p> --> 
         </template>
       </el-calendar>
-      <div class="table_div data_list posi_right" style=''>
+      <!-- 待上课表 -->
+      <div class="table_div data_list posi_right" v-if="change_value=='1'">
       <el-table class=""
         :data="tableData"
         :header-cell-style="{background:'#f4f4f4'}"
         :row-class-name="tableRowClassName"
         style="margin-top:20px ,"
       >
-        <el-table-column prop="date" label="日期" width="100"></el-table-column>
-        <el-table-column prop="name" label="时长"></el-table-column>
-        <el-table-column prop="name" label="姓名"></el-table-column>
+        <el-table-column prop="date" label="开始时间" width="100"></el-table-column>
+        <el-table-column prop="name" label="课时"></el-table-column>
+        <el-table-column prop="name" label="学生姓名"></el-table-column>
         <el-table-column prop="address" label="地点"></el-table-column>
         <el-table-column prop="name" label="科目"></el-table-column>
-        <el-table-column prop="name" label="反馈"></el-table-column>
+        <el-table-column prop="name" label="直播平台"></el-table-column>
+        <el-table-column prop="name" label="课程状态"></el-table-column>
       </el-table>
+       <el-pagination
+       style="float:right"
+    layout="prev, pager, next"
+    :total="50">
+  </el-pagination>
+      </div>
+       <!-- 已上课表 -->
+           <div class="table_div data_list posi_right" v-if="change_value=='2'">
+      <el-table class=""
+        :data="tableData"
+        :header-cell-style="{background:'#f4f4f4'}"
+        :row-class-name="tableRowClassName"
+        style="margin-top:20px ,"
+      >
+        <el-table-column prop="date" label="开始时间" width="100"></el-table-column>
+        <el-table-column prop="name" label="课时"></el-table-column>
+        <el-table-column prop="name" label="学生姓名"></el-table-column>
+        <el-table-column prop="address" label="地点"></el-table-column>
+        <el-table-column prop="name" label="科目"></el-table-column>
+        <el-table-column prop="name" label="直播平台"></el-table-column>
+        <el-table-column prop="name" label="操作"></el-table-column>
+      </el-table>
+       <el-pagination
+       style="float:right"
+    layout="prev, pager, next"
+    :total="50">
+  </el-pagination>
       </div>
         </div>
    
@@ -72,6 +101,7 @@ export default {
       options: [], //课程名称的数据
       options_: [], //总数据的数据
       tableData: [],
+      tableData_1:[], //经过学科或者学生筛选的数据
       change_value:'1',  //Tab的值  
     };
   },
@@ -155,12 +185,33 @@ export default {
 
     return result;
 },
-    handleChange_1(targetName) {
-      let a,b=null
-   this.getClassList(a,b,targetName)
+    handleChange_1(targetName) { //科目
+      var lastName = targetName.length == 1 ? targetName[0] : targetName[1];
+
+       let parms = {
+        admin_id: this.getdataCookie("admin_id"),
+        page:5,
+        subject_id:lastName.toString()
+      };
+        this.$apis.common.student_course(parms).then(res => {
+    if (res.data.code == 1) {
+        this.tableData_1=res.data.data.list
+    }
+    })
+        console.log(this.tableData_1)
     },
      handleChange(targetName) {  //学生
-     this.getClassList(a,targetName,c)
+      let parms = {
+        admin_id: this.getdataCookie("admin_id"),
+        page:5,
+        student_id:targetName.toString()
+      };
+        this.$apis.common.student_course(parms).then(res => {
+    if (res.data.code == 1) {
+        this.tableData_1=res.data.data.list
+    }
+    })
+    console.log(this.tableData_1)
      },
    getdata() {
       let parms = {
@@ -245,12 +296,14 @@ export default {
 } */
 .posi_right{
   position: absolute;
+  width: 43%;
   left:820px;
   top:225px; border:1px solid block ;
     border:1px solid silver;
     height: 400px;
 }
-.table_div{
- 
+.el-calendar-day{
+ width: 50px;
+ height: 50px;
 }
 </style>
