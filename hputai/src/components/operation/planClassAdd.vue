@@ -29,7 +29,7 @@
       <el-form-item :inline="true" label="讲师">
         <el-cascader
           v-model="form.teacher_live"
-          :options="this.teacher_list_new"
+          :options="this.teacher_data_new"
           :props="{ expandTrigger: 'hover' }"
           :show-all-levels="false"
           @change="handleChange_teacher"
@@ -48,7 +48,7 @@
       <el-form-item :inline="true" label="助教">
         <el-cascader
           v-model="form.helpTeacher_live"
-          :options="this.helpTeacher_list_new"
+          :options="this.zhujiao_data_new"
           :props="{ expandTrigger: 'hover' }"
           :show-all-levels="false"
           @change="handleChange_help"
@@ -59,7 +59,7 @@
         <!-- 用el-autocomplete -->
         <el-cascader
           v-model="form.jiaowu_live"
-          :options="this.jiaowu_list_new"
+          :options="this.jiaowu_data_new"
           :props="{ expandTrigger: 'hover' }"
           :show-all-levels="false"
           @change="handleChange_money"
@@ -246,7 +246,7 @@
             <el-table-column property="subject_name" label="科目"></el-table-column>
             <el-table-column property="classhour" label="课时"></el-table-column>
             <el-table-column property="amount" label="金额"></el-table-column>
-            <el-table-column property="live_type" label="班课"></el-table-column>
+            <el-table-column property="course_id" label="班课"></el-table-column>
             <el-table-column property="is_one" label="一对一"></el-table-column>
           </el-table>
         </el-form-item>
@@ -255,14 +255,8 @@
             :data="seeapplytable.students_data"
             style="border:1px solid silver;margin: 0; border-bottom:none;"
           >
-            <el-table-column property="student_name" label="学生姓名"></el-table-column>
-            <el-table-column property="start_time" label="QQ"></el-table-column>
-            <el-table-column property="tel" label="手机"></el-table-column>
-            <el-table-column property="live_type" label="性别"></el-table-column>
-            <el-table-column property="play_type" label="监护人名称"></el-table-column>
-            <el-table-column property="week" label="校区"></el-table-column>
-            <el-table-column property="live_type" label="在读学校"></el-table-column>
-            <el-table-column property="play_type" label="在读年级"></el-table-column>
+            <el-table-column property="student_name" label="学生姓名" width="100"></el-table-column>
+            <el-table-column property="tel" label="手机" width="100"></el-table-column>
           </el-table>
         </el-form-item>
         <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="课程顾问:">
@@ -285,14 +279,11 @@
         <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="需求:">
           <p>内容</p>
         </el-form-item>
-        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="状态:">
+        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="上课地点:">
           <p>{{seeclassneeds.course_address}}</p>
         </el-form-item>
         <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="上课地址:">
           <p>{{seeclassneeds.address?seeclassneeds.address:"未安排"}}</p>
-        </el-form-item>
-        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="客户类别:">
-          <p>{{seeclassneeds.live_name?seeclassneeds.live_name:"未安排"}}</p>
         </el-form-item>
         <el-form-item
           style="border:1px solid silver;margin: 0; border-bottom:none;background-color:silver;"
@@ -328,7 +319,10 @@
         >
           <p>学生之前的学习经历和学习基础（之前在那里上的学？学习基础怎么样？）</p>
         </el-form-item>
-        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="学生:">
+                <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label>
+          <p>{{seeclassneeds.need_three}}</p>
+        </el-form-item>
+        <!-- <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="学生:">
           <el-table
             :data="seeclassneeds.students"
             style="border:1px solid silver;margin: 0; border-bottom:none;"
@@ -344,7 +338,7 @@
             <el-table-column property="live_type" label="总分"></el-table-column>
             <el-table-column property="play_type" label="目标分数"></el-table-column>
           </el-table>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item
           style="border:1px solid silver;margin: 0; border-bottom:none;background-color:silver;"
           label="需求五:"
@@ -369,14 +363,13 @@
     <el-dialog :visible.sync="dialogTableVisible_seeTeacherClass">
       <span>查看{{}}老师课表</span>
       <el-table :data="seeteacherclass" border>
-        <el-table-column property="classhour" label="学生姓名"></el-table-column>
-        <el-table-column property="start_time" label="QQ"></el-table-column>
-        <el-table-column property="week" label="手机"></el-table-column>
-        <el-table-column property="live_type" label="性别"></el-table-column>
-        <el-table-column property="play_type" label="监护人名称"></el-table-column>
-        <el-table-column property="week" label="校区"></el-table-column>
-        <el-table-column property="live_type" label="在读学校"></el-table-column>
-        <el-table-column property="play_type" label="在读年级"></el-table-column>
+        <el-table-column property="course_address" label="上课地点"></el-table-column>
+        <el-table-column property="address" label="线下上课地址"></el-table-column>
+        <el-table-column property="subject_name" label="科目"></el-table-column>
+        <el-table-column property="start_time" label="开始时间"></el-table-column>
+        <el-table-column property="end_time" label="结束时间"></el-table-column>
+        <el-table-column property="banzhuren_name" label="班主任"></el-table-column>
+        <el-table-column property="student_name" label="学生"></el-table-column>
       </el-table>
     </el-dialog>
   </div>
@@ -403,30 +396,17 @@ export default {
       value_data_start: "", //默认form开始日期
       value_data_end: "", //结束时间
       input_twice: "", //排几节课?
-      live_type: "", //直播类型
-      study_wey: "", //观看端
+      live_type:"1", //直播类型
+      study_wey: "1", //观看端
       live_list_new: [], //直播数据
       value_live: "", //
-      radio: "", //上课地点的选择
-      teacher_list_new: [
-        { value: 10911, label: "飞扬", id: 1 },
-        { value: 10811, label: "朝夕", id: 4 }
-      ], //讲师数据
-      // teacher_live: "",
+      radio: "1", //上课地点的选择
+      teacher_data_new: [], //讲师数据
       banzhuren_list_new: [], //班主任数据
-      // banzhuren_live: "",
-      helpTeacher_list_new: [
-        { value: 10141, label: "飞扬", id: 1 },
-        { value: 1011, label: "朝夕", id: 2 }
-      ], //助教数据
-      // helpTeacher_live: "",
-      jiaowu_list_new: [
-        { value: 10141, label: "飞扬", id: 1 },
-        { value: 10511, label: "朝夕", id: 7 }
-      ], //财务专员
-      // jiaowu_live: "",
+       banzhuren_live: "",
+      zhujiao_data_new: [], //助教数据
+      jiaowu_data_new: [ ], //财务专员
       input_class_time: "", //课时
-
       input: "",
       input1: "",
       input2: "",
@@ -444,15 +424,15 @@ export default {
       options_: [], //总数据的数据
       editableTabsValue_1: [],
       editableTabs_1: [],
-      tabIndex: 1,
+      tabIndex:1,
+      tabIndex_1:0,
       subjects_data: [], //学科数据
       title: "", //标题
       value_data: "", //排课的日期
-
       form: {
         //总表格
         value_live: "",
-        teacher_live: "",
+        teacher_live: "",  //选择的讲师的id
         banzhuren_live: "",
         helpTeacher_live: "",
         jiaowu_live: "",
@@ -495,21 +475,22 @@ export default {
     this.get_banzhuren_list({
       //获取班主任列表
       url: "/api/api_banzhuren_list",
-      params
     });
     this.get_live_list({
       //获取直播列表
       url: "/api/api_live_list",
-      params
     });
-
     this.get_region_list({  //查看学生课表
       url:'/api/api_region_list'
     })
     // this.get_look_arrange({  //查看排课
     //   url:'/api/api_look_arrange'
-    // })
+    // })/api_teacher_data
+        this.get_teacher_data({  //获取讲师数据
+      url:'/api/api_teacher_data'
+    })
     this.get_apply_data();
+    
   },
   computed: mapState([
     "rolemenu",
@@ -525,8 +506,11 @@ export default {
     "student_course",
     "look_arrange"
   ]),
-  mounted() {
+  mounted() {   //优化数据结构
     this.getbanzhurenName();
+    this.getTeacherName();
+    this.gezhujiaoName();
+    this.getjiaowuName();
     this.getLiveName();
   },
 
@@ -554,12 +538,12 @@ export default {
       "get_student_course",
       "get_look_arrange"
     ]),
-    //查看报名表的弹框
-    seeApplyTable(a) {
+    seeApplyTable(a) {     //查看报名表的弹框
       this.dialogTableVisible_seeapplytable = true;
       let params = {
         app_id: this.apply_data.app_id
       };
+
       this.get_application({
         //查看报名表数据
         params,
@@ -581,17 +565,18 @@ export default {
       });
       this.seeclassneeds = this.needs;
     }, //查看老师课表的弹框
-    seeTeacherClass(a) {
+    seeTeacherClass() {
+      console.log(this.form.teacher_live*1)
       let params = {
-        app_id: this.apply_data.app_id
+        teacher_id:this.form.teacher_live*1
       };
       this.dialogTableVisible_seeTeacherClass = true;
-      //          this.get_teacher_course({  //查看老师课表
-      //          params,
-      //   url:'/api/api_teacher_course'
-      // })
+               this.get_teacher_course({  //查看老师课表
+               params,
+        url:'/api/api_teacher_course'
+      })
       this.seeteacherclass = this.teacher_course;
-      console.log(this.teacher_data);
+      console.log(this.seeteacherclass);
     },
     seeStudentClass(a, b) {
       //查看学生课表
@@ -610,16 +595,35 @@ export default {
       console.log(this.apply_data.students);
     },
     getLiveName() {
-      //获取直播列表
       //筛选直播列表
       for (let i = 0; i < this.live_list.length; i++) {
         var val = this.live_list[i];
         this.live_list_new.push({ value: val.id, label: val.live_name });
       }
     },
+        getTeacherName() {
+      //筛选讲师列表
+      for (let i = 0; i < this.teacher_data.length; i++) {
+        var val = this.teacher_data[i];
+        this.teacher_data_new.push({ value: val.id, label: val.teacher_name });
+      }
+    },
+        gezhujiaoName() {
+      //筛选助教列表
+      for (let i = 0; i < this.zhujiao_data.length; i++) {
+        var val = this.zhujiao_data[i];
+        this.zhujiao_data_new.push({ value: val.id, label: val.zhujiao_name });
+      }
+    },
+        getjiaowuName() {
+      //筛选教务专员列表
+      for (let i = 0; i < this.jiaowu_data.length; i++) {
+        var val = this.jiaowu_data[i];
+        this.jiaowu_data_new.push({ value: val.id, label: val.jiaowu_name });
+      }
+    },
     getbanzhurenName() {
       //筛选班主任列表
-      // if(this.banzhuren_list.length>0){
       for (let i = 0; i < this.banzhuren_list.length; i++) {
         var val = this.banzhuren_list[i];
         this.banzhuren_list_new.push({ value: val.id, label: val.banzhuren });
@@ -653,16 +657,14 @@ export default {
         start_time: "", //选择开始日期
         end_time: "", //选择结束日期
         input_week: "", //周几
-        course_type: "", //课程类型
-        play_type: ""
+        course_type: "1", //课程类型
+        play_type: "1"
       });
       this.editableTabsValue_1 = newTabName;
       // }
     },
     onSubmit() {
-      // if(this.input_twice*1==this.$route.query.classhour*1){
-      // }else{
-      // }
+ 
       this.subjects_data.push({
         start_time: this.value_data_start.toString().slice(0, 10), //默认form开始日期
         end_time: this.value_data_end.toString().slice(0, 10), //结束时间
@@ -670,7 +672,9 @@ export default {
         course_type: this.live_type, //直播类型
         play_type: this.study_wey //观看端
       });
+      var all_hour= this.input_twice*1
       for (let i = 0; i < this.editableTabsValue_1.length; i++) {
+        all_hour+=$("#classhour" + i).val() * 1
         this.subjects_data.push({
           classhour: $("#classhour" + i).val() * 1,
           start_time: $("#start_time" + i).val(),
@@ -679,7 +683,6 @@ export default {
           play_type: $("#play_type" + i).val()
         });
       }
-      console.log(this.subjects_data);
       let parms = {
         app_id: this.$route.query.id, //报名表id
         live_id: this.form.value_live[0], //直播平台id
@@ -695,21 +698,31 @@ export default {
       var studentStr = this.apply_data.students.map((item, index, arr) => {
         return item.student_id;
       });
-      parms.students_id = studentStr.join();
-      console.log(parms);
-      //console.log(Object.prototype.toString.call(studentStr.join()))
-      //course_data:[]   // {"classhour":2,"start_time":1564560000,"end_time":1564567200,"course_type":1,"play_type":1},
+      parms.students_id = studentStr.join();     
       parms.course_data = this.subjects_data;
-
+     if(all_hour*1==this.$route.query.classhour*1){
       this.$apis.common.application_arrange_post(parms).then(res => {
         if (res.data.code == 1) {
-          this.$message({
-            message: "添加成功",
-            type: "success"
-          });
-          this.$router.go(-1);
-        }
-      });
+  
+           this.$message({
+          type:"success",
+          message:"添加成功"
+        })
+      }else{
+            this.editableTabs_1=[]
+           this.$message({
+          type:"warning",
+          message:"请讲表补充完整"
+        })
+      }
+      })
+    }else{
+       this.editableTabs_1=[]
+        this.$message({
+          type:"warning",
+          message:"排课时间或信息不准确"
+        })
+      }
     },
     open4() {
       this.$notify({

@@ -60,7 +60,7 @@
           <!-- <p  v-bind:id="'all_mach' + i"  v-model=item.price>0</p> -->
           <p>
             <select v-model="item.course_type" v-bind:id="'attr' + i" placeholder="课程性质">
-              <option label="试听" :value="2"></option>
+              <option label="试听" value="2"></option>
               <option label="正课" value="1"></option>
               <option label="辅导" value="3"></option>
             </select>
@@ -139,6 +139,7 @@
    <el-form-item label="上课地址" v-if="show==true">
       <el-cascader
         placeholder="支持到地级市"
+         v-model="address"
         :options="address_check"
         filterable></el-cascader>
       </el-form-item>
@@ -181,7 +182,7 @@
       </div>
       <div class="succ_word">
         <el-link icon="el-icon-edit" type="primary" href="./ApplicationAdd">继续添加排课需求</el-link>
-        <el-link type="primary" href="./ApplicationAdd">
+        <el-link type="primary" href="./ApplyNeedsList">
           查看排课需求列表
           <i class="el-icon-view el-icon--right"></i>
         </el-link>
@@ -189,7 +190,7 @@
     </div>
 
     <el-button @click="goBack" v-if="active==1||active==2">取消</el-button>
-    <el-button style="margin-top: 12px;" @click="pre" v-if="active==2||active==3">上一步</el-button>
+    <el-button style="margin-top: 12px;" @click="pre" v-if="active==2">上一步</el-button>
     <el-button style="margin-top: 12px;" @click="next" v-if="active==1">下一步</el-button>
     <el-button type="primary" @click="onSubmit" v-if="active==2">立即创建</el-button>
     <!-- 设置充值链接 -->
@@ -198,13 +199,18 @@
 </template>
 
 <script>
+import {mapState}  from 'vuex'
 import studens_url from "../../config/config";
 export default {
   data() {
     return {
+      show: "false",
+      address_check: [], //上课地址的数据
+      address:"",  //上课地址
       input: "",
       input1: "",
       input2: "",
+      value:'',
       value_1: "",
       valueDate: "",
       active: 1,
@@ -234,7 +240,7 @@ export default {
       students_data: [], //用户id
       subjects_data: [], //学科数据
       feedback: "", //反馈
-      course_address: "", //上课地址
+      course_address: "", //上课线上或线下
       title: "", //标题
       need_one: "",
       need_two: "",
@@ -253,16 +259,18 @@ export default {
     //           return $("#time"+i).val()*$("#mach"+i).val()
     //               }
     //  }
+    ...mapState(['region_list'])
   },
   mounted() {},
   methods: {
-    // milti(){
-    //   alert(222)
-    //     for(let i=0 ; i<this.editableTabsValue_1.length; i++){
-    //  document.getElementById("'all_mach' + i").innerHTML=$("#time"+i).val()*$("#mach"+i).val()
-
-    //       }
-    // },
+     whereGo(a) {
+        if (a == "2") {
+        this.show = true;
+        this.address_check = this.region_list;
+      } else {
+        this.show = false;
+      }
+    },
     //生成学员编号
     writeCurrentDate() {
       var now = new Date();
@@ -280,8 +288,9 @@ export default {
       if (minu < 10) minu = "0" + minu;
       if (sec < 10) sec = "0" + sec;
       var time = "";
-      time = year + "" + month + date + hour + minu + sec;
-      return time;
+      time = year + "" + month + date + hour + minu 
+      let timer=JSON.parse(time)
+      return timer;
       // //设置得到当前日期的函数的执行间隔时间，每1000毫秒刷新一次。
       // var timer = setTimeout("writeCurrentDate()", 1000);
     },
@@ -430,6 +439,7 @@ export default {
         expiry_date: this.valueDate,
         remarks: this.feedback,
         course_address: this.radio,
+        address:this.address,
         need_one: this.need_one,
         need_two: this.need_two,
         need_three: this.need_three,
@@ -440,15 +450,15 @@ export default {
       parms.subjects_data = this.subjects_data;
       parms.students_data = this.students_data;
       console.log(parms);
-      this.$apis.common.application_add(parms).then(res => {
-        if (res.data.code == 1) {
-          this.$message({
-            message: "添加成功",
-            type: "success"
-          });
-          this.active = 3;
-        }
-      });
+      // this.$apis.common.application_add(parms).then(res => {
+      //   if (res.data.code == 1) {
+      //     this.$message({
+      //       message: "添加成功",
+      //       type: "success"
+      //     });
+      //     this.active = 3;
+      //   }
+      // });
     },
     next() {
       for (let i = 0; i < this.editableTabsValue.length; i++) {

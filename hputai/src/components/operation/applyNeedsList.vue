@@ -110,16 +110,16 @@
       </span>
     </el-dialog>
 
-    <!-- 设置充值链接 -->
+    <!-- 分页的设置 -->
     <div class="block">
       <el-pagination
-        @size-change="handleSizeChange"
+        @size-change="handleSizeChange"     
         @current-change="handleCurrentChange"
         :current-page="currentPage4"
-        :page-sizes="[20, 40, 60, 80]"
-        :page-size="20"
+        :page-sizes="[6, 2, 12, 15]"
+        :page-size="5"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="400"
+        :total=this.tableData.length
       ></el-pagination>
     </div>
 <el-dialog title="查看排课" :visible.sync="dialogTableVisible_table">
@@ -410,12 +410,28 @@ export default {
       });
       this.centerDialogVisible_shenghe = false;
     },
-    handleSizeChange(val) {
-      //分页设置
-      console.log(`每页 ${val} 条`);
+    handleSizeChange(val) {    //分页每页多少条
+         let parms = {
+        admin_id: this.getdataCookie("admin_id"),
+        page:val*1
+      };
+      this.$apis.common
+        .application_list(parms)
+        .then(res => {
+          if (res.data.code == 1) {
+            this.msg = res.data;
+            this.tableData = res.data.data.list;
+          }
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "请求失败"
+          });
+        });
     },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+    handleCurrentChange(val) {     //当前多少页
+      console.log(`当前页: ${val}`,this.tableData.length);
     },
     //获取顾问列表adviser_list
     getAdviser() {

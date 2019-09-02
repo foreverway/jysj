@@ -36,13 +36,13 @@ const store = new Vuex.Store({
       state.banzhuren_list = all_goods
     },
     get_teacher_data(state, all_goods) { //获取讲师列表
-      state.banzhuren_list = all_goods
+      state.teacher_data = all_goods
     },
     get_zhujiao_data(state, all_goods) { //获取助教列表
-      state.banzhuren_list = all_goods
+      state.zhujiao_data = all_goods
     },
     get_jiaowu_data(state, all_goods) { //取教务专员列表
-      state.banzhuren_list = all_goods
+      state.jiaowu_data = all_goods
     },
     get_region_list(state, all_goods) { //地址列表
       state.region_list = all_goods
