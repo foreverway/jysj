@@ -34,50 +34,56 @@
       <!-- 待上课表 -->
       <div class="table_div data_list posi_right" v-if="change_value=='1'">
       <el-table class=""
-        :data="tableData"
+        :data="tableData.slice((currentPage-1)*pagesize,currentPage*pagesize)"
         :header-cell-style="{background:'#f4f4f4'}"
         :row-class-name="tableRowClassName"
         style="margin-top:20px ,"
       >
-        <el-table-column prop="date" label="开始时间" width="100"></el-table-column>
-        <el-table-column prop="name" label="课时"></el-table-column>
-        <el-table-column prop="name" label="学生姓名"></el-table-column>
-        <el-table-column prop="address" label="地点"></el-table-column>
-        <el-table-column prop="name" label="科目"></el-table-column>
-        <el-table-column prop="name" label="直播平台"></el-table-column>
-        <el-table-column prop="name" label="课程状态"></el-table-column>
+        <el-table-column prop="start_time" label="开始时间" width="100"></el-table-column>
+        <el-table-column prop="classhour" label="课时"></el-table-column>
+        <el-table-column prop="student_name" label="学生姓名"></el-table-column>
+        <el-table-column prop="course_address" label="地点"></el-table-column>
+        <el-table-column prop="subject_name" label="科目"></el-table-column>
+        <el-table-column prop="live_name" label="直播平台"></el-table-column>
+        <el-table-column prop="ready_txt" label="状态"></el-table-column>
       </el-table>
-       <el-pagination
-       style="float:right"
-    layout="prev, pager, next"
-    :total="50">
-  </el-pagination>
+      <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page.sync="currentPage"
+      :page-sizes="[6,8,10,12]"
+      :page-size="6"
+      layout="total, sizes, prev, pager, next"
+      :total='tableData.length'>
+    </el-pagination>
       </div>
        <!-- 已上课表 -->
            <div class="table_div data_list posi_right" v-if="change_value=='2'">
       <el-table class=""
-        :data="tableData"
+        :data="tableData.slice((currentPage-1)*pagesize,(currentPage)*pagesize)"
         :header-cell-style="{background:'#f4f4f4'}"
         :row-class-name="tableRowClassName"
-        style="margin-top:20px ,"
+        style="margin-top:20px,"
       >
-        <el-table-column prop="date" label="开始时间" width="100"></el-table-column>
-        <el-table-column prop="name" label="课时"></el-table-column>
-        <el-table-column prop="name" label="学生姓名"></el-table-column>
-        <el-table-column prop="address" label="地点"></el-table-column>
-        <el-table-column prop="name" label="科目"></el-table-column>
-        <el-table-column prop="name" label="直播平台"></el-table-column>
-        <el-table-column prop="name" label="操作"></el-table-column>
+        <el-table-column prop="start_time" label="开始时间" width="100"></el-table-column>
+        <el-table-column prop="classhour" label="课时"></el-table-column>
+        <el-table-column prop="student_name" label="学生姓名"></el-table-column>
+        <el-table-column prop="course_address" label="地点"></el-table-column>
+        <el-table-column prop="subject_name" label="科目"></el-table-column>
+        <el-table-column prop="live_name" label="直播平台"></el-table-column>
+        <el-table-column prop="ready_txt" label="状态"></el-table-column>
       </el-table>
-       <el-pagination
-       style="float:right"
-    layout="prev, pager, next"
-    :total="50">
-  </el-pagination>
+         <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page.sync="currentPage"
+      :page-sizes="[6,8,10,12]"
+      :page-size="6"
+      layout="total, sizes, prev, pager, next"
+      :total='tableData.length'>
+    </el-pagination>
       </div>
         </div>
-   
-
   </div>
 </template>
 <script>
@@ -95,6 +101,8 @@ export default {
         //学生姓名的数据
         // label:"username",
       ],
+      currentPage: 1, //当前页
+      pagesize:6,
       value_stu:'',
       value_sub:'',
       options_1: [], //学生数组总数据
@@ -102,14 +110,13 @@ export default {
       options_: [], //总数据的数据
       tableData: [],
       tableData_1:[], //经过学科或者学生筛选的数据
-      change_value:'1',  //Tab的值  
+      change_value:'1',  //Tab切换的值  
     };
   },
   created() {
     this.$watch("value", function() {
       //this.artdata()
       let myTime = this.dateToMs(this.value);
-      console.log(this.msToDate(myTime).hasTime);//--->2017-09-19
     });
     this.getdata();
     this.getStudent();
@@ -120,16 +127,22 @@ export default {
   },
     watch:{
     changeTab:function(value){
-      console.log(value)
       this.change_value=value
       this.getClassList()
     }
   },
   methods: {
-    getClassList(){
+    handleSizeChange(val) {
+      this.pagesize=val*1
+      },
+      handleCurrentChange(val) {
+         this.currentPage = val;
+        this.getClassList(val)
+      },
+    getClassList(a){
  let parms = {
-        admin_id: this.getdataCookie("admin_id"),
-        page:5,
+        course_type:this.change_value,
+        page:a?a:1,
       };
         this.$apis.common.student_course(parms).then(res => {
     if (res.data.code == 1) {
@@ -185,7 +198,7 @@ export default {
 
     return result;
 },
-    handleChange_1(targetName) { //科目
+    handleChange_1(targetName) { //选择科目
       var lastName = targetName.length == 1 ? targetName[0] : targetName[1];
 
        let parms = {
@@ -200,7 +213,7 @@ export default {
     })
         console.log(this.tableData_1)
     },
-     handleChange(targetName) {  //学生
+     handleChange(targetName) {  //选择学生
       let parms = {
         admin_id: this.getdataCookie("admin_id"),
         page:5,
@@ -213,11 +226,11 @@ export default {
     })
     console.log(this.tableData_1)
      },
-   getdata() {
+   getdata() {//获取科目的数据
       let parms = {
         admin_id: this.getdataCookie("admin_id")
       };
-      //获取科目的数据
+      
       this.$apis.common.subject_list(parms).then(res => {
         if (res.data.code == 1) {
           this.msg = res.data;
@@ -300,7 +313,6 @@ export default {
   left:820px;
   top:225px; border:1px solid block ;
     border:1px solid silver;
-    height: 400px;
 }
 .el-calendar-day{
  width: 50px;

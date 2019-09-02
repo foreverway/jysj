@@ -1,24 +1,25 @@
 <template>
     <div class="main">
-            <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-                <el-menu-item index="1">学习币明细</el-menu-item>
-                <el-menu-item index="2">现金钱包明细</el-menu-item>
-                  <el-menu-item index="3">福利钱包明细</el-menu-item>
-            </el-menu>
-    <router-view/>
+
+                    <el-tabs v-model="activeName" @tab-click="handleClick">
+    <el-tab-pane label="学习币明细" name="1"></el-tab-pane>
+    <el-tab-pane label="现金钱包明细" name="2"></el-tab-pane>
+ <el-tab-pane label="福利钱包明细" name="3"></el-tab-pane>
+  </el-tabs>
+    <router-view :activeIndex="activeName" />
     </div>
 </template>
 <script>
   export default {
     data() {
       return {
-        activeIndex: '1',
-        activeIndex2: '1'
+        activeName: '1',
+  
       };
     },
     methods: {
-      handleSelect(key, keyPath) {
-        console.log(key, keyPath);
+      handleClick(tab, event) {
+        //console.log(key, keyPath);
       }
     }
   }

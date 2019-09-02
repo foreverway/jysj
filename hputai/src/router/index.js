@@ -25,7 +25,8 @@ import StudentClass from '@/components/students/StudentClass'
 
 import ClassMain from '@/components/students/ClassMain'
 
-import StudentMoneyMain from '@/components/students/StudentMoneyMain'
+import StudentMoneyMain from '@/components/students/StudentMoneyMain'  //学生钱包在这里
+import StudentMoneyPackge from '@/components/students/StudentMoneyPackge'
 //系统设置路由
 import SystemMain from '@/components/system/system_main'
 //系统设置
@@ -129,11 +130,11 @@ export default new Router({
           component: SubjectList
         },
         {
-          path: '/SubjectAdd', //科目配置  
+          path: '/SubjectAdd', //科目添加  
           component: SubjectAdd
         },
         {
-          path: '/SubjectEdit/:id', //科目配置  
+          path: '/SubjectEdit/:id', //科目编辑
           component: SubjectEdit
         },
         {
@@ -192,7 +193,13 @@ export default new Router({
 
         {
           path: '/StudentMoneyMain', // 学生充值记录
-          component: StudentMoneyMain
+          component: StudentMoneyMain,
+          children:[
+            {
+              path:'',
+              component:StudentMoneyPackge
+            }
+          ]
         },
       
       ]

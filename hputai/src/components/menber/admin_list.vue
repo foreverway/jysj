@@ -45,7 +45,7 @@
       @prev-click="prev"
       @next-click="next"
       @current-change="current"
-      page-size="10"
+      :page-size="10"
       :total="tableData.count"
     ></el-pagination>
   </div>
