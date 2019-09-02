@@ -75,5 +75,8 @@ export default {
       application_arrange_post(params){    //报名需求排课提交数据
         let url ="/api/api_application_arrange"
         return shuju.postdata(url,params)},
+        student_course(params){    //获取学生课表（待上/已上）接口
+          let url ="/api/api_student_course"
+          return shuju.getdata(url,params)},
  
 }

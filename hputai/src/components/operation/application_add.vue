@@ -307,13 +307,7 @@ export default {
     },
     result() {
       for (let i = 0; i < this.items_add.length; i++) {
-        console.log(
-          $("#name" + i).val() +
-            "  " +
-            $("#age" + i).val() +
-            "  " +
-            $("#sex" + i).val()
-        );
+
       }
     },
     getdata() {

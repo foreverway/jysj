@@ -229,7 +229,7 @@
           }
       };
     },
-    created () {
+    created() {
       this.getdata()  
     },
     methods: {
@@ -278,6 +278,7 @@
         //获取基础配置数据
         this.$apis.sys.basedata_list().then(res=>{
             if(res.data.code==1){
+              console.log(res.data.data)
               this.basedata_list=res.data.data
             }
         })

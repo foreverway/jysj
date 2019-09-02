@@ -28,11 +28,11 @@
               <el-radio-button :label="true">收起</el-radio-button>
           </el-radio-group> -->
           <el-menu
-           :unique-opened=true
             :default-active="ActiveMenu"
             class="el-menu-vertical-demo"
             @open="handleOpen"
             @close="handleClose"
+            unique-opened
             router
             background-color="#ffffff"
             text-color="#000"

@@ -59,11 +59,15 @@
             prop=""
             label="操作" width="140">
                <template slot-scope="scope">
-                  <router-link :to="'/StudentsEdit/'+ scope.row.id">
-        <el-button type="text" size="small">编辑 </el-button>
-                  </router-link>
-         <el-button @click="admin_del(scope.row)" type="text" size="small">删除</el-button>
-           <el-button type="text" size="small"  @click="dialogFormVisible1=1">复制链接</el-button>
+                  <span v-for="(item,index) in getStuList()" :key="index">
+             <el-button
+              type="text"
+              size="medium"
+              index="item.id"
+               @click="trueAction(item.menu_action,scope.row)" 
+            >{{item.menu_name}}</el-button>
+          </span> 
+      
            </template>
         </el-table-column>
 
@@ -80,14 +84,14 @@
   :total="msg.data.count">
 </el-pagination> -->
         <!-- 设置充值链接 -->
-<el-dialog title="设置充值金额" :visible.sync="dialogFormVisible1" width="500px" close-on-click-modal="false" >
+<el-dialog title="设置充值金额" :visible.sync="dialogFormVisible1" width="500px"  >
 
 
       <el-input  style="width:200px" v-model="money"  placeholder="请输入充值金额" ></el-input>
  <el-button type="primary" v-show="money>0" @click="dialogFormVisible1 = false,copyUrl( msg.data.recharge_url)">复制充值链接</el-button>
 
   <div slot="footer" class="dialog-footer">
-    <el-button @click="dialogFormVisible1 = false">取 消</el-button>
+    <el-button @click="dialogFormVisible1 = false">取 消</el-button>  
     <el-button type="primary" @click="dialogFormVisible1 = false,copyUrl( msg.data.recharge_url)">确 定</el-button>
   </div>
 </el-dialog>
@@ -97,6 +101,7 @@
   </template>
 
   <script>
+import { mapState } from 'vuex';
     export default {
       data() {
         return {
@@ -108,13 +113,15 @@
             search:'',
             page:1,
           },
-          tableData:'',
+          tableData:[],
         }
       },
       created () {
         this.getdata()
+        this.getStuList()
         // console.log( this.getdata())
       },
+      computed:mapState([ "rolemenu"]),
       methods: {
             //序号排列
       indexMethod(index) {
@@ -124,6 +131,24 @@
               let page=(this.parms.page-1)*10+1
               return index+page
             }
+      },
+      getStuList(){
+       return this.rolemenu[1].children[0].children
+      },
+      trueAction(a,b){
+          switch(a){
+            case "del_this" :
+              this.admin_del(b)
+            break;
+            case "edit_list" :
+              this.$router.push({path:'/StudentsEdit',query:{id:b.id} })
+            break;
+            case "see_info" :
+            break;
+            case "copy_url" :
+              this.dialogFormVisible1=true
+            break;
+          }
       },
                   // 复制链接
       copyUrl(data){
