@@ -26,7 +26,10 @@ import StudentClass from '@/components/students/StudentClass'
 import ClassMain from '@/components/students/ClassMain'
 
 import StudentMoneyMain from '@/components/students/StudentMoneyMain'  //学生钱包在这里
-import StudentMoneyPackge from '@/components/students/StudentMoneyPackge'
+import NewMoney from '@/components/students/NewMoney'
+import VirtualMonney from '@/components/students/VirtualMonney'
+import LearningMoney from '@/components/students/LearningMoney'
+
 //系统设置路由
 import SystemMain from '@/components/system/system_main'
 //系统设置
@@ -196,8 +199,16 @@ export default new Router({
           component: StudentMoneyMain,
           children:[
             {
-              path:'',
-              component:StudentMoneyPackge
+              path:'/VirtualMonney',
+              component:VirtualMonney
+            },
+            {
+              path:'/NewMoney',
+              component:NewMoney
+            },
+            {
+              path:'/LearningMoney',
+              component:LearningMoney
             }
           ]
         },

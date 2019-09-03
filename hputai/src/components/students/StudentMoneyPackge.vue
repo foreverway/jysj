@@ -16,7 +16,7 @@
     <el-table  v-if="this.changeIndex==1"
       :data="tableData" :header-cell-style="{background:'#f4f4f4'}" style="margin-top:20px" size="medium" fit border
     >  
-    <!-- 表格一 -->
+    <!-- 学习币 -->
       <el-table-column label="序号" type="index" width="100px" :index="indexMethod"></el-table-column>
       <el-table-column prop="uname" width="120px" label="学员姓名"></el-table-column>
       <el-table-column prop="amount" width="120px" label="金额"></el-table-column>
@@ -26,35 +26,45 @@
     </el-table>
         <el-table  v-if="this.changeIndex==2"
       :data="tableData_2" :header-cell-style="{background:'#f4f4f4'}" style="margin-top:20px" size="medium" fit border
-    > <!-- 表格二 -->
+    > <!-- 现金钱包 -->
       <el-table-column label="序号" type="index" width="100px" :index="indexMethod"></el-table-column>
       <el-table-column prop="username" width="120px" label="学员姓名"></el-table-column>
       <el-table-column prop="price" width="120px" label="金额"></el-table-column>
-      <el-table-column prop="rechargetype" width="120px" label="账户余额"></el-table-column>
+      <el-table-column prop="balance" width="120px" label="账户余额"></el-table-column>
       <el-table-column prop="reason" label="事由"></el-table-column>
       <el-table-column prop="addtime" label="时间"></el-table-column>
+   
     </el-table>
+       
         <el-table  v-if="this.changeIndex==3"
       :data="tableData_3" :header-cell-style="{background:'#f4f4f4'}" style="margin-top:20px" size="medium" fit border
-    > <!-- 表格三 -->
+    > <!-- 福利钱包 -->
       <el-table-column label="序号" type="index" width="100px" :index="indexMethod"></el-table-column>
-      <el-table-column prop="username" width="120px" label="学员姓名"></el-table-column>
-      <el-table-column prop="price" width="120px" label="金额"></el-table-column>
-      <el-table-column prop="balance"  label="账户余额"></el-table-column>
-      <el-table-column prop="reason" label="事由"></el-table-column>
-      <el-table-column prop="addtime" label="时间"></el-table-column>
+      <el-table-column prop="uname" width="120px" label="学员姓名"></el-table-column>
+      <el-table-column prop="given_amount" width="120px" label="金额"></el-table-column>
+      <el-table-column prop="given_remarks" label="事由"></el-table-column>
+      <el-table-column prop="create_time" label="下发时间"></el-table-column>
     </el-table>
     <el-row :gutter="12" style="margin:20px 5px;" v-show="this.changeIndex==1">
       <el-col :span="6">
-        <el-card shadow="always">累计入款(元):</el-card>
+        <el-card shadow="always">累计入款:{{getMonay}} 元</el-card>
       </el-col>
       <el-col :span="6">
-        <el-card shadow="always">累计消耗(元):</el-card>
+        <el-card shadow="always">累计消耗:{{lastMonay}} 元</el-card>
       </el-col>
     </el-row>
-    <div v-show="this.changeIndex==1">孩纸们的钱包1</div>
-    <div v-show="this.changeIndex==2">孩纸们的钱包2</div>
-    <div v-show="this.changeIndex==3">孩纸们的钱包3</div>
+ <el-pagination   v-if="this.changeIndex==1"
+    layout="prev, pager, next"
+    :total=this.tableData.length>
+  </el-pagination>
+  <el-pagination   v-if="this.changeIndex==2"
+    layout="prev, pager, next"
+    :total=this.tableData_2.length>
+  </el-pagination>
+  <el-pagination   v-if="this.changeIndex==3"
+    layout="prev, pager, next"
+    :total=this.tableData_3.length>
+  </el-pagination>
   </div>
 </template>
 
@@ -73,6 +83,8 @@ export default {
         search: "",
         page: 1
       },
+      lastMonay:0 , //账户余额
+      getMonay:0,  //累计入款
       value2: "", //搜索的时间
       tableData: [] ,//表格的数据
       tableData_2: [], //表格2的数据
@@ -83,11 +95,16 @@ export default {
     this.getmoneydata();
     // console.log( this.getdata())
   },
+  mounted(){
+
+  },
   methods: {
     searchdata() {
       //搜索的方法
-      this.$apis.common
-        .salepro_list(this.parms)
+     switch( this.changeIndex){
+       case '1':
+          this.$apis.students
+        .learnmoney_list(this.parms)
         .then(res => {
           if (res.data.code == 1) {
             this.msg = res.data.msg;
@@ -97,18 +114,72 @@ export default {
             } else {
               new_arr = res.data.data.list.filter(
                 item =>
-                  item.dtime > this.value2[0] && item.dtime < this.value2[1]
+                  item.create_time > this.value2[0] && item.create_time < this.value2[1]
               );
+              console.log(new_arr)
               this.tableData = new_arr;
             }
           }
-        })
-        .catch(() => {
+        }) .catch(() => {
           this.$message({
             type: "info",
             message: "请求失败"
           });
         });
+        break;
+        
+        case '2':
+                 this.$apis.students
+        .cash_list(this.parms)
+        .then(res => {
+          if (res.data.code == 1) {
+            this.msg = res.data.msg;
+            let new_arr = [];
+            if (this.value2.length == 0) {
+              this.tableData_2 = res.data.data.list;
+            } else {
+              new_arr = res.data.data.list.filter(
+                item =>
+                  item.addtime > this.value2[0] && item.addtime < this.value2[1]
+              );
+              console.log(new_arr)
+              this.tableData_2 = new_arr;
+            }
+          }
+        }) .catch(() => {
+          this.$message({
+            type: "info",
+            message: "请求失败"
+          });
+        });
+        break;
+        case '3':
+                 this.$apis.students
+        .welfare_wallet_list(this.parms)
+        .then(res => {
+          if (res.data.code == 1) {
+            this.msg = res.data.msg;
+            let new_arr = [];
+            if (this.value2.length == 0) {
+              this.tableData_3 = res.data.data.list;
+            } else {
+              new_arr = res.data.data.list.filter(
+                item =>
+                  item.create_time > this.value2[0] && item.create_time < this.value2[1]
+              );
+              console.log(new_arr)
+              this.tableData_3 = new_arr;
+            }
+          }
+        }) .catch(() => {
+          this.$message({
+            type: "info",
+            message: "请求失败"
+          });
+        });
+        break;
+     }
+     
     },
     //序号排列
     indexMethod(index) {
@@ -138,6 +209,26 @@ export default {
             // console.log(res.data.data);
             this.msg = res.data;
             this.tableData = res.data.data.list;
+              this.tableData.map((a)=>{
+                this.lastMonay+=a.amount*1
+                this.getMonay+=a.amount*1+a.balance*1
+              })
+          }
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "请求失败"
+          });
+        });
+    },   cash_list() {    //关于现金钱包明细列表
+      let parms = {};
+      this.$apis.students
+        .cash_list(parms)
+        .then(res => {
+          if (res.data.code == 1) {
+            this.msg = res.data;
+            this.tableData_2 = res.data.data.list;
           }
         })
         .catch(() => {
@@ -153,25 +244,6 @@ export default {
         .welfare_wallet_list(parms)
         .then(res => {
           if (res.data.code == 1) {
-            // console.log(res.data.data);
-            this.msg = res.data;
-            this.tableData_2 = res.data.data.list;
-          }
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "请求失败"
-          });
-        });
-    },
-        cash_list() {    //关于现金钱包明细列表
-      let parms = {};
-      this.$apis.students
-        .cash_list(parms)
-        .then(res => {
-          if (res.data.code == 1) {
-            // console.log(res.data.data);
             this.msg = res.data;
             this.tableData_3 = res.data.data.list;
           }
@@ -183,6 +255,7 @@ export default {
           });
         });
     },
+     
   },
   watch: {
     activeIndex: function(value) {

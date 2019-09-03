@@ -33,28 +33,70 @@ export default {
             let url='/api/api_students_del'
             return shuju.deletedata(url,params)
            },
-           //关于莫名其妙的学习币的设置
-           learnmoney_list (params) {
-            let url='/api/api_learnmoney_list'
-            return shuju.getdata(url,params)
-           },
-           //关于福利钱包明细列表
-           welfare_wallet_list (params) {
-            let url='/api/api_welfare_wallet_list'
-            return shuju.getdata(url,params)
-           },
-            //关于现金钱包明细列表
-            cash_list (params) {
-               let url='/api/api_cash_list'
-               return shuju.getdata(url,params)
-              },
+          
+                // 检查手机号和用户名
+  ifusername (params) {
+   let url = '/api/pc_members_check'
+   return shuju.postdata(url, params)
+ },
+ ifuserphone (phone, address_type) {
+   let url = '/api/pc_members_check'
+   let parms = {
+     tel: phone,
+     address_type: address_type
+   }
+   return shuju.postdata(url, parms)
+ },
+   // 检查剩余学习币余额 
+   user_learnmoney (parms) {
+      let url = '/api/pc_user_learnmoney'
+      return shuju.postdata(url, parms)
+    },
+      // 现金钱包列表
+  cash_list (parms) {
+   let url = '/api/api_cash_list'
 
+   return shuju.postdata(url, parms)
+ },
+ // 学习币明细 
+ learnmoney_list (parms) {
+   let url = '/api/api_learnmoney_list'
 
+   return shuju.postdata(url, parms)
+ },
+ // 福利钱包入款扣款 
+ wallet_balance (parms) {
+   let url = '/api/api_welfare_wallet_balance'
+   return shuju.postdata(url, parms)
+ },
+ // 福利钱包列表 
+ wallet_list (parms) {
+   let url = '/api/api_learnmoney_list'
+   return shuju.postdata(url, parms)
+ },
+   // ------------------------------公共方法---------------------------------------------------------
+  // 读取url上的参数
+  getuilcode () {
+   let admin_uid = this.getQueryString('admin_uid')
 
+   let admin_name = this.getQueryString('admin_name')
 
+   if (!!admin_uid || !!admin_name) {
+     // 设置缓存
+     var d = new Date()
+     d.setTime(d.getTime() + (2 * 3600000))
+     var expires = 'expires=' + d.toGMTString()
+     document.cookie = 'admin_name=' + admin_name + ';' + expires
+     document.cookie = 'admin_uid=' + admin_uid + ';' + expires
+   }
+ },
 
-
-
-
-
+ // 获取url的值
+ getQueryString (value) {
+   const reg = new RegExp('(^|&)' + value + '=([^&]*)(&|$)')
+   const r = window.location.search.substr(1).match(reg) || window.location.hash.substring((window.location.hash.search(/\?/)) + 1).match(reg)
+   if (r != null) {
+     return decodeURIComponent(r[2])
+   }
+ }
 }

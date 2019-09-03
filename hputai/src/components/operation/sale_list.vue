@@ -105,7 +105,7 @@ export default {
         search: "",
         page: 1
       },
-      tableData: "",
+      tableData: [],
       pickerOptions: {
         shortcuts: [
           {

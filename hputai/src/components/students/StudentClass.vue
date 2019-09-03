@@ -110,7 +110,7 @@ export default {
       options_: [], //总数据的数据
       tableData: [],
       tableData_1:[], //经过学科或者学生筛选的数据
-      change_value:'1',  //Tab切换的值  
+      change_value:'1',  //Tab的值  
     };
   },
   created() {
