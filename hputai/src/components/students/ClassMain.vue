@@ -38,6 +38,23 @@
   }
 </script>
 <style>
+html {
+  overflow-y: scroll;
+}
+
+:root {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+:root body {
+  position: absolute;
+}
+
+body {
+  width: 100vw;
+  overflow: hidden;
+}
   .el-calendar-table .el-calendar-day {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
