@@ -1,5 +1,5 @@
 <template>
-  <div class="main" heigth="800px">
+  <div class="main" >
     <div class="data_main" >
        <el-cascader
           placeholder="输入学生姓名"
@@ -18,10 +18,9 @@
           @change="handleChange_1"
         ></el-cascader>
         <div  style="height:50px"></div>
-
-   <el-calendar v-model="value" width="400px"  >
-        <template slot="dateCell" slot-scope="{date, data}">
-          <p width="50px" height="50px">
+   <el-calendar v-model="value"   style="height:500px;">
+        <template slot="dateCell" slot-scope="{date, data}" >
+          <p >
             {{data.day.slice(8)}}
           </p>
            <!-- <p :class="msg.indexOf(data.day)!=-1? 'is-selected' : ''">
@@ -40,19 +39,25 @@
         style="margin-top:20px ,"
       >
         <el-table-column prop="start_time" label="开始时间" width="100"></el-table-column>
-        <el-table-column prop="classhour" label="课时"></el-table-column>
+        <el-table-column prop="classhour" label="课时" ></el-table-column>
         <el-table-column prop="student_name" label="学生姓名"></el-table-column>
-        <el-table-column prop="course_address" label="地点"></el-table-column>
-        <el-table-column prop="subject_name" label="科目"></el-table-column>
+        <el-table-column prop="course_address"  label="地点"></el-table-column>
+        <el-table-column prop="subject_name"  label="科目"></el-table-column>
         <el-table-column prop="live_name" label="直播平台"></el-table-column>
-        <el-table-column prop="ready_txt" label="状态"></el-table-column>
+        <el-table-column  label="操作" width="320">
+          <template slot-scope="scope">
+            <el-button size="mini" v-if="scope.row.ready_txt=='待直播'" style="color:red" >{{scope.row.ready_txt}}</el-button >
+            <el-button size="mini" v-if="scope.row.ready_txt=='未知状态'" style="color:silver" >{{scope.row.ready_txt}}</el-button >
+
+          </template>
+        </el-table-column>
       </el-table>
       <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
       :page-sizes="[6,8,10,12]"
-      :page-size="6"
+      :page-size="8"
       layout="total, sizes, prev, pager, next"
       :total='tableData.length'>
     </el-pagination>
@@ -66,22 +71,38 @@
         style="margin-top:20px,"
       >
         <el-table-column prop="start_time" label="开始时间" width="100"></el-table-column>
-        <el-table-column prop="classhour" label="课时"></el-table-column>
+        <el-table-column prop="classhour" label="课时" width="50"></el-table-column>
         <el-table-column prop="student_name" label="学生姓名"></el-table-column>
         <el-table-column prop="course_address" label="地点"></el-table-column>
         <el-table-column prop="subject_name" label="科目"></el-table-column>
         <el-table-column prop="live_name" label="直播平台"></el-table-column>
-        <el-table-column prop="ready_txt" label="状态"></el-table-column>
+         <el-table-column  label="操作" width="320">
+          <template slot-scope="scope">
+            <el-button size="mini" v-if="scope.row.ready_txt=='待直播'" style="color:red" >{{scope.row.ready_txt}}</el-button >
+            <el-button size="mini" v-if="scope.row.ready_txt=='未知状态'" style="color:silver;bcakground-color:rgb(255,208,75);" >{{scope.row.ready_txt}}</el-button >
+            <el-button size="mini"  v-if="scope.row.ready_txt=='观看回放'" style="color:white;background-color:#409eff;" >
+              
+              <a @click="openVideo(scope.row.playback_url)">{{scope.row.ready_txt}}</a>
+              </el-button >
+            <el-button size="mini" v-if="scope.row.feedback_txt=='讲师填写反馈'" style="color:orange" >{{scope.row.feedback_txt}}</el-button >
+            <el-button size="mini" v-if="scope.row.feedback_txt=='查看课堂反馈'" style="color:blue" >{{scope.row.feedback_txt}}</el-button >
+            <el-button size="mini" v-if="scope.row.feedback_txt=='等待讲师填写'" style="color:silver" >{{scope.row.feedback_txt}}</el-button >
+
+             <!-- <el-button size="mini"  >观看录播</el-button > -->
+
+          </template>
+        </el-table-column>
       </el-table>
          <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
       :page-sizes="[6,8,10,12]"
-      :page-size="6"
+      :page-size="8"
       layout="total, sizes, prev, pager, next"
       :total='tableData.length'>
     </el-pagination>
+    <div class="indexVedio"></div>
       </div>
         </div>
   </div>
@@ -102,7 +123,7 @@ export default {
         // label:"username",
       ],
       currentPage: 1, //当前页
-      pagesize:6,
+      pagesize:8,
       value_stu:'',
       value_sub:'',
       options_1: [], //学生数组总数据
@@ -204,11 +225,12 @@ export default {
        let parms = {
         admin_id: this.getdataCookie("admin_id"),
         page:5,
-        subject_id:lastName.toString()
+        subject_id:lastName.toString(),
+        course_type:this.change_value
       };
         this.$apis.common.student_course(parms).then(res => {
     if (res.data.code == 1) {
-        this.tableData_1=res.data.data.list
+        this.tableData=res.data.data.list
     }
     })
         console.log(this.tableData_1)
@@ -217,20 +239,30 @@ export default {
       let parms = {
         admin_id: this.getdataCookie("admin_id"),
         page:5,
-        student_id:targetName.toString()
+        student_id:targetName.toString(),
+         course_type:this.change_value
       };
         this.$apis.common.student_course(parms).then(res => {
     if (res.data.code == 1) {
-        this.tableData_1=res.data.data.list
+        this.tableData=res.data.data.list
     }
     })
     console.log(this.tableData_1)
      },
+     openVideo(a){
+       //window.location.href=a;
+   var iWidth=$(window).width();                         //弹出窗口的宽度;
+  var iHeight=600;
+  var iTop = (window.screen.height-30-iHeight)/2;       //获得窗口的垂直位置;
+  var iLeft = (window.screen.width-10-iWidth)/2;        //获得窗口的水平位置;
+ window.open(a,name,'height='+iHeight+',innerHeight='+iHeight+',width='+iWidth+',innerWidth='+iWidth+',top='+iTop+',left='+iLeft+',toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no');
+
+       },
    getdata() {//获取科目的数据
-      let parms = {
+   if(this.change_value=='1'){
+        let parms = {
         admin_id: this.getdataCookie("admin_id")
       };
-      
       this.$apis.common.subject_list(parms).then(res => {
         if (res.data.code == 1) {
           this.msg = res.data;
@@ -260,6 +292,8 @@ export default {
           }
         }
       });
+   }
+   
     },
     //获取学生列表
     getStudent() {
@@ -292,7 +326,6 @@ export default {
 <style scoped>
 .data_main {
   width: 600px;
-
   float: left;
 }
 .data_list {
@@ -309,13 +342,30 @@ export default {
 } */
 .posi_right{
   position: absolute;
-  width: 43%;
-  left:820px;
+  width: 50%;
+  left:640px;
   top:225px; border:1px solid block ;
     border:1px solid silver;
 }
-.el-calendar-day{
- width: 50px;
- height: 50px;
+
+ .el-calendar{
+  width: 400px !important;
+   height: 400px !important;
 }
+
+.el-calendar-table .el-calendar-day {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 8px;
+  height: 35px !important;
+}
+
+ .prev .el-calendar-day{
+   height: 35px !important;
+}
+/* .data_main[data-v-83bc0558]{
+  width: 300px !important;
+    float: left;
+    height: 600px !important;
+} */
 </style>

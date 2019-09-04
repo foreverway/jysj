@@ -37,4 +37,12 @@
     }
   }
 </script>
+<style>
+  .el-calendar-table .el-calendar-day {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 8px;
+  height: 35px !important;
+}
+</style>
 

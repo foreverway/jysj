@@ -55,39 +55,37 @@ export default {
       // 现金钱包列表
   cash_list (parms) {
    let url = '/api/api_cash_list'
-
-   return shuju.postdata(url, parms)
+   return shuju.getdata(url, parms)
  },
  // 学习币明细 
  learnmoney_list (parms) {
    let url = '/api/api_learnmoney_list'
-
-   return shuju.postdata(url, parms)
+   return shuju.getdata(url, parms)
  },
  // 福利钱包入款扣款 
  wallet_balance (parms) {
    let url = '/api/api_welfare_wallet_balance'
    return shuju.postdata(url, parms)
  },
- // 福利钱包列表 
+ // 福利钱包明细列表
  wallet_list (parms) {
-   let url = '/api/api_learnmoney_list'
-   return shuju.postdata(url, parms)
+   let url = '/api/api_welfare_wallet_list'
+   return shuju.getdata(url, parms)
  },
    // ------------------------------公共方法---------------------------------------------------------
   // 读取url上的参数
   getuilcode () {
-   let admin_uid = this.getQueryString('admin_uid')
+   let admin_id = this.getQueryString('admin_id')
 
    let admin_name = this.getQueryString('admin_name')
 
-   if (!!admin_uid || !!admin_name) {
+   if (!!admin_id || !!admin_name) {
      // 设置缓存
      var d = new Date()
      d.setTime(d.getTime() + (2 * 3600000))
      var expires = 'expires=' + d.toGMTString()
      document.cookie = 'admin_name=' + admin_name + ';' + expires
-     document.cookie = 'admin_uid=' + admin_uid + ';' + expires
+     document.cookie = 'admin_id=' + admin_id + ';' + expires
    }
  },
 

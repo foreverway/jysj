@@ -26,8 +26,8 @@
 
 <div class="so_main_right">
 
-<el-button type="danger"  v-if="msg.data.isAdmin==1" @click="dialogFormVisible1= true,form1.type=1">入款</el-button>
-<el-button type="primary"  v-if="msg.data.isAdmin==1" @click="dialogFormVisible1= true,form1.type=2">扣款</el-button>
+<el-button type="danger"  v-if="msg.data.isAdmin=='1'" @click="dialogFormVisible1= true,form1.type=1">入款</el-button>
+<el-button type="primary"  v-if="msg.data.isAdmin=='1'" @click="dialogFormVisible1= true,form1.type=2">扣款</el-button>
 
 <el-dialog :title="form1.type==1?'入款':'扣款'" :visible.sync="dialogFormVisible1" width="500px" close-on-click-modal="false" >
   <el-form :model="form1">
@@ -77,8 +77,8 @@
    
        <el-table-column align="center" label="金额">
       <template slot-scope="scope">
-        <span v-if="scope.row.type==2" style="color:green">-{{ scope.row.given_amount }}</span>
-          <span v-if="scope.row.type==1" style="color:red">+{{ scope.row.given_amount }}</span>
+        <span v-show="scope.row.type==2" style="color:green">-{{ scope.row.given_amount }}</span>
+          <span v-show="scope.row.type==1" style="color:red">+{{ scope.row.given_amount }}</span>
       </template>
     </el-table-column>
 
@@ -111,7 +111,7 @@
      @prev-click="prev"
   @next-click="next"
   @current-change="current"
-   page-size=10
+   :page-size="10"
   :total="msg.data.count">
 </el-pagination>
 
@@ -138,9 +138,8 @@
             uname:'',//学生姓名
              type:'' ,//入款还是扣款，1入款，2扣款
        },
-         msg:'',
+         msg:{},
         dialogFormVisible1:false,//入扣款弹窗
-
       }
     },
       created () {
@@ -168,7 +167,6 @@ if(res.data.code==-1){
               return  (index+1) 
             }else{
                     let page=(this.form.page-1)*10+1
-             
               return index+page
             }
       },
@@ -189,7 +187,7 @@ if(this.form.page>1){
 }        
       },
       postfun(){
-       
+ 
        this.$apis.students.wallet_balance(this.form1).then(res => {
          if(res.data.code==1){
            let fuhao=this.form1.type==1?'+':'-'
@@ -209,7 +207,6 @@ this.getadata()
               if(res.data.code==1){
                    this.msg=res.data
                this.tableData = res.data.data.list
-               console.log(this.tableData)
               }
               
                 })

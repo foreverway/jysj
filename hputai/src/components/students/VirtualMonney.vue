@@ -112,19 +112,58 @@ export default {
       dialogFormVisible1: false //入扣款弹窗
     };
   },
+ created () {
+         this.$apis.students.getuilcode()
+      this.getadata()
+    },
+    methods: {
+     //序号排列
+      indexMethod(index) {
+            if(this.form.page==1){
+              return  (index+1) 
+            }else{
+                    let page=(this.form.page-1)*10+1
+           
+              return index+page
+            }
+      },
 
+       current(num){//当前页数
+this.form.page=num
+this.getadata()
+      },
+      next(){
+        this.form.page++
+        this.getadata()
+      },
+      prev(){ //上一页
+if(this.form.page>1){
+  this.form.page--
+  this.getadata()
+}        
+      },
+      postfun(){
+       this.$apis.students.wallet_balance(this.form1).then(res => {
+         if(res.data.code==1){
+           let fuhao=this.form1.type==1?'+':'-'
+ this.$message({
+          message: this.form1.uname+'操作成功'+fuhao+this.form1.amount +'元',
+          type: 'success'
+        });
+this.getadata()
+         }else{
+            this.$message.error(res.data.msg);      
+         }
+ })
+      },
+        getadata(){
+            this.$apis.students.learnmoney_list(this.form).then(res => {
+              if(res.data.code==1){
+                   this.msg=res.data
+               this.tableData = res.data.data.list
+              }
+                })
+        }
+    }
 };
 </script>
-<style scoped>
-.so_input {
-  width: 300px;
-  margin-bottom: 20px;
-}
-.so_main_left {
-  float: left;
-  margin-top: 15px;
-}
-.so_main_right {
-  float: right;
-}
-</style>

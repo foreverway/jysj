@@ -81,7 +81,7 @@
      @prev-click="prev"
   @next-click="next"
   @current-change="current"
-   page-size=10
+   :page-size='10'
   :total="msg.data.count">
 </el-pagination>
 
@@ -107,13 +107,13 @@
             uname:'',//学生姓名
              type:'' ,//入款还是扣款，1入款，2扣款
        },
-         msg:'',
+         msg:{},
         dialogFormVisible1:false,//入扣款弹窗
 
       }
     },
       created () {
-         this$apis.students.getuilcode()
+         this.$apis.students.getuilcode()
       this.getadata()
     },
     methods: {
@@ -143,8 +143,7 @@ if(this.form.page>1){
 }        
       },
       postfun(){
-       
-       this$apis.students.wallet_balance(this.form1).then(res => {
+       this.$apis.students.wallet_balance(this.form1).then(res => {
          if(res.data.code==1){
            let fuhao=this.form1.type==1?'+':'-'
  this.$message({
@@ -156,16 +155,13 @@ this.getadata()
             this.$message.error(res.data.msg);      
          }
  })
-                
       },
         getadata(){
-            this$apis.students.cash_list(this.form).then(res => {
+            this.$apis.students.cash_list(this.form).then(res => {
               if(res.data.code==1){
                    this.msg=res.data
                this.tableData = res.data.data.list
-               console.log(this.tableData)
               }
-              
                 })
         }
     }
