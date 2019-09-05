@@ -167,3 +167,11 @@ this.getadata()
     }
 };
 </script>
+<style scoped>
+.so_input{
+  width: 300px;
+  margin-bottom: 20px;
+}
+.so_main_left{float: left;margin-top: 20px}
+.so_main_right{float: right;}
+</style>

@@ -68,6 +68,7 @@
 
   
   <script>
+  import {mapState}  from 'vuex'
     export default {
       data() {
         return {
@@ -81,6 +82,9 @@
       },
       created () {
         this.getdata()  
+      },
+      computed:{
+      ...mapState(['live_list'])
       },
       methods: {
           //表格索引
@@ -128,12 +132,13 @@ let params={
       },
           // 获取数据
           getdata(){
-              this.$apis.sys.live_list().then(res=>{
-                    if(res.data.code==1){
-                        this.tableData=res.data.data
+            console.log(this.live_list)
+              // this.$apis.sys.live_list().then(res=>{
+              //       if(res.data.code==1){
+                        this.tableData=this.live_list
                        
-                    }
-              })
+                    // }
+              // })
           }
       }
     }

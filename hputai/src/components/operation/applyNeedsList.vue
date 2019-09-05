@@ -287,7 +287,6 @@ export default {
       switch (a) {
         case "click_edit":
     this.$router.push({ path: "/ApplicationEdit", query:{id: b.id }});
-          console.log(this.tableData);
            this.$message({
             message:"确定成功",
             type:"success"
@@ -334,6 +333,7 @@ export default {
         });
           break;
         case "click_delete":
+          alert(555)
         this.$confirm('此操作将永久删除该需求, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -380,14 +380,13 @@ export default {
              if(res.data.code==1){
               this.gridData=res.data.data
                this.gridData_class=res.data.data.course_data
-              console.log(this.gridData)
              }
            })
           break;
       }
     },
     getRolenenu() {
-      return this.rolemenu[0].children[3].children;
+      return this.rolemenu[1].children[2].children;
       //  console.log()
     },
     submit_think() {
@@ -459,11 +458,9 @@ export default {
     },
     //根据顾问老师生成列表
     showAdviser(targetName) {
-      //   console.log(this.options_all)
       this.adviserList = this.options_all.filter(
         item => item.adviser == targetName
       );
-      console.log(this.adviserList[0].id);
       let parms = {
         admin_id: this.getdataCookie("admin_id"),
         add_admin_id:

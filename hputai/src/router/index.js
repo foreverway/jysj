@@ -10,7 +10,7 @@ import AdminEdit from '@/components/menber/admin_edit'
 //操作
 import AddLink from '@/components/operation/addlink'
 import ApplicationAdd from '@/components/operation/application_add'  //添加报名需求列表
-import ApplicationEdit from '@/components/operation/application_edit'  //添加报名需求列表
+import ApplicationEdit from '@/components/operation/application_edit'  //编辑报名需求列表
 import SalesList from '@/components/operation/sale_list.vue'
 import SalelistEdit from '@/components/operation/salelist_edit.vue'
 import Addsalepro from '@/components/operation/addsalepro'
@@ -22,9 +22,7 @@ import StudentsAdd from '@/components/students/students_add'
 import StudentsEdit from '@/components/students/students_edit'
 import StudentsList from '@/components/students/StudentsList'
 import StudentClass from '@/components/students/StudentClass'
-
 import ClassMain from '@/components/students/ClassMain'
-
 import StudentMoneyMain from '@/components/students/StudentMoneyMain'  //学生钱包在这里
 import NewMoney from '@/components/students/NewMoney'
 import VirtualMonney from '@/components/students/VirtualMonney'

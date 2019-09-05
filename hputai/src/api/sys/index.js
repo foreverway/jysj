@@ -22,10 +22,10 @@ export default {
     return shuju.postdata(url,params)
    },
    // 获取直播平台数据 /api_live_list
-  //  live_list (params) {
-  //   let url='/api/api_live_list'
-  //   return shuju.getdata(url,params)
-  //  },
+   // live_list (params) {
+   //  let url='/api/api_live_list'
+   //  return shuju.getdata(url,params)
+   // },
       //班主任数据 /api_banzhuren_list
       // banzhuren_list (params) {
       //   let url='/api/api_banzhuren_list'

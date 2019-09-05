@@ -443,16 +443,15 @@ export default {
 
       parms.subjects_data = this.subjects_data;
       parms.students_data = this.students_data;
-      console.log(parms);
-      // this.$apis.common.application_add(parms).then(res => {
-      //   if (res.data.code == 1) {
-      //     this.$message({
-      //       message: "添加成功",
-      //       type: "success"
-      //     });
-      //     this.active = 3;
-      //   }
-      // });
+      this.$apis.common.application_add(parms).then(res => {
+        if (res.data.code == 1) {
+          this.$message({
+            message: "添加成功",
+            type: "success"
+          });
+          this.active = 3;
+        }
+      });
     },
     next() {
       for (let i = 0; i < this.editableTabsValue.length; i++) {

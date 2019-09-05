@@ -1,6 +1,6 @@
 <template>
 <div class="main">
-<el-input placeholder="请输入搜索内容"  @input="getdata" clearable style="width:300px"></el-input> <el-button type="primary" >搜索</el-button>
+<el-input placeholder="请输入搜索内容"  @change="getdata_1" v-model="search_value" clearable style="width:300px"></el-input> <el-button type="primary" >搜索</el-button>
  <router-link to="/SubjectAdd">
   <el-button type="primary" style="float:right">添加科目</el-button>
  </router-link>
@@ -47,11 +47,12 @@
 </div>
 </template>
 <script>
+  import {mapState}  from 'vuex'
   export default {
     data() {
       return {
         tableData: [],
- 
+        search_value:''
       }
     },
     created () {
@@ -73,14 +74,26 @@
   },
 getdata(){
       let parms={
+    // admin_id:this.getdataCookie('admin_id')
+  }
+  
+this.$apis.common.subject_list(parms).then(res=>{
+  if(res.data.code==1){
+        this.tableData=res.data.data
+  }
+  else{
+     this.$router.push({path:'/login'})
+  }
+})
+},
+getdata_1(){
+      let parms={
     admin_id:this.getdataCookie('admin_id')
   }
   
 this.$apis.common.subject_list(parms).then(res=>{
-  //console.log(parms)
   if(res.data.code==1){
-    console.log(res.data.data)
-        this.rolemenu=res.data.data
+        this.tableData=res.data.data
   }
   else{
      this.$router.push({path:'/login'})

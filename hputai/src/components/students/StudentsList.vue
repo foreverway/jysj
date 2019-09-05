@@ -133,7 +133,7 @@ import { mapState } from 'vuex';
             }
       },
       getStuList(){
-       return this.rolemenu[1].children[0].children
+       return this.rolemenu[0].children[0].children
       },
       trueAction(a,b){
           switch(a){

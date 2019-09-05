@@ -7,7 +7,6 @@
           :options="options1"
           @change="handleChange(value_stu)"
           filterable
-          clearable
         ></el-cascader>
            <!-- 用el-autocomplete -->
         <el-cascader
@@ -16,8 +15,6 @@
           :options="options"
           :props="{ expandTrigger: 'hover' }"
           :show-all-levels="false"
-          filterable
-          clearable
           @change="handleChange_1"
         ></el-cascader>
         <div  style="height:50px"></div>
@@ -49,9 +46,8 @@
         <el-table-column prop="live_name" label="直播平台"></el-table-column>
         <el-table-column  label="操作" width="320">
           <template slot-scope="scope">
-            <p size="mini"  v-if="scope.row.ready_txt=='待直播'" style="color:red;margin:0 10px;display:inline-block;" >{{scope.row.ready_txt}}</p >
+            <el-button size="mini" v-if="scope.row.ready_txt=='待直播'" style="color:red" >{{scope.row.ready_txt}}</el-button >
             <el-button size="mini" v-if="scope.row.ready_txt=='未知状态'" style="color:silver" >{{scope.row.ready_txt}}</el-button >
-            <el-button size="mini" v-if="scope.row.feedback_txt=='等待讲师填写'" @click="teacher_wey" style="color:silver" >{{scope.row.feedback_txt}}</el-button >
 
           </template>
         </el-table-column>
@@ -223,15 +219,12 @@ export default {
 
     return result;
 },
-teacher_wey(){   //待上课表老师操作
-alert(33)
-},
     handleChange_1(targetName) { //选择科目
       var lastName = targetName.length == 1 ? targetName[0] : targetName[1];
 
        let parms = {
         admin_id: this.getdataCookie("admin_id"),
-        page:1,
+        page:5,
         subject_id:lastName.toString(),
         course_type:this.change_value
       };
@@ -240,6 +233,7 @@ alert(33)
         this.tableData=res.data.data.list
     }
     })
+        console.log(this.tableData_1)
     },
      handleChange(targetName) {  //选择学生
       let parms = {
@@ -330,23 +324,6 @@ alert(33)
 };
 </script>
 <style scoped>
-html {
-  overflow-y: scroll;
-}
-
-:root {
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-:root body {
-  position: absolute;
-}
-
-body {
-  width: 100vw;
-  overflow: hidden;
-}
 .data_main {
   width: 600px;
   float: left;
