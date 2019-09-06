@@ -9,7 +9,7 @@
     <el-tab-pane label="已上课表" name="2"></el-tab-pane>
 
   </el-tabs>
-    <router-view :changeTab='activeName' ></router-view> 
+    <router-view :changeTab.sync='activeName' ></router-view> 
     <!-- 显示子组件studencClass -->
     </div>
 </template>

@@ -1,6 +1,7 @@
 <template>
 <div class="so_main">
-  <h3>福利钱包</h3>
+
+
 <div class="so_main_left">
 
  <el-form :inline="true" :model="form" class="demo-form-inline">

@@ -72,6 +72,12 @@ export default {
    let url = '/api/api_welfare_wallet_list'
    return shuju.getdata(url, parms)
  },
+    
+   // 添加报名需求列表 /api_attendance_list
+   attendance_list (params) {
+    let url='/api/api_attendance_list'
+    return shuju.getdata(url,params)
+   },
    // ------------------------------公共方法---------------------------------------------------------
   // 读取url上的参数
   getuilcode () {

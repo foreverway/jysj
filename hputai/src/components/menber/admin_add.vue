@@ -96,13 +96,16 @@
          if(value.length!=11){
              return callback(new Error('手机号长度不足11位'));
         }
-          this.$apis.menber.check_tel(this.form).then(res=>{
+        let parms={ 
+           admin_tel:this.form.admin_tel
+        }
+        console.log(parms)
+          this.$apis.menber.check_tel(parms).then(res=>{
               if(res){
-          //       console.log(res)
-          //          this.$message({
-          //   message: "添加成功",
-          //   type: "success"
-          // });
+                   this.$message({
+            message: "添加成功",
+            type: "success"
+          });
                   callback();
               }else{
                 callback(new Error('该手机号已经存在'));

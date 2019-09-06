@@ -22,9 +22,12 @@
                             </el-form-item>
                       </el-form>
               </div>
-                 <el-button type="primary" @click="login" round style="width:175px">登录</el-button>
+               <el-form ref="form" :model="form" label-width="60px">
+                            <el-form-item label="" >
+                 <el-button type="primary" @click="login" round style="width:175px;background-color:#e6563a; border:none;">登录</el-button>
     <el-link type="primary" @click="dialogFormVisible = true">忘记密码?</el-link>
-              
+               </el-form-item>
+                      </el-form>
 			</div>
 		</div>
 

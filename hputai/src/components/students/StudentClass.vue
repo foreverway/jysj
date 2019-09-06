@@ -20,7 +20,7 @@
         <div  style="height:50px"></div>
    <el-calendar v-model="value"   style="height:500px;">
         <template slot="dateCell" slot-scope="{date, data}" >
-          <p >
+          <p @click="searchDay(data.day)">
             {{data.day.slice(8)}}
           </p>
            <!-- <p :class="msg.indexOf(data.day)!=-1? 'is-selected' : ''">
@@ -38,17 +38,24 @@
         :row-class-name="tableRowClassName"
         style="margin-top:20px ,"
       >
-        <el-table-column prop="start_time" label="开始时间" width="100"></el-table-column>
+        <el-table-column prop="start_time" label="开始时间" width="140"></el-table-column>
         <el-table-column prop="classhour" label="课时" ></el-table-column>
         <el-table-column prop="student_name" label="学生姓名"></el-table-column>
+        <el-table-column prop="teacher_name" label="讲师姓名"></el-table-column>
         <el-table-column prop="course_address"  label="地点"></el-table-column>
         <el-table-column prop="subject_name"  label="科目"></el-table-column>
         <el-table-column prop="live_name" label="直播平台"></el-table-column>
-        <el-table-column  label="操作" width="320">
+        <el-table-column  label="操作" width="250">
           <template slot-scope="scope">
-            <el-button size="mini" v-if="scope.row.ready_txt=='待直播'" style="color:red" >{{scope.row.ready_txt}}</el-button >
+            <el-button size="mini" v-if="scope.row.ready_txt=='准备直播'" style="color:red" >{{scope.row.ready_txt}}</el-button >
             <el-button size="mini" v-if="scope.row.ready_txt=='未知状态'" style="color:silver" >{{scope.row.ready_txt}}</el-button >
-
+            <el-button size="mini"  v-if="scope.row.ready_txt=='待直播'" style="color:white;background-color:#409eff;" >
+              <a @click="nowVideo(scope.row.course_id)">{{scope.row.ready_txt}}</a>
+              </el-button >
+              
+              <el-button size="mini" v-if="scope.row.feedback_txt=='讲师填写反馈'" style="color:orange" >{{scope.row.feedback_txt}}</el-button >
+            <el-button size="mini" v-if="scope.row.feedback_txt=='查看课堂反馈'" style="color:blue" >{{scope.row.feedback_txt}}</el-button >
+            <el-button size="mini" v-if="scope.row.feedback_txt=='等待讲师填写'" style="color:silver" >{{scope.row.feedback_txt}}</el-button >
           </template>
         </el-table-column>
       </el-table>
@@ -70,9 +77,10 @@
         :row-class-name="tableRowClassName"
         style="margin-top:20px,"
       >
-        <el-table-column prop="start_time" label="开始时间" width="100"></el-table-column>
+        <el-table-column prop="start_time" label="开始时间" width="140"></el-table-column>
         <el-table-column prop="classhour" label="课时" width="50"></el-table-column>
         <el-table-column prop="student_name" label="学生姓名"></el-table-column>
+          <el-table-column prop="teacher_name" label="讲师姓名"></el-table-column>
         <el-table-column prop="course_address" label="地点"></el-table-column>
         <el-table-column prop="subject_name" label="科目"></el-table-column>
         <el-table-column prop="live_name" label="直播平台"></el-table-column>
@@ -84,10 +92,9 @@
               
               <a @click="openVideo(scope.row.playback_url)">{{scope.row.ready_txt}}</a>
               </el-button >
-            <el-button size="mini" v-if="scope.row.feedback_txt=='讲师填写反馈'" style="color:orange" >{{scope.row.feedback_txt}}</el-button >
+            <el-button size="mini" v-if="scope.row.feedback_txt=='讲师填写反馈'" @click="fillFeedback(scope.row.course_id)"  style="color:orange" >{{scope.row.feedback_txt}}</el-button >
             <el-button size="mini" v-if="scope.row.feedback_txt=='查看课堂反馈'" style="color:blue" >{{scope.row.feedback_txt}}</el-button >
             <el-button size="mini" v-if="scope.row.feedback_txt=='等待讲师填写'" style="color:silver" >{{scope.row.feedback_txt}}</el-button >
-
              <!-- <el-button size="mini"  >观看录播</el-button > -->
 
           </template>
@@ -102,7 +109,67 @@
       layout="total, sizes, prev, pager, next"
       :total='tableData.length'>
     </el-pagination>
-    <div class="indexVedio"></div>
+    <el-dialog title="收货地址" :visible.sync="dialogFromVisible" >
+       <p style="font-size:18px;height:30px;margin:10px 0;">课程信息</p>
+      <ul :data="gridData">
+       
+        <li><span>课程名称</span><span>{{gridData.subject_name}}</span></li>
+        <li><span>教师姓名</span><span>{{gridData.teacher_name}}</span></li>
+        <li><span>班主任</span><span>{{gridData.banzhuren_name}}</span></li>
+        <li><span >上课时间</span><span style="border:0;">{{gridData.start_time}}</span></li>
+        <li><span>结束时间</span><span style="border:0;">{{gridData.end_time}}</span></li>
+        <li><span>时长</span><span>{{gridData.classhour}}</span></li>
+        <li><span>授课方式</span><span>{{gridData.course_address}}</span></li>
+        <li><span>地点</span><span>{{gridData.course_address}}</span></li>
+        <li><span></span><span></span></li>
+      </ul>
+      <div style="clear:both;"></div>
+        <p style="font-size:18px;height:30px;margin:10px 0;">反馈内容</p>
+<el-form  :model="form" label-width="100px">
+  <el-form-item label="类型">
+        <el-radio-group v-model="form.radio">
+          <el-radio :label="1">试听/首次课程反馈</el-radio>
+          <el-radio :label="2">日常上课反馈</el-radio>
+          <el-radio :label="3">结课总结</el-radio>
+        </el-radio-group>
+        
+  </el-form-item>
+  <el-form-item label="本次授课内容" prop="desc" v-if="form.radio==1">
+    <el-input type="textarea" v-model="form.desc"></el-input>
+  </el-form-item>
+    <el-form-item label="课堂配合度和积极性" prop="desc">
+    <el-input type="textarea" v-model="form.desc"></el-input>
+  </el-form-item>
+    <el-form-item label="学生的主要问题和建议" prop="desc">
+    <el-input type="textarea" v-model="form.desc"></el-input>
+  </el-form-item>
+    <el-form-item label="课时建议" prop="desc">
+    <el-input type="textarea" v-model="form.desc"></el-input>
+  </el-form-item>
+    <el-form-item label="课程阶段安排及课时建议" prop="desc">
+    <el-input type="textarea" v-model="form.desc"></el-input>
+  </el-form-item>
+    <el-form-item label="上次课知识点掌握情况" prop="desc">
+    <el-input type="textarea" v-model="form.desc"></el-input>
+  </el-form-item>  
+  <el-form-item label="本次授课内容" prop="desc">
+    <el-input type="textarea" v-model="form.desc"></el-input>
+  </el-form-item>
+    <el-form-item label="作业" prop="desc">
+    <el-input type="textarea" v-model="form.desc"></el-input>
+  </el-form-item>
+    <el-form-item label="课程期间学生总体表现" prop="desc">
+    <el-input type="textarea" v-model="form.desc"></el-input>
+  </el-form-item>
+    <el-form-item label="下一步学习方案建议" prop="desc">
+    <el-input type="textarea" v-model="form.desc"></el-input>
+  </el-form-item>
+  <el-form-item>
+    <el-button type="primary" @click="onSubmit">查询</el-button>
+  </el-form-item>
+</el-form>
+              
+</el-dialog>
       </div>
         </div>
   </div>
@@ -117,11 +184,15 @@ export default {
   data() {
     return {
       value: "",
+      form:{
+        radio:'1',
+      }, //from提交的数据
       msg: ["2019-06-13 ", "2019-06-18", "2019-06-16"],
       options1: [
         //学生姓名的数据
         // label:"username",
       ],
+      radio:'',//反馈类型
       currentPage: 1, //当前页
       pagesize:8,
       value_stu:'',
@@ -132,6 +203,8 @@ export default {
       tableData: [],
       tableData_1:[], //经过学科或者学生筛选的数据
       change_value:'1',  //Tab的值  
+      dialogFromVisible: false,  //弹出框的设置
+      gridData:{},  //弹出框的表格数据
     };
   },
   created() {
@@ -153,6 +226,18 @@ export default {
     }
   },
   methods: {
+    fillFeedback(a){
+      this.dialogFromVisible= true
+       let parms = {
+        course_id:a,
+      };
+        this.$apis.common.feedback_add(parms).then(res => {
+    if (res.data.code == 1) {
+        this.gridData=res.data.data
+        console.log(this.gridData)
+    }
+    })
+    },
     handleSizeChange(val) {
       this.pagesize=val*1
       },
@@ -161,6 +246,7 @@ export default {
         this.getClassList(val)
       },
     getClassList(a){
+      this.$emit('update:changeTab',this.change_value)
  let parms = {
         course_type:this.change_value,
         page:a?a:1,
@@ -221,10 +307,9 @@ export default {
 },
     handleChange_1(targetName) { //选择科目
       var lastName = targetName.length == 1 ? targetName[0] : targetName[1];
-
        let parms = {
         admin_id: this.getdataCookie("admin_id"),
-        page:5,
+        page:1,
         subject_id:lastName.toString(),
         course_type:this.change_value
       };
@@ -233,12 +318,11 @@ export default {
         this.tableData=res.data.data.list
     }
     })
-        console.log(this.tableData_1)
     },
      handleChange(targetName) {  //选择学生
       let parms = {
         admin_id: this.getdataCookie("admin_id"),
-        page:5,
+        page:1,
         student_id:targetName.toString(),
          course_type:this.change_value
       };
@@ -247,16 +331,59 @@ export default {
         this.tableData=res.data.data.list
     }
     })
-    console.log(this.tableData_1)
      },
-     openVideo(a){
-       //window.location.href=a;
-   var iWidth=$(window).width();                         //弹出窗口的宽度;
+     searchDay(a){
+        let parms = {
+        admin_id: this.getdataCookie("admin_id"),
+        page:1,
+         course_type:this.change_value,
+         start_time:a
+      };
+        this.$apis.common.student_course(parms).then(res => {
+    if (res.data.code == 1) {
+        this.tableData=res.data.data.list
+    }
+     })
+     },
+     nowVideo(a){     //观看直播
+       let parms={
+         course_id:a
+       }
+       this.$message({
+             type:"success",
+             message:"正在创建链接,请稍等片刻"
+           })
+       this.$apis.common.enter_classroom(parms).then(res=>{
+         if(res.data.code==1){
+           let client_url=res.data.data.client_url
+   var iWidth=1000;
+  var iHeight=600;
+  var iTop = (window.screen.height-30-iHeight)/2;       //获得窗口的垂直位置;
+  var iLeft = (window.screen.width-10-iWidth)/2;        //获得窗口的水平位置;
+ window.open(client_url,name,'height='+iHeight+',innerHeight='+iHeight+',width='+iWidth+',innerWidth='+iWidth+',top='+iTop+',left='+iLeft+',toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no');
+         }else{
+           this.$message({
+             type:"warnning",
+             message:"数据获取出错"
+           })
+         }
+       })
+     },
+     openVideo(a){  //观看录播
+  //  var iWidth=$(window).width();                         //弹出窗口的宽度;
+       if(a=='0'){
+this.$message({
+             type:"warning",
+             message:"我们的直播数据还在生成中,你可以稍后再来",
+             duration:4000
+           })
+           }else{
+  var iWidth=1000;
   var iHeight=600;
   var iTop = (window.screen.height-30-iHeight)/2;       //获得窗口的垂直位置;
   var iLeft = (window.screen.width-10-iWidth)/2;        //获得窗口的水平位置;
  window.open(a,name,'height='+iHeight+',innerHeight='+iHeight+',width='+iWidth+',innerWidth='+iWidth+',top='+iTop+',left='+iLeft+',toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no');
-
+           }
        },
    getdata() {//获取科目的数据
    if(this.change_value=='1'){
@@ -368,4 +495,21 @@ export default {
     float: left;
     height: 600px !important;
 } */
+li {
+  list-style: none;
+  display:inline-block;
+  float: left;
+  width: 32%;
+  height: 30px;
+  padding:0;
+  margin:0 0 0 -2px ;
+}
+li span{
+  display:inline-block;
+  float: left;
+  width: 49%;
+  height: 30px;
+  line-height: 30px;
+  border:1px silver solid;
+}
 </style>

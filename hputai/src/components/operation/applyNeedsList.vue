@@ -44,7 +44,7 @@
           <span v-else-if="scope.row.app_status== '待排课'" style="color:rgb(230, 162, 60)">待排课</span>
           <span v-if="scope.row.app_status== '已排课待确认'" style="color:#009688">已排课待确认</span>
           <span v-else-if="scope.row.app_status== '已确认'" style="color:#303133">已确认</span>
-          <span v-if="scope.row.app_status== '授课考勤'" style="color:#409EFF">授课考勤</span>
+          <span v-if="scope.row.app_status== '授课考勤中'" style="color:#409EFF">授课考勤中</span>
           <span v-else-if="scope.row.app_status== '已结课'" style="color:#67C23A">已结课</span>
         </template>
       </el-table-column>
@@ -188,13 +188,9 @@ export default {
       banzhuren_list_new: [], //班主任数据
       banzhuren_live: "",
       moneymen_list_new: [
-        { value: 10141, label: "飞扬", id: 1 },
-        { value: 10511, label: "朝夕", id: 7 }
       ], //教务专员
       moneymen_live: "",
       helpTeacher_list_new: [
-        { value: 10141, label: "飞扬", id: 1 },
-        { value: 1011, label: "朝夕", id: 2 }
       ], //助教数据
       helpTeacher_live: "",
       parms: {
@@ -251,7 +247,7 @@ export default {
     // this.getbanzhurenName();
   },
   mounted() {
-    this.getbanzhurenName();       
+    // this.getbanzhurenName();       
     // this.tip_banzhuren=JSON.stringfy(this.banzhuren_list)
   },
   watch: {},
@@ -281,11 +277,20 @@ export default {
         var val = this.banzhuren_list[i];
         this.banzhuren_list_new.push({ value: val.id, label: val.banzhuren });
       }
+         for (let i = 0; i < this.zhujiao_data.length; i++) {
+        var val = this.zhujiao_data[i];
+        this.helpTeacher_list_new.push({ value: val.id, label: val.zhujiao_name });
+      }
+         for (let i = 0; i < this.jiaowu_data.length; i++) {
+        var val = this.jiaowu_data[i];
+        this.moneymen_list_new.push({ value: val.id, label: val.jiaowu_name });
+      }
     },
    
     mommonAction(a, b) {
       switch (a) {
         case "click_edit":
+        
     this.$router.push({ path: "/ApplicationEdit", query:{id: b.id }});
            this.$message({
             message:"确定成功",
@@ -295,8 +300,7 @@ export default {
         case "click_test": //审核
          if (b.app_status == "待审核") {
           this.centerDialogVisible_shenghe = true;
-          mapState(["banzhuren_list"]);
-          //  console.log(this.banzhuren_list_new)
+          mapState(["banzhuren_list",'zhujiao_data','jiaowu_data']);
           this.app_id=b.id
           this.getbanzhurenName();}else{
                 this.$message({
@@ -333,7 +337,6 @@ export default {
         });
           break;
         case "click_delete":
-          alert(555)
         this.$confirm('此操作将永久删除该需求, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -401,6 +404,7 @@ export default {
            }
       this.$apis.common.application_audit(shenghe).then(res => {
         if (res.data.code == 1) {
+          location.reload() 
           this.$message({
             message:"审核成功",
             type:"success"

@@ -36,11 +36,11 @@
             router
             background-color="#ffffff"
             text-color="#000"
-            active-text-color="#ffd04b"
+            active-text-color="#fff"
           >
-            <el-menu-item index="/">
-              <i class="el-icon-s-home"></i>
-              <span slot="title">首页</span>
+            <el-menu-item index="/" style="background-color:#ddd;color:#e6563a; border:none;">
+              <i class="el-icon-s-home" style="color:#e6563a; border:none;"></i>
+              <span slot="title" >首页</span>
             </el-menu-item>
             <span v-for="(item,index) in rolemenu" :key="index">
               <!-- 刷新出首层名字 -->
@@ -246,20 +246,23 @@ export default {
   float: right;
   line-height: 61px;
 }
-
+.el-menu-item{
+  background-color: #fff !important;
+}
 .el-menu-item:hover {
   outline: 0 !important;
-  color: #409eff !important;
+  color: #fff !important;
+  background: #ddd !important;
 }
 .el-menu-item.is-active {
   color: #fff !important;
-  background: #409eff !important;
+  background: #e6563a !important;
 }
 
 .el-submenu__title:focus,
 .el-submenu__title:hover {
   outline: 0 !important;
-  color: #409eff !important;
+  color: #e6563a !important;
   background: none !important;
 }
 </style>

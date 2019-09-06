@@ -78,5 +78,10 @@ export default {
         student_course(params){    //获取学生课表（待上/已上）接口
           let url ="/api/api_student_course"
           return shuju.getdata(url,params)},
- 
+          enter_classroom(params){    //直播进入教室
+            let url ="/api/api_enter_classroom"
+            return shuju.getdata(url,params)},
+            feedback_add(params){    //直播进入教室
+              let url ="/api/api_feedback_add"
+              return shuju.getdata(url,params)},
 }
