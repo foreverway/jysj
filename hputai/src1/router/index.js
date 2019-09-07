@@ -10,7 +10,6 @@ import AdminEdit from '@/components/menber/admin_edit'
 //操作
 import AddLink from '@/components/operation/addlink'
 import ApplicationAdd from '@/components/operation/application_add'  //添加报名需求列表
-import ApplicationEdit from '@/components/operation/application_edit'  //添加报名需求列表
 import SalesList from '@/components/operation/sale_list.vue'
 import SalelistEdit from '@/components/operation/salelist_edit.vue'
 import Addsalepro from '@/components/operation/addsalepro'
@@ -73,15 +72,11 @@ export default new Router({
           component: ApplicationAdd
         },
         {
-          path: '/ApplicationEdit',//ApplicationEdit编辑报名需求列表
-          component: ApplicationEdit
-        },
-        {
           path: '/ApplyNeedsList',//ApplyNeedsList添加报名需求列表
           component: ApplyNeedsList
         },
         {
-          path: '/PlanClassAdd',//PlanClassAdd添加报名需求列表
+          path: '/PlanClassAdd/:id',//PlanClassAdd添加报名需求列表
           component: PlanClassAdd
         },
         {

@@ -49,7 +49,7 @@
               <el-submenu index="index" link="item.menu_url">
                 <template slot="title">
                   <i :class="item.menu_icon"></i>
-                  <span slot="title">{{item.menu_name}}</span>
+                  <span slot="title"  class="changeC">{{item.menu_name}}</span>
                 </template>
                 <span v-for="(items,index1) in item.children" :key="index1">
                   <el-menu-item :index="items.menu_url" route>
@@ -136,12 +136,23 @@ export default {
  
   methods: {
     selectMenu(index,indexPath){
-      console.log(index,indexPath)
-      this.rolemenu.forEach((index,item,array)=>{  //遍历菜单
-        console.log(index,item,array)
+             var menuList=$('.changeC')
+             for(let y=0;y<menuList.length;y++){
+               $(menuList[y]).attr('id','')
+             }
+      this.rolemenu.forEach((item,index,array)=>{  //遍历菜单
+         //console.log(index,item,array)
         if(item.children){  //有子集
            for(let j=0;j<item.children.length;j++){   //遍历子集
-              
+              // console.log(item.children[j])
+            let a=item.children.filter(function(item){
+              return item.menu_url==indexPath[1]
+                })
+              if(a.length>0){
+         
+               $(menuList[index]).attr('id','changeC')
+                return index
+              }
            }
         }else{  //无子集
         }
@@ -296,7 +307,9 @@ export default {
   color: #fff !important;
   background: #e6563a !important;
 }
-
+#changeC{
+  color:#e6563a !important;
+}
 .el-submenu__title:focus,
 .el-submenu__title:hover {
   outline: 0 !important;

@@ -4,12 +4,12 @@
     <el-input
       placeholder="模糊搜索"
       v-model="parms.search"
+      @input="getdata"
       clearable
       style="width:300px"
     ></el-input>
 
     <el-date-picker
-     value-format="yyyy-MM-dd HH:mm:ss"
       v-model="value2"
       type="datetimerange"
       :picker-options="pickerOptions"
@@ -19,7 +19,7 @@
       align="right"
     ></el-date-picker>
 
-    <el-button type="primary"  @click="searchdata">搜索</el-button>
+    <el-button type="primary">搜索</el-button>
     <router-link to="/Addsalepro">
       <el-button type="primary" style="float:right">新建销售情况列表</el-button>
     </router-link>
@@ -67,7 +67,7 @@
   :total="msg.data.count">
     </el-pagination>-->
     <!-- 设置充值链接 -->
-    <!-- <el-dialog
+    <el-dialog
       title="设置充值金额"
       :visible.sync="dialogFormVisible1"
       width="500px"
@@ -89,7 +89,7 @@
       </div>
     </el-dialog>
     <!-- 设置充值链接 -->
-    <!-- <div style="display:none" cols="20" id="biao1">{{copyurl1}}</div> --> 
+    <div style="display:none" cols="20" id="biao1">{{copyurl1}}</div>
   </div>
 </template>
 
@@ -137,8 +137,8 @@ export default {
           }
         ]
       },
-       value1: '',
-        value2: []
+      value1: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
+      value2: ""
     };
   },
   created() {
@@ -146,30 +146,9 @@ export default {
     // console.log( this.getdata())
   },
   mounted() {
+    console.log(this.tableData);
   },
   methods: {
-    searchdata(){
-            this.$apis.common.salepro_list(this.parms)
-        .then(res => {
-          if (res.data.code == 1){
-            this.msg = res.data.msg;
-            let new_arr =[]
-            if(this.value2.length==0){
-              this.tableData = res.data.data.list
-            }else{
-            new_arr=res.data.data.list.filter(item=>item.dtime>this.value2[0]&&item.dtime<this.value2[1])
-               this.tableData = new_arr
-            }
-           
-          }
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "请求失败"
-          });
-        });
-    },
     //序号排列
     indexMethod(index) {
       if (this.parms.page == 1) {
@@ -220,7 +199,6 @@ export default {
           });
         })
         .catch(() => {
-          
           this.$message({
             type: "info",
             message: "已取消删除"
@@ -246,7 +224,7 @@ export default {
         .salepro_list(parms)
         .then(res => {
           if (res.data.code == 1) {
-            // console.log(res.data.data);
+            console.log(res.data.data);
             this.msg = res.data;
             this.tableData = res.data.data.list;
           }
