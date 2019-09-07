@@ -64,14 +64,14 @@
 <!-- 公告 -->
 <div class="block_main fl ">
     <el-carousel height="380px" >
-      <el-carousel-item  style="background:#5ab1ef">
+      <el-carousel-item  style="background:#5ab1ef;color:white;">
       你所追忆的那些事,他们不发生在现在,不是未来,也不是过去,他们是记忆里的一些残影,你每想到一次,就多了一次记忆的渲染.他从来没有发生过,但你却固执的相信,并怀念
       </el-carousel-item >
-       <el-carousel-item style="background:#fa6e86">
+       <el-carousel-item style="background:#fa6e86;color:white;">
       夜晚。街上熙熙攘攘的很是热闹，穿着时尚的小伙子在走他的很酷的路，女孩子们也在很用心的打扮自己。我左边的呆子问我:我们算是这城市的观众吗?我不知道答案，我只感觉这晚风吹在身上真是舒服极了
       </el-carousel-item>
-       <el-carousel-item style="background:#ffb980">
-      
+       <el-carousel-item style="background:#ffb980;color:white;">
+      这世上每时每刻都在发生着新的事,新的冲淡旧的,与你有关的占据了与你无关的.可是有的事我们不能忘记,如果你忘记了是怎么开始,也就不会知道要怎么结束
       </el-carousel-item>
     </el-carousel>
 
@@ -93,9 +93,9 @@
   </div>
 </el-card>
 <!-- 统计图 -->
-<div class="main1 fl f11">
+<!-- <div class="main1 fl f11">
   <ve-line  width="700px" :data="chartData" ></ve-line>   
-</div> 
+</div>  -->
 
    
   

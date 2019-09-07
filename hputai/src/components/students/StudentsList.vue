@@ -1,8 +1,8 @@
  <template>
  <div class="main">
-<el-input placeholder="请输入搜索内容" v-model="parms.search" @input="getdata" clearable style="width:300px"></el-input> <el-button type="primary" >搜索</el-button>
+<el-input placeholder="请输入搜索内容" v-model="parms.search" @input="getdata" clearable style="width:300px"></el-input> <el-button style="background-color:#e6563a; border:none;" type="primary" >搜索</el-button>
  <router-link to="/StudentsAdd">
-  <el-button type="primary" style="float:right">新建学员账户</el-button>
+  <el-button type="primary" style="float:right;">新建学员账户</el-button>
  </router-link>
 
         <el-table 
@@ -67,7 +67,6 @@
                @click="trueAction(item.menu_action,scope.row)" 
             >{{item.menu_name}}</el-button>
           </span> 
-      
            </template>
         </el-table-column>
 

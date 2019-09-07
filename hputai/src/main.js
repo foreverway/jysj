@@ -10,9 +10,9 @@ import store from './store'//引入store
 
 import apis from './api/apiList'
 import 'babel-polyfill';
+import '../theme/index.css'
 import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
-
+// import 'element-ui/lib/theme-chalk/index.css';
 
 Vue.prototype.$apis = apis
 Vue.use(ElementUI);

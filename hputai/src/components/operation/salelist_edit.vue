@@ -112,7 +112,7 @@
     <el-input type="textarea" v-model="form.feedback"></el-input>
   </el-form-item>
   <el-form-item>
-    <el-button type="primary" @click=onSubmit>编辑保存</el-button>
+    <el-button type="primary" style="background-color:#e6563a; border:none;" @click=onSubmit>编辑保存</el-button>
     <el-button @click="goBack">取消</el-button>
   </el-form-item>
 </el-form>
@@ -164,7 +164,6 @@ export default {
       //  let parms ={
       //    form:this.form
       //  }
-       console.log(this.form)
        this.$apis.common.salepro_edit_put(this.form).then(res=>{
             if(res.data.code==1){
    this.$router.push({path:'/SalesList'})
@@ -173,11 +172,11 @@ export default {
      },
       getdata(){
         let params ={
-          id:this.$route.params.id
+          id:this.$route.query.id
         }
+        console.log(this.$route.query.id)
         this.$apis.common.salepro_edit(params).then(res=>{
             if(res.data.code==1){
-              console.log(res.data)
                 this.form =res.data.data
          
             }

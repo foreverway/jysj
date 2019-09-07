@@ -190,9 +190,9 @@
     </div>
 
     <el-button @click="goBack" v-if="active==1||active==2">取消</el-button>
-    <el-button style="margin-top: 12px;" @click="pre" v-if="active==2">上一步</el-button>
-    <el-button style="margin-top: 12px;" @click="next" v-if="active==1">下一步</el-button>
-    <el-button type="primary" @click="onSubmit" v-if="active==2">立即创建</el-button>
+    <el-button style="margin-top: 12px;background-color:#e6563a; border:none;color:white;" @click="pre" v-if="active==2">上一步</el-button>
+    <el-button style="margin-top: 12px;background-color:#e6563a; border:none;color:white;" @click="next" v-if="active==1">下一步</el-button>
+    <el-button type="primary" style="background-color:#e6563a; border:none;color:white;" @click="onSubmit" v-if="active==2">立即创建</el-button>
     <!-- 设置充值链接 -->
     <!-- <div style="display:none" cols="20" id="biao1">{{copyurl1}}</div> -->
   </div>

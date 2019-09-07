@@ -14,8 +14,8 @@
       <el-form-item label="标题">
         <!-- 标题是从上一个页面拉去过来的信息 -->
         <p style="width:200px;display:inline-block;">{{this.$route.query.title}}</p>
-        <el-button type="primary" plain @click="seeApplyTable(2)">查看报名表</el-button>
-        <el-button type="primary" plain @click="seeClassNeeds(2)">查看排课需求</el-button>
+        <el-button type="primary" style="background-color:#e6563a; border:none;" plain @click="seeApplyTable(2)">查看报名表</el-button>
+        <el-button type="primary" style="background-color:#e6563a; border:none;" plain @click="seeClassNeeds(2)">查看排课需求</el-button>
       </el-form-item>
       <el-form-item :inline="true" label="直播平台">
         <el-cascader
@@ -34,7 +34,7 @@
           :show-all-levels="false"
           @change="handleChange_teacher"
         ></el-cascader>
-        <el-button type="primary" plain @click="seeTeacherClass(2)">查看老师课表</el-button>
+        <el-button type="primary" style="background-color:#e6563a; border:none;" plain @click="seeTeacherClass(2)">查看老师课表</el-button>
       </el-form-item>
       <el-form-item :inline="true" label="班主任">
         <el-cascader
@@ -85,7 +85,7 @@
         <div class="add_ul" v-for="(item,index) in this.apply_data.students" :key="index">
           <p>{{item.student_name}}</p>
           <p>
-            <el-button type="text" @click="seeStudentClass(item.student_id,item.student_name)">查看课表</el-button>
+            <el-button type="text" style="background-color:#e6563a; border:none;" @click="seeStudentClass(item.student_id,item.student_name)">查看课表</el-button>
           </p>
         </div>
         <!-- <div class="add_ul_new" v-for="(item,i) in editableTabs_1" :key="i">
@@ -105,7 +105,7 @@
           <p>观看端</p>
           <p>操作</p>
           <p style="border:none;background-color:rgba(0,0,0,0);">
-            <el-button type="primary" @click="handleChange_1">新增</el-button>
+            <el-button type="primary" style="background-color:#e6563a; border:none;" @click="handleChange_1">新增</el-button>
           </p>
         </div>
         <div class="add_ul">

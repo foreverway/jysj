@@ -108,11 +108,11 @@ export default new Router({
           component: StudentsAdd
         },
         {
-          path: '/SalelistEdit/:id',  //
+          path: '/SalelistEdit',  //
           component: SalelistEdit
         },
         {
-          path: '/StudentsEdit/:id',  //StudentsEdit
+          path: '/StudentsEdit',  //StudentsEdit
           component: StudentsEdit
         },
         {

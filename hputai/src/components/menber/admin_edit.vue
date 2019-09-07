@@ -50,7 +50,7 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">编辑保存</el-button>
+        <el-button style="background-color:#e6563a; border:none;" @click="onSubmit">编辑保存</el-button>
         <el-button @click="goBack">取消</el-button>
       </el-form-item>
     </el-form>

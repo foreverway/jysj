@@ -146,7 +146,7 @@
 
 
   <el-form-item size="large">
-    <el-button type="primary"  autosize @click="onSubmit('sizeForm')">编辑保存</el-button>
+    <el-button type="primary" style="background-color:#e6563a; border:none;" autosize @click="onSubmit('sizeForm')">编辑保存</el-button>
     <el-button @click="goBack">取消</el-button>
   </el-form-item>
 </el-form>

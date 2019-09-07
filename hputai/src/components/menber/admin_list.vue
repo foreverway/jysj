@@ -56,7 +56,7 @@ export default {
   data() {
     return {
       input: "",
-      tableData: "",
+      tableData: [],
       form: {
         search: "",
         page: 1
@@ -128,6 +128,19 @@ export default {
           });
         });
     },
+       getdataCookie(cname) {
+      // return 1
+      var name = cname + "=";
+      var ca = document.cookie.split(";");
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i].trim();
+        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+      }
+      // 路由跳转
+      // window.location.href = ''
+      this.$router.push({ path: "/login" });
+      // Router.push("/")
+    },
     // 获取数据
     getdata() {
       this.$apis.menber.admin_list(this.form).then(res => {
@@ -135,6 +148,7 @@ export default {
           this.tableData = res.data.data;
         }
       });
+ 
     }
   }
 };

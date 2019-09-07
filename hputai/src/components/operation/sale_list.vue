@@ -19,9 +19,9 @@
       align="right"
     ></el-date-picker>
 
-    <el-button type="primary"  @click="searchdata">搜索</el-button>
+    <el-button type="primary" style="background-color:#e6563a; border:none;"  @click="searchdata">搜索</el-button>
     <router-link to="/Addsalepro">
-      <el-button type="primary" style="float:right">新建销售情况列表</el-button>
+      <el-button type="primary"  style="float:right;background-color:#e6563a; border:none;">新建销售情况列表</el-button>
     </router-link>
 
     <el-table :data="tableData" :header-cell-style="{background:'#f4f4f4'}" style="margin-top:20px">
@@ -48,9 +48,7 @@
       <el-table-column prop="feedback" label="客户反馈"></el-table-column>
       <el-table-column fixed="right" prop label="操作" width="140">
         <template slot-scope="scope">
-          <router-link :to="'/SalelistEdit/'+ scope.row.id">
-            <el-button type="text" size="small">编辑</el-button>
-          </router-link>
+            <el-button type="text" size="small"  @click="pushToEdit(scope.row.id)">编辑</el-button>
           <el-button @click="salepro_del(scope.row)" type="text" size="small">删除</el-button>
           <!-- <el-button type="text" size="small"  @click="dialogFormVisible1=1">复制链接</el-button> -->
         </template>
@@ -148,6 +146,9 @@ export default {
   mounted() {
   },
   methods: {
+    pushToEdit(a){
+            this.$router.push({path:'/SalelistEdit',query:{id:a}})
+    },
     searchdata(){
             this.$apis.common.salepro_list(this.parms)
         .then(res => {

@@ -1,14 +1,16 @@
 <template>
   <div class="main">
     <el-container>
-      <el-header>
+      <el-header >
         <div class="header">
-          <img src="../assets/logo.png" height="50" alt style="padding:5px;float:left;" />
+          
+          <img href="#top" src="../assets/logo.png" height="50" alt style="padding:5px;float:left;" />
           <div class="users">
             <el-dropdown trigger="click">
+             
               <span class="el-dropdown-link">
                 <img src="../assets/touxiang.png" alt class="touxiang" />
-                <span>{{admin_name}}</span>
+                <span>{{this.getdataCookie("admin_name")}}</span>
                 <i class="el-icon-caret-bottom el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
@@ -27,20 +29,20 @@
               <el-radio-button :label="false">展开</el-radio-button>
               <el-radio-button :label="true">收起</el-radio-button>
           </el-radio-group> -->
+         
           <el-menu
-            :default-active="ActiveMenu"
+            :default-active="ActiveMenu"  
             class="el-menu-vertical-demo"
-            @open="handleOpen"
-            @close="handleClose"
-            unique-opened
+            :default-openeds="openeds"
             router
             background-color="#ffffff"
             text-color="#000"
             active-text-color="#fff"
+            @select="selectMenu"
           >
-            <el-menu-item index="/" style="background-color:#ddd;color:#e6563a; border:none;">
-              <i class="el-icon-s-home" style="color:#e6563a; border:none;"></i>
-              <span slot="title" >首页</span>
+            <el-menu-item index="/" style="background-color:#fff; border:none;">
+              <i class="el-icon-s-home" ></i>
+              <a id="top"> <span slot="title" >首页</span></a>
             </el-menu-item>
             <span v-for="(item,index) in rolemenu" :key="index">
               <!-- 刷新出首层名字 -->
@@ -77,12 +79,11 @@
         </el-container>
       </el-container>
     </el-container>
+    <template>
+ 
+</template>
   </div>
 </template>
-
-
-
-
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
 export default {
@@ -91,7 +92,9 @@ export default {
       isCollapse: true,
       ActiveMenu: this.$route.path,
       //  rolemenu:'',  菜单列表
-      admin_name: ""
+      admin_name: "",
+      openeds: ['1','2','3'],
+      peopleInfo:{},
     };
   },
   created() {
@@ -121,8 +124,7 @@ export default {
       //获取教务专员列表
       url: "/api/api_jiaowu_data",
     });
-
-
+    this.getMen()
   },
   computed:
         mapState(["banzhuren_list","rolemenu","live_list",
@@ -133,6 +135,19 @@ export default {
       ]),
  
   methods: {
+    selectMenu(index,indexPath){
+      console.log(index,indexPath)
+      this.rolemenu.forEach((index,item,array)=>{  //遍历菜单
+        console.log(index,item,array)
+        if(item.children){  //有子集
+           for(let j=0;j<item.children.length;j++){   //遍历子集
+              
+           }
+        }else{  //无子集
+        }
+      })
+    },
+
     ...mapActions(["get_mune_list" ,"get_banzhuren_list",
       "get_live_list",
       "get_region_list",
@@ -140,13 +155,7 @@ export default {
       "get_zhujiao_data",
       "get_jiaowu_data"]), //发送actions this.store.dispatch
  //获取直播列表发送actions this.store.dispatch
- handleOpen(key, keyPath) {
-      // console.log(key, keyPath);
-      //用于打开页面，通过key
-    },
-    handleClose(key, keyPath) {
-      // console.log(key, keyPath);
-    },
+
     // 读取缓存
     getdataCookie(cname) {
       // return 1
@@ -186,7 +195,28 @@ export default {
             message: "退出失败"
           });
         });
-    }
+    },
+         open1() {
+    const h = this.$createElement;
+
+        this.$notify({
+          title:'今天也有好心情吗?',
+          duration:6000,
+           message: h('i', { style: 'color: teal'}, "欢迎回来,"+this.peopleInfo.admin_name+ " 这是你第 "+this.peopleInfo.admin_login+" 次来这儿" +""),
+      });
+      },
+      
+    getMen(){
+            let params={
+            search:this.getdataCookie("admin_name")
+          }
+      this.$apis.menber.admin_list(params).then(res => {
+          this.peopleInfo=res.data.data.list[0]
+        })
+      }
+    
+     
+      
     // getmune(){
     //   let parms={
     //     admin_id:this.getdataCookie('admin_id')
@@ -205,6 +235,13 @@ export default {
 };
 </script>
 <style scoped>
+.header[data-v-9bcc0be2]{
+ position:fixed;
+  top:0;
+  left:0;
+  z-index: 5;
+}
+
 .touxiang:hover {
   cursor: pointer;
 }
@@ -244,10 +281,11 @@ export default {
 }
 .users {
   float: right;
+  width: 200px;
   line-height: 61px;
 }
 .el-menu-item{
-  background-color: #fff !important;
+  background-color: rgb(235, 232, 232) !important;
 }
 .el-menu-item:hover {
   outline: 0 !important;

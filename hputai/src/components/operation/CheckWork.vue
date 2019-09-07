@@ -5,7 +5,7 @@
     <div class="so_main_left">
       <el-form :inline="true" :model="form" class="demo-form-inline">
         <el-input class="so_input" v-model="form.search" placeholder="请输入用户名"></el-input>
-        <el-button type="primary" @click="getadata" style="margin-left:5px">搜索</el-button>
+        <el-button type="primary"  @click="getadata" style="margin-left:5px;background-color:#e6563a; border:none;">搜索</el-button>
 
         <el-date-picker
           style="margin-left:60px"
@@ -29,11 +29,13 @@
 
     <div class="so_main_right">
       <el-button
+      style="background-color:#e6563a; border:none;"
         type="danger"
         v-if="msg.data.isAdmin=='1'"
         @click="dialogVisible= true,form1.type=1"
       >入款</el-button>
       <el-button
+      style="background-color:#e6563a; border:none;"
         type="primary"
         v-if="msg.data.isAdmin=='1'"
         @click="dialogVisible= true,form1.type=2"
@@ -72,7 +74,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="dialogVisible = false,postfun()">确 定</el-button>
+          <el-button type="primary" tyle="background-color:#e6563a; border:none;" @click="dialogVisible = false,postfun()">确 定</el-button>
         </div>
       </el-dialog>
     </div>

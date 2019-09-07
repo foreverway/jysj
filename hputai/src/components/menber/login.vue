@@ -24,7 +24,7 @@
               </div>
                <el-form ref="form" :model="form" label-width="60px">
                             <el-form-item label="" >
-                 <el-button type="primary" @click="login" round style="width:175px;background-color:#e6563a; border:none;">登录</el-button>
+                 <el-button  @click="login" round style="width:175px;background-color:#e6563a; border:none;color:white;">登录</el-button>
     <el-link type="primary" @click="dialogFormVisible = true">忘记密码?</el-link>
                </el-form-item>
                       </el-form>
@@ -45,8 +45,8 @@
                             </el-form-item>
                               <el-form-item label="验证码:" >
                               <el-input v-model="formphone.code" style="width:100px" clearable  placeholder="验证码"></el-input>
-                                 <el-button type="primary"  v-if="isgetcode" @click="getcode">获取验证码</el-button>
-                                  <el-button type="primary" v-if="isgetcode==false" @click="login">({{miao}})再获取</el-button>
+                                 <el-button style="background-color:#e6563a; border:none;color:white;"  v-if="isgetcode" @click="getcode">获取验证码</el-button>
+                                  <el-button style="background-color:#e6563a; border:none;color:white;" v-if="isgetcode==false" @click="login">({{miao}})再获取</el-button>
 
                             </el-form-item>
                               <el-form-item label="密码:">
@@ -57,13 +57,15 @@
                             </el-form-item>
                       </el-form>
               </div>
-                 <el-button type="primary" @click="change_pass" round style="width:175px">确定</el-button>
-    <el-link type="primary" @click="dialogFormVisible = false">登录</el-link>
+                 <el-button type="primary" @click="change_pass" round style="width:175px;background-color:#e6563a; border:none;color:white;">确定</el-button>
+    <el-link type="primary" @click="dialogFormVisible = false" style="color:white;">登录</el-link>
               
 			</div>
 		</div>
 </div>
+    <template>
 
+</template>
 
     <div class="footer">
            <p> © 2015-2019 深圳市精英世家教育科技有限公司</p>
@@ -93,12 +95,24 @@ export default {
          admin_pass_sure:''
        },
         msg:'',
+          peopleInfo:{},
       }
     },
     created () {
-     
+         this.getMen()
     },
      methods: {
+           getMen(a){
+            let params={
+            search:a
+          }
+      this.$apis.menber.admin_list(params).then(res => {
+        if (res.data.code == 1) {
+          this.peopleInfo=res.data.data.list[0]
+            this.open1() 
+        }
+      });
+    },
        getcode(){
           this.$apis.menber.send_code(this.formphone).then(res=>{
             if(res.data.code==1){
@@ -136,7 +150,15 @@ export default {
           })
       },
 
-  
+          open1() {
+    const h = this.$createElement;
+    console.log(this.peopleInfo.admin_name)
+        this.$notify({
+          title:'今天也有好心情吗?',
+          duration:6000,
+           message: h('i', { style: 'color: teal'}, "欢迎回来,"+this.peopleInfo.admin_name+ " 这是你第 "+this.peopleInfo.admin_login+" 次来这儿" +""),
+      });
+      },
       login () {
         this.$apis.menber.login(this.form).then(res=>{
                       if(res.data.code==1){
@@ -146,8 +168,9 @@ export default {
                         document.cookie = "usertoken="+ res.data.data.token+";" + expires;
                          document.cookie = "admin_id="+ res.data.data.admin_id+";" + expires;
                         document.cookie = "admin_name="+ res.data.data.admin_name+";" + expires;
-                       
-                              this.$router.push({path:'/'})
+                          this.getMen(res.data.data.admin_name)
+                      
+                         this.$router.push({path:'/'})
 }else{
     this.$message.error(res.data.msg);
 }

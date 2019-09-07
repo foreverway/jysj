@@ -18,9 +18,9 @@
       @change="showAdviser"
     ></el-cascader>
 
-    <el-button type="primary" @click="getdata">查看所有需求表</el-button>
+    <el-button type="primary" style="background-color:#e6563a; border:none;" @click="getdata">查看所有需求表</el-button>
     <router-link to="/ApplicationAdd">
-      <el-button type="primary" style="float:right">新建报名需求</el-button>
+      <el-button type="primary"  style="float:right;background-color:#e6563a; border:none;">新建报名需求</el-button>
     </router-link>
     <el-table
       border
@@ -290,7 +290,6 @@ export default {
     mommonAction(a, b) {
       switch (a) {
         case "click_edit":
-        
     this.$router.push({ path: "/ApplicationEdit", query:{id: b.id }});
            this.$message({
             message:"确定成功",

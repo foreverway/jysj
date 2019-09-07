@@ -109,7 +109,7 @@
     <el-input type="textarea" v-model="form.feedback"></el-input>
   </el-form-item>
   <el-form-item>
-    <el-button type="primary" @click="onSubmit">立即创建</el-button>
+    <el-button type="primary" style="background-color:#e6563a; border:none;" @click="onSubmit">立即创建</el-button>
     <el-button @click="aaa">取消</el-button>
   </el-form-item>
 </el-form>
