@@ -29,36 +29,30 @@
               <el-radio-button :label="false">展开</el-radio-button>
               <el-radio-button :label="true">收起</el-radio-button>
           </el-radio-group> -->
-         
           <el-menu
-            :default-active="ActiveMenu"  
             class="el-menu-vertical-demo"
-            :default-openeds="openeds"
             router
+            :default-openeds="openeds"
             background-color="#ffffff"
             text-color="#000"
             active-text-color="#fff"
             @select="selectMenu"
           >
-            <el-menu-item index="/" style="background-color:#fff; border:none;">
+            <el-menu-item index="/" >
               <i class="el-icon-s-home" ></i>
-              <a id="top"> <span slot="title" >首页</span></a>
+               <span slot="title" >首页</span>
             </el-menu-item>
-            <span v-for="(item,index) in rolemenu" :key="index">
-              <!-- 刷新出首层名字 -->
-              <el-submenu index="index" link="item.menu_url">
-                <template slot="title">
-                  <i :class="item.menu_icon"></i>
+            <span v-for="(item,index) in rolemenu" :key="index"  >
+              <!-- 刷新出首层菜单名字 style="pointer-events: none;" -->
+              <el-submenu  index="index" id="click_1" style="pointer-events: none;">
+                <template slot="title" >
+                   <i :class=item.menu_icon ></i>
                   <span slot="title"  class="changeC">{{item.menu_name}}</span>
                 </template>
                 <span v-for="(items,index1) in item.children" :key="index1">
-                  <el-menu-item :index="items.menu_url" route>
-                    <!-- <span slot="title">分组一</span> -->
-                    <!-- <div > -->
-                    <!-- 刷新出每一个首层每一个子级 -->
-
+                    <!-- 刷新出次级菜单名字 -->
+                  <el-menu-item :index="items.menu_url" route style="pointer-events:painted;">
                     <template slot="title">
-                      <i :class="items.menu_icon"></i>
                       <span slot="title">{{items.menu_name}}</span>
                     </template>
                   </el-menu-item>
@@ -67,7 +61,6 @@
             </span>
           </el-menu>
         </el-aside>
-
         <el-container>
           <el-main>
             <router-view />
@@ -80,7 +73,6 @@
       </el-container>
     </el-container>
     <template>
- 
 </template>
   </div>
 </template>
@@ -90,10 +82,10 @@ export default {
   data() {
     return {
       isCollapse: true,
-      ActiveMenu: this.$route.path,
+      // ActiveMenu: this.$route.path,
       //  rolemenu:'',  菜单列表
       admin_name: "",
-      openeds: ['1','2','3'],
+      openeds:['1','2','3'],
       peopleInfo:{},
     };
   },
@@ -124,7 +116,16 @@ export default {
       //获取教务专员列表
       url: "/api/api_jiaowu_data",
     });
-    this.getMen()
+    this.getMen()   //
+      this.$nextTick(function(){  //实现菜单的展开 图标消失
+        var iconI =$('.el-icon-arrow-down')
+         var menuC=$('.el-submenu__title')
+          $(menuC)[0].click()
+          for(let i =0;i<iconI.length;i++){
+            var addAttr= $(iconI)[i]
+            $(addAttr).attr('class','')
+          }
+      });
   },
   computed:
         mapState(["banzhuren_list","rolemenu","live_list",
@@ -133,23 +134,24 @@ export default {
       "jiaowu_data",
       "region_list",
       ]),
- 
+ mounted(){
+   alert(55)
+    
+
+ },
   methods: {
-    selectMenu(index,indexPath){
-             var menuList=$('.changeC')
+    selectMenu(index,indexPath){    //实现点击子菜单父菜单出现
+  var menuList=$('.changeC')
              for(let y=0;y<menuList.length;y++){
                $(menuList[y]).attr('id','')
              }
       this.rolemenu.forEach((item,index,array)=>{  //遍历菜单
-         //console.log(index,item,array)
         if(item.children){  //有子集
            for(let j=0;j<item.children.length;j++){   //遍历子集
-              // console.log(item.children[j])
             let a=item.children.filter(function(item){
               return item.menu_url==indexPath[1]
                 })
               if(a.length>0){
-         
                $(menuList[index]).attr('id','changeC')
                 return index
               }
@@ -209,15 +211,23 @@ export default {
     },
          open1() {
     const h = this.$createElement;
-
         this.$notify({
           title:'今天也有好心情吗?',
           duration:6000,
            message: h('i', { style: 'color: teal'}, "欢迎回来,"+this.peopleInfo.admin_name+ " 这是你第 "+this.peopleInfo.admin_login+" 次来这儿" +""),
       });
       },
-      
+//       getIndex(){
+// var arr =this.rolemenu.map((iten,index)=>{
+//           return index
+//       })
+//       return arr
+//       },
     getMen(){
+          //  $('.el-submenu__icon-arrow').attr('class','')
+          //   $('.el-icon-arrow-down').attr('class','')
+       
+       
             let params={
             search:this.getdataCookie("admin_name")
           }
@@ -245,14 +255,20 @@ export default {
   mounted() {}
 };
 </script>
+
 <style scoped>
+.el-submenu__title{
+  pointer-events: none !important;
+}
 .header[data-v-9bcc0be2]{
  position:fixed;
   top:0;
   left:0;
   z-index: 5;
 }
-
+#changeC{
+  color:#e6563a !important;
+}
 .touxiang:hover {
   cursor: pointer;
 }
@@ -307,9 +323,7 @@ export default {
   color: #fff !important;
   background: #e6563a !important;
 }
-#changeC{
-  color:#e6563a !important;
-}
+
 .el-submenu__title:focus,
 .el-submenu__title:hover {
   outline: 0 !important;
