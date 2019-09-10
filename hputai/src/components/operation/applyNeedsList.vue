@@ -30,7 +30,12 @@
       :header-cell-style="{background:'#f4f4f4'}"
       style="width: 100%;margin:20px auto"
     >
-      <el-table-column label="id" prop="id" width="50"></el-table-column>
+      <el-table-column
+      type="index"
+      label="序号"
+      width="50">
+    </el-table-column>
+      <!-- <el-table-column label="序号" prop="index" width="50"></el-table-column> -->
       <el-table-column prop="number" label="编号"></el-table-column>
       <el-table-column prop="title" label="标题"></el-table-column>
       <el-table-column prop="amount" label="价格"></el-table-column>

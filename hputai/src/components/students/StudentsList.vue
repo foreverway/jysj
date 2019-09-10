@@ -1,5 +1,6 @@
  <template>
  <div class="main">
+   <div class="head_word">学生列表</div>
 <el-input placeholder="请输入搜索内容" v-model="parms.search" @input="getdata" clearable style="width:300px"></el-input> <el-button style="background-color:#e6563a; border:none;" type="primary" >搜索</el-button>
  <router-link to="/StudentsAdd">
   <el-button type="primary" style="float:right;">新建学员账户</el-button>
@@ -208,3 +209,10 @@ import { mapState } from 'vuex';
       }
     }
   </script>
+<style  scoped>
+.head_word {
+  font-size: 26px;
+  margin:15px 0;
+  font-weight: 700;
+}
+</style>

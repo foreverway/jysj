@@ -214,7 +214,7 @@ export default {
         this.$notify({
           title:'今天也有好心情吗?',
           duration:6000,
-           message: h('i', { style: 'color: teal'}, "欢迎回来,"+this.peopleInfo.admin_name+ " 这是你第 "+this.peopleInfo.admin_login+" 次来这儿" +""),
+           message: h('i', { style: 'color: teal'}, "欢迎回来,"+this.peopleInfo.admin_name+ " 这是我们的第 "+this.peopleInfo.admin_login+" 次见面" +""),
       });
       },
 //       getIndex(){
@@ -308,7 +308,7 @@ export default {
 }
 .users {
   float: right;
-  width: 200px;
+  width: 150px;
   line-height: 61px;
 }
 .el-menu-item{

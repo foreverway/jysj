@@ -81,7 +81,17 @@ export default {
           enter_classroom(params){    //直播进入教室
             let url ="/api/api_enter_classroom"
             return shuju.getdata(url,params)},
-            feedback_add(params){    //直播进入教室
+
+            feedback_add(params){    //获取课表反馈数据
               let url ="/api/api_feedback_add"
               return shuju.getdata(url,params)},
+
+              post_feedback_add(params){    //提交课表反馈数据
+                let url ="/api/api_feedback_add"
+                return shuju.postdata(url,params)},
+                
+
+                course_feedback(params){    //查看课堂反馈
+                  let url ="/api/api_course_feedback"
+                  return shuju.getdata(url,params)},                
 }

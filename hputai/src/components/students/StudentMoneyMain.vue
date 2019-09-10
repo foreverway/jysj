@@ -1,9 +1,10 @@
 <template>
     <div class="main">
 
-            
    <el-container>
+     <div class="head_word">学生账户明细</div>
 <el-header>
+  
         <el-tabs v-model="activeName" @tab-click="handleClick">
     <el-tab-pane label="学习币明细" name="1"></el-tab-pane>
     <el-tab-pane label="现金钱包明细" name="2" ></el-tab-pane>
@@ -51,5 +52,11 @@
     }
   }
 </script>
-
+<style  scoped>
+.head_word {
+  font-size: 26px;
+  margin:15px 0 15px 20px;
+  font-weight: 700;
+}
+</style>
 

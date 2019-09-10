@@ -1,5 +1,7 @@
  <template>
   <div class="main">
+       <div class="head_word">后台账户</div>
+
     <el-input
       placeholder="请输入搜索内容"
       v-model="form.search"
@@ -153,3 +155,10 @@ export default {
   }
 };
 </script>
+<style  scoped>
+.head_word {
+  font-size: 26px;
+  margin:15px 0;
+  font-weight: 700;
+}
+</style>

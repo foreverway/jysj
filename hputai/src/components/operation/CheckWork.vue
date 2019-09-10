@@ -189,7 +189,6 @@ export default {
         return index + page;
       }
     },
-
     current(num) {
       //当前页数
       this.form.page = num;

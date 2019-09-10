@@ -52,7 +52,15 @@
             <el-button size="mini"  v-if="scope.row.ready_txt=='待直播'" style="color:white;background-color:#409eff;" >
               <a @click="nowVideo(scope.row.course_id)">{{scope.row.ready_txt}}</a>
               </el-button >
-              
+              <!-- 如果有人他进入不了直播他就只能来这 -->
+                <el-select v-model="value_other" placeholder="请选择">
+                <el-option
+                  v-for="item in options_other"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
               <el-button size="mini" v-if="scope.row.feedback_txt=='讲师填写反馈'" style="color:orange" >{{scope.row.feedback_txt}}</el-button >
             <el-button size="mini" v-if="scope.row.feedback_txt=='查看课堂反馈'" style="color:blue" >{{scope.row.feedback_txt}}</el-button >
             <el-button size="mini" v-if="scope.row.feedback_txt=='等待讲师填写'" style="color:silver" >{{scope.row.feedback_txt}}</el-button >
@@ -89,14 +97,12 @@
             <el-button size="mini" v-if="scope.row.ready_txt=='待直播'" style="color:red" >{{scope.row.ready_txt}}</el-button >
             <el-button size="mini" v-if="scope.row.ready_txt=='未知状态'" style="color:silver;bcakground-color:rgb(255,208,75);" >{{scope.row.ready_txt}}</el-button >
             <el-button size="mini"  v-if="scope.row.ready_txt=='观看回放'" style="color:white;background-color:#409eff;" >
-              
               <a @click="openVideo(scope.row.playback_url)">{{scope.row.ready_txt}}</a>
               </el-button >
             <el-button size="mini" v-if="scope.row.feedback_txt=='讲师填写反馈'" @click="fillFeedback(scope.row.course_id)"  style="color:orange" >{{scope.row.feedback_txt}}</el-button >
-            <el-button size="mini" v-if="scope.row.feedback_txt=='查看课堂反馈'" style="color:blue" >{{scope.row.feedback_txt}}</el-button >
+            <el-button size="mini" v-if="scope.row.feedback_txt=='查看课堂反馈'" @click="fillFeedback_see(scope.row.course_id)" style="color:blue" >{{scope.row.feedback_txt}}</el-button >
             <el-button size="mini" v-if="scope.row.feedback_txt=='等待讲师填写'" style="color:silver" >{{scope.row.feedback_txt}}</el-button >
              <!-- <el-button size="mini"  >观看录播</el-button > -->
-
           </template>
         </el-table-column>
       </el-table>
@@ -109,6 +115,7 @@
       layout="total, sizes, prev, pager, next"
       :total='tableData.length'>
     </el-pagination>
+    <!-- 填写课堂反馈 -->
     <el-dialog title="收货地址" :visible.sync="dialogFromVisible" >
        <p style="font-size:18px;height:30px;margin:10px 0;">课程信息</p>
       <ul :data="gridData">
@@ -125,50 +132,98 @@
       </ul>
       <div style="clear:both;"></div>
         <p style="font-size:18px;height:30px;margin:10px 0;">反馈内容</p>
-<el-form  :model="form" label-width="100px">
+<el-form  :model="form" label-width="200px">
   <el-form-item label="类型">
-        <el-radio-group v-model="form.radio">
+        <el-radio-group v-model="form.feedback_type">
           <el-radio :label="1">试听/首次课程反馈</el-radio>
           <el-radio :label="2">日常上课反馈</el-radio>
           <el-radio :label="3">结课总结</el-radio>
         </el-radio-group>
         
   </el-form-item>
-  <el-form-item label="本次授课内容" prop="desc" v-if="form.radio==1">
-    <el-input type="textarea" v-model="form.desc"></el-input>
+  <el-form-item label="本次授课内容" prop="desc" v-if="form.feedback_type=='2'||form.feedback_type=='1'">
+    <el-input type="textarea" v-model="form.details_1"></el-input>
   </el-form-item>
-    <el-form-item label="课堂配合度和积极性" prop="desc">
-    <el-input type="textarea" v-model="form.desc"></el-input>
+    <el-form-item label="课堂配合度和积极性" prop="desc" v-if="form.feedback_type=='2'||form.feedback_type=='1'">
+    <el-input type="textarea" v-model="form.details_2"></el-input>
   </el-form-item>
-    <el-form-item label="学生的主要问题和建议" prop="desc">
-    <el-input type="textarea" v-model="form.desc"></el-input>
+    <el-form-item label="学生的主要问题和建议" prop="desc" v-if="form.feedback_type=='1'">
+    <el-input type="textarea" v-model="form.details_3"></el-input>
   </el-form-item>
-    <el-form-item label="课时建议" prop="desc">
-    <el-input type="textarea" v-model="form.desc"></el-input>
+    <el-form-item label="课时建议" prop="desc" v-if="form.feedback_type=='1'">
+    <el-input type="textarea" v-model="form.details_4"></el-input>
   </el-form-item>
-    <el-form-item label="课程阶段安排及课时建议" prop="desc">
-    <el-input type="textarea" v-model="form.desc"></el-input>
+    <el-form-item label="课程阶段安排及课时建议" prop="desc" v-if="form.feedback_type=='1'">
+    <el-input type="textarea" v-model="form.details_5"></el-input>
   </el-form-item>
-    <el-form-item label="上次课知识点掌握情况" prop="desc">
-    <el-input type="textarea" v-model="form.desc"></el-input>
+    <el-form-item label="上次课知识点掌握情况" prop="desc" v-if="form.feedback_type=='2'">
+    <el-input type="textarea" v-model="form.details_6"></el-input>
   </el-form-item>  
-  <el-form-item label="本次授课内容" prop="desc">
-    <el-input type="textarea" v-model="form.desc"></el-input>
+    <el-form-item label="作业" prop="desc" v-if="form.feedback_type=='2'">
+    <el-input type="textarea" v-model="form.details_7"></el-input>
   </el-form-item>
-    <el-form-item label="作业" prop="desc">
-    <el-input type="textarea" v-model="form.desc"></el-input>
+    <el-form-item label="课程期间学生总体表现" prop="desc" v-if="form.feedback_type=='3'">
+    <el-input type="textarea" v-model="form.details_8"></el-input>
   </el-form-item>
-    <el-form-item label="课程期间学生总体表现" prop="desc">
-    <el-input type="textarea" v-model="form.desc"></el-input>
-  </el-form-item>
-    <el-form-item label="下一步学习方案建议" prop="desc">
-    <el-input type="textarea" v-model="form.desc"></el-input>
+    <el-form-item label="下一步学习方案建议" prop="desc" v-if="form.feedback_type=='3'">
+    <el-input type="textarea" v-model="form.details_9"></el-input>
   </el-form-item>
   <el-form-item>
-    <el-button type="primary" style="background-color:#e6563a; border:none;" @click="onSubmit">查询</el-button>
+    <el-button type="primary" @click="onSubmit">查询</el-button>
+      <el-button type="primary" @click="onSubmit_1">取消</el-button>
   </el-form-item>
 </el-form>
-              
+</el-dialog>
+<!-- 查看课堂反馈 -->
+<el-dialog
+  title="这是老师的反馈"
+  :visible.sync="dialogVisible"
+  >
+   <ul :data="formLabelAlign">
+        <li><span>课程名称</span><span>{{formLabelAlign.subject_name}}</span></li>
+        <li><span>教师姓名</span><span>{{formLabelAlign.teacher_name}}</span></li>
+        <li><span>班主任</span><span>{{formLabelAlign.banzhuren_name}}</span></li>
+        <li><span >上课时间</span><span style="border:0;">{{formLabelAlign.start_time}}</span></li>
+        <li><span>结束时间</span><span style="border:0;">{{formLabelAlign.end_time}}</span></li>
+        <li><span>时长</span><span>{{formLabelAlign.classhour}}</span></li>
+        <li><span>授课方式</span><span>{{formLabelAlign.course_address}}</span></li>
+        <li><span></span><span></span></li>
+        <li><span></span><span ></span></li>
+      </ul>
+       <div style="clear:both;"></div>
+  <el-form  label-width="200px" :model="formLabelAlign">
+  <el-form-item label="本次授课内容"  v-if="formLabelAlign.feedback_type=='2'||formLabelAlign.feedback_type=='1'">
+    <p >{{formLabelAlign.details_1}}</p>
+  </el-form-item>
+   <el-form-item label="课堂配合度和积极性" v-if="formLabelAlign.feedback_type=='2'||formLabelAlign.feedback_type=='1'">
+    <span >{{formLabelAlign.details_2}}</span>
+  </el-form-item>
+   <el-form-item label="学生的主要问题和建议" v-if="formLabelAlign.feedback_type=='1'">
+    <span >{{formLabelAlign.details_3}}</span>
+  </el-form-item>
+    <el-form-item label="课时建议" v-if="formLabelAlign.feedback_type=='1'">
+    <span >{{formLabelAlign.details_4}}</span>
+  </el-form-item>
+   <el-form-item label="课程阶段安排及课时建议" v-if="formLabelAlign.feedback_type=='1'">
+    <span>{{formLabelAlign.details_5}}</span>
+  </el-form-item>
+   <el-form-item label="上次课知识点掌握情况" v-if="formLabelAlign.feedback_type=='2'">
+    <span>{{formLabelAlign.details_6}}</span>
+  </el-form-item>
+    <el-form-item label="作业" v-if="formLabelAlign.feedback_type=='2'">
+    <span>{{formLabelAlign.details_7}}</span>
+  </el-form-item>
+   <el-form-item label="课程期间学生总体表现" v-if="formLabelAlign.feedback_type=='3'">
+    <span>{{formLabelAlign.details_8}}</span>
+  </el-form-item>
+   <el-form-item label="下一步学习方案建议" v-if="formLabelAlign.feedback_type=='3'">
+    <span>{{formLabelAlign.details_9}}</span>
+  </el-form-item>
+</el-form>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+  </span>
 </el-dialog>
       </div>
         </div>
@@ -185,14 +240,27 @@ export default {
     return {
       value: "",
       form:{
-        radio:'1',
+        feedback_type:'1',
+        details_1	:'',
+        details_2:'',
+        details_3	:'',
+        details_4:'',
+        details_5:'',
+        details_6:'',
+        details_7	:'',
+        details_8:'',
+        details_9:'',
       }, //from提交的数据
       msg: ["2019-06-13 ", "2019-06-18", "2019-06-16"],
       options1: [
         //学生姓名的数据
         // label:"username",
       ],
-      radio:'',//反馈类型
+      value_other:'',
+      options_other:[{label:"直播备用方法",value:'备用方法'}],//其他直播方法
+      formLabelAlign:{},//老师在这里疯狂反馈
+      course:"",//课程ID 
+      //  radio:'1',//反馈类型
       currentPage: 1, //当前页
       pagesize:8,
       value_stu:'',
@@ -204,6 +272,7 @@ export default {
       tableData_1:[], //经过学科或者学生筛选的数据
       change_value:'1',  //Tab的值  
       dialogFromVisible: false,  //弹出框的设置
+      dialogVisible: false,  //查看课堂反馈
       gridData:{},  //弹出框的表格数据
     };
   },
@@ -226,15 +295,43 @@ export default {
     }
   },
   methods: {
+    
+    onSubmit(){
+      this.form.course_id=this.course;
+      this.$apis.common.post_feedback_add(this.form).then(res => {
+    if (res.data.code == 1) {
+              this.dialogFromVisible= false,
+         this.$message({
+             type:"success",
+             message:"提交成功"
+           })
+    }
+    })
+    },
+    onSubmit_1(){
+      this.dialogFromVisible= false
+    },
+    fillFeedback_see(a){
+      let parms={
+course_id:a
+      }
+      this.dialogVisible=true
+      this.$apis.common.course_feedback(parms).then(res=>{
+        if(res.data.code==1){
+          console.log(res.data)
+          this.formLabelAlign=res.data.data
+        }
+      })
+    },
     fillFeedback(a){
       this.dialogFromVisible= true
+      this.course=a
        let parms = {
         course_id:a,
       };
         this.$apis.common.feedback_add(parms).then(res => {
     if (res.data.code == 1) {
         this.gridData=res.data.data
-        console.log(this.gridData)
     }
     })
     },
@@ -471,7 +568,7 @@ this.$message({
   position: absolute;
   width: 50%;
   left:640px;
-  top:225px; border:1px solid block ;
+  top:290px; border:1px solid block ;
     border:1px solid silver;
 }
 

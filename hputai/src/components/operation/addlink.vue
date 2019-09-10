@@ -2,7 +2,7 @@
     <div class="main">
                     <!-- 设置充值链接 -->
 
-
+         <div class="head_word">充值链接</div>
       <el-input  style="width:200px" v-model="money"  placeholder="请输入充值金额" ></el-input>
 
 
@@ -46,4 +46,10 @@ export default {
     }
 }
 </script>
-
+<style  scoped>
+.head_word {
+  font-size: 26px;
+  margin:15px 0;
+  font-weight: 700;
+}
+</style>
