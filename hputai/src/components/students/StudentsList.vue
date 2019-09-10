@@ -73,7 +73,16 @@
 
 
         </el-table>
- 
+        <!-- 分页 -->
+         <!-- <el-pagination style="margin-top:30px; float: right;margin-bottom: 30px;"
+  background
+  layout="prev, pager, next"
+  @prev-click="prev"
+  @next-click="next"
+  @current-change="current"
+  page-size=10
+  :total="msg.data.count">
+</el-pagination> -->
         <!-- 设置充值链接 -->
 <el-dialog title="设置充值金额" :visible.sync="dialogFormVisible1" width="500px"  >
 
