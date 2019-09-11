@@ -27,57 +27,7 @@
       </el-form>
     </div>
 
-    <div class="so_main_right">
-      <el-button
-      style="background-color:#e6563a; border:none;"
-        type="danger"
-        v-if="msg.data.isAdmin=='1'"
-        @click="dialogVisible= true,form1.type=1"
-      >入款</el-button>
-      <el-button
-      style="background-color:#e6563a; border:none;"
-        type="primary"
-        v-if="msg.data.isAdmin=='1'"
-        @click="dialogVisible= true,form1.type=2"
-      >扣款</el-button>
 
-      <el-dialog
-        :title="form1.type==1?'入款':'扣款'"
-        :visible.sync="dialogVisible"
-        width="500px"
-        close-on-click-modal="false"
-      >
-        <el-form :model="form1">
-          <el-form-item label="会员名" label-width="100px">
-            <el-input
-              v-model="form1.uname"
-              @input="ifnamemoney"
-              placeholder="请输入会员名"
-              style="width:200px"
-            ></el-input>
-            <span style="color:red">{{ifname}}</span>
-          </el-form-item>
-
-          <el-form-item label="金额" label-width="100px">
-            <el-input v-model="form1.amount" style="width:200px" placeholder="请输入金额"></el-input>
-          </el-form-item>
-
-          <el-form-item label="事由" label-width="100px">
-            <el-input
-              type="textarea"
-              style="width:300px"
-              :autosize="{ minRows: 2, maxRows: 4}"
-              placeholder="请输入事由"
-              v-model="form1.reason"
-            ></el-input>
-          </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" tyle="background-color:#e6563a; border:none;" @click="dialogVisible = false,postfun()">确 定</el-button>
-        </div>
-      </el-dialog>
-    </div>
     <!-- 表格数据 -->
     <el-table
       :header-cell-style="{background:'#f4f4f4'}"
@@ -116,16 +66,67 @@
 </el-table-column>
 <el-table-column align="center" label="操作" >
      <template slot-scope="scope">
-          <span v-show="scope.row.attendance_status==2" style="color:blue">已考勤-异常</span>
-          <span v-show="scope.row.attendance_status==1" style="color:green">已考勤-正常</span>
-         <span v-show="scope.row.attendance_status==0" style="color:red">未考勤</span>
+          <div v-show="scope.row.attendance_status==2" style="color:blue"><span  @click="payMoney(scope.row)" style="display:inline-block;border:1px solid orange;">{{opration[2].menu_name}}</span></div>
+          <div v-show="scope.row.attendance_status==1" style="color:green"><span>查看考勤详情</span></div>
+         <div v-show="scope.row.attendance_status==0" style="color:red"><span  @click="normal(scope.row)" style="cursor:pointer;display:inline-block;border:1px solid green;width:45px;border-radius:5px;margin:0 3px;color:green;">{{opration[0].menu_name}}</span><span  @click="unnormal(scope.row)" style="cursor:pointer;display:inline-block;border:1px solid orange;width:45px;border-radius:5px;margin:0 3px;">{{opration[1].menu_name}}</span></div>
         </template>
 </el-table-column>
 
     </el-table>
     <!-- <p style="margin-top:30px"><span>累计金额：</span><span style="color:red">{{msg.data.givenamount}}</span></p> -->
     <!-- <el-button type="primary" @click="ifinputselect" style="margin-top:20px">审核</el-button> -->
-
+<!-- 正常的弹出页面 -->
+<el-dialog
+  title="正常页面"
+  :visible.sync="centerDialogVisible_normal"
+  width="30%"
+  center>
+  <el-form  label-width="80px" :model="normalData">
+  <el-form-item label="已排课时">
+    <el-input v-model="normalData.classhour"></el-input>
+  </el-form-item>
+  <el-form-item label="实上课时">
+    <el-input v-model="normalData.true_classhour"></el-input>
+  </el-form-item>
+  <el-form-item label="老师核准">
+    <el-input v-model="normalData.teacher_classhour"></el-input>
+  </el-form-item>
+  <el-form-item label="学生核准">
+    <el-input v-model="normalData.student_classhour"></el-input>
+  </el-form-item>
+  <el-form-item label="备注">
+    <el-input v-model="normalData.remarks"></el-input>
+  </el-form-item>
+</el-form>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="centerDialogVisible_normal = false">取 消</el-button>
+    <el-button type="primary" @click="centerDialogVisible_normal = false">确 定</el-button>
+  </span>
+</el-dialog>
+<!-- 异动的弹出页面 -->
+<el-dialog
+  title="异动页面"
+  :visible.sync="centerDialogVisible_unnormal"
+  width="30%"
+  center>
+  <span>异动页面</span>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="centerDialogVisible_unnormal = false">取 消</el-button>
+    <el-button type="primary" @click="centerDialogVisible_unnormal = false">确 定</el-button>
+  </span>
+</el-dialog>
+<!-- 结账的弹出页面 -->
+<el-dialog
+  title="结账页面"
+  :visible.sync="centerDialogVisible_paymoney"
+  width="30%"
+  center>
+  <span>需要注意的是内容是默认不居中的</span>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="centerDialogVisible_paymoney = false">取 消</el-button>
+    <el-button type="primary" @click="centerDialogVisible_paymoney = false">确 定</el-button>
+  </span>
+</el-dialog>
     <el-pagination
       style="float:right;margin-bottom:30px"
       background
@@ -140,6 +141,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
   data() {
     return {
@@ -150,36 +152,35 @@ export default {
         page: 1, //页码
         attendance_status: "" //考勤状态
       },
-      form1: {
-        // 入款和扣款
-        amount: "", //金额
-        reason: "", //理由
-        uname: "", //学生姓名
-        type: "" //入款还是扣款，1入款，2扣款
-      },
+      normalData:{
+
+      }, //正常数据
+      unNormalData:{}, //异常数据
       msg: {},
-      dialogVisible: false //入扣款弹窗
+      centerDialogVisible_normal: false,  //正常
+      centerDialogVisible_unnormal: false,  //异动
+      centerDialogVisible_paymoney: false,  //结账
+      opration:"",//操作选项
     };
   },
+       computed:mapState([ "rolemenu"]),
   created() {
     this.$apis.students.getuilcode();
     this.getadata();
+    this.opration=this.rolemenu[1].children[4].children
+    console.log(this.opration)
   },
   methods: {
-    //验证姓名和学币余额
-    ifnamemoney() {
-      let parms = { uname: this.form1.uname };
-      let parms2 = { tel: this.form1 };
-      this.$apis.students.ifusername(parms).then(res => {
-        if (res.data.code == -1) {
-          this.$apis.students.user_learnmoney(parms2).then(res => {
-            this.ifname = res.data.data.learnmoney;
-          });
-        } else {
-          this.ifname = "用户名不存在";
-        }
-      });
+    normal(a){
+      this.normalData.true_classhour=a.true_classhour
+      this.normalData.classhour=a.classhour
+      this.centerDialogVisible_normal = true
     },
+    unnormal(a){
+      console.log(a)
+      this.centerDialogVisible_unnormal = true
+    },
+    payMoney(){},
     //序号排列
     indexMethod(index) {
       if (this.form.page == 1) {
@@ -205,21 +206,7 @@ export default {
         this.getadata();
       }
     },
-    postfun() {
-      this.$apis.students.wallet_balance(this.form1).then(res => {
-        if (res.data.code == 1) {
-          let fuhao = this.form1.type == 1 ? "+" : "-";
-          this.$message({
-            message:
-              this.form1.uname + "操作成功" + fuhao + this.form1.amount + "元",
-            type: "success"
-          });
-          this.getadata();
-        } else {
-          this.$message.error(res.data.msg);
-        }
-      });
-    },
+ 
     getadata() {
       this.$apis.students.attendance_list(this.form).then(res => {
         if (res.data.code == 1) {
