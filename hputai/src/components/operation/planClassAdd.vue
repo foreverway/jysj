@@ -14,8 +14,8 @@
       <el-form-item label="标题">
         <!-- 标题是从上一个页面拉去过来的信息 -->
         <p style="width:200px;display:inline-block;">{{this.$route.query.title}}</p>
-        <el-button type="primary" style="background-color:#e6563a; border:none;" plain @click="seeApplyTable(2)">查看报名表</el-button>
-        <el-button type="primary" style="background-color:#e6563a; border:none;" plain @click="seeClassNeeds(2)">查看排课需求</el-button>
+        <el-button type="primary"  plain @click="seeApplyTable(2)">查看报名表</el-button>
+        <el-button type="primary"  plain @click="seeClassNeeds(2)">查看排课需求</el-button>
       </el-form-item>
       <el-form-item :inline="true" label="直播平台">
         <el-cascader
@@ -34,7 +34,7 @@
           :show-all-levels="false"
           @change="handleChange_teacher"
         ></el-cascader>
-        <el-button type="primary" style="background-color:#e6563a; border:none;" plain @click="seeTeacherClass(2)">查看老师课表</el-button>
+        <el-button type="primary"  plain @click="seeTeacherClass(2)">查看老师课表</el-button>
       </el-form-item>
       <el-form-item :inline="true" label="班主任">
         <el-cascader
@@ -82,10 +82,11 @@
           <p>学生姓名</p>
           <p>课表</p>
         </div>
+          <!-- 学生在这里刷新 -->
         <div class="add_ul" v-for="(item,index) in this.apply_data.students" :key="index">
-          <p>{{item.student_name}}</p>
+          <p>{{item.student_name?item.student_name:"姓名未登记"}}</p>
           <p>
-            <el-button type="text" style="background-color:#e6563a; border:none;" @click="seeStudentClass(item.student_id,item.student_name)">查看课表</el-button>
+            <el-button type="text"  @click="seeStudentClass(item.student_id,item.student_name)">查看课表</el-button>
           </p>
         </div>
         <!-- <div class="add_ul_new" v-for="(item,i) in editableTabs_1" :key="i">
@@ -105,7 +106,7 @@
           <p>观看端</p>
           <p>操作</p>
           <p style="border:none;background-color:rgba(0,0,0,0);">
-            <el-button type="primary" style="background-color:#e6563a; border:none;" @click="handleChange_1">新增</el-button>
+            <el-button type="primary"  @click="handleChange_1">新增</el-button>
           </p>
         </div>
         <div class="add_ul">
@@ -424,7 +425,7 @@ export default {
       options_: [], //总数据的数据
       editableTabsValue_1: [],
       editableTabs_1: [],
-      tabIndex:1,
+      tabIndex:0,
       tabIndex_1:0,
       subjects_data: [], //学科数据
       title: "", //标题
@@ -566,17 +567,23 @@ export default {
       this.seeclassneeds = this.needs;
     }, //查看老师课表的弹框
     seeTeacherClass() {
-      console.log(this.form.teacher_live*1)
       let params = {
         teacher_id:this.form.teacher_live*1
       };
+      if(!this.form.teacher_live*1==""){
       this.dialogTableVisible_seeTeacherClass = true;
-               this.get_teacher_course({  //查看老师课表
+      this.get_teacher_course({  //查看老师课表
                params,
         url:'/api/api_teacher_course'
       })
       this.seeteacherclass = this.teacher_course;
-      console.log(this.seeteacherclass);
+      }else{
+        this.$message({
+          type:"worning",
+          message:"请选择老师"
+        })
+      }
+
     },
     seeStudentClass(a, b) {
       //查看学生课表
@@ -586,13 +593,12 @@ export default {
 
       this.stu_centerDialogVisible = true;
       this.get_student_course({
-        //查看老师课表
+        //查看学生课表
         params,
         url: "/api/api_student_course"
       });
       this.seestudentclass = this.student_course;
       this.seestudentname = b;
-      console.log(this.apply_data.students);
     },
     getLiveName() {
       //筛选直播列表
@@ -673,8 +679,10 @@ export default {
         play_type: this.study_wey //观看端
       });
       var all_hour= this.input_twice*1
-      for (let i = 0; i < this.editableTabsValue_1.length; i++) {
-        all_hour+=$("#classhour" + i).val() * 1
+     for (let i = 0; i < this.editableTabsValue_1.length; i++) {
+        all_hour +=$("#classhour" + i).val() * 1
+      }
+          for (let i = 0; i < this.editableTabsValue_1.length; i++) {
         this.subjects_data.push({
           classhour: $("#classhour" + i).val() * 1,
           start_time: $("#start_time" + i).val(),
@@ -683,6 +691,7 @@ export default {
           play_type: $("#play_type" + i).val()
         });
       }
+ 
       let parms = {
         app_id: this.$route.query.id, //报名表id
         live_id: this.form.value_live[0], //直播平台id
@@ -700,19 +709,21 @@ export default {
       });
       parms.students_id = studentStr.join();     
       parms.course_data = this.subjects_data;
+      console.log(all_hour*1)
+      console.log(this.$route.query.classhour*1)
      if(all_hour*1==this.$route.query.classhour*1){
+       console.log(parms)
       this.$apis.common.application_arrange_post(parms).then(res => {
         if (res.data.code == 1) {
-  
            this.$message({
           type:"success",
           message:"添加成功"
         })
       }else{
-            this.editableTabs_1=[]
+          this.editableTabs_1=[]
            this.$message({
           type:"warning",
-          message:"请讲表补充完整"
+          message:res.data.msg
         })
       }
       })
@@ -720,7 +731,7 @@ export default {
        this.editableTabs_1=[]
         this.$message({
           type:"warning",
-          message:"排课时间或信息不准确"
+          message:"排课时间不足"
         })
       }
     },
@@ -738,31 +749,31 @@ export default {
         this.open4();
       }
     },
-    next() {
-      for (let i = 0; i < this.editableTabsValue.length; i++) {
-        this.students_data.push({
-          student_id: $("#students" + i).html()
-        });
-      }
-      for (let i = 0; i < this.editableTabsValue_1.length; i++) {
-        this.subjects_data.push({
-          subject_id: $("#course_id" + i).html() * 1,
-          classhour: $("#time" + i).val() * 1,
-          price: $("#mach" + i).val() * 1,
-          amount: $("#time" + i).val() * $("#mach" + i).val(),
-          course_type: $("#attr" + i).val(),
-          course_id: $("#course_id" + i).html() * 1,
-          is_one: $("#one" + i).val() * 1,
-          is_group: $("#self" + i).val() * 1
-        });
-        if ($("#clas" + i).val() == 1) {
-          // console.log($("#time"+i).val() + "  " + $("#mach"+i).val() + "  " + $("#sex"+i).val())
-          this.active = 3;
-        } else {
-          this.active++;
-        }
-      }
-    },
+    // next() {
+    //   for (let i = 0; i < this.editableTabsValue.length; i++) {
+    //     this.students_data.push({
+    //       student_id: $("#students" + i).html()
+    //     });
+    //   }
+    //   for (let i = 0; i < this.editableTabsValue_1.length; i++) {
+    //     this.subjects_data.push({
+    //       subject_id: $("#course_id" + i).html() * 1,
+    //       classhour: $("#time" + i).val() * 1,
+    //       price: $("#mach" + i).val() * 1,
+    //       amount: $("#time" + i).val() * $("#mach" + i).val(),
+    //       course_type: $("#attr" + i).val(),
+    //       course_id: $("#course_id" + i).html() * 1,
+    //       is_one: $("#one" + i).val() * 1,
+    //       is_group: $("#self" + i).val() * 1
+    //     });
+    //     if ($("#clas" + i).val() == 1) {
+    //       // console.log($("#time"+i).val() + "  " + $("#mach"+i).val() + "  " + $("#sex"+i).val())
+    //       this.active = 3;
+    //     } else {
+    //       this.active++;
+    //     }
+    //   }
+    // },
 
     goBack() {
       history.back(-1);
@@ -778,6 +789,7 @@ export default {
         .then(res => {
           if (res.data.code == 1) {
             this.apply_data = res.data.data;
+            console.log(this.apply_data)
           } else {
             this.$message({
               type: "info",

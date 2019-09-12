@@ -75,27 +75,30 @@ export default {
       application_arrange_post(params){    //报名需求排课提交数据
         let url ="/api/api_application_arrange"
         return shuju.postdata(url,params)},
-        student_course(params){    //获取学生课表（待上/已上）接口
-          let url ="/api/api_student_course"
-          return shuju.getdata(url,params)},
-          enter_classroom(params){    //直播进入教室
-            let url ="/api/api_enter_classroom"
-            return shuju.getdata(url,params)},
+      student_course(params){    //获取学生课表（待上/已上）接口
+        let url ="/api/api_student_course"
+        return shuju.getdata(url,params)},
+      enter_classroom(params){    //直播进入教室
+        let url ="/api/api_enter_classroom"
+        return shuju.getdata(url,params)},
 
-            feedback_add(params){    //获取课表反馈数据
-              let url ="/api/api_feedback_add"
-              return shuju.getdata(url,params)},
+      feedback_add(params){    //获取课表反馈数据
+        let url ="/api/api_feedback_add"
+        return shuju.getdata(url,params)},
 
-              post_feedback_add(params){    //提交课表反馈数据
-                let url ="/api/api_feedback_add"
-                return shuju.postdata(url,params)},
+      post_feedback_add(params){    //提交课表反馈数据
+        let url ="/api/api_feedback_add"
+        return shuju.postdata(url,params)},
 
-                course_feedback(params){    //查看课堂反馈
-                  let url ="/api/api_course_feedback"
-                  return shuju.getdata(url,params)},
+      course_feedback(params){    //查看课堂反馈
+        let url ="/api/api_course_feedback"
+        return shuju.getdata(url,params)},
 
-                  other_enter(params){    //其他方式进入教室教室接口
-                    let url ="/api/api_other_enter"
-                    return shuju.getdata(url,params)},       
-                              
+      other_enter(params){    //其他方式进入教室教室接口
+        let url ="/api/api_other_enter"
+        return shuju.getdata(url,params)},       
+        //考勤操作（添加考勤记录/api_attendance_add
+        attendance_add(params){    //其他方式进入教室教室接口
+        let url ="/api/api_attendance_add"
+        return shuju.postdata(url,params)}, 
 }

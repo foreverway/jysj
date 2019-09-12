@@ -109,18 +109,27 @@
          <el-dialog
             title="其他方式进入教室"
             :visible.sync="centerDialogVisible"
-            width="50%"
-           
+
             center>
+             <el-dialog
+              width="30%"
+              title="使用手机扫码下载"
+              :visible.sync="innerVisible"
+              append-to-body>
+              <div class='flex_div'>
+                   <img :src=otherWey.mobileDownloadUrl>
+              </div>
+           
+              </el-dialog>
             <el-form label-width="80px" :model="otherWey"   v-model="labelPosition"
             :label-position="labelPosition">
             <el-form-item label="方式一：参与码进入教室" style="font-weight:700;">
-              <p style="color:;">你的参与码：<span style="color:orange;">{{otherWey.code?therWey.code:"暂未生成"}}</span></p>
+              <p >你的参与码：<span style="color:orange;">{{otherWey.code?therWey.code:"暂未生成"}}</span></p>
               <p>打开“云端课堂”的PC端或者APP端，输入参与码，即可进入教室。</p>
-              <p><a href=otherWey.windowsDowloadUrl>Windows版下载</a>、<a href=otherWey.macDowloadUrl>Mac版下载</a>、<a href=otherWey.mobileDownloadUrl>手机版下载</a>，（或在手机应用市场搜索“云端课堂”即可下载）</p>
+              <p><el-button @click='toPc()'>Windows版下载</el-button><el-button @click='toMac()'>Mac版下载</el-button><el-button @click='toMob()'>手机版下载</el-button>（或在手机应用市场搜索“云端课堂”即可下载）</p>
             </el-form-item>
             <el-form-item label="方式二：网页端进入教室" style="font-weight:700;">
-              <router-link :to=otherWey.webUrl>点击这里即可进入教室</router-link>
+              <el-button @click='nowSee()'>点击这里即可进入教室</el-button>
              <p>或者复制下方链接在其他浏览器打开</p>
             <p>{{otherWey.webUrl}}</p>
             </el-form-item>
@@ -387,6 +396,7 @@ export default {
     return {
       value: "",
         labelPosition: 'top',//其他方法进入直播排在顶部
+         innerVisible: false, //内层弹框
       form: {
         feedback_type: "1",
         details_1: "",
@@ -443,7 +453,19 @@ export default {
     }
   },
   methods: {
-
+      toPc(){
+         window.open(this.otherWey.windowsDowloadUrl)
+      },
+      toMac(){
+        window.open(this.otherWey.macDowloadUrl)
+      },
+      toMob(){
+        this.innerVisible = true
+       // window.open(this.otherWey.mobileDownloadUrl)
+      },
+      nowSee(){
+        window.open(this.otherWey.webUrl)
+      },
     closeDio(){
       this.value_other="";
       this.centerDialogVisible = false;
@@ -456,7 +478,6 @@ export default {
       }
       this.$apis.common.other_enter(prams).then(res=>{
         if(res.data.code==1){
-          console.log(res.data.data)
           this.otherWey=res.data.data
         }
       })
@@ -819,4 +840,11 @@ li span {
   width: 100px !important;
   text-align: center;
 } */
+.flex_div{
+width: 100%;
+}
+.flex_div img{
+width: 80%;
+margin:0 10%;
+}
 </style>
