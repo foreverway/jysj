@@ -749,31 +749,7 @@ export default {
         this.open4();
       }
     },
-    // next() {
-    //   for (let i = 0; i < this.editableTabsValue.length; i++) {
-    //     this.students_data.push({
-    //       student_id: $("#students" + i).html()
-    //     });
-    //   }
-    //   for (let i = 0; i < this.editableTabsValue_1.length; i++) {
-    //     this.subjects_data.push({
-    //       subject_id: $("#course_id" + i).html() * 1,
-    //       classhour: $("#time" + i).val() * 1,
-    //       price: $("#mach" + i).val() * 1,
-    //       amount: $("#time" + i).val() * $("#mach" + i).val(),
-    //       course_type: $("#attr" + i).val(),
-    //       course_id: $("#course_id" + i).html() * 1,
-    //       is_one: $("#one" + i).val() * 1,
-    //       is_group: $("#self" + i).val() * 1
-    //     });
-    //     if ($("#clas" + i).val() == 1) {
-    //       // console.log($("#time"+i).val() + "  " + $("#mach"+i).val() + "  " + $("#sex"+i).val())
-    //       this.active = 3;
-    //     } else {
-    //       this.active++;
-    //     }
-    //   }
-    // },
+
 
     goBack() {
       history.back(-1);
@@ -789,7 +765,6 @@ export default {
         .then(res => {
           if (res.data.code == 1) {
             this.apply_data = res.data.data;
-            console.log(this.apply_data)
           } else {
             this.$message({
               type: "info",
