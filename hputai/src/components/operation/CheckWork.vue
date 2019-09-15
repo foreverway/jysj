@@ -66,8 +66,8 @@
 </el-table-column>
 <el-table-column align="center" label="操作" >
      <template slot-scope="scope">
-          <div v-show="scope.row.attendance_status==2" style="color:blue"><span style="cursor:pointer;" @click="seeMore(scope.row)">查看详情</span><span  @click="payMoney(scope.row)" style="cursor:pointer;display:inline-block;border:1px solid blue;width:45px;border-radius:5px;margin:0 3px;color:blue;">{{opration[2].menu_name}}</span></div>
-          <div v-show="scope.row.attendance_status==1" style="color:green"><span style="cursor:pointer;" @click="seeMore(scope.row)">查看详情</span></div>
+          <div v-show="scope.row.attendance_status==2" style="color:blue"><span style="cursor:pointer;" @click="seeMore(scope.row.course_id)">查看详情</span><span  @click="payMoney(scope.row)" style="cursor:pointer;display:inline-block;border:1px solid blue;width:45px;border-radius:5px;margin:0 3px;color:blue;">{{opration[2].menu_name}}</span></div>
+          <div v-show="scope.row.attendance_status==1" style="color:green"><span style="cursor:pointer;" @click="seeMore(scope.row.course_id)">查看详情</span></div>
          <div v-show="scope.row.attendance_status==0" style="color:red"><span  @click="normal(scope.row)" style="cursor:pointer;display:inline-block;border:1px solid green;width:45px;border-radius:5px;margin:0 3px;color:green;">{{opration[0].menu_name}}</span><span  @click="unnormal(scope.row)" style="cursor:pointer;display:inline-block;border:1px solid orange;width:45px;border-radius:5px;margin:0 3px;">{{opration[1].menu_name}}</span></div>
       </template>
 </el-table-column>
@@ -180,6 +180,43 @@
     <el-button type="primary" @click="centerDialogVisible_paymoney = false">确 定</el-button>
   </span>
 </el-dialog>
+<!-- 查看详情的弹出页面 -->
+<el-dialog
+  title="查看详情"
+  :visible.sync="centerDialogVisible_seeMore"
+  width="40%"
+>
+  <el-form  label-width="100px" :model="seeMoreData">
+  <el-form-item label="已排课时">
+    <p>{{seeMoreData.classhour}}</p>
+  </el-form-item>
+  <el-form-item label="考勤状态">
+    <p>{{seeMoreData.attendance_type}}</p>
+  </el-form-item>
+  <el-form-item label="实上课时">
+    <p>{{seeMoreData.true_classhour}}</p>
+  </el-form-item>
+  <el-form-item label="异动实上课时备注">
+    <p>{{seeMoreData.remarks1}}</p>
+  </el-form-item>
+  <el-form-item label="老师核准">
+    <p>{{seeMoreData.teacher_classhour	}}</p>
+  </el-form-item>
+   <el-form-item label="异动老师核准备注">
+     <p>{{seeMoreData.remarks2}}</p>
+  </el-form-item>
+   <el-form-item label="学生核准">
+     <p>{{seeMoreData.student_classhour	}}</p>
+  </el-form-item>
+   <el-form-item label="异动学生核准的备注">
+     <p>{{seeMoreData.remarks3}}</p>
+  </el-form-item>
+</el-form>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="centerDialogVisible_seeMore = false">取 消</el-button>
+    <el-button type="primary" @click="centerDialogVisible_seeMore = false">确 定</el-button>
+  </span>
+</el-dialog>
     <el-pagination
       style="float:right;margin-bottom:30px"
       background
@@ -239,7 +276,6 @@ export default {
     this.$apis.students.getuilcode();
     this.getadata();
     this.opration=this.rolemenu[1].children[4].children
-    console.log(this.opration)
   },
   methods: {
     normal(a){
@@ -268,8 +304,18 @@ export default {
       })
     },
     // 查看详情
-    seeMore(){  
-
+    seeMore(result){  
+      this.centerDialogVisible_seeMore = true
+      let params={
+        course_id:result
+      }
+      this.$apis.common.attendance_details(params).then(res=>{
+        if(res.data.code){
+          this.seeMoreData=res.data.data
+        }
+      })
+      console.log(this.seeMoreData)
+      //
     },
     payMoney(){},
     //序号排列

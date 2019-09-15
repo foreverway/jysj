@@ -423,8 +423,8 @@ export default {
       ],
       options: [], //课程名称的数据
       options_: [], //总数据的数据
-      editableTabsValue_1: [],
-      editableTabs_1: [],
+      editableTabs_1: [],  //课程详情数组
+      editableTabs_1: [],    //课程
       tabIndex:0,
       tabIndex_1:0,
       subjects_data: [], //学科数据
@@ -657,7 +657,7 @@ export default {
     handleChange_1(targetName) {
       // for (let i = 0; i < this.options_.length; i++) {
       // var val = this.options_[i];
-      let newTabName = ++this.tabIndex_1 + "";
+     // let newTabName = ++this.tabIndex_1 + "";
       this.editableTabs_1.push({
         classhour: "",
         start_time: "", //选择开始日期
@@ -666,11 +666,10 @@ export default {
         course_type: "1", //课程类型
         play_type: "1"
       });
-      this.editableTabsValue_1 = newTabName;
+     // this.editableTabs_1 = newTabName;
       // }
     },
     onSubmit() {
- 
       this.subjects_data.push({
         start_time: this.value_data_start.toString().slice(0, 10), //默认form开始日期
         end_time: this.value_data_end.toString().slice(0, 10), //结束时间
@@ -679,14 +678,19 @@ export default {
         play_type: this.study_wey //观看端
       });
       var all_hour= this.input_twice*1
-     for (let i = 0; i < this.editableTabsValue_1.length; i++) {
+     for (let i = 0; i < this.editableTabs_1.length; i++) {
         all_hour +=$("#classhour" + i).val() * 1
       }
-          for (let i = 0; i < this.editableTabsValue_1.length; i++) {
+          for (let i = 0; i < this.editableTabs_1.length; i++) {
+
+            function dateToMs (date) {
+    let result = new Date(date).getTime();
+    return result.toString().slice(0, 10);
+}
         this.subjects_data.push({
           classhour: $("#classhour" + i).val() * 1,
-          start_time: $("#start_time" + i).val(),
-          end_time: $("#end_time" + i).val(),
+          start_time:dateToMs($("#start_time" + i).val()) ,
+          end_time:dateToMs($("#end_time" + i).val()) ,
           course_type: $("#course_type" + i).val(),
           play_type: $("#play_type" + i).val()
         });
@@ -709,18 +713,21 @@ export default {
       });
       parms.students_id = studentStr.join();     
       parms.course_data = this.subjects_data;
-      console.log(all_hour*1)
-      console.log(this.$route.query.classhour*1)
+      // console.log(all_hour*1,'填入时间')
+      // console.log(this.$route.query.classhour*1,'总时间')
+       console.log(this.subjects_data,'数组长度')
      if(all_hour*1==this.$route.query.classhour*1){
-       console.log(parms)
+      //  console.log(parms)
       this.$apis.common.application_arrange_post(parms).then(res => {
         if (res.data.code == 1) {
            this.$message({
           type:"success",
           message:"添加成功"
         })
+       this.$router.go(-1)
       }else{
           this.editableTabs_1=[]
+          this.subjects_data=[]
            this.$message({
           type:"warning",
           message:res.data.msg
@@ -729,6 +736,7 @@ export default {
       })
     }else{
        this.editableTabs_1=[]
+       this.subjects_data=[]
         this.$message({
           type:"warning",
           message:"排课时间不足"
@@ -744,7 +752,7 @@ export default {
       });
     },
     deleteTest_1() {
-      this.editableTabs_1.pop(this.editableTabsValue_1);
+      this.editableTabs_1.pop(this.editableTabs_1);
       if (this.editableTabs_1.length == 0) {
         this.open4();
       }
@@ -755,7 +763,7 @@ export default {
     //       student_id: $("#students" + i).html()
     //     });
     //   }
-    //   for (let i = 0; i < this.editableTabsValue_1.length; i++) {
+    //   for (let i = 0; i < this.editableTabs_1.length; i++) {
     //     this.subjects_data.push({
     //       subject_id: $("#course_id" + i).html() * 1,
     //       classhour: $("#time" + i).val() * 1,
@@ -789,7 +797,6 @@ export default {
         .then(res => {
           if (res.data.code == 1) {
             this.apply_data = res.data.data;
-            console.log(this.apply_data)
           } else {
             this.$message({
               type: "info",

@@ -97,8 +97,33 @@ export default {
       other_enter(params){    //其他方式进入教室教室接口
         let url ="/api/api_other_enter"
         return shuju.getdata(url,params)},       
+
         //考勤操作（添加考勤记录/api_attendance_add
         attendance_add(params){    //其他方式进入教室教室接口
         let url ="/api/api_attendance_add"
         return shuju.postdata(url,params)}, 
+        
+        attendance_details(params){    //查看详情
+          let url ="/api/api_attendance_details"
+          return shuju.getdata(url,params)}, 
+
+          teacher_list_only(params){    //老师列表
+        let url ="/api/api_teacher_list"
+        return shuju.getdata(url,params)},     
+
+        teacher_dollars_get(params){    //老师课酬获取数据
+          let url ="/api/api_teacher_dollars"
+          return shuju.getdata(url,params)},  
+
+        teacher_dollars_post(params){    //教师课酬设置提交数据
+          let url ="/api/api_teacher_dollars"
+          return shuju.postdata(url,params)},   
+
+        teacher_edit_put(params){    //编辑教师提交数据
+          let url ="/api/api_teacher_edit"
+          return shuju.putdata(url,params)},   
+
+        teacher_edit_get(params){    //教师课酬设置提交数据
+          let url ="/api/api_teacher_edit"
+          return shuju.getdata(url,params)},   
 }

@@ -64,7 +64,6 @@
               index="item.id"
               @click="mommonAction(item.menu_action,scope.row)"
             >{{item.menu_name}}</el-button>
-            <!-- </router-link> -->
           </span>
         </template>
       </el-table-column>

@@ -505,7 +505,6 @@ export default {
       this.dialogVisible = true;
       this.$apis.common.course_feedback(parms).then(res => {
         if (res.data.code == 1) {
-          console.log(res.data);
           this.formLabelAlign = res.data.data;
         }
       });

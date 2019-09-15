@@ -28,7 +28,9 @@ import StudentMoneyMain from '@/components/students/StudentMoneyMain'  //学生�
 import NewMoney from '@/components/students/NewMoney'
 import VirtualMonney from '@/components/students/VirtualMonney'
 import LearningMoney from '@/components/students/LearningMoney'
-
+//师资管理
+import TeacherAssess from '@/components/teacher/TeacherAssess'  //老师评价
+import TeacherList from '@/components/teacher/TeacherList'  //老师列表
 //系统设置路由
 import SystemMain from '@/components/system/system_main'
 //系统设置
@@ -90,6 +92,14 @@ export default new Router({
         {
           path: '/CheckWork',//CheckWork  考勤
           component: CheckWork
+        },
+        {
+          path: '/TeacherAssess',//TeacherAssess  老师评价
+          component: TeacherAssess
+        },
+        {
+          path: '/TeacherList',//TeacherList  老师列表
+          component: TeacherList
         },
         {
           path: '/AddLink',//
