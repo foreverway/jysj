@@ -70,6 +70,7 @@
     </el-table>
     <!-- <p style="margin-top:30px"><span>累计金额：</span><span style="color:red">{{msg.data.givenamount}}</span></p> -->
     <!-- <el-button type="primary" @click="ifinputselect" style="margin-top:20px">审核</el-button> -->
+   <!-- 教师课酬设置 -->
     <el-dialog
     title="教师课酬设置"
     :visible.sync="centerDialogVisible_salary"
@@ -79,13 +80,60 @@
   <el-form-item label="讲师姓名">
     <p>{{teacher_name}}</p>
   </el-form-item>
- 
   <el-form-item label="选择科目">
-    <p>{{teacher_salary.attendance_type}}</p>
+   <el-cascader
+          v-model="value_suj"
+          :options="options"
+          :props="{ expandTrigger: 'hover' }"
+          :show-all-levels="false"
+          @change="handleChange_1"
+        ></el-cascader>
   </el-form-item>
-  <el-form-item label="课酬标准">
-    <p>{{teacher_salary.true_classhour}}</p>
-  </el-form-item>
+    <el-form-item :inline="true" label="课酬标准">
+<el-table
+    :data="teacher_salary"
+    style="width: 100%"
+ >
+    <el-table-column
+      prop="teacher_id"
+      label="科目"
+      width="150">
+    </el-table-column>
+    <el-table-column
+      prop="online_type"
+      label="线上/线下"
+      width="120">
+    </el-table-column>
+    <el-table-column
+      prop="one_to_one"
+      label="一对一"
+      width="120">
+    </el-table-column>
+    <el-table-column
+      prop="small_class"
+      label="小班"
+      width="120">
+    </el-table-column>
+    <el-table-column
+      prop="big_class"
+      label="大班"
+      width="300">
+    </el-table-column>
+    <el-table-column
+      fixed="right"
+      label="操作"
+      width="120">
+      <template slot-scope="scope">
+        <el-button
+          @click.native.prevent="deleteRow(scope.$index, teacher_salary)"
+          type="text"
+          size="small">
+          移除
+        </el-button>
+      </template>
+    </el-table-column>
+  </el-table>
+      </el-form-item>
 </el-form>
     <span slot="footer" class="dialog-footer">
         <el-button @click="centerDialogVisible_salary = false">取 消</el-button>
@@ -110,16 +158,19 @@ import {mapState} from 'vuex'
 export default {
   data() {
     return {
+      value_suj:'', //学科数据
       tableData: "",
+      editableTabs_1:'', //添加科目的详情
       form: {
         search: "", //搜索老师条件
         page: 1, //页码
         teacher_id: "", //教师id
       },
-
+      options: [], //课程名称的数据
+      options_: [], //总数据的数据
       msg: {},
       centerDialogVisible_salary: false ,//入扣款弹窗,
-      teacher_salary:{},
+      teacher_salary:[],
       teacher_name:'',
       teacher_salary_data:{
       }, //教师课酬
@@ -151,11 +202,89 @@ export default {
                    this.teacher_salary=res.data.data
                     }
                 })
+                      let parms = {
+        admin_id: this.getdataCookie("admin_id")
+      };
+   
+      //获取科目的数据
+      this.$apis.common.subject_list(parms).then(res => {
+        if (res.data.code == 1) {
+          this.msg = res.data;
+          this.options_ = res.data.data;
+          for (let i = 0; i < this.options_.length; i++) {
+            var val = this.options_[i];
+            var children = [];
+            if (val.children) {
+              for (let j = 0; j < val.children.length; j++) {
+                var val1 = val.children[j];
+                children.push({
+                  value: val1.subject_name,
+                  label: val1.subject_name
+                });
+              }
+              this.options.push({
+                value: val.subject_name,
+                label: val.subject_name,
+                children: children
+              });
+            } else {
+              this.options.push({
+                value: val.subject_name,
+                label: val.subject_name
+              });
+            }
+          }
+        }
+      });
             break
             case 'teacher_delete' :
                 console.log(b)
             break
         }
+    },
+         deleteRow(index, rows) {  //删除那一列
+        rows.splice(index, 1);
+      },
+      //选择报读科目的函数
+    handleChange_1(targetName) {
+      var lastName = targetName.length == 1 ? targetName[0] : targetName[1];
+      let oneArr = this.options_.filter(item => item.subject_name == lastName);
+      if (oneArr.length == 0) {
+        for (let i = 0; i < this.options_.length; i++) {
+          var val = this.options_[i];
+          if (val.children) {
+            //如果有子元素
+            var val_1 = val.children.filter(item => item);
+            // if(val_1.length==1){
+            let oneArr_1 = val_1.filter(item => item.subject_name == lastName); //对子元素进行赛选
+            if (oneArr_1.length > 0) {
+              //let newTabName = ++this.tabIndex_1 + "";
+              this.teacher_salary.push({
+                teacher_id: oneArr_1[0].subject_name,
+                online_type: 10,
+                one_to_one: 1000,
+                small_class: "", //课程类型
+                big_class: oneArr_1[0].id, //课程id
+              });
+             // this.editableTabsValue_1 = newTabName;
+            }
+          }
+        }
+      } else {
+        //没有子元素
+        console.log(oneArr[0].id);
+        //let newTabName = ++this.tabIndex_1 + "";
+        this.teacher_salary.push({
+          teacher_id: lastName,
+          online_type: 10,
+          one_to_one: 1000,
+          small_class: "", //课程类型
+          big_class: oneArr[0].id, //课程id
+
+        });
+       // this.editableTabsValue_1 = newTabName;
+        // this.subject_id.push({student_id:checkOne[0].id})
+      }
     },
     indexMethod(index) {
       if (this.form.page == 1) {
@@ -202,11 +331,20 @@ export default {
       this.$apis.common.teacher_list_only(this.form).then(res => {
         if (res.data.code == 1) {
           this.msg = res.data;
-     
           this.tableData = res.data.data.list;
   
         }
       });
+    },
+        getdataCookie(cname) {
+      // return 1
+      var name = cname + "=";
+      var ca = document.cookie.split(";");
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i].trim();
+        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+      }
+      // this.$router.push({path:'/login'})
     }
   }
 };
@@ -219,5 +357,25 @@ export default {
 .so_main_left {
   float: left;
   margin-top: 15px;
+}
+.add_ul p {
+  list-style: none;
+  display: inline-block;
+  background-color: #fff;
+  padding: 0;
+  margin-right: -5px;
+  width: 8%;
+  border: 1px solid silver;
+  text-align: center;
+}
+.add_ul_new p {
+  list-style: none;
+  display: inline-block;
+  background-color: #fff;
+  padding: 0;
+  margin-right: -5px;
+  width: 8%;
+  border: 1px solid silver;
+  text-align: center;
 }
 </style>

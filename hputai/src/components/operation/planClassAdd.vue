@@ -424,7 +424,6 @@ export default {
       options: [], //课程名称的数据
       options_: [], //总数据的数据
       editableTabs_1: [],  //课程详情数组
-      editableTabs_1: [],    //课程
       tabIndex:0,
       tabIndex_1:0,
       subjects_data: [], //学科数据
