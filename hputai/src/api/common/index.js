@@ -126,4 +126,20 @@ export default {
         teacher_edit_get(params){    //教师课酬设置提交数据
           let url ="/api/api_teacher_edit"
           return shuju.getdata(url,params)},   
+          
+          recharge_list(params){    //获取充值记录单列表
+            let url ="/api/api_recharge_list"
+            return shuju.getdata(url,params)},   
+                      
+            inpeople_list(params){    //实收人数据接口
+            let url ="/api/api_inpeople_list"
+            return shuju.getdata(url,params)}, 
+                                  
+        basedata_list(params){    //获取实收人数据接口
+        let url ="/api/api_basedata_list"
+        return shuju.getdata(url,params)}, 
+                                          
+        basedata_list_post(params){    //获取实收人数据接口
+          let url ="/api/api_basedata"
+          return shuju.getdata(url,params)}, 
 }

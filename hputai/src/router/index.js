@@ -17,6 +17,7 @@ import Addsalepro from '@/components/operation/addsalepro'
 import ApplyNeedsList from '@/components/operation/applyNeedsList'  //报名需求列表
 import PlanClassAdd from '@/components/operation/PlanClassAdd'  //新添加排课
 import CheckWork from '@/components/operation/CheckWork'  //考勤
+import RechargeRecord from '@/components/operation/RechargeRecord'  //充值记录单
 
 //学生路由
 import StudentsAdd from '@/components/students/students_add'
@@ -88,6 +89,10 @@ export default new Router({
         {
           path: '/PlanClassAdd',//PlanClassAdd添加报名需求列表
           component: PlanClassAdd
+        },
+        {
+          path: '/RechargeRecord',//RechargeRecord充值记录单
+          component: RechargeRecord
         },
         {
           path: '/CheckWork',//CheckWork  考勤
