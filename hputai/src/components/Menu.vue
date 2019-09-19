@@ -90,6 +90,7 @@ export default {
     };
   },
   created() {
+
      let params = {
       admin_id: this.getdataCookie("admin_id")
     };
@@ -134,10 +135,8 @@ export default {
       "jiaowu_data",
       "region_list",
       ]),
- mounted(){
-   alert(55)
-    
-
+ mounted(){    
+    window.location.reload()
  },
   methods: {
     selectMenu(index,indexPath){    //实现点击子菜单父菜单出现

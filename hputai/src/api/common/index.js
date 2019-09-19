@@ -15,7 +15,7 @@ export default {
 
    // 顾问数据 /api_adviser_list
    adviser_list (params) {
-    let url='/api/api_adviser_list'
+    let url='/api/api_adviser_list' 
     return shuju.getdata(url,params)
    },
    //销售进程管控列表
@@ -99,7 +99,7 @@ export default {
         return shuju.getdata(url,params)},       
 
         //考勤操作（添加考勤记录/api_attendance_add
-        attendance_add(params){    //其他方式进入教室教室接口
+        attendance_add(params){    
         let url ="/api/api_attendance_add"
         return shuju.postdata(url,params)}, 
         
@@ -139,7 +139,15 @@ export default {
         let url ="/api/api_basedata_list"
         return shuju.getdata(url,params)}, 
                                           
-        basedata_list_post(params){    //获取实收人数据接口
+        basedata_list_post(params){    //发送实收人数据接口
           let url ="/api/api_basedata"
           return shuju.getdata(url,params)}, 
+          
+          recharge_edit(params){    //编辑充值记录单获取数据
+            let url ="/api/api_recharge_edit"
+            return shuju.getdata(url,params)}, 
+                      
+            recharge_export_table(params){    //导出充值记录信息表
+            let url ="/api/api_recharge_export"
+            return shuju.getdata(url,params)}, 
 }

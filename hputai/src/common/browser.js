@@ -31,5 +31,8 @@ export default {
   isIE8,
   isIE9,
   isIE10,
-  isIE11
+  isIE11,
+  //yidong_url_s: 'http://student.hqjystudio.com', // 正式移动端访问地址student.hqjystudio.com  测试移动端地址http://vue.test.hqjystudio.com
+  post_url_s: 'http://personal.hqjystudio.com', // 接口地址http://personal.hqjystudio.com  测试接口地址http://personal.test.hqjystudio.com
+  //admin_url_s: 'http://cms.hqjystudio.com/admin/index.php'
 }

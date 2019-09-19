@@ -50,7 +50,7 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button style="background-color:#e6563a; border:none;" @click="onSubmit">编辑保存</el-button>
+        <el-button  @click="onSubmit">编辑保存</el-button>
         <el-button @click="goBack">取消</el-button>
       </el-form-item>
     </el-form>
@@ -71,7 +71,7 @@ export default {
 
     return {
       rolelist: "",
-      id: this.$route.params.id, //用户id
+      id: this.$route.params.id*1, //用户id
       form: {
         admin_id: "",
         admin_name: "",
@@ -97,7 +97,7 @@ export default {
   },
   methods: {
     onSubmit() {
-      this.form.admin_id = this.id;
+      this.form.admin_id = this.id*1;
       this.$apis.menber.admin_edit_put(this.form).then(res => {
         if (res.data.code == 1) {
           this.$message({
@@ -116,7 +116,7 @@ export default {
     },
     getdata() {
       let params = {
-        admin_id: this.id
+        admin_id: this.id*1
       };
       this.$apis.menber.admin_edit(params).then(res => {
         if (res.data.code == 1) {

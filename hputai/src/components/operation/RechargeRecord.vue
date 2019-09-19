@@ -5,11 +5,8 @@
            <el-form :inline="true" :model="form" label-width="90px">
              <el-form-item label="学生姓名：">
  <el-input  clearable style="width:180px" class="so_input" v-model="form.search" @input="getadata" placeholder="请输入用户名"></el-input>
-            
-
+          
              </el-form-item>
-           
-               
             <el-form-item label="实收人：">
                 <el-select  clearable style="width:180px"  class="so_input" v-model="form.in_people" filterable placeholder="请输入" @change="getadata">
                     <el-option
@@ -109,9 +106,8 @@
        value-format="yyyy-MM-dd H:mm:ss"
       placeholder="结束时间">
     </el-date-picker>
-    <router-link to="/Rechargecreate"> <el-button v-if="msg.data.permissions.isAdd==1" type="primary" >新增充值记录单</el-button></router-link>
-
- <el-button v-if="msg.data.permissions.isExport==1" type="primary" @click="recharge_export" >导出</el-button>
+    <router-link to="/Rechargecreate"> <el-button  type="primary" v-if="this.opration[0].menu_name=='新增'">新增充值记录单</el-button></router-link>
+ <el-button v-if="this.opration[1].menu_name=='导出'" type="primary" @click="recharge_export" >导出</el-button>
  
  </el-form>
         </div>
@@ -238,41 +234,32 @@
        <el-table-column align="center" label="审核状态">
       <template slot-scope="scope">
             <span v-if="scope.row.status==0" >待审核</span>
-             <span v-if="scope.row.status==1" style="color:#67c23a;">审核通过</span>
+             <span v-if="scope.row.status==1" style="color:#67C23A;">审核通过</span>
               <span v-if="scope.row.status==2" style="color:red;">审核不通过</span>
       </template>
     </el-table-column>
 
-       <el-table-column align="center" label="操作" width="200">
+       <el-table-column align="center" label="操作" width="200" fixed="right">
       <template slot-scope="scope">
-        <router-link :to="'/EditRecharge/'+scope.row.id" v-if="scope.row.status==0||scope.row.status==2" v-show="msg.data.permissions.isEdit==1" >
-        <el-button size="mini" type="success" >编辑</el-button>
-          
-        </router-link>
-        <el-button size="mini" type="info" disabled v-if="scope.row.status==1">编辑</el-button>
-        <span v-if="scope.row.isZhuan">
-         
-            <el-button v-if="scope.row.isZhuanAudit" v-show="scope.row.status==0||scope.row.status==2" size="mini" @click="dialogFormVisible4=true,shenhe( scope.row.id)" type="primary" >审核</el-button>
-        
-            
-
-        </span>
-         <span v-else>
-               <el-button  v-if="scope.row.status==0||scope.row.status==2" v-show="msg.data.permissions.isAudit==1" size="mini" @click="dialogFormVisible4=true,shenhe( scope.row.id)" type="primary" >审核</el-button>
-         </span>
-      <el-button  v-if="scope.row.status==1" size="mini"  type="info" disabled >已审核</el-button>
+        <el-button @click="toEdit(scope.row.id)" v-show="opration[0].menu_name=='编辑'||opration[2].menu_name=='编辑'" size="mini" type="success" >编辑</el-button>
+        <!-- <el-button size="mini" type="info" disabled v-if="scope.row.status==1">编辑</el-button> -->
+            <el-button  v-if="opration[1].menu_name=='审核'||opration[3].menu_name=='审核'" size="mini" @click="shenhe( scope.row.id)" type="primary" > 审核</el-button>
+            <!-- <el-button  v-if="opration[2].menu_name=='删除'||opration[4].menu_name=='删除'"  size="mini" @click.native.prevent="deleteRow(scope.$index, tableData)" >删除</el-button> -->
+      <!-- <el-button  v-if="scope.row.status==1" size="mini"  type="info" disabled >已审核</el-button> -->
       </template>
     </el-table-column>
 
 
   </el-table>
+  
  <!-- 表格结束 -->
 <el-dialog title="审核" :visible.sync="dialogFormVisible4" width="300px"  close-on-click-modal=false>
      <el-input   type="textarea" v-model="form1.audit_content"  placeholder="请输入理由"></el-input>
    
     <p style="margin-bottom:10px"></p>
-    <el-button type="primary" @click="dialogFormVisible4 = false,tongguo(1)">通过</el-button>
-    <el-button type="danger" @click="dialogFormVisible4= false,tongguo(2)">不通过</el-button>
+    
+    <el-button style="background-color:#67C23A;color:white;" @click="tongguo(1)">通过</el-button>
+    <el-button type="danger" @click="tongguo(2)">不通过</el-button>
 </el-dialog>
 
 
@@ -286,12 +273,11 @@
   :page-size="10"
   :total="msg.data.count">
 </el-pagination>
-
     </div>
 </template>
 
 <script>
-// import glbol from '../common/const_config.js'
+  //import glbol from '../../api/../config/prod.env.js/API_ROOT'
 import {mapState} from 'vuex'
 export default {
   data () {
@@ -319,6 +305,7 @@ export default {
                 uid:'',//如果有uid,查询该用户的记录
       },
       tableData:'',
+      opration:'',
       msg:'',
       form1:{
           id:'', // 审核主键id
@@ -328,15 +315,23 @@ export default {
      
     }
   },
-  computed:mapState["banzhuren_list"],
+         computed:mapState([ "rolemenu"],"banzhuren_list",),
   created () {
       //this.$apis.common.getuilcode()
     this.getadata()
     this.adminid=this.getdataCookie('admin_uid')
+    this.opration=this.rolemenu[1].children[5].children
   },
   methods: {
+         deleteRow(index, rows) {
+        rows.splice(index, 1);
+      },
+      toEdit(a){
+        this.$router.push({path:'/EditRecharge',query:{id:a}})
+      },
     //审核
 shenhe(id){
+this.dialogFormVisible4=true
  this.form1.id=id
 },
 
@@ -357,6 +352,7 @@ if(this.form.page>1){
       },
 
 tongguo(num){
+  this.dialogFormVisible4 = false
   this.form1.status=num
    this.$apis.common.recharge_audit(this.form1).then(res=>{
      if(res.data.code==1){
@@ -381,14 +377,18 @@ this.$message({
 },
     //导出
     recharge_export(){
-      let urls=glbol.post_url_s
+      // this.$apis.common.recharge_export_table().then(res=>{
+      //   if(res.data.code==1){
+      //     console.log(res.deda)
+      //     return res.deda.data
+      //   }
+      // })
+      let urls='http://personal.test.hqjystudio.com'
       let parms=''
-
        for(var key in this.form){
-         
          parms+=key+'='+ this.form[key]+'&'
        }
-        window.location.href=urls+'/pc_recharge_export'+'?'+parms
+        window.location.href=urls+'/api_recharge_export'+'?'+parms
     },
 
      //序号排列
@@ -409,6 +409,7 @@ this.$message({
              this.tableData=res.data.data.list
              console.log(this.tableData)
         }
+
     })
       this.$apis.common.inpeople_list().then(res=>{ // 实收人数据
               if(res.data.code==1){

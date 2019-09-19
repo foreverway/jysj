@@ -18,6 +18,8 @@ import ApplyNeedsList from '@/components/operation/applyNeedsList'  //报名需�
 import PlanClassAdd from '@/components/operation/PlanClassAdd'  //新添加排课
 import CheckWork from '@/components/operation/CheckWork'  //考勤
 import RechargeRecord from '@/components/operation/RechargeRecord'  //充值记录单
+import Rechargecreate from '@/components/operation/recharge_create'  //充值记录单
+import EditRecharge from '@/components/operation/edit_recharge'  //充值记录单
 
 //学生路由
 import StudentsAdd from '@/components/students/students_add'
@@ -93,6 +95,14 @@ export default new Router({
         {
           path: '/RechargeRecord',//RechargeRecord充值记录单
           component: RechargeRecord
+        },
+        {
+          path: '/Rechargecreate',//Rechargecreate添加记录单
+          component: Rechargecreate
+        },
+        {
+          path: '/EditRecharge',//EditRecharge编辑充值记录单
+          component: EditRecharge
         },
         {
           path: '/CheckWork',//CheckWork  考勤
