@@ -7,7 +7,7 @@ import MainIndex from '@/components/menber/index'
 import AdminList from '@/components/menber/admin_list' 
 import AdminAdd from '@/components/menber/admin_add' 
 import AdminEdit from '@/components/menber/admin_edit'
-//操作
+//   操作
 import AddLink from '@/components/operation/addlink'
 import ApplicationAdd from '@/components/operation/application_add'  //添加报名需求列表
 import ApplicationEdit from '@/components/operation/application_edit'  //编辑报名需求列表
