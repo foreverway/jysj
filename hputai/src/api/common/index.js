@@ -150,4 +150,40 @@ export default {
             recharge_export_table(params){    //导出充值记录信息表
             let url ="/api/api_recharge_export"
             return shuju.getdata(url,params)}, 
+            
+            recharge_audit(params){    //审核充值记录单
+          let url ="/api/api_recharge_audit"
+          return shuju.postdata(url,params)},   
+                      
+          recharge_update(params){    //更新充值记录单提交数据
+            let url ="/api/api_recharge_update"
+            return shuju.putdata(url,params)},   
+                                  
+            user_recharge_list(params){    //获取用户充值未关联充值记录单的数据接口
+              let url ="/api/api_user_recharge_list"
+              return shuju.getdata(url,params)}, 
+
+              share_list(params){    //分享记录列表
+              let url ="/api/api_share_list"
+              return shuju.getdata(url,params)}, 
+              
+              del_share(params){    //删除分享素材列表的数据接口
+                let url ="/api/api_del_share"
+                return shuju.deletedata(url,params)}, 
+                              
+              share_record_list(params){    //分享记录列表接口
+                let url ="/api/api_share_record_list"
+                return shuju.getdata(url,params)}, 
+                
+              share_config_list(params){    //获取配置的分享素材
+              let url ="/api/api_share_config_list"
+              return shuju.getdata(url,params)}, 
+
+              del_share_config(params){    //删除分享素材列表的数据接口
+                let url ="/api/api_del_share_config"
+                return shuju.deletedata(url,params)}, 
+                
+              share_config_list(params){    //获取配置的分享素材接口
+              let url ="/api/api_share_config_list"
+              return shuju.getdata(url,params)}, 
 }

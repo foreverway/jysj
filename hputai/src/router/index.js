@@ -20,6 +20,18 @@ import CheckWork from '@/components/operation/CheckWork'  //考勤
 import RechargeRecord from '@/components/operation/RechargeRecord'  //充值记录单
 import Rechargecreate from '@/components/operation/recharge_create'  //充值记录单
 import EditRecharge from '@/components/operation/edit_recharge'  //充值记录单
+import Share from '@/components/operation/Share'  //充值记录单
+
+import ShareArticleConfig from '@/components/operation/share_page/share_article_config'
+import ShareList from '@/components/operation/share_page/share_list'
+import ShareListAdd from '@/components/operation/share_page/share_list_add'
+import AddDelmonney from '@/components/operation/share_page/add_del_money'
+import ShareRules from '@/components/operation/share_page/share_rules'
+import ShareStatistical from '@/components/operation/share_page/share_statistical'
+import ShareUser from '@/components/operation/share_page/share_user'
+import AddArticle from '@/components/operation/share_page/add_article'
+import AddArticleEdit from '@/components/operation/share_page/add_article_edit'
+import AddRules from '@/components/operation/share_page/add.rules'
 
 //学生路由
 import StudentsAdd from '@/components/students/students_add'
@@ -171,6 +183,65 @@ export default new Router({
         {
           path: '/Base', //基础数据配置  
           component: Base
+        },
+        {
+          path: '/Share',
+          name: 'Share',
+          component: Share,
+          children: [
+            {
+              path: '/',
+              component: ShareStatistical
+            },
+            {
+              path: '/AddDelmonney',
+              component: AddDelmonney
+            },
+            {
+              path: '/ShareRules',
+              component: ShareRules
+            },
+            {
+              path: '/ShareArticleConfig',
+              name: 'ShareArticleConfig',
+              component: ShareArticleConfig
+            },
+            {
+              path: '/ShareList',
+              name: 'ShareList',
+              component: ShareList
+            },
+            {
+              path: '/ShareListAdd',
+              name: 'ShareListAdd',
+              component: ShareListAdd
+            },
+            {
+              path: '/ShareStatistical',
+              name: 'ShareStatistical',
+              component: ShareStatistical
+            },
+            {
+              path: '/ShareUser',
+              name: 'ShareUser',
+              component: ShareUser
+            },
+            {
+              path: '/AddArticleEdit/:id',
+              name: 'AddArticleEdit',
+              component: AddArticleEdit
+            },
+            {
+              path: '/AddArticle',
+              name: 'AddArticle',
+              component: AddArticle
+            },
+            {
+              path: '/AddRules',
+              name: 'AddRules',
+              component: AddRules
+            }
+          ]
         },
         {
           path: '/SystemMain', // 系统设置 

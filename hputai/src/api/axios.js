@@ -58,10 +58,7 @@ export default{
   },
     // delete请求方法
     deletedata (url, params) {
-
-    
-      axios.defaults.headers.common['token'] = this.getdataCookie('usertoken');
-   
+       axios.defaults.headers.common['token'] = this.getdataCookie('usertoken');
       let shuj = axios.delete(url, {params})
         .then(function (response) {
           return response
@@ -69,14 +66,11 @@ export default{
         .catch(function (error) {
           return console.log(error)
         })
-  
       return shuj
     },
       // put请求方法
   putdata (url, params) {
-
     axios.defaults.headers.common['token'] = this.getdataCookie('usertoken');
-    
     let shuj = axios.put(url, params)
       .then(function (response) {
         return response
@@ -84,7 +78,6 @@ export default{
       .catch(function (error) {
         return console.log(error)
       })
-
     return shuj
   },
   // 读取cookie的值

@@ -5,12 +5,12 @@
         <div class="header">
           
           <img href="#top" src="../assets/logo.png" height="50" alt style="padding:5px;float:left;" />
-          <div class="users">
+          <div class="users" style="width:180px;">
             <el-dropdown trigger="click">
              
               <span class="el-dropdown-link">
                 <img src="../assets/touxiang.png" alt class="touxiang" />
-                <span>{{this.getdataCookie("admin_name")}}</span>
+                <span style="display:inline-block;width:88px;">{{this.getdataCookie("admin_name")}}</span>
                 <i class="el-icon-caret-bottom el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
