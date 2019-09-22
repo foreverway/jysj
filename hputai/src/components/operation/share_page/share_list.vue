@@ -69,13 +69,11 @@
           </el-popover>
         </template>
       </el-table-column>
-
       <el-table-column align="center" label="创建时间">
         <template slot-scope="scope">
           <span>{{ scope.row.addtime }}</span>
         </template>
       </el-table-column>
-
       <el-table-column align="center" label="操作" width="400">
         <template slot-scope="scope">
           <!-- <router-link :to="'/AddArticleEdit/'+scope.row.id"> <el-button size="mini" type="success">编辑</el-button></router-link>  -->
@@ -83,7 +81,6 @@
         </template>
       </el-table-column>
     </el-table>
-
     <el-pagination
       style="margin-top:30px; float: right;"
       background
@@ -115,7 +112,6 @@ export default {
         start_time: "",
         end_time: ""
       },
-
       tableData: ""
     };
   },
@@ -135,7 +131,6 @@ export default {
         return index + page;
       }
     },
-
     current(num) {
       //当前页数
       this.form.page = num;

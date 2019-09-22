@@ -161,7 +161,6 @@ export default {
             new_arr=res.data.data.list.filter(item=>item.dtime>this.value2[0]&&item.dtime<this.value2[1])
                this.tableData = new_arr
             }
-           
           }
         })
         .catch(() => {
@@ -196,7 +195,6 @@ export default {
       this.money = "";
       oInput.remove();
     },
-
     //删除用户
     salepro_del(row) {
       this.$confirm("此操作将永久删除该用户, 是否继续?", "提示", {
@@ -221,14 +219,12 @@ export default {
           });
         })
         .catch(() => {
-          
           this.$message({
             type: "info",
             message: "已取消删除"
           });
         });
     },
-
     getdataCookie(cname) {
       // return 1
       var name = cname + "=";

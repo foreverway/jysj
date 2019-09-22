@@ -165,15 +165,15 @@
         ></el-date-picker>
 
         <router-link to="/Rechargecreate">
-          <el-button type="primary" v-if="this.menuShow[0].menu_name=='新增'">新增充值记录单</el-button>
-        </router-link>
+          <el-button type="primary" v-if="this.menuArr[0].menu_name=='新增'">新增充值记录单</el-button>
+        </router-link> 
       <!-- 在这里写一个函数  判断函数的返回值 -->
-        <el-button
-          v-if="this.menuShow[1].menu_name=='导出'"
-    
+           <el-button
+          v-if="this.menuArr[1].menu_name=='导出'"
           type="primary"
           @click="recharge_export"
         >导出</el-button>
+      
       </el-form>
     </div>
     <!-- 表格开始 -->
@@ -184,13 +184,11 @@
           <span>{{ scope.row.uname }}</span>
         </template>
       </el-table-column>
-
       <el-table-column align="center" label="收款类别">
         <template slot-scope="scope">
           <span>{{ scope.row.collection_class }}</span>
         </template>
       </el-table-column>
-
       <el-table-column align="center" label="收款方式">
         <template slot-scope="scope">
           <span>{{ scope.row.collection_type }}</span>
@@ -221,55 +219,46 @@
           <span>{{ scope.row.given_amount }}</span>
         </template>
       </el-table-column>
-
       <el-table-column align="center" label="赠送类别">
         <template slot-scope="scope">
           <span>{{ scope.row.given_type }}</span>
         </template>
       </el-table-column>
-
       <el-table-column align="center" label="赠送备注说明">
         <template slot-scope="scope">
           <span>{{ scope.row.given_remarks }}</span>
         </template>
       </el-table-column>
-
       <el-table-column align="center" label="实收人">
         <template slot-scope="scope">
           <span>{{ scope.row.in_people }}</span>
         </template>
       </el-table-column>
-
       <el-table-column align="center" label="顾问1">
         <template slot-scope="scope">
           <span>{{ scope.row.consultant1 }}</span>
         </template>
       </el-table-column>
-
       <el-table-column align="center" label="顾问2">
         <template slot-scope="scope">
           <span>{{ scope.row.consultant2 }}</span>
         </template>
       </el-table-column>
-
       <el-table-column align="center" label="报课项目">
         <template slot-scope="scope">
           <span>{{ scope.row.classproject }}</span>
         </template>
       </el-table-column>
-
       <el-table-column align="center" label="班主任">
         <template slot-scope="scope">
           <span>{{ scope.row.teacher }}</span>
         </template>
       </el-table-column>
-
       <el-table-column align="center" label="创建时间">
         <template slot-scope="scope">
           <span>{{ scope.row.create_time }}</span>
         </template>
       </el-table-column>
-
       <el-table-column align="center" label="审核状态">
         <template slot-scope="scope">
           <span v-if="scope.row.status==0">待审核</span>
@@ -279,22 +268,22 @@
       </el-table-column>
       <el-table-column align="center" label="操作" width="200" fixed="right">
         <template slot-scope="scope">
-          <el-button
+         <el-button
             @click="toEdit(scope.row.id)"
-            v-if="scope.row.status==0"
-            v-show="menuShow[0].menu_name=='编辑'||menuShow[2].menu_name=='编辑'"
+            v-show="scope.row.status==0"
+            v-if="menuArr[0].menu_name=='编辑'||menuArr[2].menu_name=='编辑'||menuArr[1].menu_name=='编辑'"
             size="mini"
             type="success"
           >编辑</el-button>
           <el-button size="mini" type="info" disabled v-if="scope.row.status==1">已编辑</el-button>
           <el-button
             v-show="scope.row.status==0"
-            v-if="menuShow[1].menu_name=='审核'||menuShow[3].menu_name=='审核'||menuShow[2].menu_name=='审核'"
+            v-if="menuArr[1].menu_name=='审核'||menuArr[3].menu_name=='审核'||menuArr[2].menu_name=='审核'"
             size="mini"
             @click="shenhe( scope.row.id)"
             type="primary"
           >审核</el-button>
-          <el-button v-if="scope.row.status==1" size="mini" type="info" disabled>已审核</el-button>
+          <el-button v-show="scope.row.status==1" size="mini" type="info" disabled>已审核</el-button> 
         </template>
       </el-table-column>
     </el-table>
@@ -356,9 +345,10 @@ export default {
         end_time: "", //搜索结束时间
         uid: "" //如果有uid,查询该用户的记录
       },
+      menuArr:'',
+      menuArr_:'',
       tableData: "",
       opration: "",
-      menuShow: "",
       msg: "",
       form1: {
         id: "", // 审核主键id
@@ -373,15 +363,19 @@ export default {
     this.getadata();
     this.adminid = this.getdataCookie("admin_uid");
     this.$nextTick(function(){
-    this.opration = this.rolemenu[1].children[5].children;
-    if (this.opration.length > 0) {
-      this.menuShow = this.opration;
-    } else {
-      console.log(this.opration);
-      this.menuShow = "";
-    }
+    this.opration = this.rolemenu[1].children;
+    this.menuArr_=this.opration.filter(item=>{
+     return item.menu_name=="充值记录单"
     })
-
+    this.menuArr=this.menuArr_[0].children
+    console.log(this.menuArr)
+    // if (this.opration.length > 0) {
+    //   this.menuShow = this.opration;
+    // } else {
+    //   console.log(this.opration);
+    //   this.menuShow = "";
+    // }
+    })
   },
   methods: {
     //    deleteRow(index, rows) {
@@ -439,7 +433,7 @@ export default {
       // this.$apis.common.recharge_export_table().then(res=>{
       //   if(res.data.code==1){
       //     console.log(res.deda)
-      //     return res.deda.data
+      //     return res.deda.data 
       //   }
       // })
       this.$message({
@@ -459,7 +453,6 @@ export default {
         return index + 1;
       } else {
         let page = (this.form.page - 1) * 10 + 1;
-
         return index + page;
       }
     },
