@@ -115,7 +115,7 @@ if(this.page>1){
         console.log(index, row);
       },
         getadata(){
-            this.$common.share_config_list(this.page).then(res => {
+            this.$apis.common.share_config_list(this.page).then(res => {
                this.msg= res.data
                this.tableData = res.data.data.list
                

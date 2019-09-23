@@ -182,8 +182,21 @@ export default {
               del_share_config(params){    //删除分享素材列表的数据接口
                 let url ="/api/api_del_share_config"
                 return shuju.deletedata(url,params)}, 
-                
-              share_config_list(params){    //获取配置的分享素材接口
-              let url ="/api/api_share_config_list"
-              return shuju.getdata(url,params)}, 
+                              
+              edit_share_config(params){    //编辑分享素材配置获取数据
+                let url ="/api/api_edit_share_config"
+                return shuju.getdata(url,params)}, 
+                                              
+                save_share_config(params){    //保存编辑分享素材配置的数据接口
+                let url ="/api/api_save_share_config"
+                return shuju.putdata(url,params)},
+                                                              
+                add_share(params){    //添加分享素材列表数据接口
+                  let url ="/api/api_add_share"
+                  return shuju.postdata(url,params)},
+                                                                                
+                  user_list(params){    //获取学员账户接口
+                  let url ="/api/api_user_list"
+                  return shuju.getdata(url,params)},
+
 }

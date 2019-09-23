@@ -161,9 +161,9 @@
     </div>
 
     <el-button @click="goBack" v-if="active==1||active==2">取消</el-button>
-    <el-button style="margin-top: 12px;background-color:#e6563a; border:none;" @click="pre" v-if="active==2||active==3">上一步</el-button>
-    <el-button style="margin-top: 12px;background-color:#e6563a; border:none;" @click="next" v-if="active==1">下一步</el-button>
-    <el-button type="primary" @click="onSubmit" style="background-color:#e6563a; border:none;" v-if="active==2">立即创建</el-button>
+    <el-button style="margin-top: 12px;" @click="pre" v-if="active==2||active==3">上一步</el-button>
+    <el-button style="margin-top: 12px;" @click="next" v-if="active==1">下一步</el-button>
+    <el-button type="primary" @click="onSubmit" style="" v-if="active==2">立即创建</el-button>
     <!-- 设置充值链接 -->
     <!-- <div style="display:none" cols="20" id="biao1">{{copyurl1}}</div> -->
   </div>
@@ -245,7 +245,6 @@ export default {
       };
       this.$apis.menber.application_edit(parms1).then(res=>{
         if(res.data.code==1){   //从编辑的位置获取之前的信息
-   
             this.edit_data=res.data.data
             this.title=this.edit_data.title
             this.feedback=this.edit_data.remarks
@@ -388,10 +387,10 @@ export default {
 
       parms.subjects_data = this.subjects_data;
       parms.students_data = this.students_data;
-      this.$apis.common.application_add(parms).then(res => {
+      this.$apis.common.application_edit_put(parms).then(res => {
         if (res.data.code == 1) {
           this.$message({
-            message: "添加成功",
+            message: "修改成功",
             type: "success"
           });
           this.active = 3;

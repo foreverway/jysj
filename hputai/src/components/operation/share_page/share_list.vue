@@ -81,6 +81,7 @@
         </template>
       </el-table-column>
     </el-table>
+    <span v-if="msg">
     <el-pagination
       style="margin-top:30px; float: right;"
       background
@@ -89,7 +90,7 @@
       @next-click="next"
       @current-change="current"
       :total="msg.data.count"
-    ></el-pagination>
+    ></el-pagination></span>
   </div>
 </template>
 
@@ -112,7 +113,7 @@ export default {
         start_time: "",
         end_time: ""
       },
-      tableData: ""
+      tableData: []
     };
   },
   created() {

@@ -62,7 +62,7 @@
           </el-select>
         </el-form-item>
         <br />
-        <el-form-item label="进线项目：">
+        <el-form-item label="进线项目："  v-if="base_selct">
           <el-select
             clearable
             style="width:180px"
@@ -70,6 +70,7 @@
             @change="getadata"
             filterable
             placeholder="请选择"
+           v-if="base_selct"
           >
             <el-option
               v-for="item in base_selct.data.inproject_list"
@@ -87,6 +88,8 @@
             v-model="form.inchannel"
             placeholder="请选择"
             @change="getadata"
+           v-if="base_selct"
+
           >
             <el-option
               v-for="item in base_selct.data.inchannel_list"
@@ -104,6 +107,8 @@
             v-model="form.collection_class"
             placeholder="请选择"
             @change="getadata"
+           v-if="base_selct"
+
           >
             <el-option
               v-for="item in base_selct.data.collectionclass_list"
@@ -121,6 +126,8 @@
             v-model="form.collection_type"
             placeholder="请选择"
             @change="getadata"
+            v-if="base_selct"
+
           >
             <el-option
               v-for="item in base_selct.data.collectiontype_list"
@@ -165,19 +172,20 @@
         ></el-date-picker>
 
         <router-link to="/Rechargecreate">
-          <el-button type="primary" v-if="this.menuArr[0].menu_name=='新增'">新增充值记录单</el-button>
+          <!-- <el-button type="primary" v-if="this.menuArr[0].menu_name=='新增'">新增充值记录单</el-button> -->
+         <el-button type="primary" v-if="ifHere(65)==true">新增充值记录单</el-button>
+
         </router-link> 
       <!-- 在这里写一个函数  判断函数的返回值 -->
            <el-button
-          v-if="this.menuArr[1].menu_name=='导出'"
+          v-if="ifHere(66)==true"
           type="primary"
           @click="recharge_export"
         >导出</el-button>
-      
       </el-form>
     </div>
     <!-- 表格开始 -->
-    <el-table :data="tableData" :header-cell-style="{background:'#f4f4f4'}">
+    <el-table :data="tableData" :header-cell-style="{background:'#f4f4f4'}" >
       <el-table-column label="序号" type="index" :index="indexMethod"></el-table-column>
       <el-table-column :show-overflow-tooltip="true" align="center" label="学生姓名">
         <template slot-scope="scope">
@@ -271,14 +279,14 @@
          <el-button
             @click="toEdit(scope.row.id)"
             v-show="scope.row.status==0"
-            v-if="menuArr[0].menu_name=='编辑'||menuArr[2].menu_name=='编辑'||menuArr[1].menu_name=='编辑'"
+            v-if="ifHere(67)==true"
             size="mini"
             type="success"
           >编辑</el-button>
           <el-button size="mini" type="info" disabled v-if="scope.row.status==1">已编辑</el-button>
           <el-button
             v-show="scope.row.status==0"
-            v-if="menuArr[1].menu_name=='审核'||menuArr[3].menu_name=='审核'||menuArr[2].menu_name=='审核'"
+            v-if="ifHere(68)==true"
             size="mini"
             @click="shenhe( scope.row.id)"
             type="primary"
@@ -292,19 +300,19 @@
       title="审核"
       :visible.sync="dialogFormVisible4"
       width="300px"
-      close-on-click-modal="false"
     >
       <el-input type="textarea" v-model="form1.audit_content" placeholder="请输入理由"></el-input>
       <p style="margin-bottom:10px"></p>
       <el-button style="background-color:#67C23A;color:white;" @click="tongguo(1)">通过</el-button>
       <el-button type="danger" @click="tongguo(2)">不通过</el-button>
     </el-dialog>
-    <p style="margin-top: 30px;">
+    <p style="margin-top: 30px;" v-if="msg">
       <span class="mg_left">实收金额(元) :</span>
       <span class="monney">{{msg.data.inamount}}</span>
       <span class="mg_left">赠送金额(元)：</span>
       <span class="monney">{{msg.data.givenamount}}</span>
     </p>
+    <span  v-if="msg">
     <el-pagination
       style=" float: right;margin-bottom: 30px;"
       background
@@ -315,6 +323,8 @@
       :page-size="10"
       :total="msg.data.count"
     ></el-pagination>
+    </span>
+
   </div>
 </template>
 <script>
@@ -347,7 +357,7 @@ export default {
       },
       menuArr:'',
       menuArr_:'',
-      tableData: "",
+      tableData: [],
       opration: "",
       msg: "",
       form1: {
@@ -362,25 +372,21 @@ export default {
     //this.$apis.common.getuilcode()
     this.getadata();
     this.adminid = this.getdataCookie("admin_uid");
-    this.$nextTick(function(){
+   // this.$nextTick(function(){
     this.opration = this.rolemenu[1].children;
     this.menuArr_=this.opration.filter(item=>{
      return item.menu_name=="充值记录单"
     })
     this.menuArr=this.menuArr_[0].children
-    console.log(this.menuArr)
-    // if (this.opration.length > 0) {
-    //   this.menuShow = this.opration;
-    // } else {
-    //   console.log(this.opration);
-    //   this.menuShow = "";
-    // }
-    })
   },
   methods: {
-    //    deleteRow(index, rows) {
-    //   rows.splice(index, 1);
-    // },
+    ifHere(a){
+      let nameArr=[]
+      for(let i =0;i<this.menuArr.length;i++){
+        nameArr.push(this.menuArr[i].id)
+      }
+     return nameArr.includes(a)
+    },
     toEdit(a) {
       this.$router.push({ path: "/EditRecharge", query: { id: a } });
     },
