@@ -67,7 +67,7 @@
             clearable
             style="width:180px"
             v-model="form.inproject"
-            @change="getadata"
+            @change="getadata"  
             filterable
             placeholder="请选择"
            v-if="base_selct"

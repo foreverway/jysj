@@ -31,7 +31,6 @@
                 >分享记录列表</span>
               </router-link>
             </el-menu-item>
-
             <!-- <el-menu-item index v-if="isShowConfig==1"> -->
              <el-menu-item index="3">
               <router-link to="/ShareArticleConfig">
@@ -43,8 +42,8 @@
               </router-link>
             </el-menu-item>
           </el-menu>
-          <el-dropdown>
-          </el-dropdown>
+          <!-- <el-dropdown el-dropdown-menu>
+          </el-dropdown> -->
         </el-header>
 
         <el-main>

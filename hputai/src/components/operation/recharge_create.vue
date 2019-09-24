@@ -15,7 +15,7 @@
         <el-input v-model="form.given_amount" style="width:200px"></el-input>
       </el-form-item>
 
-      <el-form-item label="赠送类别：">
+      <el-form-item label="赠送类别：" v-if="msg.data">
         <el-select clearable v-model="form.given_type" placeholder="请选择">
           <el-option
             v-for="item in msg.data.giventype_list"
@@ -30,7 +30,7 @@
         <el-input v-model="form.given_remarks" style="width:300px" type="textarea"></el-input>
       </el-form-item>
 
-      <el-form-item label="收款类别：" prop="collection_class">
+      <el-form-item label="收款类别：" prop="collection_class" v-if="msg.data">
         <el-select clearable v-model="form.collection_class" placeholder="请选择">
           <el-option
             v-for="item in msg.data.collectionclass_list"
@@ -41,12 +41,13 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="收款方式：" style="width:1000px" prop="collection_type">
+      <el-form-item label="收款方式：" v-if="msg.data" style="width:1000px" prop="collection_type">
         <el-select
           clearable
           v-model="form.collection_type"
           placeholder="请选择支付方式"
           @input="getfinanceid"
+          v-if="msg.data"
         >
           <el-option
             v-for="item in msg.data.collectiontype_list"
@@ -87,7 +88,7 @@
           <el-option
             v-for="item in adviser"
             :key="item.id"
-            :label="item.adviser+item.admin_name"
+            :label="item.adviser"
             :value="item.id"
           ></el-option>
         </el-select>
@@ -98,7 +99,7 @@
           <el-option
             v-for="item in adviser"
             :key="item.id"
-            :label="item.adviser+item.admin_name"
+            :label="item.adviser"
             :value="item.id"
           ></el-option>
         </el-select>
@@ -217,6 +218,9 @@ export default {
     this.getdata();
   },
   methods: {
+    getadata(){
+      //暂时没有什么用
+    },
     getfinanceid() {
       //获取历史订单
       this.$apis.common.recharge_list(this.form.uname).then(res => {
