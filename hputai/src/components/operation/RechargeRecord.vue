@@ -267,7 +267,7 @@
         </template>
       </el-table-column>
       <el-table-column align="center" label="操作" width="200" fixed="right">
-        <template slot-scope="scope">
+        <template slot-scope="scope" v-if="menuArr!=undefined">
          <el-button
             @click="toEdit(scope.row.id)"
             v-show="scope.row.status==0"
