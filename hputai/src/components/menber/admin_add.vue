@@ -103,9 +103,9 @@
           this.$apis.menber.check_tel(parms).then(res=>{
               if(res){
                    this.$message({
-            message: "添加成功",
-            type: "success"
-          });
+                      message: "添加成功",
+                      type: "success"
+                    });
                   callback();
               }else{
                 callback(new Error('该手机号已经存在'));

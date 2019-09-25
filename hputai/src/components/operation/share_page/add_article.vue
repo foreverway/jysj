@@ -22,7 +22,6 @@
           <div slot="tip" class="el-upload__tip">用户素材列表显示,只能上传jpg/png文件</div>
         </el-upload>
       </el-form-item>
-
       <el-form-item>
         <el-button type="primary" @click="onSubmit">立即创建</el-button>
         <el-button @click="goback">取消</el-button>
@@ -56,15 +55,6 @@ export default {
       javascript: history.back(-1);
     },
 
-    handlePreview(file) {
-      let reader = new FileReader();
-      reader.readAsDataURL(file.raw);
-      reader.onload = () => {
-        let _base64 = reader.result;
-        let ba = _base64.split(",");
-        this.form.src_img = _base64;
-      };
-    },
 
     onSubmit() {
       this.$apis.common.add_share_config(this.form).then(res => {

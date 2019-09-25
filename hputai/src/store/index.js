@@ -9,7 +9,7 @@ const store = new Vuex.Store({
   state: { //要设置的全局访问的state对象
     live_list: [],
     rolemenu: [], // 菜单列表
-    banzhuren_list: [],
+    banzhuren_list: [],//班主任列表
     teacher_data: [], //讲师列表
     zhujiao_data: [], //助教列表
     jiaowu_data: [], //教务专员列表
@@ -19,6 +19,7 @@ const store = new Vuex.Store({
     teacher_course: {}, //查看老师课表
     student_course: {}, //查看学生课表
     look_arrange: {}, //查看排课
+    
   },
   getters: {
     doneTodos: state => {

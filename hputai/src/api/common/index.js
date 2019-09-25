@@ -123,7 +123,7 @@ export default {
           let url ="/api/api_teacher_edit"
           return shuju.putdata(url,params)},   
 
-        teacher_edit_get(params){    //教师课酬设置提交数据
+        teacher_edit_get(params){    //编辑教师获取数据接口
           let url ="/api/api_teacher_edit"
           return shuju.getdata(url,params)},   
           
@@ -198,5 +198,8 @@ export default {
                   user_list(params){    //获取学员账户接口
                   let url ="/api/api_user_list"
                   return shuju.getdata(url,params)},
-
+                                                                                
+                  recharge_check(params){    //检查学生姓名
+                    let url ="/api/api_recharge_check"
+                    return shuju.getdata(url,params)},
 }

@@ -3,7 +3,13 @@
     <h3>新增充值记录单</h3>
     <el-form :rules="rules" :model="form" ref="form" label-width="100px">
       <el-form-item label="学员姓名：" style="width:1000px" prop="uname">
-        <el-input v-model="form.uname" style="width:200px" @input="ifname"></el-input>
+        <el-input v-model="form.uname" style="width:200px" ></el-input>
+        <!-- <el-autocomplete
+  v-model="state"
+  :fetch-suggestions="querySearchAsync"
+  placeholder="请输入内容"
+  @select="handleSelect"
+></el-autocomplete> -->
         <span style="color:red;font-size:14px;">{{tipname}}</span>
       </el-form-item>
 
@@ -30,8 +36,8 @@
         <el-input v-model="form.given_remarks" style="width:300px" type="textarea"></el-input>
       </el-form-item>
 
-      <el-form-item label="收款类别：" prop="collection_class" v-if="msg.data">
-        <el-select clearable v-model="form.collection_class" placeholder="请选择">
+      <el-form-item label="收款类别：" prop="collection_class" >
+        <el-select clearable v-model="form.collection_class" placeholder="请选择" v-if="msg.data">
           <el-option
             v-for="item in msg.data.collectionclass_list"
             :key="item.id"
@@ -106,7 +112,7 @@
       </el-form-item>
 
       <el-form-item label="报课项目：" prop="classproject">
-        <el-select clearable v-model="form.classproject" placeholder="请选择">
+        <el-select clearable v-model="form.classproject" placeholder="请选择" v-if="msg.data">
           <el-option
             v-for="item in msg.data.classproject_list"
             :key="item.id"
@@ -140,22 +146,7 @@
 // import { type } from "os";
 export default {
   data() {
-    var YanuUname = (rules, value, callback) => {
-      if (!value) {
-        return callback(new Error("姓名不能为空"));
-      }
-      this.$apis.common.recharge_check(this.form.uname).then(res => {
-        if (res.data.code == 1) {
-          callback();
-        } else {
-          if (res.data.msg == "") {
-            callback(new Error("学生姓名不存在"));
-          } else {
-            callback(new Error(res.data.msg));
-          }
-        }
-      });
-    };
+   
 
     var YanuIn_amount = (rules, value, callback) => {
       if (!value) {
@@ -191,7 +182,7 @@ export default {
         teacher: "" //班主任
       },
       rules: {
-        uname: [{ required: true, validator: YanuUname, trigger: "blur" }],
+        uname: [{ required: true, validator: this.YanuUname, trigger: "blur" }],
         in_amount: [
           { required: true, validator: YanuIn_amount, trigger: "blur" }
         ],
@@ -218,6 +209,31 @@ export default {
     this.getdata();
   },
   methods: {
+      YanuUname(rules, value, callback) {
+      if (!value) {
+        return callback(new Error("姓名不能为空"));
+      }
+      let params={
+        uname:this.form.uname.toString()
+      }
+      this.$apis.common.recharge_check(params).then(res => {
+        if(res){
+          alert(11)
+  if (res.data.code == 1) {
+          callback();
+        } else {
+          if (res.data.code == 0) {
+            callback(new Error(res.data.msg));
+          } else {
+            callback(new Error(res.data.msg));
+          }
+        }
+        }else{
+          alert(55)
+        }
+      
+      });
+    },
     getadata(){
       //暂时没有什么用
     },
@@ -315,7 +331,10 @@ export default {
             }
           });
         } else {
-          console.log("error submit!!");
+             this.$message({
+                message: "请填写完整信息",
+                type: "warning"
+              });
           return false;
         }
       });

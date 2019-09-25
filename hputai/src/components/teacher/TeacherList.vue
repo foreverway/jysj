@@ -82,10 +82,11 @@
         </el-form-item>
         <el-form-item :inline="true" label="课酬标准">
     <el-table :data="table.tableData" style="width: 100%">
-      <el-table-column v-for="(col,colIndex) in table.tableHead"  :prop="col.name" :label="col.label">
+      <el-table-column v-for="(col,colIndex) in table.tableHead"  :prop="col.name" :label="col.label" :key="colIndex">
         <template slot-scope="scope">
           <el-input v-if="col.type == 'input'" v-model="scope.row[col.name]"></el-input>
           <template v-else>{{scope.row[col.name]}}</template>
+          <!-- 如果是button或者select就再判断 -->
         </template>
       </el-table-column>
     </el-table>
@@ -123,6 +124,79 @@
         <el-button type="primary" @click="centerDialogVisible_salary = false">确 定</el-button>
       </span>
     </el-dialog>
+    <!-- 编辑弹窗 -->
+     <el-dialog title="教师信息" :visible.sync="editDialog" width="50%">
+      <el-form label-width="100px" :model="editTeacher">
+        <el-form-item label="讲师姓名">
+          <p v-if="editTeacher.teacher_name">{{editTeacher.teacher_name}}</p>
+          <p v-if="!editTeacher.teacher_name">暂无数据</p>
+        </el-form-item>
+        <el-form-item label="选择科目">
+          <el-cascader
+            v-model="editTeacher.teach_subjects"
+            :options="options"
+            :props="{ expandTrigger: 'hover' }"
+            :show-all-levels="false"
+          ></el-cascader>
+        </el-form-item>
+          <el-form-item label="已选科目">
+          <p  v-if="editTeacher.teach_subjects">{{editTeacher.teach_subjects.toString()}}</p>
+           <p v-if="!editTeacher.teach_subjects">待选择..</p>
+        </el-form-item>
+         <el-form-item label="城市">
+          <el-cascader
+            v-model="editTeacher.address"
+            :options="this.region_list"
+            :props="{ expandTrigger: 'hover' }"
+            :show-all-levels="false"
+            @change="handleChange_1"
+          ></el-cascader>
+        </el-form-item>
+        <el-form-item label="类型">
+            <el-radio v-model="editTeacher.part_time" label="1">全职</el-radio>
+            <el-radio v-model="editTeacher.part_time" label="2">兼职</el-radio>
+        </el-form-item>
+        <el-form-item label="排课时间">
+             <el-input type="textarea" v-model="editTeacher.can_class"></el-input>
+        </el-form-item>
+        <el-form-item label="合同到期">
+          <el-date-picker
+            v-model="editTeacher.expiredate"
+            type="date"
+            placeholder="选择你的时间">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="教育简介">
+             <el-input type="textarea" v-model="editTeacher.introduction"></el-input>
+        </el-form-item>
+            <el-form-item label="银行账户">
+              <el-input v-model="editTeacher.bank_number"></el-input>
+            </el-form-item>
+              <el-form-item label="银行户名">
+              <el-input v-model="editTeacher.bank_name"></el-input>
+            </el-form-item>
+              <el-form-item label="开户行">
+              <el-input v-model="editTeacher.bank_open"></el-input>
+            </el-form-item>
+              <el-form-item label="讲师简历">
+          <el-upload 
+          class="upload-demo" 
+    action="www.anywey.com"    
+    :http-request="requestFile" 
+    accept=".pdf,.PDF,.doc,.dot,.docx,.dotx,.xls,.ppt,.png,.jpg" 
+    :limit="1"
+    :on-change="handlePreview"
+    :file-list="fileList"
+    :auto-upload="false">
+    <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                </el-upload>
+            </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="editDialog = false">取 消</el-button>
+        <el-button type="primary" @click="editDialog = false">确 定</el-button>
+      </span>
+    </el-dialog>
     <span v-if="msg">
     <el-pagination
       style="float:right;margin-top:20px;margin-bottom: 20px;"
@@ -142,7 +216,7 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-     
+     value_suj:'', //选择科目
       value_line:'', //选择线上线下
       options_line:[{ value: 1, label: '线上' },{value: 2, label: '线下' }],
       tableData: [],
@@ -154,20 +228,37 @@ export default {
       },
       options: [], //课程名称的数据
       options_: [], //总数据的数据
+     // address:this.region_list,//地址的数据
+
       msg: {},
       centerDialogVisible_salary: false, //入扣款弹窗
-      
+      editDialog: false, //编辑教师弹窗
       // teacher: [
-        
+        editTeacher:{      //编辑老师的信息
+          teacher_id:'',
+          part_time: '',//类型,
+          teach_subjects: '',//所授科目
+          can_class: '',  //排课时间
+          address: '', //城市
+          expiredate: "", //	合同到期
+          introduction: "", //	教育简介
+          bank_number:'',
+          bank_name: "",
+          bank_open: '',
+          resume:''
+        },
       // ],//根据科目生成的教师数据
         	table: {
-          	tableData: [{
-              subject_id: '2016-05-02',
-              online_type: '王小虎',
-              one_to_one: '上海市普陀区金沙江路 1518 弄',
-              small_class: '王小虎',
-               big_class: '王小虎',
-            }],
+          	tableData: [
+            //   {
+            //   subject_id: '2016-05-02',
+            //   online_type: '王小虎',
+            //   one_to_one: '上海市普陀区金沙江路 1518 弄',
+            //   small_class: '王小虎',
+            //    big_class: '王小虎',
+            //     address: '王小虎',
+            // }
+            ],
             tableHead: [{
             	name: 'subject_id',
               label: '科目',
@@ -195,20 +286,33 @@ export default {
               type: 'button'
             }]
           },
+          fileList:[], //上传文件所需
+         // temp:null, //上传文件所需
       teacher_name: "",
-      teacher_salary_data: {} //教师课酬
+      teacher_salary_data: {} ,//教师课酬
+            rules: {
+        title: [{ required: true, message: "请输入标题名称", trigger: "blur" }],
+        turn_url: [{ required: true, message: "请输链接地址", trigger: "blur" }]
+      }
     };
   },
   created() {
     this.$apis.students.getuilcode();
     this.getadata();
+    this.getSubjectList();
   },
-  computed: mapState(["rolemenu"]),
+  computed: mapState(["rolemenu","region_list"]),
   methods: {
     //序号排列
     teacherAction(a, b) {
       switch (a) {
         case "teacher_edit":
+          this.editDialog=true
+          this.$apis.common.teacher_edit_get({teacher_id:b.teacher_id}).then(res=>{
+            if(res.data.code==1){
+              this.editTeacher=res.data.data
+            }
+          })
           console.log(b);
           break;
         case "teacher_info":
@@ -227,13 +331,50 @@ export default {
               }else{
                 this.teacher=res.data.data
               }
-              
             }
           });
+
+          break;
+        case "teacher_delete":
+          console.log(b);
+          break;
+      }
+    },
+        handlePreview(file) {
+      let reader = new FileReader();
+      reader.readAsDataURL(file.raw);
+      reader.onload = () => {
+        let _base64 = reader.result;
+        let ba = _base64.split(",");
+        this.form.src_img = _base64;
+      };
+    },
+     handlePreview(file) {
+           console.log(file.raw)
+          this.temp.pdf_file = file.raw
+          console.log(this.temp)
+        },
+        requestFile(param) {
+          var fileObj = param.file
+          console.log(fileObj)
+          this.file = fileObj
+          var FileController = this.uploadUrl    // 接收上传文件的后台地址
+          var form = new FormData()    // FormData 对象
+          form.append('pdf_file', fileObj)    // 文件对象
+          // form.append('xxx', 'xxx')    // 其他参数
+          var xhr = new XMLHttpRequest()    // XMLHttpRequest 对象
+          xhr.open('post', FileController, true)
+          xhr.send(form)
+          console.log(this.fileList)
+        },
+    deleteRow(index, rows) {
+      //删除那一列
+      rows.splice(index, 1);
+    },
+    getSubjectList(){
           let parms = {
             admin_id: this.getdataCookie("admin_id")
           };
-
           //获取科目的数据
           this.$apis.common.subject_list(parms).then(res => {
             if (res.data.code == 1) {
@@ -264,19 +405,9 @@ export default {
               }
             }
           });
-          break;
-        case "teacher_delete":
-          console.log(b);
-          break;
-      }
-    },
-    deleteRow(index, rows) {
-      //删除那一列
-      rows.splice(index, 1);
     },
     //选择报读科目的函数
     handleChange_1(targetName) {
-      console.log(this.teacher)
       var lastName = targetName.length == 1 ? targetName[0] : targetName[1];
       //判断标题
       let oneArr = this.options_.filter(item => item.subject_name == lastName);
@@ -290,7 +421,7 @@ export default {
             let oneArr_1 = val_1.filter(item => item.subject_name == lastName); //对子元素进行赛选
             if (oneArr_1.length > 0) {
               //let newTabName = ++this.tabIndex_1 + "";
-              this.teacher.push({
+              this.table.tableData.push({
                 subject_id: oneArr_1[0].subject_id,
                 online_type: 1,
                 one_to_one: 1000,
@@ -303,7 +434,6 @@ export default {
         }
       } else {
         //没有子元素
-        console.log(oneArr[0].id);
         //let newTabName = ++this.tabIndex_1 + "";
         this.teacher.push({
           subject_id: lastName,
