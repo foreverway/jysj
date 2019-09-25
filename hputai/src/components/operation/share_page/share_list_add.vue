@@ -4,7 +4,6 @@
       <el-form-item label="学生姓名：">
         <el-transfer
           filterable
-          :filter-method="filterMethod"
           :titles="['选择学员', '已选学员']"
           filter-placeholder="请输入学员姓名"
           v-model="form1.uid"
@@ -38,7 +37,6 @@
 </template>
 <script>
 export default {
-  name: "share_list_add",
   data() {
     return {
       data: [],
@@ -57,7 +55,7 @@ export default {
 
   methods: {
     onSubmit() {
-      this.$common.add_share(this.form1).then(res => {
+      this.$apis.common.add_share(this.form1).then(res => {
         if (res.data.code == 1) {
           this.$message({
             message: "添加成功",
@@ -69,12 +67,13 @@ export default {
         }
       });
     },
+
     // 返回上一页
     goback() {
-      javascript: history.back(-1);
+     history.back(-1);
     },
     getadata() {
-      this.$common.user_list().then(res => {
+      this.$apis.common.user_list().then(res => {
         if (res.data.code == 1) {
           this.students = res.data.data.list;
           this.students.forEach(element => {
@@ -86,7 +85,7 @@ export default {
         }
       });
 
-      this.$common.share_config_list().then(res => {
+      this.$apis.common.share_config_list().then(res => {
         this.shar_config = res.data.data.list;
       });
     }

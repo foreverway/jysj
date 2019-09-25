@@ -88,5 +88,9 @@ export default {
    look_arrange(params){         //获取排课信息
      let url='/api/api_look_arrange'
      return shuju.getdata(url,params)
-   }
+   },
+   application_edit_put(params){ //编辑报名需求提交保存数据接口
+    let url='/api/api_application_edit'
+    return shuju.putdata(url,params)
+  }
 }

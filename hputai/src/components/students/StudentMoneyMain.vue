@@ -58,5 +58,8 @@
   margin:15px 0 15px 20px;
   font-weight: 700;
 }
+.el-header{
+  background-color: #fff;
+}
 </style>
 

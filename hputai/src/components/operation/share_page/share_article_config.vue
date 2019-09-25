@@ -89,7 +89,6 @@
       :visible.sync="dialogFormVisible3"
       width="475px"
       custom-class="yulan_height"
-      close-on-click-modal="false"
     ></el-dialog>
 
     <el-pagination
