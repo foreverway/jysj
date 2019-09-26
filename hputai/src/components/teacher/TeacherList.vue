@@ -128,15 +128,17 @@
      <el-dialog title="教师信息" :visible.sync="editDialog" width="50%">
       <el-form label-width="100px" :model="editTeacher">
         <el-form-item label="讲师姓名">
-          <p v-if="editTeacher.teacher_name">{{editTeacher.teacher_name}}</p>
-          <p v-if="!editTeacher.teacher_name">暂无数据</p>
+          <p v-if="teacher_name">{{teacher_name}}</p>
+          <p v-if="!teacher_name">暂无数据</p>
         </el-form-item>
         <el-form-item label="选择科目">
           <el-cascader
-            v-model="editTeacher.teach_subjects"
+            v-model="this_subject"
             :options="options"
             :props="{ expandTrigger: 'hover' }"
             :show-all-levels="false"
+            @change="choose_suj"
+
           ></el-cascader>
         </el-form-item>
           <el-form-item label="已选科目">
@@ -146,10 +148,10 @@
          <el-form-item label="城市">
           <el-cascader
             v-model="editTeacher.address"
-            :options="this.region_list"
+            :options="this.region"
             :props="{ expandTrigger: 'hover' }"
             :show-all-levels="false"
-            @change="handleChange_1"
+             @change="choose_city"
           ></el-cascader>
         </el-form-item>
         <el-form-item label="类型">
@@ -163,6 +165,7 @@
           <el-date-picker
             v-model="editTeacher.expiredate"
             type="date"
+            value-format="yyyy-MM-dd"
             placeholder="选择你的时间">
           </el-date-picker>
         </el-form-item>
@@ -179,25 +182,26 @@
               <el-input v-model="editTeacher.bank_open"></el-input>
             </el-form-item>
               <el-form-item label="讲师简历">
-          <el-upload 
-          class="upload-demo" 
-    action="www.anywey.com"    
-    :http-request="requestFile" 
-    accept=".pdf,.PDF,.doc,.dot,.docx,.dotx,.xls,.ppt,.png,.jpg" 
-    :limit="1"
-    :on-change="handlePreview"
-    :file-list="fileList"
-    :auto-upload="false">
-    <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                </el-upload>
+              <el-upload 
+                  class="upload-demo" 
+                  action="www.anywey.com"    
+                  :http-request="requestFile" 
+                  accept=".pdf,.PDF,.doc,.dot,.docx,.dotx,.xls,.ppt,.png,.jpg" 
+                  :limit="1"
+                  list-type="picture"
+                  :on-change="handlePreview"
+                  :file-list="fileList"
+                  :auto-upload="false">
+                  <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+              </el-upload>
             </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="editDialog = false">取 消</el-button>
-        <el-button type="primary" @click="editDialog = false">确 定</el-button>
+        <el-button type="primary" @click="submitEdit">提交</el-button>
       </span>
     </el-dialog>
-    <span v-if="msg">
+    <span v-if="msg.data">
     <el-pagination
       style="float:right;margin-top:20px;margin-bottom: 20px;"
       background
@@ -229,13 +233,12 @@ export default {
       options: [], //课程名称的数据
       options_: [], //总数据的数据
      // address:this.region_list,//地址的数据
-
+      region:[],//改造后的城市列表
       msg: {},
       centerDialogVisible_salary: false, //入扣款弹窗
       editDialog: false, //编辑教师弹窗
       // teacher: [
         editTeacher:{      //编辑老师的信息
-          teacher_id:'',
           part_time: '',//类型,
           teach_subjects: '',//所授科目
           can_class: '',  //排课时间
@@ -245,7 +248,9 @@ export default {
           bank_number:'',
           bank_name: "",
           bank_open: '',
-          resume:''
+          resume:'',
+          teacher_id:'',
+
         },
       // ],//根据科目生成的教师数据
         	table: {
@@ -286,7 +291,9 @@ export default {
               type: 'button'
             }]
           },
+          this_subject:"",//当前选择的科目
           fileList:[], //上传文件所需
+          arr:[],//选择科目的数组
          // temp:null, //上传文件所需
       teacher_name: "",
       teacher_salary_data: {} ,//教师课酬
@@ -311,12 +318,42 @@ export default {
           this.$apis.common.teacher_edit_get({teacher_id:b.teacher_id}).then(res=>{
             if(res.data.code==1){
               this.editTeacher=res.data.data
+              this.editTeacher.teacher_id=b.teacher_id
+              console.log(res.data.data)
             }
           })
-          console.log(b);
+         // console.log(b.teacher_id)
+          
+          console.log(this.editTeacher.teacher_id)
+          this.teacher_name=b.teacher_name
+          //console.log(b)
+          //改造城市列表
+                        for (let i = 0; i < this.region_list.length; i++) {
+                var val = this.region_list[i];
+                var children = [];
+                if (val.children) {
+                  for (let j = 0; j < val.children.length; j++) {
+                    var val1 = val.children[j];
+                    children.push({
+                      value: val1.label,
+                      label: val1.label
+                    });
+                  }
+                  this.region.push({
+                    value: val.label,
+                    label: val.label,
+                    children: children
+                  });
+                } else {
+                  this.region.push({
+                    value: val.label,
+                    label: val.label
+                  });
+                }
+              }
           break;
         case "teacher_info":
-          console.log(b);
+          //console.log(b);
           break;
         case "teacher_salary":
           let params = {
@@ -340,23 +377,23 @@ export default {
           break;
       }
     },
-        handlePreview(file) {
-      let reader = new FileReader();
-      reader.readAsDataURL(file.raw);
-      reader.onload = () => {
-        let _base64 = reader.result;
-        let ba = _base64.split(",");
-        this.form.src_img = _base64;
-      };
-    },
+    //     handlePreview(file) {
+    //   let reader = new FileReader();
+    //   reader.readAsDataURL(file.raw);
+    //   reader.onload = () => {
+    //     let _base64 = reader.result;
+    //     let ba = _base64.split(",");
+    //     this.form.src_img = _base64;
+    //   };
+    // },
      handlePreview(file) {
-           console.log(file.raw)
-          this.temp.pdf_file = file.raw
-          console.log(this.temp)
+          // this.temp.pdf_file = file.raw
+          this.editTeacher.resume = file.raw
+
         },
         requestFile(param) {
           var fileObj = param.file
-          console.log(fileObj)
+          //console.log(fileObj)
           this.file = fileObj
           var FileController = this.uploadUrl    // 接收上传文件的后台地址
           var form = new FormData()    // FormData 对象
@@ -365,7 +402,25 @@ export default {
           var xhr = new XMLHttpRequest()    // XMLHttpRequest 对象
           xhr.open('post', FileController, true)
           xhr.send(form)
-          console.log(this.fileList)
+          // console.log(form)
+          // console.log(this.fileList)
+        },
+        submitEdit(){
+          console.log(this.editTeacher)
+          this.$apis.common.teacher_edit_put(this.editTeacher).then(res=>{
+            if(res.data.code==1){
+              this.editDialog = false
+              this.$message({
+                type:'success',
+                message:"上传成功"
+              })
+            }else{
+                this.$message({
+                type:'success',
+                message:res.data.msg
+              })
+            }
+          })
         },
     deleteRow(index, rows) {
       //删除那一列
@@ -405,6 +460,16 @@ export default {
               }
             }
           });
+    },
+    choose_suj(targetName){
+      var lastName = targetName.length == 1 ? targetName[0] : targetName[1];
+      this.arr.push(lastName)
+      this.editTeacher.teach_subjects=this.arr.toString()
+      //科目赋值
+    },
+    choose_city(targetName){
+      //城市赋值
+      this.editTeacher.address=targetName.toString()
     },
     //选择报读科目的函数
     handleChange_1(targetName) {

@@ -202,4 +202,8 @@ export default {
                   recharge_check(params){    //检查学生姓名
                     let url ="/api/api_recharge_check"
                     return shuju.getdata(url,params)},
+                                                                                                    
+                    recharge_add(params){    //新增充值记录单
+                    let url ="/api/api_recharge_add"
+                    return shuju.postdata(url,params)},
 }

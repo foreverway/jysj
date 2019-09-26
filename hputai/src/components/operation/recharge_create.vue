@@ -3,7 +3,7 @@
     <h3>新增充值记录单</h3>
     <el-form :rules="rules" :model="form" ref="form" label-width="100px">
       <el-form-item label="学员姓名：" style="width:1000px" prop="uname">
-        <el-input v-model="form.uname" style="width:200px" ></el-input>
+        <el-input v-model="form.uname" style="width:200px" @input="ifname"></el-input>
         <!-- <el-autocomplete
   v-model="state"
   :fetch-suggestions="querySearchAsync"
@@ -146,8 +146,6 @@
 // import { type } from "os";
 export default {
   data() {
-   
-
     var YanuIn_amount = (rules, value, callback) => {
       if (!value) {
         return callback(new Error("金额不能为空"));
@@ -210,29 +208,27 @@ export default {
   },
   methods: {
       YanuUname(rules, value, callback) {
+              let params={
+        uname:this.form.uname
+      }
       if (!value) {
         return callback(new Error("姓名不能为空"));
-      }
-      let params={
-        uname:this.form.uname.toString()
-      }
+      }else{
       this.$apis.common.recharge_check(params).then(res => {
-        if(res){
-          alert(11)
-  if (res.data.code == 1) {
+  if (res) {
           callback();
         } else {
-          if (res.data.code == 0) {
-            callback(new Error(res.data.msg));
-          } else {
-            callback(new Error(res.data.msg));
-          }
+          // if (res.data.code == 0) {
+          //   callback(new Error(res.data.msg));
+          // } else {
+          //   callback(new Error(res.data.msg));
+          // }
+           callback(new Error("姓名不存在"));
         }
-        }else{
-          alert(55)
-        }
-      
       });
+      }
+
+
     },
     getadata(){
       //暂时没有什么用
@@ -303,7 +299,8 @@ export default {
       javascript: history.back(-1);
     },
     ifname() {
-      this.$apis.common.recharge_check(this.form.uname).then(res => {
+      if(this.form.uname!=''){
+      this.$apis.common.recharge_check({uname:this.form.uname}).then(res => {
         if (res.data.code == 1) {
           this.tipname = "";
           let num = parseInt(res.data.data.banzhuren_id);
@@ -314,6 +311,8 @@ export default {
           }
         }
       });
+      }
+
     },
     add(formName) {
       this.$refs[formName].validate(valid => {
