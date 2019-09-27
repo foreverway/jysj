@@ -182,23 +182,39 @@
               <el-input v-model="editTeacher.bank_open"></el-input>
             </el-form-item>
               <el-form-item label="讲师简历">
-              <el-upload 
+              <!-- <el-upload 
                   class="upload-demo" 
                   action="www.anywey.com"    
-                  :http-request="requestFile" 
                   accept=".pdf,.PDF,.doc,.dot,.docx,.dotx,.xls,.ppt,.png,.jpg" 
-                  :limit="1"
+                  :limit="3"
+                  multiple
+                  :on-exceed="handleExceed"
                   list-type="picture"
                   :on-change="handlePreview"
                   :file-list="fileList"
                   :auto-upload="false">
                   <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-              </el-upload>
+              </el-upload> -->
+              <el-upload
+              class="upload-demo"
+              ref="upload"
+              action="doUpload"
+              :limit="2"
+              multiple
+              :file-list="fileList"
+              :before-upload="beforeUpload">
+              <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+              <a href="./static/moban.xlsx" rel="external nofollow" download="模板"><el-button size="small" type="success">下载模板</el-button></a>
+              <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button> -->
+              <div slot="tip" class="el-upload__tip">只能上传excel文件，且不超过5MB</div>
+              <div slot="tip" class="el-upload-list__item-name">{{fileName}}</div>
+              </el-upload> 
+
             </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="editDialog = false">取 消</el-button>
-        <el-button type="primary" @click="submitEdit">提交</el-button>
+        <el-button type="primary" @click="submitUpload">提交</el-button>
       </span>
     </el-dialog>
     <span v-if="msg.data">
@@ -248,9 +264,8 @@ export default {
           bank_number:'',
           bank_name: "",
           bank_open: '',
-          resume:'',
+          resume:[],
           teacher_id:'',
-
         },
       // ],//根据科目生成的教师数据
         	table: {
@@ -300,7 +315,8 @@ export default {
             rules: {
         title: [{ required: true, message: "请输入标题名称", trigger: "blur" }],
         turn_url: [{ required: true, message: "请输链接地址", trigger: "blur" }]
-      }
+      },
+      fileName:'',
     };
   },
   created() {
@@ -319,16 +335,16 @@ export default {
             if(res.data.code==1){
               this.editTeacher=res.data.data
               this.editTeacher.teacher_id=b.teacher_id
-              console.log(res.data.data)
+               this.editTeacher.resume=[]
+              //console.log(res.data.data)
             }
           })
          // console.log(b.teacher_id)
           
-          console.log(this.editTeacher.teacher_id)
           this.teacher_name=b.teacher_name
           //console.log(b)
           //改造城市列表
-                        for (let i = 0; i < this.region_list.length; i++) {
+                for (let i = 0; i < this.region_list.length; i++) {
                 var val = this.region_list[i];
                 var children = [];
                 if (val.children) {
@@ -377,34 +393,66 @@ export default {
           break;
       }
     },
-    //     handlePreview(file) {
-    //   let reader = new FileReader();
-    //   reader.readAsDataURL(file.raw);
-    //   reader.onload = () => {
-    //     let _base64 = reader.result;
-    //     let ba = _base64.split(",");
-    //     this.form.src_img = _base64;
-    //   };
-    // },
-     handlePreview(file) {
-          // this.temp.pdf_file = file.raw
-          this.editTeacher.resume = file.raw
 
+    beforeUpload(file){
+    debugger
+    console.log(file,'文件');
+    this.files = file;
+    const extension = file.name.split('.')[1] === 'pdf'
+    const extension2 = file.name.split('.')[1] === 'PDF'
+    const extension3 = file.name.split('.')[1] === 'doc'
+    const extension4 = file.name.split('.')[1] === 'dot'
+    const extension5 = file.name.split('.')[1] === 'docx'
+    const extension6 = file.name.split('.')[1] === 'ppt'
+    const extension7 = file.name.split('.')[1] === 'png'
+    const extension8 = file.name.split('.')[1] === 'jpg'
+    const extension9 = file.name.split('.')[1] === 'xlsx'
+    const isLt2M = file.size / 1024 / 1024 < 5
+    if (!extension && !extension2 && !extension3 && !extension4 && !extension5 && !extension6 && !extension7 && !extension8 && !extension9 ) {
+    this.$message.warning('上传模板只能是 xls、xlsx格式!')
+    return
+    }
+    if (!isLt2M) {
+    this.$message.warning('上传模板大小不能超过 5MB!')
+    return
+    }
+    this.fileName = file.name;
+    return false // 返回false不会自动上传
+    },
+     handlePreview(param) {
+          this.editTeacher.resume.push(param)    // 文件对象
         },
-        requestFile(param) {
-          var fileObj = param.file
-          //console.log(fileObj)
-          this.file = fileObj
-          var FileController = this.uploadUrl    // 接收上传文件的后台地址
-          var form = new FormData()    // FormData 对象
-          form.append('pdf_file', fileObj)    // 文件对象
-          // form.append('xxx', 'xxx')    // 其他参数
-          var xhr = new XMLHttpRequest()    // XMLHttpRequest 对象
-          xhr.open('post', FileController, true)
-          xhr.send(form)
-          // console.log(form)
-          // console.log(this.fileList)
-        },
+submitUpload() {
+  debugger
+  console.log('上传'+this.files.name)
+  if(this.fileName == ""){
+   this.$message.warning('请选择要上传的文件！')
+   return false
+  }
+  let fileFormData = new FormData();
+  fileFormData.append('file', this.files, this.fileName);//filename是键，file是值，就是要传的文件，test.zip是要传的文件名
+  let requestConfig = {
+   headers: {
+   'Content-Type': 'multipart/form-data'
+   },
+  }
+  this.$apis.common.teacher_edit_put( fileFormData, requestConfig).then((res) => {
+   debugger
+   if (data && data.code === 0) {
+   this.$message({
+    message: '操作成功',
+    type: 'success',
+    duration: 1500,
+    onClose: () => {
+    this.visible = false
+    this.$emit('refreshDataList')
+    }
+   })
+   } else {
+   this.$message.error(data.msg)
+   }
+  }) 
+  },
         submitEdit(){
           console.log(this.editTeacher)
           this.$apis.common.teacher_edit_put(this.editTeacher).then(res=>{
@@ -469,7 +517,10 @@ export default {
     },
     choose_city(targetName){
       //城市赋值
+      if(targetName){
       this.editTeacher.address=targetName.toString()
+
+      }
     },
     //选择报读科目的函数
     handleChange_1(targetName) {
