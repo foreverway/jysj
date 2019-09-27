@@ -431,6 +431,7 @@ submitUpload() {
   }
   let fileFormData = new FormData();
   fileFormData.append('file', this.files, this.fileName);//filename是键，file是值，就是要传的文件，test.zip是要传的文件名
+  fileFormData.append('part_time',this.editTeacher.part_time)
   let requestConfig = {
    headers: {
    'Content-Type': 'multipart/form-data'
@@ -438,7 +439,7 @@ submitUpload() {
   }
   this.$apis.common.teacher_edit_put( fileFormData, requestConfig).then((res) => {
    debugger
-   if (data && data.code === 0) {
+   if (data && data.code === 1) {
    this.$message({
     message: '操作成功',
     type: 'success',

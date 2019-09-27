@@ -206,4 +206,8 @@ export default {
                     recharge_add(params){    //新增充值记录单
                     let url ="/api/api_recharge_add"
                     return shuju.postdata(url,params)},
+
+                    add_share_config(params){    //新增充值记录单
+                      let url ="/api/api_add_share_config"
+                      return shuju.postdata(url,params)},
 }
