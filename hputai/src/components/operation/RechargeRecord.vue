@@ -118,7 +118,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-
+        
         <el-form-item label="收款方式：">
           <el-select
             clearable
@@ -127,10 +127,28 @@
             placeholder="请选择"
             @change="getadata"
             v-if="base_selct"
-
           >
             <el-option
               v-for="item in base_selct.data.collectiontype_list"
+              :key="item.id"
+              :label="item.name"
+              :value="item.name"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+
+                <el-form-item label="报课项目">
+          <el-select
+            clearable
+            style="width:140px"
+            
+            v-model="form.classproject"
+            placeholder="请选择"
+            @change="getadata"
+            v-if="base_selct"
+          >
+            <el-option
+              v-for="item in base_selct.data.classproject_list"
               :key="item.id"
               :label="item.name"
               :value="item.name"
@@ -151,7 +169,6 @@
             <el-option label="审核不通过" value="2"></el-option>
           </el-select>
         </el-form-item>
-
         <el-date-picker
           style="width:200px"
           @change="getadata"
@@ -348,6 +365,7 @@ export default {
         inchannel: "", //进线渠道 ,进线渠道,1百度SEM,2转介绍
         consultant1: "", //顾问1
         teacher: "", //班主任
+        classproject:'',//报课项目
         collection_class: "", //收款类别
         collection_type: "", //收款方式，1微信，2支付宝，3银联转账，4用户自行充值
         status: "", //审核状态，0待审核，1审核通过，2审核不通过

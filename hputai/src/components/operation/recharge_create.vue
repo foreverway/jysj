@@ -235,7 +235,7 @@ export default {
     },
     getfinanceid() {
       //获取历史订单
-      this.$apis.common.recharge_list(this.form.uname).then(res => {
+      this.$apis.common.user_recharge_list({uname:this.form.uname}).then(res => {
         if (res.data.code == 1) {
           this.financeId = res.data.data.list;
         }

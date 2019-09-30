@@ -63,9 +63,11 @@
 </el-table-column>
 <el-table-column align="center" label="操作" width="200px" fixed="right">
      <template slot-scope="scope">
-          <div v-show="scope.row.attendance_status==2" style="color:#169BD5"><span style="cursor:pointer;" @click="seeMore(scope)">查看考勤详情</span><span  @click="payMoney(scope.row)" style="cursor:pointer;display:inline-block;background-color:red;color:white;width:45px;border-radius:5px;margin:0 3px;">{{opration[2].menu_name}}</span></div>
+          <div v-show="scope.row.attendance_status==2&&scope.row.is_forward!==1" style="color:#169BD5"><span style="cursor:pointer;" @click="seeMore(scope)">查看考勤详情</span><el-button type="danger" size="mini"  @click="payMoney(scope.row)" >{{opration[2].menu_name}}</el-button></div>
           <div v-show="scope.row.attendance_status==1" style="color:#169BD5"><span style="cursor:pointer;" @click="seeMore(scope)">查看考勤详情</span></div>
-         <div v-show="scope.row.attendance_status==0" ><span  @click="normal(scope.row)" style="cursor:pointer;display:inline-block;border:1px solid green;width:45px;border-radius:5px;margin:0 3px;background-color:green;color:white;">{{opration[0].menu_name}}</span><span  @click="unnormal(scope.row)" style="cursor:pointer;display:inline-block;border:1px solid red;background-color:red;color:white;width:45px;border-radius:5px;margin:0 3px;">{{opration[1].menu_name}}</span></div>
+         <div v-show="scope.row.attendance_status==0" ><el-button size="mini" @click="normal(scope.row)" type="success">{{opration[0].menu_name}}</el-button><el-button size="mini" @click="unnormal(scope.row)" type="danger">{{opration[1].menu_name}}</el-button></div>
+         <div v-show="scope.row.is_forward==1" style="color:#169BD5"><span style="cursor:pointer;" @click="seeMore(scope)">查看考勤详情</span><el-button  @click="payMoney(scope.row)" type="info" disabled size="mini">{{opration[2].menu_name}}</el-button></div>
+
       </template>
 </el-table-column>
 
@@ -101,7 +103,7 @@
 </el-form>
   <span slot="footer" class="dialog-footer">  
     <el-button @click="normal_post()">取 消</el-button>
-    <el-button type="primary" @click="centerDialogVisible_normal = false">确 定</el-button>
+    <el-button type="primary" @click="normal_post">确 定</el-button>
   </span>
 </el-dialog>
 <!-- 异动的弹出页面 -->
@@ -110,14 +112,7 @@
   :visible.sync="centerDialogVisible_unnormal"
  width="800px"
   center>
-    <!-- <el-form : :model="unnormalData" >
-  <el-form-item label="已排课时">
-    <el-input v-model="unnormalData.classhour"></el-input>
-  </el-form-item>
-    </el-form> -->
-      <!-- <el-form-item label="已排课时" >
-   <el-input v-model="unnormalData.classhour"></el-input> 
-  </el-form-item> -->
+
   <p style="height:40px;width:100%;padding:10px 15px;"><span style="display:inline-block;width:80px;">已排课时</span>{{this.unnormalData.classhour}}</p>
   <el-form :inline="true"  :model="unnormalData" class="demo-form-inline">
 
@@ -145,46 +140,7 @@
     <el-button type="primary" @click="unnormal_post()" >确 定</el-button>
   </span>
 </el-dialog>
-<!-- 查看详情 -->
-<!-- <el-dialog
-  title="考勤详情"
-  :visible.sync="centerDialogVisible_normal"
-  width="30%"
-  center>
-  <el-form  label-width="80px" :model="normalData">
-  <el-form-item label="已排课时">
-    <el-input v-model="normalData.classhour"></el-input>
-  </el-form-item>
-  <el-form-item label="实上课时">
-    <el-input v-model="normalData.true_classhour"></el-input>
-  </el-form-item>
-  <el-form-item label="老师核准">
-    <el-input v-model="normalData.teacher_classhour"></el-input>
-  </el-form-item>
-  <el-form-item label="学生核准">
-    <el-input v-model="normalData.student_classhour"></el-input>
-  </el-form-item>
-  <el-form-item label="备注">
-    <el-input v-model="normalData.remarks"></el-input>
-  </el-form-item>
-</el-form>
-  <span slot="footer" class="dialog-footer">  
-    <el-button @click="normal_post()">取 消</el-button>
-    <el-button type="primary" @click="centerDialogVisible_seeMore = false">确 定</el-button>
-  </span>
-</el-dialog> -->
-<!-- 结账的弹出页面 -->
-<el-dialog
-  title="结账页面"
-  :visible.sync="centerDialogVisible_paymoney"
-  width="30%"
-  center>
-  <span>在这里显示结账信息</span>
-  <span slot="footer" class="dialog-footer">
-    <el-button @click="centerDialogVisible_paymoney = false">取 消</el-button>
-    <el-button type="primary"  @click="sureMoney">确 定</el-button>
-  </span>
-</el-dialog>
+
 <!-- 查看详情的弹出页面 -->
 <el-dialog
   title="查看详情"
@@ -273,7 +229,6 @@ export default {
       msg: {},
       centerDialogVisible_normal: false,  //正常
       centerDialogVisible_unnormal: false,  //异动
-      centerDialogVisible_paymoney: false,  //结账
       centerDialogVisible_seeMore:false,
       opration:"",//操作选项
       labelPosition: 'left',
@@ -299,6 +254,10 @@ export default {
     normal_post(){
  this.$apis.common.attendance_add(this.normalData).then(res=>{
         if(res.data.code==1){
+               this.$message({
+          message:'成功',
+          type:"success"
+        })
              this.centerDialogVisible_normal = false
         }
       })
@@ -340,18 +299,33 @@ export default {
         }
       })
     },
-    payMoney(){
-            this.centerDialogVisible_paymoney = true
-    },
-    sureMoney(data){
- let params={
+
+    payMoney(data){
+       let params={
         course_id:data.course_id
       }
-      this.$apis.common.carryforward(params).then(res=>{
+        this.$confirm('此操作将确定转结, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+                this.$apis.common.carryforward(params).then(res=>{
         if(res.data.code==1){
-         this.centerDialogVisible_paymoney = false
+           this.$message({
+            type: 'success',
+            message: '转结成功!'
+          });
         }
       })
+
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消转结'
+          });          
+        });
+
+
     }
     ,
     //序号排列

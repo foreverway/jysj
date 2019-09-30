@@ -45,7 +45,10 @@ import VirtualMonney from '@/components/students/VirtualMonney'
 import LearningMoney from '@/components/students/LearningMoney'
 //师资管理
 import TeacherAssess from '@/components/teacher/TeacherAssess'  //老师评价
-import TeacherList from '@/components/teacher/TeacherList'  //老师列表
+import TeacherList from '@/components/teacher/TeacherList'  //老师列表TeacherData
+import TeacherData from '@/components/teacher/TeacherData'  //授课数据TeacherData
+import ToAssessTeacher from '@/components/teacher/ToAssessTeacher'  //评价老师ToAssessTeacher
+
 //系统设置路由
 import SystemMain from '@/components/system/system_main'
 //系统设置
@@ -127,6 +130,15 @@ export default new Router({
         {
           path: '/TeacherList',//TeacherList  老师列表
           component: TeacherList
+        },
+        {
+          path: '/TeacherData',//TeacherData  老师列表
+          component: TeacherData
+        },
+        {
+          path: '/ToAssessTeacher/:id',//ToAssessTeacher  [评价老师]
+          name:"ToAssessTeacher",
+          component: ToAssessTeacher
         },
         {
           path: '/AddLink',//

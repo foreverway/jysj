@@ -207,11 +207,19 @@ export default {
                     let url ="/api/api_recharge_add"
                     return shuju.postdata(url,params)},
 
-                    add_share_config(params){    //新增充值记录单
+                    add_share_config(params){    //分享素材配置接口
                       let url ="/api/api_add_share_config"
                       return shuju.postdata(url,params)},
                       
-                      carryforward(params){    //新增充值记录单
+                      carryforward(params){    //考勤异常的时候结转接口
                       let url ="/api/api_carryforward"
                       return shuju.postdata(url,params)},
+                                            
+                      evaluation_list(params){    //教师评价列表接口
+                        let url ="/api/api_evaluation_list"
+                        return shuju.getdata(url,params)},
+                                                                    
+            user_recharge_list(params){    //获取用户充值未关联充值记录单的数据
+                        let url ="/api/api_user_recharge_list"
+                        return shuju.getdata(url,params)},
 }

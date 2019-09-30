@@ -5,6 +5,7 @@
         placeholder="输入学生姓名"
         v-model="value_stu"
         :options="options1"
+        clearable
         @change="handleChange(value_stu)"
         filterable
       ></el-cascader>
@@ -12,6 +13,7 @@
       <el-cascader
         placeholder="选择科目"
         v-model="value_sub"
+        clearable
         :options="options"
         :props="{ expandTrigger: 'hover' }"
         :show-all-levels="false"
@@ -45,7 +47,8 @@
                 size="mini"
                 v-if="scope.row.ready_txt=='准备直播'"
                 style="color:red"
-              >{{scope.row.ready_txt}}</el-button>
+              >
+                <a @click="nowVideo(scope.row.course_id)">{{scope.row.ready_txt}}</a></el-button>
               <el-button
                 size="mini"
                 v-if="scope.row.ready_txt=='未知状态'"
@@ -56,8 +59,15 @@
                 v-if="scope.row.ready_txt=='待直播'"
                 style="color:white;background-color:#409eff;"
               >
-                <a @click="nowVideo(scope.row.course_id)">{{scope.row.ready_txt}}</a>
+{{scope.row.ready_txt}}
+              
               </el-button>
+                    <el-button
+                size="mini"
+                v-if="scope.row.ready_txt=='直播中'"
+                style="color:white;background-color:#409eff;"
+              >
+              <a @click="nowVideo(scope.row.course_id)">{{scope.row.ready_txt}}</a></el-button>
               <!-- 如果有人他进入不了直播他就只能来这 -->
               <!-- <div style="width:120px; display:inline-block;">
                 <el-select v-model="value_other" :change="changeSele()" placeholder="请选择">
@@ -69,13 +79,12 @@
                   ></el-option>
                 </el-select>
               </div> -->
-            <el-dropdown @command="changeSele" style="border:1px orange solid;cursor:pointer;">
+            <el-dropdown @command="changeSele(scope.row.course_id)" style="border:1px orange solid;cursor:pointer;">
               <span class="el-dropdown-link">
                 直播备用方法<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item command="a" style="width:100px;text-align:center;">方法一</el-dropdown-item>
- 
               </el-dropdown-menu>
             </el-dropdown>
            
@@ -109,7 +118,6 @@
          <el-dialog
             title="其他方式进入教室"
             :visible.sync="centerDialogVisible"
-
             center>
              <el-dialog
               width="30%"
@@ -119,12 +127,12 @@
               <div class='flex_div'>
                    <img :src=otherWey.mobileDownloadUrl>
               </div>
-           
               </el-dialog>
             <el-form label-width="80px" :model="otherWey"   v-model="labelPosition"
             :label-position="labelPosition">
             <el-form-item label="方式一：参与码进入教室" style="font-weight:700;">
-              <p >你的参与码：<span style="color:orange;">{{otherWey.code?therWey.code:"暂未生成"}}</span></p>
+              <p v-if="otherWey.code">你的参与码：<span style="color:orange;">{{otherWey.code}}</span></p>
+              <p v-if="!otherWey.code">你的参与码：<span style="color:orange;">暂未生成</span></p>
               <p>打开“云端课堂”的PC端或者APP端，输入参与码，即可进入教室。</p>
               <p><el-button @click='toPc()'>Windows版下载</el-button><el-button @click='toMac()'>Mac版下载</el-button><el-button @click='toMob()'>手机版下载</el-button>（或在手机应用市场搜索“云端课堂”即可下载）</p>
             </el-form-item>
@@ -472,13 +480,15 @@ export default {
     },
     changeSele(a) {
       //这是根据选中的值变化的函数
+      console.log(a)
       this.centerDialogVisible = true;
       let prams={
-        course_id:this.course
+        course_id:a
       }
       this.$apis.common.other_enter(prams).then(res=>{
         if(res.data.code==1){
           this.otherWey=res.data.data
+         
         }
       })
     },
