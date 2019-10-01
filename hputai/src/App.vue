@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-  
+     
     <router-view/>
-  </div>
+  </div> 
 </template>
 
 <script>
@@ -20,7 +20,7 @@ export default {
   .el-table .success-row {
     background: #f0f9eb;
   }
-/* 表格颜色 */
+/* 表格的颜色 */
 
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
