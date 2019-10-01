@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-     
-    <router-view/>
+     <router-view/>
+    <!-- <router-view></router-view> -->
   </div> 
 </template>
 
@@ -15,6 +15,7 @@ export default {
 /* 表格颜色 */
   .el-table .warning-row {
     background: oldlace;
+     /* background: oldlace; */
   }
 
   .el-table .success-row {
