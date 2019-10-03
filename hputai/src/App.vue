@@ -1,7 +1,8 @@
 <template>
   <div id="app">
      <router-view/>
-    <!-- <router-view></router-view> -->
+    <!-- <router-view> </router-view> -->
+    <!-- 无意义 -->
   </div> 
 </template>
 
@@ -73,5 +74,7 @@ html {
     scrollbar-arrow-color:rgba(0,0,0,0.4);/*箭头颜色*/
     scrollbar-track-color:#eeeeee;/*背景颜色*/
 }
-
+.gt{
+  background:white;
+}
 </style>
