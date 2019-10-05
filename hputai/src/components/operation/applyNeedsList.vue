@@ -115,17 +115,18 @@
     </el-dialog>
 
     <!-- 分页的设置 -->
-    <div class="block">
+    <span  v-if="msg.data">
       <el-pagination
-        @size-change="handleSizeChange"     
-        @current-change="handleCurrentChange"
-        :current-page="currentPage4"
-        :page-sizes="[6, 2, 12, 15]"
-        :page-size="5"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total=this.tableData.length
+      style=" float: right;margin-bottom: 30px;"
+      background
+      layout="prev, pager, next"
+      @prev-click="prev"
+      @next-click="next"
+      @current-change="current"
+      :page-size="10"
+      :total='msg.data.count'
       ></el-pagination>
-    </div>
+    </span>
 <el-dialog title="查看排课" :visible.sync="dialogTableVisible_table">
     <el-form ref="form"  label-width="80px">
       <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;"  label="标题:">
@@ -199,9 +200,9 @@ export default {
       helpTeacher_live: "",
       parms: {
         search: "",
-        page: 1
+        page: 1,
+        admin_id:'' //选择的
       },
-      currentPage4: 4, //分页数据
       tableData: [],
       options: [],
       options_all: [], //顾问的所有数据
@@ -256,6 +257,24 @@ export default {
   },
   watch: {},
   methods: {
+    //用于分页的一些设置
+        current(num) {
+      //当前页数
+      console.log(num)
+      this.parms.page = num;
+      this.getdata();
+    },
+    next() {
+      this.parms.page++;
+      this.getdata();
+    },
+    prev() {
+      //上一页
+      if (this.parms.page > 1) {
+        this.parms.page--;
+        this.getdata();
+      }
+    },
     ...mapActions([
       "get_mune_list",
       "get_banzhuren_list",
@@ -532,14 +551,14 @@ export default {
       this.$router.push({ path: "/login" });
     },
     getdata() {
-      let parms = {
-        admin_id: this.getdataCookie("admin_id")
-      };
+      this.parms.admin_id=this.getdataCookie("admin_id")
       this.$apis.common
-        .application_list(parms)
+        .application_list(this.parms)
         .then(res => {
           if (res.data.code == 1) {
+         
             this.msg = res.data;
+               console.log(this.msg)
             this.tableData = res.data.data.list;
           }
         })

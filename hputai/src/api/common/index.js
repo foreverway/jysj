@@ -18,6 +18,11 @@ export default {
     let url='/api/api_adviser_list' 
     return shuju.getdata(url,params)
    },
+      // 班主任数据 
+      adviser_list (params) {
+        let url='/api/api_banzhuren_list' 
+        return shuju.getdata(url,params)
+       },
    //销售进程管控列表
    salepro_list (params) {
     let url='/api/api_salepro_list'

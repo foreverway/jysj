@@ -57,6 +57,7 @@
             label="首次缴费时间">
         </el-table-column>
            <el-table-column
+           fixed="right"
             prop=""
             label="操作" width="140">
                <template slot-scope="scope">
@@ -70,23 +71,21 @@
           </span> 
            </template>
         </el-table-column>
-
-
         </el-table>
         <!-- 分页 -->
-         <!-- <el-pagination style="margin-top:30px; float: right;margin-bottom: 30px;"
+        <span v-if="msg.data">
+         <el-pagination style="margin-top:30px; float: right;margin-bottom: 30px;"
   background
   layout="prev, pager, next"
   @prev-click="prev"
   @next-click="next"
   @current-change="current"
-  page-size=10
+  :page-size='10'
   :total="msg.data.count">
-</el-pagination> -->
+</el-pagination>
+        </span>
         <!-- 设置充值链接 -->
 <el-dialog title="设置充值金额" :visible.sync="dialogFormVisible1" width="500px"  >
-
-
       <el-input  style="width:200px" v-model="money"  placeholder="请输入充值金额" ></el-input>
  <el-button type="primary" v-show="money>0" @click="dialogFormVisible1 = false,copyUrl( msg.data.recharge_url)">复制充值链接</el-button>
 
@@ -121,8 +120,26 @@ import { mapState } from 'vuex';
         this.getStuList()
         // console.log( this.getdata())
       },
+   
       computed:mapState([ "rolemenu"]),
       methods: {
+           current(num){
+        console.log(num)
+        this.parms.page=num
+        this.getdata()
+      },
+          next() {
+            console.log(this.parms.page)
+      this.parms.page++;
+      this.getadata();
+    },
+    prev() {
+      //上一页
+      if (this.parms.page > 1) {
+        this.parms.page--;
+        this.getadata();
+      }
+    },
             //序号排列
       indexMethod(index) {
             if(this.parms.page==1){
@@ -201,6 +218,7 @@ import { mapState } from 'vuex';
       this.$apis.students.students_list(this.parms).then(res=>{
               if(res.data.code==1){
                 this.msg=res.data
+                console.log(this.msg)
                 this.tableData=res.data.data.list
               }
       })

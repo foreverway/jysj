@@ -8,7 +8,7 @@
       style="width:300px"
     ></el-input>
 
-    <el-date-picker
+    <!-- <el-date-picker
      value-format="yyyy-MM-dd HH:mm:ss"
       v-model="value2"
       type="datetimerange"
@@ -17,9 +17,26 @@
       start-placeholder="开始日期"
       end-placeholder="结束日期"
       align="right"
-    ></el-date-picker>
+    ></el-date-picker> -->
+           <el-date-picker
+          style="margin-left:60px"
+          v-model="form.start_time"
+          @change="getdata"
+          type="datetime"
+          clearable
+          value-format="yyyy-MM-dd H:mm:ss"
+          placeholder="选择日期时间"
+        ></el-date-picker>至
+        <el-date-picker
+          @change="getdata"
+          v-model="form.end_time"
+          type="datetime"
+          clearable
+          value-format="yyyy-MM-dd H:mm:ss"
+          placeholder="选择日期时间"
+        ></el-date-picker>
 
-    <el-button type="primary" style="background-color:#e6563a; border:none;"  @click="searchdata">搜索</el-button>
+    <el-button type="primary" style="background-color:#e6563a; border:none;"  @click="getdata">搜索</el-button>
     <router-link to="/Addsalepro">
       <el-button type="primary"  style="float:right;background-color:#e6563a; border:none;">新建销售情况列表</el-button>
     </router-link>
@@ -55,39 +72,17 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <!-- <el-pagination style="margin-top:30px; float: right;margin-bottom: 30px;"
+    <span v-if="msg.data">
+     <el-pagination style="margin-top:30px; float: right;" 
   background
   layout="prev, pager, next"
   @prev-click="prev"
   @next-click="next"
   @current-change="current"
-  page-size=10
+  :page-size='10'
   :total="msg.data.count">
-    </el-pagination>-->
-    <!-- 设置充值链接 -->
-    <!-- <el-dialog
-      title="设置充值金额"
-      :visible.sync="dialogFormVisible1"
-      width="500px"
-      close-on-click-modal="false"
-    >
-      <el-input style="width:200px" v-model="money" placeholder="请输入充值金额"></el-input>
-      <el-button
-        type="primary"
-        v-show="money>0"
-        @click="dialogFormVisible1 = false,copyUrl( msg.data.recharge_url)"
-      >复制充值链接</el-button>
-
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible1 = false">取 消</el-button>
-        <el-button
-          type="primary"
-          @click="dialogFormVisible1 = false,copyUrl( msg.data.recharge_url)"
-        >确 定</el-button>
-      </div>
-    </el-dialog>
-    <!-- 设置充值链接 -->
-    <!-- <div style="display:none" cols="20" id="biao1">{{copyurl1}}</div> --> 
+     </el-pagination>
+    </span>
   </div>
 </template>
 
@@ -101,42 +96,15 @@ export default {
       msg: "",
       parms: {
         search: "",
-        page: 1
+        page: 1,
+        admin_id:''
       },
       tableData: [],
-      pickerOptions: {
-        shortcuts: [
-          {
-            text: "最近一周",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit("pick", [start, end]);
-            }
-          },
-          {
-            text: "最近一个月",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit("pick", [start, end]);
-            }
-          },
-          {
-            text: "最近三个月",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit("pick", [start, end]);
-            }
-          }
-        ]
+      form:{
+        start_time:null,
+        end_time:null
       },
        value1: '',
-        value2: []
     };
   },
   created() {
@@ -145,31 +113,66 @@ export default {
   },
   mounted() {
   },
+  // watch:{
+  //   form:function(before,after){
+  //       if(this.form.end_time!==""){
+  //             this.tableData = res.data.data.list
+  //             console.log(this.tableData)
+  //           }else if (this.form.start_time!==""){
+  //           new_arr=res.data.data.list.filter(item=>item.dtime>this.form.start_time)
+  //              this.tableData = new_arr
+  //           }else{
+  //           new_arr=res.data.data.list.filter(item=>item.dtime<this.form.end_time)
+  //              this.tableData = new_arr
+  //           }
+  //   }
+  // },
   methods: {
+        //用于分页的一些设置
+        current(num) {
+      //当前页数
+      console.log(num)
+      this.parms.page = num;
+      this.getdata();
+    },
+    next() {
+      this.parms.page++;
+      this.getdata();
+    },
+    prev() {
+      //上一页
+      if (this.parms.page > 1) {
+        this.parms.page--;
+        this.getdata();
+      }
+    },
     pushToEdit(a){
             this.$router.push({path:'/SalelistEdit',query:{id:a}})
     },
-    searchdata(){
-            this.$apis.common.salepro_list(this.parms)
-        .then(res => {
-          if (res.data.code == 1){
-            this.msg = res.data.msg;
-            let new_arr =[]
-            if(this.value2.length==0){
-              this.tableData = res.data.data.list
-            }else{
-            new_arr=res.data.data.list.filter(item=>item.dtime>this.value2[0]&&item.dtime<this.value2[1])
-               this.tableData = new_arr
-            }
-          }
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "请求失败"
-          });
-        });
-    },
+    // searchData(){
+    //         this.$apis.common.salepro_list(this.parms)
+    //     .then(res => {
+    //       if (res.data.code == 1){
+    //         this.msg = res.data.msg;
+    //         let new_arr =[]
+    //     if(this.form.end_time!==""){
+    //       new_arr=res.data.data.list.filter(item=>item.dtime<this.form.end_time)
+    //            this.tableData = new_arr
+    //         }else if (this.form.start_time!==""){
+    //         new_arr=res.data.data.list.filter(item=>item.dtime>this.form.start_time)
+    //            this.tableData = new_arr
+    //         }else{
+ 
+    //         }
+    //       }
+    //     })
+    //     .catch(() => {
+    //       this.$message({
+    //         type: "info",
+    //         message: "请求失败"
+    //       });
+    //     });
+    // },
     //序号排列
     indexMethod(index) {
       if (this.parms.page == 1) {
@@ -236,24 +239,35 @@ export default {
       this.$router.push({ path: "/login" });
     },
     getdata() {
-      let parms = {
-        admin_id: this.getdataCookie("admin_id")
-      };
+      console.log(this.form)
+        this.parms.admin_id=this.getdataCookie("admin_id")
+        let new_arr =[]
       this.$apis.common
-        .salepro_list(parms)
+        .salepro_list(this.parms)
         .then(res => {
           if (res.data.code == 1) {
             // console.log(res.data.data);
             this.msg = res.data;
-            this.tableData = res.data.data.list;
+            if(this.form.end_time==null&&this.form.start_time==null){
+         this.tableData = res.data.data.list;
+         console.log(this.tableData)
+            }else{
+              if(this.form.end_time!==null){
+ new_arr=res.data.data.list.filter(item=>item.dtime<this.form.end_time)
+               this.tableData = new_arr
+              }else{
+      new_arr=res.data.data.list.filter(item=>item.dtime>this.form.start_time)
+               this.tableData = new_arr
+              }
+            }
           }
         })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "请求失败"
-          });
-        });
+        // .catch(() => {
+        //   this.$message({
+        //     type: "info",
+        //     message: "请求失败"
+        //   });
+        // });
     }
   }
 };

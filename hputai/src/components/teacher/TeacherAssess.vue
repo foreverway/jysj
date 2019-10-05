@@ -59,11 +59,13 @@
 
       </el-table-column>
       <el-table-column align="center" label="操作" fixed="right">
-           <template slot-scope="scope">
-          <router-link :to="{path:'/ToAssessTeacher',query:{id:scope.row.id}}">
-              <el-button size="mini" type="success">进行评价</el-button>
-          </router-link>
-           </template>
+       
+        <template slot-scope="scope">
+<el-button size="mini" type="success" @click="toAssess(scope.row.id)">进行评价</el-button>
+        </template>
+
+       
+           
       </el-table-column>
     </el-table>
 <span v-if="msg.data">
@@ -127,38 +129,11 @@ export default {
         this.getadata();
       }
     },
+    toAssess(){
+        this.$router.push({path:'./ToAssessTeacher',parmas:{id:}})
+    },
 
-    // 编辑
-    handleEdit(index, row) {
-      // 行号信息
-      this.$router.push("/AddArticle1/" + row.id);
-    },
-    handleDelete(index, row) {
-      this.$confirm("此操作将永久删除该条信息, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
-          this.$apis.common.del_share_config(row.id).then(res => {
-            if (res.data.code == 1) {
-              this.$message({
-                type: "success",
-                message: row.title + " 删除成功"
-              });
-              this.getadata();
-            } else {
-              this.$message.error(res.data.msg);
-            }
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });
-    },
+
     getadata() {
       this.$apis.common.evaluation_list(this.form).then(res => {
         this.msg = res.data;

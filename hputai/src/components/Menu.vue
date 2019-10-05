@@ -1,13 +1,48 @@
 <template>
   <div class="main">
-    <el-container>
-      <el-header >
+    <el-container style="height: 750px; border: 1px solid #eee">
+      
+  <el-aside width="202px" style="background-color: rgb(238, 241, 246)">
+    <div style="height:55px;">
+    </div>
+          <el-menu
+            class="el-menu-vertical-demo"
+            router
+            :default-openeds="openeds"
+            background-color="#ffffff"
+            text-color="#000"
+            active-text-color="#fff"
+            @select="selectMenu"
+          >
+            <el-menu-item index="/">
+              <i class="el-icon-s-home"></i>
+              <span slot="title">首页</span>
+            </el-menu-item>
+            <span v-for="(item,index) in rolemenu" :key="index">
+              <!-- 刷新出首层菜单名字 style="pointer-events: none;" -->
+              <el-submenu index="index" id="click_1" style="pointer-events: none;">
+                <template slot="title">
+                  <i :class="item.menu_icon"></i>
+                  <span slot="title" class="changeC">{{item.menu_name}}</span>
+                </template>
+                <span v-for="(items,index1) in item.children" :key="index1">
+                  <!-- 刷新出次级菜单名字 -->
+                  <el-menu-item :index="items.menu_url" route style="pointer-events:painted;">
+                    <template slot="title">
+                      <span slot="title">{{items.menu_name}}</span>
+                    </template>
+                  </el-menu-item>
+                </span>
+              </el-submenu>
+            </span>
+          </el-menu>
+  </el-aside>
+  <el-container>
+       <el-header >
         <div class="header">
-          
           <img href="#top" src="../assets/logo.png" height="50" alt style="padding:5px;float:left;" />
           <div class="users" style="width:180px;">
             <el-dropdown trigger="click">
-             
               <span class="el-dropdown-link">
                 <img src="../assets/touxiang.png" alt class="touxiang" />
                 <span style="display:inline-block;width:88px;">{{this.getdataCookie("admin_name")}}</span>
@@ -23,59 +58,15 @@
           </div>
         </div>
       </el-header>
-      <el-container>
-        <el-aside width="202px">
-          <!-- <el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">
-              <el-radio-button :label="false">展开</el-radio-button>
-              <el-radio-button :label="true">收起</el-radio-button>
-          </el-radio-group> -->
-          <el-menu
-            class="el-menu-vertical-demo"
-            router
-            :default-openeds="openeds"
-            background-color="#ffffff"
-            text-color="#000"
-            active-text-color="#fff"
-            @select="selectMenu"
-          >
-            <el-menu-item index="/" >
-              <i class="el-icon-s-home" ></i>
-               <span slot="title" >首页</span>
-            </el-menu-item>
-            <span v-for="(item,index) in rolemenu" :key="index"  >
-              <!-- 刷新出首层菜单名字 style="pointer-events: none;" -->
-              <el-submenu  index="index" id="click_1" style="pointer-events: none;">
-                <template slot="title" >
-                   <i :class=item.menu_icon ></i>
-                  <span slot="title"  class="changeC">{{item.menu_name}}</span>
-                </template>
-                <span v-for="(items,index1) in item.children" :key="index1">
-                    <!-- 刷新出次级菜单名字 -->
-                  <el-menu-item :index="items.menu_url" route style="pointer-events:painted;">
-                    <template slot="title">
-                      <span slot="title">{{items.menu_name}}</span>
-                    </template>
-                  </el-menu-item>
-                </span>
-              </el-submenu>
-            </span>
-          </el-menu>
-        </el-aside>
-        <el-container>
-          <el-main>
-            <router-view />
-            <!-- 主体部分在这里显示 -->
-          </el-main>
-          <el-footer>
-            <!-- <p class="banquan">精英世家</p> -->
-          </el-footer>
-        </el-container>
-      </el-container>
-    </el-container>
-    <template>
-</template>
+    <el-main>
+   <router-view />
+    </el-main>
+  </el-container>
+</el-container>
+  
   </div>
 </template>
+
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
 export default {
@@ -85,88 +76,98 @@ export default {
       // ActiveMenu: this.$route.path,
       //  rolemenu:'',  菜单列表
       admin_name: "",
-      openeds:['1','2','3'],
-      peopleInfo:{},
+      openeds: ["1", "2", "3"],
+      peopleInfo: {}
     };
   },
   created() {
-
-     let params = {
+    let params = {
       admin_id: this.getdataCookie("admin_id")
     };
-      this.get_banzhuren_list({
+    this.get_banzhuren_list({
       //获取班主任列表
-      url: "/api/api_banzhuren_list",
+      url: "/api/api_banzhuren_list"
     });
     this.get_mune_list({
-      url: "/api/api_menu_list",
+      url: "/api/api_menu_list"
     });
     this.get_live_list({
       //获取直播列表
-      url: "/api/api_live_list",
+      url: "/api/api_live_list"
     });
     this.get_teacher_data({
       //获取讲师列表
-      url: "/api/api_teacher_data",
+      url: "/api/api_teacher_data"
     });
     this.get_zhujiao_data({
       //获取助教列表
-      url: "/api/api_zhujiao_data",
+      url: "/api/api_zhujiao_data"
     });
     this.get_jiaowu_data({
       //获取教务专员列表
-      url: "/api/api_jiaowu_data",
+      url: "/api/api_jiaowu_data"
     });
-    this.getMen()   //
-      this.$nextTick(function(){  //实现菜单的展开 图标消失
-        var iconI =$('.el-icon-arrow-down')
-         var menuC=$('.el-submenu__title')
-          $(menuC)[0].click()
-          for(let i =0;i<iconI.length;i++){
-            var addAttr= $(iconI)[i]
-            $(addAttr).attr('class','')
-          }
-      });
+    this.getMen(); //
+    this.$nextTick(function() {
+      //实现菜单的展开 图标消失
+      var iconI = $(".el-icon-arrow-down");
+      var menuC = $(".el-submenu__title");
+      $(menuC)[0].click();
+      for (let i = 0; i < iconI.length; i++) {
+        var addAttr = $(iconI)[i];
+        $(addAttr).attr("class", "");
+      }
+    });
   },
-  computed:
-        mapState(["banzhuren_list","rolemenu","live_list",
-      "teacher_data",
-      "zhujiao_data",
-      "jiaowu_data",
-      "region_list",
-      ]),
- mounted(){    
-    window.location.reload()
- },
+  computed: mapState([
+    "banzhuren_list",
+    "rolemenu",
+    "live_list",
+    "teacher_data",
+    "zhujiao_data",
+    "jiaowu_data",
+    "region_list"
+  ]),
+  mounted() {
+    window.location.reload();
+  },
   methods: {
-    selectMenu(index,indexPath){    //实现点击子菜单父菜单出现
-  var menuList=$('.changeC')
-             for(let y=0;y<menuList.length;y++){
-               $(menuList[y]).attr('id','')
-             }
-      this.rolemenu.forEach((item,index,array)=>{  //遍历菜单
-        if(item.children){  //有子集
-           for(let j=0;j<item.children.length;j++){   //遍历子集
-            let a=item.children.filter(function(item){
-              return item.menu_url==indexPath[1]
-                })
-              if(a.length>0){
-               $(menuList[index]).attr('id','changeC')
-                return index
-              }
-           }
-        }else{  //无子集
+    selectMenu(index, indexPath) {
+      //实现点击子菜单父菜单出现
+      var menuList = $(".changeC");
+      for (let y = 0; y < menuList.length; y++) {
+        $(menuList[y]).attr("id", "");
+      }
+      this.rolemenu.forEach((item, index, array) => {
+        //遍历菜单
+        if (item.children) {
+          //有子集
+          for (let j = 0; j < item.children.length; j++) {
+            //遍历子集
+            let a = item.children.filter(function(item) {
+              return item.menu_url == indexPath[1];
+            });
+            if (a.length > 0) {
+              $(menuList[index]).attr("id", "changeC");
+              return index;
+            }
+          }
+        } else {
+          //无子集
         }
-      })
+      });
     },
 
-    ...mapActions(["get_mune_list" ,"get_banzhuren_list",
+    ...mapActions([
+      "get_mune_list",
+      "get_banzhuren_list",
       "get_live_list",
       "get_region_list",
       "get_teacher_data",
       "get_zhujiao_data",
-      "get_jiaowu_data"]), //发送actions this.store.dispatch
- //获取直播列表发送actions this.store.dispatch
+      "get_jiaowu_data"
+    ]), //发送actions this.store.dispatch
+    //获取直播列表发送actions this.store.dispatch
 
     // 读取缓存
     getdataCookie(cname) {
@@ -208,35 +209,41 @@ export default {
           });
         });
     },
-         open1() {
-    const h = this.$createElement;
-        this.$notify({
-          title:'今天也有好心情吗?',
-          duration:6000,
-           message: h('i', { style: 'color: teal'}, "欢迎回来,"+this.peopleInfo.admin_name+ " 这是我们的第 "+this.peopleInfo.admin_login+" 次见面" +""),
+    open1() {
+      const h = this.$createElement;
+      this.$notify({
+        title: "今天也有好心情吗?",
+        duration: 6000,
+        message: h(
+          "i",
+          { style: "color: teal" },
+          "欢迎回来," +
+            this.peopleInfo.admin_name +
+            " 这是我们的第 " +
+            this.peopleInfo.admin_login +
+            " 次见面" +
+            ""
+        )
       });
-      },
-//       getIndex(){
-// var arr =this.rolemenu.map((iten,index)=>{
-//           return index
-//       })
-//       return arr
-//       },
-    getMen(){
-          //  $('.el-submenu__icon-arrow').attr('class','')
-          //   $('.el-icon-arrow-down').attr('class','')
-       
-       
-            let params={
-            search:this.getdataCookie("admin_name")
-          }
+    },
+    //       getIndex(){
+    // var arr =this.rolemenu.map((iten,index)=>{
+    //           return index
+    //       })
+    //       return arr
+    //       },
+    getMen() {
+      //  $('.el-submenu__icon-arrow').attr('class','')
+      //   $('.el-icon-arrow-down').attr('class','')
+
+      let params = {
+        search: this.getdataCookie("admin_name")
+      };
       this.$apis.menber.admin_list(params).then(res => {
-          this.peopleInfo=res.data.data.list[0]
-        })
-      }
-    
-     
-      
+        this.peopleInfo = res.data.data.list[0];
+      });
+    }
+
     // getmune(){
     //   let parms={
     //     admin_id:this.getdataCookie('admin_id')
@@ -256,17 +263,17 @@ export default {
 </script>
 
 <style scoped>
-.el-submenu__title{
-  pointer-events: none !important;
+.el-submenu__title {
+  pointer-events: none !important;
 }
-.header[data-v-9bcc0be2]{
- position:fixed;
-  top:0;
-  left:0;
+.header[data-v-9bcc0be2] {
+  position: fixed;
+  top: 0;
+  left: 0;
   z-index: 5;
 }
-#changeC{
-  color:#e6563a !important;
+#changeC {
+  color: #e6563a !important;
 }
 .touxiang:hover {
   cursor: pointer;
@@ -310,7 +317,7 @@ export default {
   width: 150px;
   line-height: 61px;
 }
-.el-menu-item{
+.el-menu-item {
   background-color: rgb(235, 232, 232) !important;
 }
 .el-menu-item:hover {
