@@ -1,8 +1,9 @@
 <template>
   <div id="app">
-  
-    <router-view/>
-  </div>
+     <router-view/>
+    <!-- <router-view> </router-view> -->
+    <!-- 无意义 -->
+  </div> 
 </template>
 
 <script>
@@ -15,12 +16,13 @@ export default {
 /* 表格颜色 */
   .el-table .warning-row {
     background: oldlace;
+     /* background: oldlace; */
   }
 
   .el-table .success-row {
     background: #f0f9eb;
   }
-/* 表格颜色 */
+/* 表格的颜色 */
 
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -72,5 +74,7 @@ html {
     scrollbar-arrow-color:rgba(0,0,0,0.4);/*箭头颜色*/
     scrollbar-track-color:#eeeeee;/*背景颜色*/
 }
-
+.gt{
+  background:white;
+}
 </style>
