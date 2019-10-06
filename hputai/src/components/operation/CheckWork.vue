@@ -48,6 +48,7 @@
           <span>{{ scope.row.teacher_name }}</span>
         </template>
       </el-table-column>
+<el-table-column align="center" label="学生姓名" prop="student_name"></el-table-column>
 <el-table-column align="center" label="授课类型" prop="course_txt"></el-table-column>
 <el-table-column align="center" label="授课地点" prop="course_address"></el-table-column>
 <el-table-column align="center" label="开始时间" prop="start_time"></el-table-column>

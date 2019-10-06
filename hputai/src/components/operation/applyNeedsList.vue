@@ -201,7 +201,7 @@ export default {
       parms: {
         search: "",
         page: 1,
-        admin_id:'' //选择的
+        add_admin_id:'' //选择的
       },
       tableData: [],
       options: [],
@@ -487,6 +487,7 @@ export default {
       this.adviserList = this.options_all.filter(
         item => item.adviser == targetName
       );
+      console.log(this.adviserList[0])
       let parms = {
         admin_id: this.getdataCookie("admin_id"),
         add_admin_id:
@@ -558,7 +559,6 @@ export default {
           if (res.data.code == 1) {
          
             this.msg = res.data;
-               console.log(this.msg)
             this.tableData = res.data.data.list;
           }
         })

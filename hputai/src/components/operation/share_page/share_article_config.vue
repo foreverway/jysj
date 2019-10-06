@@ -90,16 +90,18 @@
       width="475px"
       custom-class="yulan_height"
     ></el-dialog>
+    <span v-if="msg.data">
+        <el-pagination
+          style="margin-top:30px; float: right;"
+          background
+          layout="prev, pager, next"
+          @prev-click="prev"
+          @next-click="next"
+          @current-change="current"
+          :total="msg.data.count"
+        ></el-pagination>
+    </span>
 
-    <el-pagination
-      style="margin-top:30px; float: right;"
-      background
-      layout="prev, pager, next"
-      @prev-click="prev"
-      @next-click="next"
-      @current-change="current"
-      :total="msg.data.count"
-    ></el-pagination>
   </div>
 </template>
 

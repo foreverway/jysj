@@ -12,17 +12,9 @@
             mode="horizontal"
             @select="handleSelect"
           >
-            <el-menu-item index="1">
-              <router-link to="/ShareList">
-                <span
-                  index="1"
-                  class="_span"
-                  style="display: inline-block; width: 100px;text-align: center;height: 60px;"
-                >分享素材列表</span>
-              </router-link>
-            </el-menu-item>
+           
 
-            <el-menu-item index="2">
+            <el-menu-item index="1">
               <router-link to="/ShareStatistical">
                 <span
                   index="1"
@@ -31,11 +23,20 @@
                 >分享记录列表</span>
               </router-link>
             </el-menu-item>
+             <el-menu-item index="2">
+              <router-link to="/ShareList">
+                <span
+                  index="2"
+                  class="_span"
+                  style="display: inline-block; width: 100px;text-align: center;height: 60px;"
+                >分享素材列表</span>
+              </router-link>
+            </el-menu-item>
             <!-- <el-menu-item index v-if="isShowConfig==1"> -->
              <el-menu-item index="3">
               <router-link to="/ShareArticleConfig">
                 <span
-                  index="1"
+                  index="2"
                   class="_span"
                   style="display: inline-block; width: 100px;text-align: center;height: 60px;"
                 >分享素材配置</span>

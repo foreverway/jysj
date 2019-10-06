@@ -184,7 +184,7 @@ export default {
       });
       this.$apis.common.share_config_list().then(res => {
         this.sharelist = res.data.data.list;
-        console.log(this.sharelist);
+        //console.log(this.sharelist);
       });
     }
   }

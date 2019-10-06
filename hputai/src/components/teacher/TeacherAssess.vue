@@ -61,7 +61,7 @@
       <el-table-column align="center" label="操作" fixed="right">
        
         <template slot-scope="scope">
-<el-button size="mini" type="success" @click="toAssess(scope.row.id)">进行评价</el-button>
+<el-button size="mini" type="success" @click="toAssess(scope.row.teacher_id)">进行评价</el-button>
         </template>
 
        
@@ -129,8 +129,9 @@ export default {
         this.getadata();
       }
     },
-    toAssess(){
-        this.$router.push({path:'./ToAssessTeacher',parmas:{id:}})
+    toAssess(a){
+      console.log(a)
+        this.$router.push({path:'./ToAssessTeacher',query:{id:a}})
     },
 
 

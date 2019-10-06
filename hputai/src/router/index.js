@@ -136,7 +136,8 @@ export default new Router({
           component: TeacherData
         },
         {
-          path: '/ToAssessTeacher/:id',//ToAssessTeacher  [评价老师]
+         // path: '/ToAssessTeacher/:id',//ToAssessTeacher  [评价老师]
+          path: '/ToAssessTeacher',//ToAssessTeacher  [评价老师]
           name:"ToAssessTeacher",
           component: ToAssessTeacher
         },
