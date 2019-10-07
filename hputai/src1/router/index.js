@@ -48,7 +48,6 @@ import TeacherAssess from '@/components/teacher/TeacherAssess'  //老师评价
 import TeacherList from '@/components/teacher/TeacherList'  //老师列表TeacherData
 import TeacherData from '@/components/teacher/TeacherData'  //授课数据TeacherData
 import ToAssessTeacher from '@/components/teacher/ToAssessTeacher'  //评价老师ToAssessTeacher
-import TeacherSalary from '@/components/teacher/TeacherSalary'  //教师课酬列表数据接口
 
 //系统设置路由
 import SystemMain from '@/components/system/system_main'
@@ -142,11 +141,6 @@ export default new Router({
           name:"ToAssessTeacher",
           component: ToAssessTeacher
         },
-        {
-           path: '/TeacherSalary',//TeacherSalary  [教师课酬列表数据接口]
-           name:"TeacherSalary",
-           component: TeacherSalary
-         },
         {
           path: '/AddLink',//
           component: AddLink

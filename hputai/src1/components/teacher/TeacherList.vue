@@ -148,7 +148,7 @@
       </span>
     </el-dialog>
     <!-- 编辑弹窗 -->
-    <el-dialog title="编辑教师" :visible.sync="editDialog" width="50%">
+    <el-dialog title="教师信息" :visible.sync="editDialog" width="50%">
       <el-form label-width="100px" :model="editTeacher">
         <el-form-item label="讲师姓名">
           <p v-if="teacher_name">{{teacher_name}}</p>
@@ -177,10 +177,8 @@
           ></el-cascader>
         </el-form-item>
         <el-form-item label="类型">
-          <el-radio-group  v-model="editTeacher.part_time">
-          <el-radio  :label="1">全职</el-radio>
-          <el-radio  :label="2">兼职</el-radio>
-          </el-radio-group>
+          <el-radio v-model="editTeacher.part_time" label="1">全职</el-radio>
+          <el-radio v-model="editTeacher.part_time" label="2">兼职</el-radio>
         </el-form-item>
         <el-form-item label="排课时间">
           <el-input type="textarea" v-model="editTeacher.can_class"></el-input>
@@ -255,9 +253,7 @@ export default {
       form: {
         search: "", //搜索老师条件
         page: 1, //页码
-        teacher_id: "" ,//教师id,
-        start_time:'',
-        end_time:''
+        teacher_id: "" //教师id
       },
       options: [], //课程名称的数据
       options_: [], //总数据的数据
@@ -273,7 +269,7 @@ export default {
         part_time: "", //类型,
         teach_subjects: "", //所授科目
         can_class: "", //排课时间
-        address: '', //城市
+        address: "", //城市
         expiredate: "", //	合同到期
         introduction: "", //	教育简介
         bank_number: "",
@@ -349,22 +345,19 @@ export default {
             .then(res => {
               if (res.data.code == 1) {
                 this.editTeacher = res.data.data;
-                this.editTeacher.address = res.data.data.address.split(',');
-                    console.log(this.editTeacher)
-              //  this.editTeacher.part_time=res.data.data.part_time
-              
                 this.teacher_id = b.teacher_id;
                 this.editTeacher.files = [];
+                //console.log(res.data.data)
               }
             });
+          // console.log(b.teacher_id)
+
           this.teacher_name = b.teacher_name;
           //console.log(b)
           //改造城市列表
-                console.log(this.region_list)
           for (let i = 0; i < this.region_list.length; i++) {
             var val = this.region_list[i];
             var children = [];
-      
             if (val.children) {
               for (let j = 0; j < val.children.length; j++) {
                 var val1 = val.children[j];
@@ -428,7 +421,7 @@ export default {
       }
     },
     deleteName(arr) {
-      //选我需要的数组
+      //赛选我需要的数组
       let dollars_arr = [];
       arr.forEach(function(item, index, arr) {
         dollars_arr.push({

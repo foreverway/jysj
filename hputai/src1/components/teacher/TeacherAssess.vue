@@ -1,6 +1,6 @@
 <template>
   <div class="so_main">
-    <div class="head_word">教师评价</div>
+         <div class="head_word">教师评价</div>
     <div class="so_main_left">
       <el-input
         class="so_input"
@@ -9,13 +9,21 @@
         clearable
         placeholder="搜索教师名称，授课科目"
       ></el-input>
+     
     </div>
-    <span></span>
-    <el-select clearable v-model="form.is_ping" @input="getadata" placeholder="请选择状态">
-      <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+    <span> </span>
+    <el-select
+    clearable
+    v-model='form.search'
+    @input="getadata"
+    placeholder="请选择状态"
+    >
+    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+
+    </el-option>
     </el-select>
-    <span></span>
-    <el-button type="primary" @click="getadata">搜索</el-button>
+    <span> </span>
+     <el-button type="primary" @click="getadata">搜索</el-button>
     <!-- 表格数据 -->
     <el-table :data="tableData" :header-cell-style="{background:'#f4f4f4'}">
       <el-table-column label="序号" type="index" width="80" align="center" :index="indexMethod"></el-table-column>
@@ -32,30 +40,44 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="收到评价数" width="180" prop="eval_count"></el-table-column>
+      <el-table-column label="收到评价数" width="180" prop='eval_count'>
 
-      <el-table-column align="center" label="综合评分">
-        <template slot-scope="scope">
-          <el-rate v-model="scope.row.eval_average" disabled text-color="#ff9900"></el-rate>
-        </template>
       </el-table-column>
-      <el-table-column label="状态" prop="eval_status"></el-table-column>
+
+      <el-table-column align="center" label="综合评分" >
+            <template slot-scope="scope">
+       <el-rate
+  v-model="scope.row.eval_average"
+  disabled
+  show-score
+  text-color="#ff9900"
+  score-template="{scope.row.eval_average}">
+</el-rate>
+ </template>
+      </el-table-column>
+      <el-table-column label="状态"  prop='eval_status'>
+
+      </el-table-column>
       <el-table-column align="center" label="操作" fixed="right">
+       
         <template slot-scope="scope">
-          <el-button size="mini" type="success" @click="toAssess(scope.row)">进行评价</el-button>
+<el-button size="mini" type="success" @click="toAssess(scope.row.teacher_id)">进行评价</el-button>
         </template>
+
+       
+           
       </el-table-column>
     </el-table>
-    <span v-if="msg.data">
-      <el-pagination
-        style="margin-top:30px; float: right;"
-        background
-        layout="prev, pager, next"
-        @prev-click="prev"
-        @next-click="next"
-        @current-change="current"
-        :total="msg.data.count"
-      ></el-pagination>
+<span v-if="msg.data">
+    <el-pagination
+      style="margin-top:30px; float: right;"
+      background
+      layout="prev, pager, next"
+      @prev-click="prev"
+      @next-click="next"
+      @current-change="current"
+      :total="msg.data.count"
+    ></el-pagination>
     </span>
   </div>
 </template>
@@ -66,19 +88,14 @@ export default {
   data() {
     return {
       msg: "",
-      input_value:'',//输入框的值
-      search_value:'',//搜索框的值
       form: {
         page: 1,
         search: "",
-        is_ping: ""
+        is_ping:''
       },
-      options: [
-        { value: 1, label: "已评" },
-        { value: 2, label: "未评" }
-      ],
+      options:[{value:'已评',label:'已评'},{value:'未评',label:'未评'}],
       dialogFormVisible3: false,
-      tableData: []
+      tableData: [],
     };
   },
   created() {
@@ -112,9 +129,11 @@ export default {
         this.getadata();
       }
     },
-    toAssess(a) {
-      this.$router.push({ path: "./ToAssessTeacher", query: { id: a.teacher_id ,eval_status:a.eval_status} });
+    toAssess(a){
+      console.log(a)
+        this.$router.push({path:'./ToAssessTeacher',query:{id:a}})
     },
+
 
     getadata() {
       this.$apis.common.evaluation_list(this.form).then(res => {
@@ -133,8 +152,8 @@ export default {
   float: left;
   margin: 20px;
 }
-.el-select {
-  margin: 20px 15px;
+.el-select{
+     margin: 20px 15px;
 }
 .so_main_right {
   float: right;

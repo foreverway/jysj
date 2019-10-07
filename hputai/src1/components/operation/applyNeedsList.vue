@@ -18,7 +18,7 @@
       @change="showAdviser"
     ></el-cascader>
 
-    <el-button type="primary" style="background-color:#e6563a; border:none;" @click="getdata">搜索</el-button>
+    <el-button type="primary" style="background-color:#e6563a; border:none;" @click="getdata">查看所有需求表</el-button>
     <router-link to="/ApplicationAdd">
       <el-button type="primary"  style="float:right;background-color:#e6563a; border:none;">新建报名需求</el-button>
     </router-link>
@@ -487,17 +487,12 @@ export default {
       this.adviserList = this.options_all.filter(
         item => item.adviser == targetName
       );
-      if(targetName.length==0){
-         var parms = {
-        // admin_id: this.getdataCookie("admin_id"),
-        add_admin_id:''
-          //this.adviserList[0].id * 1 == "" ? "" : this.adviserList[0].id
+      console.log(this.adviserList[0])
+      let parms = {
+        admin_id: this.getdataCookie("admin_id"),
+        add_admin_id:
+          this.adviserList[0].id * 1 == "" ? "" : this.adviserList[0].id
       };
-      }else{
-           var parms = {
-        add_admin_id:this.adviserList[0].id * 1
-      };
-      }
       this.$apis.common
         .application_list(parms)
         .then(res => {

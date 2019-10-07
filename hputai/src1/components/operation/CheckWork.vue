@@ -3,8 +3,8 @@
     <div class="head_word">考勤与课时统计</div>
 
     <div class="so_main_left">
-      <el-form :inline="true" :model="form"  class="demo-form-inline">
-        <el-input class="so_input" clearable v-model="form.search" placeholder="请输入用户名"></el-input>
+      <el-form :inline="true" :model="form" class="demo-form-inline">
+        <el-input class="so_input" v-model="form.search" placeholder="请输入用户名"></el-input>
         <el-button type="primary"  @click="getadata" style="margin-left:5px;background-color:#e6563a; border:none;">搜索</el-button>
 
         <el-date-picker
