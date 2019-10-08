@@ -1,6 +1,10 @@
 <template>
   <div class="main">
+<<<<<<< HEAD
     <el-container class="youCom" height=seeHeight style=" border: 1px solid #eee">
+=======
+    <el-container class="youCom" style="height:750px; border: 1px solid #eee">
+>>>>>>> bb8b19fba0dc6f03ddcc31230e1f1a354eb4ced0
       
   <el-aside width="202px" style="background-color: rgb(238, 241, 246)">
     <div style="height:55px;">
@@ -135,7 +139,10 @@ export default {
     //     $('.youCom').height(document.documentElement.clientHeight)
     // console.log(document.documentElement.clientHeight)
     // window.location.reload();
+<<<<<<< HEAD
     
+=======
+>>>>>>> bb8b19fba0dc6f03ddcc31230e1f1a354eb4ced0
   },
   methods: {
     selectMenu(index, indexPath) {

@@ -74,7 +74,11 @@
         <p>{{parseInt(this.form.classhour)}}</p>
       </el-form-item>
       <el-form-item label="上课地点">
+<<<<<<< HEAD
         <el-radio-group v-model="form.course_address" @change="whereGo(form.course_address)">
+=======
+        <el-radio-group v-model="form.course_address" @change="whereGo(radio)">
+>>>>>>> bb8b19fba0dc6f03ddcc31230e1f1a354eb4ced0
           <el-radio :label="1">线上</el-radio>
           <el-radio :label="2">线下</el-radio>
         </el-radio-group>
@@ -166,6 +170,10 @@
             <el-date-picker
               v-model="item.start_time"
               v-bind:id="'start_time' + i"
+<<<<<<< HEAD
+=======
+              value-format="timestamp"
+>>>>>>> bb8b19fba0dc6f03ddcc31230e1f1a354eb4ced0
               type="datetime"
               placeholder="开始日期"
             ></el-date-picker>
@@ -348,7 +356,11 @@
     </el-dialog>
     <!-- 查看老师课表 -->
     <el-dialog :visible.sync="dialogTableVisible_seeTeacherClass">
+<<<<<<< HEAD
       <span>查看老师课表</span>
+=======
+      <span>查看{{}}老师课表</span>
+>>>>>>> bb8b19fba0dc6f03ddcc31230e1f1a354eb4ced0
       <el-table :data="seeteacherclass" border>
         <el-table-column property="course_address" label="上课地点"></el-table-column>
         <el-table-column property="address" label="线下上课地址"></el-table-column>
@@ -373,10 +385,17 @@ export default {
       address_check: [], //上课地址的数据
       seeapplytable: {}, //弹出报名表数据
       seeclassneeds: {}, //弹出排课需求数据
+<<<<<<< HEAD
       seeteacherclass: [], //弹出老师课表数据
       stu_centerDialogVisible: false, //学生课表的弹出层
       seestudentclass: [], //学生课表的弹出层数据
       seestudentname: [], //学生课表的弹出层学生名
+=======
+      seeteacherclass: {}, //弹出老师课表数据
+      stu_centerDialogVisible: false, //学生课表的弹出层
+      seestudentclass: [], //学生课表的弹出层数据
+      seestudentname: {}, //学生课表的弹出层学生名
+>>>>>>> bb8b19fba0dc6f03ddcc31230e1f1a354eb4ced0
       dialogTableVisible_seeapplytable: false, //报名表弹出控制
       dialogTableVisible_seeClassNeeds: false, //排课需求弹出
       dialogTableVisible_seeTeacherClass: false, //弹出老师课表
@@ -521,6 +540,10 @@ export default {
       "get_teacher_data",
       "get_zhujiao_data",
       "get_jiaowu_data",
+<<<<<<< HEAD
+=======
+      "get_application",
+>>>>>>> bb8b19fba0dc6f03ddcc31230e1f1a354eb4ced0
       "get_needs",
       "get_region_list",
       "get_teacher_course",
@@ -531,6 +554,7 @@ export default {
       //查看报名表的弹框
       this.dialogTableVisible_seeapplytable = true;
       let params = {
+<<<<<<< HEAD
         // app_id: this.apply_data.app_id
         app_id:this.$route.query.id
       };
@@ -542,12 +566,27 @@ export default {
         
       });
       // this.seeapplytable = this.application;
+=======
+        app_id: this.apply_data.app_id
+      };
+
+      this.get_application({
+        //查看报名表数据
+        params,
+        url: "/api/api_get_application"
+      });
+      this.seeapplytable = this.application;
+>>>>>>> bb8b19fba0dc6f03ddcc31230e1f1a354eb4ced0
     },
 
     seeClassNeeds(a) {
       //查看排课需求的弹框
       let params = {
+<<<<<<< HEAD
         app_id: this.$route.query.id
+=======
+        app_id: this.apply_data.app_id
+>>>>>>> bb8b19fba0dc6f03ddcc31230e1f1a354eb4ced0
       };
       this.dialogTableVisible_seeClassNeeds = true;
       this.get_needs({
@@ -559,9 +598,15 @@ export default {
     }, //查看老师课表的弹框
     seeTeacherClass() {
       let params = {
+<<<<<<< HEAD
         teacher_id: this.form.teacher_id * 1
       };
       if (!this.form.teacher_id * 1 == "") {
+=======
+        teacher_id: this.form.teacher_live * 1
+      };
+      if (!this.form.teacher_live * 1 == "") {
+>>>>>>> bb8b19fba0dc6f03ddcc31230e1f1a354eb4ced0
         this.dialogTableVisible_seeTeacherClass = true;
         this.get_teacher_course({
           //查看老师课表
@@ -692,9 +737,15 @@ export default {
         app_id: this.$route.query.id, //报名表id
         live_id: this.form.live_id, //直播平台id
         teacher_id: this.form.teacher_id, //讲师id
+<<<<<<< HEAD
         banzhuren_id: this.form.banzhuren_id, //班主任id
         zhujiao_id: this.form.zhujiao_id, //助教id
         jiaowu_id: this.form.jiaowu_id, //教务id
+=======
+        banzhuren_id: this.form.banzhuren_id[0], //班主任id
+        zhujiao_id: this.form.zhujiao_id[0], //助教id
+        jiaowu_id: this.form.jiaowu_id[0], //教务id
+>>>>>>> bb8b19fba0dc6f03ddcc31230e1f1a354eb4ced0
         // students_id: this.apply_data.students,  //学生id  string
         classhour: this.form.classhour * 1, //课时
         course_address: this.form.course_address * 1 //1线上，2线下
@@ -707,8 +758,11 @@ export default {
       // console.log(all_hour*1,'填入时间')
       // console.log(this.$route.query.classhour*1,'总时间')
       if (all_hour * 1 == this.form.classhour * 1) {
+<<<<<<< HEAD
         console.log(parms)
         console.log(this.form)
+=======
+>>>>>>> bb8b19fba0dc6f03ddcc31230e1f1a354eb4ced0
         this.$apis.common.application_arrange_put(parms).then(res => {
           if (res.data.code == 1) {
             this.$message({
@@ -764,7 +818,13 @@ export default {
           if (res.data.code == 1) {
             this.form = res.data.data;
             this.form.teacher_id = res.data.data.teacher_id;
+<<<<<<< HEAD
             this.editableTabs_1 = res.data.data.course_data;
+=======
+            console.log(this.form);
+            this.editableTabs_1 = res.data.data.course_data;
+            console.log(this.editableTabs_1);
+>>>>>>> bb8b19fba0dc6f03ddcc31230e1f1a354eb4ced0
             this.apply_data.students = res.data.data.students;
           } else {
             this.$message({
