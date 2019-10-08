@@ -382,7 +382,8 @@ export default {
         need_two: this.need_two,
         need_three: this.need_three,
         need_four: this.need_four,
-        need_five: this.need_five
+        need_five: this.need_five,
+        app_id:this.$route.query.id
       };
 
       parms.subjects_data = this.subjects_data;
@@ -394,6 +395,11 @@ export default {
             type: "success"
           });
           this.active = 3;
+        }else{
+            this.$message({
+            message:res.data.msg,
+            type: "warning"
+          });
         }
       });
     },

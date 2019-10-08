@@ -10,13 +10,13 @@
   
   </el-form-item>
   <el-button type="primary" class='assess' @click="goBack">返回</el-button>
-    <el-button type="success" class='assess1' @click="forAssess('form')">评价</el-button>
+    <el-button type="success" class='assess1' @click="forAssess('form')" v-if="assessed==true">评价</el-button>
 
       </el-form>
 <p>评价列表</p>
   <ul class="infinite-list" v-infinite-scroll="load" style="overflow:auto">
     <li style="margin:0 10%;" v-for="i in assessList" class="infinite-list-item" :key="i.username">
-         <el-image :src="head_url" style="width:50px;height:50px;margin-top:20px;border:1px white solid;border-radius:50%;">
+         <el-image :src="i.head_url" style="width:50px;height:50px;margin-top:20px;border:1px white solid;border-radius:50%;">
                  <div slot="error" class="image-slot">
         <!-- //<i class="el-icon-picture-outline"></i> -->
         <img style="width:50px;height:50px;border:1px white solid;border-radius:50%;" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" alt="">
@@ -37,6 +37,7 @@
                    rate:5,
                    teacher_id:this.$route.query.id
                },
+               assessed:true, //你是否评价过
                assessList:'',
                labelPosition: 'left',
                 texts:[ '失望', '一般', '满意', '喜欢','完美'],
@@ -58,12 +59,32 @@
       goBack(){
           this.$router.go(-1)
       },
+          getdataCookie(cname) {
+      var name = cname + "=";
+      var ca = document.cookie.split(";");
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i].trim();
+        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+      }
+      this.$router.push({ path: "/login" });
+    },
             getAssessList(){
                      this.$apis.common.teacher_evaluation_get({teacher_id:this.$route.query.id}).then(res=>{
                 if(res.data.code==1){
-                    console.log(res.data.data)
                     this.assessList=res.data.data
-                    console.log(typeof this.assessList[0].rate)
+                    if(this.$route.query.eval_status=='已评'){
+                      this.assessed=false
+                    }
+                    // //获取现在的用户名对比评论数据
+                    //   if(this.assessList.length!==0){
+                    //     var result=this.assessList.filter((item)=>{
+                    //      return item.username==this.getdataCookie("admin_name")
+                    //     })
+                    //   }
+                    //   if(result.length>0){
+                    //     
+                    //   }
+                    //console.log(typeof this.assessList[0].rate)
                 }else{
                      this.$message({
                         message:res.data.msg,

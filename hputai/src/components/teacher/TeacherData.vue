@@ -13,9 +13,9 @@
     <el-select clearable v-model="params.search" @input="getadata" placeholder="请选择状态">
       <el-option v-for="item in teacher_data" :key="item.value" :label="item.label" :value="item.value"></el-option>
     </el-select> 
-        <el-select clearable v-model="params.search" @input="getadata" placeholder="请选择状态">
+        <!-- <el-select clearable v-model="params.search" @input="getadata" placeholder="请选择状态">
       <el-option v-for="item in teacher_data" :key="item.value" :label="item.label" :value="item.value"></el-option>
-    </el-select> 
+    </el-select>  -->
     <span></span>
             <el-date-picker
           style="margin-left:60px"
@@ -142,7 +142,6 @@ export default {
         this.msg = res.data;
         
         this.tableData = res.data.data.list;
-        console.log(this.tableData)
       });
     }
   }

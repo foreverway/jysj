@@ -1,23 +1,41 @@
 <template>
   <div class="so_main">
-    <div class="head_word">教师评价</div>
-    <div class="so_main_left">
-      <el-input
+    <div class="head_word">教师课酬</div>
+     <div class="so_main_left"> 
+       <el-input
         class="so_input"
-        v-model="form.search"
+        v-model="params.search"
         @input="getadata"
         clearable
         placeholder="搜索教师名称，授课科目"
       ></el-input>
     </div>
+
+     
     <span></span>
-    <el-select clearable v-model="form.is_ping" @input="getadata" placeholder="请选择状态">
-      <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
-    </el-select>
-    <span></span>
+            <el-date-picker
+          style="margin-left:60px"
+          v-model="params.start_time"
+          @change="getadata"
+          type="datetime"
+          clearable
+          value-format="yyyy-MM-dd H:mm:ss"
+          placeholder="选择日期时间"
+        ></el-date-picker>至
+        <el-date-picker
+          @change="getadata"
+          v-model="params.end_time"
+          type="datetime" 
+          clearable
+          value-format="yyyy-MM-dd H:mm:ss"
+          placeholder="选择日期时间"
+        ></el-date-picker>
+            <el-select clearable v-model="params.search" @input="getadata" placeholder="选择教师">
+      <el-option v-for="item in teacher_data" :key="item.value" :label="item.label" :value="item.value"></el-option>
+    </el-select> 
     <el-button type="primary" @click="getadata">搜索</el-button>
     <!-- 表格数据 -->
-    <el-table :data="tableData" :header-cell-style="{background:'#f4f4f4'}">
+    <el-table :data="tableData" border :header-cell-style="{background:'#f4f4f4'}">
       <el-table-column label="序号" type="index" width="80" align="center" :index="indexMethod"></el-table-column>
 
       <el-table-column :show-overflow-tooltip="true" align="center" label="教师名称" width="200">
@@ -26,24 +44,20 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="可授科目" width="180">
+      <el-table-column label="科目" width="180">
         <template slot-scope="scope">
-          <p>{{ scope.row.teach_subjects }}</p>
+          <p>{{ scope.row.subject_name }}</p>
         </template>
       </el-table-column>
 
-      <el-table-column label="收到评价数" width="180" prop="eval_count"></el-table-column>
+      <el-table-column label="线上/线下" width="180" prop="course_address"></el-table-column>
 
-      <el-table-column align="center" label="综合评分">
-        <template slot-scope="scope">
-          <el-rate v-model="scope.row.eval_average" disabled text-color="#ff9900"></el-rate>
-        </template>
-      </el-table-column>
-      <el-table-column label="状态" prop="eval_status"></el-table-column>
-      <el-table-column align="center" label="操作" fixed="right">
-        <template slot-scope="scope">
-          <el-button size="mini" type="success" @click="toAssess(scope.row)">进行评价</el-button>
-        </template>
+
+      <el-table-column label="授课类型" prop="teaching_type"></el-table-column>
+       <el-table-column label="课酬标准" prop="dollars_standar"></el-table-column>
+       <el-table-column label="应上课时" prop="classhour"></el-table-column>
+       <el-table-column label="已上课时" prop="haved_hour"></el-table-column>
+      <el-table-column align="center" label="应得课酬" prop="due_to_dollars" fixed="right">
       </el-table-column>
     </el-table>
     <span v-if="msg.data">
@@ -62,64 +76,64 @@
 
 <script>
 //import urls from '../common/const_config.js'
+import {mapState} from 'vuex'
 export default {
   data() {
     return {
       msg: "",
-      input_value:'',//输入框的值
-      search_value:'',//搜索框的值
-      form: {
-        page: 1,
+      tableData: [],
+      params: {
+        teacher_id: "",
+        subject_id: "",
         search: "",
-        is_ping: ""
-      },
-      options: [
-        { value: 1, label: "已评" },
-        { value: 2, label: "未评" }
-      ],
-      dialogFormVisible3: false,
-      tableData: []
+        start_time: "",
+        end_time: "",
+        page: "1"
+      }
     };
   },
   created() {
     this.$apis.students.getuilcode();
     this.getadata();
   },
+  computed:mapState['teacher_data'],
   methods: {
     //序号排列
     indexMethod(index) {
-      if (this.form.page == 1) {
+      if (this.params.page == 1) {
         return index + 1;
       } else {
-        let page = (this.form.page - 1) * 10 + 1;
+        let page = (this.params.page - 1) * 10 + 1;
         return index + page;
       }
     },
 
     current(num) {
       //当前页数
-      this.form.page = num;
+      this.params.page = num;
       this.getadata();
     },
     next() {
-      this.form.page++;
+      this.params.page++;
       this.getadata();
     },
     prev() {
       //上一页
-      if (this.form.page > 1) {
-        this.form.page--;
+      if (this.params.page > 1) {
+        this.params.page--;
         this.getadata();
       }
     },
     toAssess(a) {
-      this.$router.push({ path: "./ToAssessTeacher", query: { id: a.teacher_id ,eval_status:a.eval_status} });
+      console.log(a);
     },
 
     getadata() {
-      this.$apis.common.evaluation_list(this.form).then(res => {
+      this.$apis.teacher.teacher_list(this.params).then(res => {
         this.msg = res.data;
+        
         this.tableData = res.data.data.list;
+        console.log(this.tableData)
       });
     }
   }

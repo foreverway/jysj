@@ -18,7 +18,7 @@
       @change="showAdviser"
     ></el-cascader>
 
-    <el-button type="primary" style="background-color:#e6563a; border:none;" @click="getdata">查看所有需求表</el-button>
+    <el-button type="primary" style="background-color:#e6563a; border:none;" @click="getdata">搜索</el-button>
     <router-link to="/ApplicationAdd">
       <el-button type="primary"  style="float:right;background-color:#e6563a; border:none;">新建报名需求</el-button>
     </router-link>
@@ -314,10 +314,10 @@ export default {
       switch (a) {
         case "click_edit":
     this.$router.push({ path: "/ApplicationEdit", query:{id: b.id }});
-           this.$message({
-            message:"确定成功",
-            type:"success"
-          })
+          //  this.$message({
+          //   message:"确定成功",
+          //   type:"success"
+          // })
           break;
         case "click_test": //审核
          if (b.app_status == "待审核") {
@@ -396,6 +396,14 @@ export default {
             });
           }
           break;
+          case 'click_plan_edit' :  //编辑排课
+               this.$router.push({ path: "/ClassEdit", query:{id: b.id }});
+          //  this.$message({
+          //   message:"确定成功",
+          //   type:"success"
+          // })
+           break;
+
           case 'click_see_plan':  //查看排课
            this.dialogTableVisible_table = true
                let parms = {
@@ -487,12 +495,17 @@ export default {
       this.adviserList = this.options_all.filter(
         item => item.adviser == targetName
       );
-      console.log(this.adviserList[0])
-      let parms = {
-        admin_id: this.getdataCookie("admin_id"),
-        add_admin_id:
-          this.adviserList[0].id * 1 == "" ? "" : this.adviserList[0].id
+      if(targetName.length==0){
+         var parms = {
+        // admin_id: this.getdataCookie("admin_id"),
+        add_admin_id:''
+          //this.adviserList[0].id * 1 == "" ? "" : this.adviserList[0].id
       };
+      }else{
+           var parms = {
+        add_admin_id:this.adviserList[0].id * 1
+      };
+      }
       this.$apis.common
         .application_list(parms)
         .then(res => {
