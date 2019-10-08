@@ -349,18 +349,22 @@ export default {
             .then(res => {
               if (res.data.code == 1) {
                 this.editTeacher = res.data.data;
-                this.editTeacher.address = res.data.data.address.split(',');
+                if( this.editTeacher.address){
+this.editTeacher.address = res.data.data.address.split(',');
+                }
+                
+                 this.editTeacher.teacher_id=b.teacher_id*1
                     console.log(this.editTeacher)
               //  this.editTeacher.part_time=res.data.data.part_time
               
                 this.teacher_id = b.teacher_id;
+               
                 this.editTeacher.files = [];
               }
             });
           this.teacher_name = b.teacher_name;
           //console.log(b)
           //改造城市列表
-                console.log(this.region_list)
           for (let i = 0; i < this.region_list.length; i++) {
             var val = this.region_list[i];
             var children = [];
@@ -480,28 +484,30 @@ export default {
             type: "success",
             duration: 1500
           });
+          this.editDialog = false
         } else {
           this.$message.error(data.msg);
         }
       });
     },
-    submitEdit() {
-      console.log(this.editTeacher);
-      this.$apis.common.teacher_edit_put(this.editTeacher).then(res => {
-        if (res.data.code == 1) {
-          this.editDialog = false;
-          this.$message({
-            type: "success",
-            message: "上传成功"
-          });
-        } else {
-          this.$message({
-            type: "success",
-            message: res.data.msg
-          });
-        }
-      });
-    },
+    // submitEdit() {  //提交编辑
+    //   console.log(this.editTeacher);
+    //   this.$apis.common.teacher_edit_put(this.editTeacher).then(res => {
+    //     if (res.data.code == 1) {
+    //       this.editDialog = false;
+    //       this.$message({
+    //         type: "success",
+    //         message: "上传成功"
+    //       });
+    //       this.editDialog = true
+    //     } else {
+    //       this.$message({
+    //         type: "success",
+    //         message: res.data.msg
+    //       });
+    //     }
+    //   });
+    // },
     deleteRow(index, rows) {
       //删除那一列
       rows.splice(index, 1);
@@ -541,11 +547,11 @@ export default {
         }
       });
     },
-    choose_suj(targetName) {
+    choose_suj(targetName) {//科目赋值
       var lastName = targetName.length == 1 ? targetName[0] : targetName[1];
-      this.arr.push(lastName);
+      this.arr.push(lastName.subject_name);
       this.editTeacher.teach_subjects = this.arr.toString();
-      //科目赋值
+      
     },
     choose_city(targetName) {
       //城市赋值
@@ -640,7 +646,6 @@ export default {
     },
     getadata() {
       this.$apis.common.teacher_list_only(this.form).then(res => {
-        console.log(this.form)
         if (res.data.code == 1) {
           this.msg = res.data;
           this.tableData = res.data.data.list;

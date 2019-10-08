@@ -314,10 +314,10 @@ export default {
       switch (a) {
         case "click_edit":
     this.$router.push({ path: "/ApplicationEdit", query:{id: b.id }});
-           this.$message({
-            message:"确定成功",
-            type:"success"
-          })
+          //  this.$message({
+          //   message:"确定成功",
+          //   type:"success"
+          // })
           break;
         case "click_test": //审核
          if (b.app_status == "待审核") {
@@ -396,6 +396,14 @@ export default {
             });
           }
           break;
+          case 'click_plan_edit' :  //编辑排课
+               this.$router.push({ path: "/ClassEdit", query:{id: b.id }});
+          //  this.$message({
+          //   message:"确定成功",
+          //   type:"success"
+          // })
+           break;
+
           case 'click_see_plan':  //查看排课
            this.dialogTableVisible_table = true
                let parms = {

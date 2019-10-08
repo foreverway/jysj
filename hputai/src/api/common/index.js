@@ -74,6 +74,24 @@ export default {
     let url = "/api/api_application_arrange"
     return shuju.getdata(url, params)
   },
+  
+  ///api_application_arrange  报名需求排课提交数据接口
+  application_arrange_put(params) {
+    let url = "/api/api_application_arrange"
+    return shuju.putdata(url, params)
+  },
+
+  ///  报名需求 编辑排课获取数据接口
+  arrange_edit(params) {
+    let url = "/api/api_arrange_edit"
+    return shuju.getdata(url, params)
+  },
+
+  // 编辑报名需求提交保存数据接口
+  application_edit_put(params) {
+    let url = "/api/api_application_edit"
+    return shuju.putdata(url, params)
+  },
 
   application_audit(params) { //排课审核
     let url = "/api/api_application_audit"

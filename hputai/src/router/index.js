@@ -11,6 +11,7 @@ import AdminEdit from '@/components/menber/admin_edit'
 import AddLink from '@/components/operation/addlink'
 import ApplicationAdd from '@/components/operation/application_add'  //添加报名需求列表
 import ApplicationEdit from '@/components/operation/application_edit'  //编辑报名需求列表
+import ClassEdit from '@/components/operation/ClassEdit'  //编辑报名需求列表
 import SalesList from '@/components/operation/sale_list.vue'
 import SalelistEdit from '@/components/operation/salelist_edit.vue'
 import Addsalepro from '@/components/operation/addsalepro'
@@ -22,6 +23,7 @@ import Rechargecreate from '@/components/operation/recharge_create'  //充值记
 import EditRecharge from '@/components/operation/edit_recharge'  //充值记录单
 import Share from '@/components/operation/Share'  //充值记录单
 
+   //分享页
 import ShareArticleConfig from '@/components/operation/share_page/share_article_config'
 import ShareList from '@/components/operation/share_page/share_list'
 import ShareListAdd from '@/components/operation/share_page/share_list_add'
@@ -99,6 +101,10 @@ export default new Router({
         {
           path: '/ApplicationEdit',//ApplicationEdit编辑报名需求列表
           component: ApplicationEdit
+        },
+        {
+          path: '/ClassEdit',//编辑排课
+          component: ClassEdit
         },
         {
           path: '/ApplyNeedsList',//ApplyNeedsList添加报名需求列表
