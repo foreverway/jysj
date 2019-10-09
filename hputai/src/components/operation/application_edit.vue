@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <div class="main_head">|&nbsp;添加报名需求</div>
+    <div class="main_head">|&nbsp;编辑报名需求</div>
     <el-steps :active="active" finish-status="success">
       <el-step title="填写报名情况"></el-step>
       <el-step title="填写需求情况"></el-step>
@@ -25,6 +25,8 @@
           :props="{ expandTrigger: 'hover' }"
           :show-all-levels="false"
           @change="handleChange_1"
+          clearable
+
         ></el-cascader>
       </el-form-item>
 
@@ -52,13 +54,13 @@
           <!-- <p  v-bind:id="'all_mach' + i"  v-model=item.price>0</p> -->
           <p>
             <select v-model="item.course_type" v-bind:id="'attr' + i" placeholder="课程性质">
-              <option label="试听" :value="2"></option>
+              <option label="试听" value="2"></option>
               <option label="正课" value="1"></option>
               <option label="辅导" value="3"></option>
             </select>
           </p>
           <p>
-            <select v-model="item.m1" v-bind:id="'clas' + i" placeholder="班课">
+            <select v-model="item.course_id" v-bind:id="'clas' + i" placeholder="班课">
               <option label="否" value="0">否</option>
               <option label="是" value="1">是</option>
             </select>
@@ -195,8 +197,6 @@ export default {
       options: [], //课程名称的数据
       options_: [], //总数据的数据
       radio: '1', //上课地点的选择
-      editableTabsValue: "0",
-      editableTabsValue_1: "0", //增添项的长度
       editableTabs_1: [],
       editableTabs: [
         //新增的内容的数据数组(学生)
@@ -220,18 +220,14 @@ export default {
     // this.getStudent();
   },
   computed: {
-    //     sum:function () {
-    //       for(let i=0 ; i<this.editableTabsValue_1.length; i++){
-    //           return $("#time"+i).val()*$("#mach"+i).val()
-    //               }
-    //  }
+
   },
   mounted() {},
   methods: {
     //生成学员编号
 
     deleteTest_1() {
-      this.editableTabs_1.pop(this.editableTabsValue_1);
+      this.editableTabs_1.pop(this.editableTabs_1);
     },
     deleteTest() {
       this.editableTabs.pop(this.tabIndex);
@@ -248,7 +244,8 @@ export default {
             this.edit_data=res.data.data
             this.title=this.edit_data.title
             this.feedback=this.edit_data.remarks
-
+              console.log(res.data.data)
+              this.valueDate=res.data.data.expiry_date
               this.need_one=this.edit_data.needs_data.need_one
               this.need_two=this.edit_data.needs_data.need_two
               this.need_three=this.edit_data.needs_data.need_three
@@ -258,8 +255,8 @@ export default {
                this.editableTabs_1=this.edit_data.subjects_data  //学科数据
             this.editableTabs=this.edit_data.students_data    //学生数据
             let subArr =this.edit_data.subjects_data  //原学科数据的数组
-                console.log(subArr)   //需要用户科目  手机号  学生姓名的id
-                console.log(this.editableTabs)//在这里循环得到想要的数据
+                // console.log(subArr)   //需要用户科目  手机号  学生姓名的id
+                // console.log(this.editableTabs)//在这里循环得到想要的数据
         }
       })
       //获取科目的数据
@@ -297,10 +294,10 @@ export default {
     },
     //获取学生列表
     getStudent() {
-      let parms = {
-        admin_id: this.getdataCookie("admin_id")
-      };
-      this.$apis.students.students_list(parms).then(res => {
+      // let parms = {
+      //   admin_id: this.getdataCookie("admin_id")
+      // };
+      this.$apis.students.get_students_data().then(res => {
         if (res.data.code == 1) {
           this.options_1 = res.data.data.list;
           for (let i = 0; i < this.options_1.length; i++) {
@@ -323,35 +320,31 @@ export default {
             // if(val_1.length==1){
             let oneArr_1 = val_1.filter(item => item.subject_name == lastName); //对子元素进行赛选
             if (oneArr_1.length > 0) {
-              let newTabName = ++this.tabIndex_1 + "";
-              console.log(oneArr_1[0].id);
               this.editableTabs_1.push({
                 subject_name: oneArr_1[0].subject_name,
+                subject_id: oneArr_1[0].id, //科目id
                 classhour: 10,
                 price: 1000,
-                course_type: "", //课程类型
-                course_id: oneArr_1[0].id, //课程id
-                is_one: "", //一对一？
-                is_group: "" //班课?
+                course_type: 0, //课程类型
+                 course_id:0, //班课
+                is_one: 1, //一对一？
+                is_group: 0 //班课?
               });
-              this.editableTabsValue_1 = newTabName;
             }
           }
         }
       } else {
         //没有子元素
-        console.log(oneArr[0].id);
-        let newTabName = ++this.tabIndex_1 + "";
         this.editableTabs_1.push({
-          subject_name: lastName,
-          classhour: 10,
-          price: 1000,
-          course_type: "", //课程类型
-          course_id: oneArr[0].id, //课程id
-          is_one: "", //一对一？
-          is_group: "" //班课?
+                subject_name: oneArr[0].subject_name,
+                subject_id: oneArr[0].id, //科目id
+                classhour: 10,
+                price: 1000,
+                course_type: 0, //课程类型
+                course_id:0, //班课
+                is_one: 1, //一对一？
+                is_group: 0 //自主班课?
         });
-        this.editableTabsValue_1 = newTabName;
         // this.subject_id.push({student_id:checkOne[0].id})
       }
     },
@@ -372,7 +365,7 @@ export default {
     },
 
     onSubmit() {
-      for (let i = 0; i < this.editableTabsValue_1.length; i++) {}
+      // for (let i = 0; i < this.editableTabs_1.length; i++) {}
       let parms = {
         title: this.title,
         expiry_date: this.valueDate,
@@ -404,24 +397,54 @@ export default {
       });
     },
     next() {
-      for (let i = 0; i < this.editableTabsValue.length; i++) {
+      for (let i = 0; i < this.editableTabs.length; i++) {
         this.students_data.push({
           student_id: $("#students" + i).html()
         });
       }
-      for (let i = 0; i < this.editableTabsValue_1.length; i++) {
+      for (let i = 0; i < this.editableTabs_1.length; i++) {
         this.subjects_data.push({
           subject_id: $("#course_id" + i).html() * 1,
           classhour: $("#time" + i).val() * 1,
           price: $("#mach" + i).val() * 1,
           amount: $("#time" + i).val() * $("#mach" + i).val(),
-          course_type: $("#attr" + i).val(),
-          course_id: $("#course_id" + i).html() * 1,
+          course_type: $("#attr" + i).val()*1,
+          course_id: $("#clas" + i).val()*1 ,
           is_one: $("#one" + i).val() * 1,
           is_group: $("#self" + i).val() * 1
         });
+        console.log(this.subjects_data)
         if ($("#clas" + i).val() == 1) {
           // console.log($("#time"+i).val() + "  " + $("#mach"+i).val() + "  " + $("#sex"+i).val())
+               let parms = {
+        title: this.title,
+        expiry_date: this.valueDate,
+        remarks: this.feedback,
+        course_address: this.radio,
+        need_one: this.need_one,
+        need_two: this.need_two,
+        need_three: this.need_three,
+        need_four: this.need_four,
+        need_five: this.need_five,
+        app_id:this.$route.query.id
+      };
+
+      parms.subjects_data = this.subjects_data;
+      parms.students_data = this.students_data;
+      this.$apis.common.application_edit_put(parms).then(res => {
+        if (res.data.code == 1) {
+          this.$message({
+            message: "修改成功",
+            type: "success"
+          });
+          this.active = 3;
+        }else{
+            this.$message({
+            message:res.data.msg,
+            type: "warning"
+          });
+        }
+      });
           this.active = 3;
         } else {
           this.active++;

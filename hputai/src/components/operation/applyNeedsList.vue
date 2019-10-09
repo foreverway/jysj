@@ -59,9 +59,10 @@
           <span v-for="(item,index) in getRolenenu()" :key="index">
             <!-- <router-link :to="'/SalelistEdit/'+ scope.row.id"> -->
             <el-button
-              type="text"
-              size="medium"
+              type="button" 
+              size="mini"
               index="item.id"
+              v-bind:id="item.menu_action"
               @click="mommonAction(item.menu_action,scope.row)"
             >{{item.menu_name}}</el-button>
           </span>
@@ -313,11 +314,14 @@ export default {
     mommonAction(a, b) {
       switch (a) {
         case "click_edit":
+          if (b.app_status == "待审核"||b.app_status == "待排课"||b.app_status == "已排课待确认") {
     this.$router.push({ path: "/ApplicationEdit", query:{id: b.id }});
-          //  this.$message({
-          //   message:"确定成功",
-          //   type:"success"
-          // })
+          }else{
+          this.$message({
+            message:"请按流程操作",
+            type:"warning"
+          })
+          }
           break;
         case "click_test": //审核
          if (b.app_status == "待审核") {
@@ -332,6 +336,7 @@ export default {
           }
           break;
         case "click_sure":
+          if (b.app_status == "已排课待确认") {
          this.$confirm('确认课表后无法更改课表的信息, 是否确定?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -357,8 +362,16 @@ export default {
             message: '已取消确定'
           });          
         });
+        }else{
+                            this.$message({
+            message:"请按流程操作",
+            type:"warning"
+          })
+          }
           break;
+
         case "click_delete":
+          if (b.app_status == "待审核"||b.app_status == "待排课"||b.app_status == "已排课待确认") {
         this.$confirm('此操作将永久删除该需求, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -383,8 +396,14 @@ export default {
             type: 'info',
             message: '已取消删除'
           });          
-        });
+        });}else{
+            this.$message({
+            message:"此时不能删除",
+            type:"warning"
+          })
+        }
           break;
+
         case "cilck_plan_class":
           // 排课
           if (b.app_status == "待排课") {
@@ -396,15 +415,21 @@ export default {
             });
           }
           break;
+
           case 'click_plan_edit' :  //编辑排课
+                    if (b.app_status == "已排课待确认") {
                this.$router.push({ path: "/ClassEdit", query:{id: b.id }});
-          //  this.$message({
-          //   message:"确定成功",
-          //   type:"success"
-          // })
+                    }else{
+           this.$message({
+            message:"只有已排课待确认时才可以操作",
+            type:"warning"
+          })
+                    }
            break;
 
           case 'click_see_plan':  //查看排课
+       if (b.app_status == "已确认"||b.app_status == "授课考勤中"||b.app_status == "已结课") {
+
            this.dialogTableVisible_table = true
                let parms = {
             app_id: b.id
@@ -414,7 +439,13 @@ export default {
               this.gridData=res.data.data
                this.gridData_class=res.data.data.course_data
              }
-           })
+           })}else{
+                       this.$message({
+            message:'还不能查看',
+            type:"warning"
+          })
+           }
+
           break;
       }
     },
@@ -426,9 +457,9 @@ export default {
       //提交审核意见
            let shenghe={
                  app_id: this.app_id,
-                  banzhuren_id:this.banzhuren_live,
-                  jiaowu_id: this.moneymen_live,
-                  zhujiao_id: this.helpTeacher_live,
+                  banzhuren_id:this.banzhuren_live[0],
+                  jiaowu_id: this.moneymen_live[0],
+                  zhujiao_id: this.helpTeacher_live[0],
                   is_pass: this.is_pass,
                   remarks:this.textarea
            }
@@ -607,5 +638,34 @@ export default {
   font-size: 22px;
   font-weight: 900;
   /* line-height: 30px; */
+}
+#click_edit{ 
+  /* //编辑 */
+  background-color: #3A8EFF !important;
+  color:white;
+}
+#click_test{ /* //审核 */
+  background-color: #FF8500 !important;
+    color:white;
+}
+#click_plan_edit{ /* //编辑排课 */
+  background-color: #05D294 !important;
+    color:white;
+}
+#click_sure{ /* //确定 */
+  background-color: #FE6249 !important;
+    color:white;
+}
+#click_delete{ /* //删除 */
+  background-color: #E95150 !important;
+    color:white;
+}
+#cilck_plan_class{ /* //排课 */
+  background-color: #2ADBCB !important;
+    color:white;
+}
+#click_see_plan{ /* //查看排课 */
+  background-color: #7571FA !important;
+    color:white;
 }
 </style>

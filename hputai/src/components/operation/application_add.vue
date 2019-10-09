@@ -33,6 +33,7 @@
           :props="{ expandTrigger: 'hover' }"
           :show-all-levels="false"
           @change="handleChange_1"
+          clearable
         ></el-cascader>
       </el-form-item>
 
@@ -50,9 +51,9 @@
         </div>
         <div class="add_ul_new" v-for="(item,i) in editableTabs_1" :key="i">
           <p>{{item.title}}</p>
-          <span style="display:none;" v-bind:id="'course_id'+ i">{{item.course_id}}</span>
+          <span style="display:none;" v-bind:id="'course_id'+ i">{{item.subject_id}}</span>
           <p>
-            <el-input v-model.number="item.times" v-bind:id="'time' + i" placeholder="课时"></el-input>
+            <el-input v-model.number="item.classhour" v-bind:id="'time' + i" placeholder="课时"></el-input>
           </p>
           <p>
             <el-input v-model.number="item.price" v-bind:id="'mach' + i" placeholder="单价(元)"></el-input>
@@ -66,7 +67,7 @@
             </select>
           </p>
           <p>
-            <select v-model="item.m1" v-bind:id="'clas' + i" placeholder="班课">
+            <select v-model="item.course_id" v-bind:id="'clas' + i" placeholder="班课">
               <option label="否" value="0">否</option>
               <option label="是" value="1">是</option>
             </select>
@@ -87,18 +88,13 @@
         </div>
       </el-form-item>
       <el-form-item label="学生姓名">
-        <!-- <el-cascader
-    v-model="value_1"
-    :options="options1"
-    @change="handleChange">
-      filterable
-        </el-cascader>-->
         <el-cascader
           placeholder="输入学生姓名"
           v-model="value_1"
           :options="options1"
           @change="handleChange"
           filterable
+          clearable
         ></el-cascader>
         <div class="add_ul">
           <p>学生姓名</p>
@@ -131,18 +127,14 @@
     <div v-if="active==2">
       <el-form>
         <el-form-item label="上课地点" v-model="radio">
-          <el-radio-group v-model="radio"  @change=whereGo(radio)>
-        <el-radio v-model="radio" label="1" >线上</el-radio>
-        <el-radio v-model="radio" label="2">线下</el-radio>
-         </el-radio-group>
+          <el-radio-group v-model="radio" @change="whereGo(radio)">
+            <el-radio v-model="radio" label="1">线上</el-radio>
+            <el-radio v-model="radio" label="2">线下</el-radio>
+          </el-radio-group>
         </el-form-item>
-   <el-form-item label="上课地址" v-if="show==true">
-      <el-cascader
-        placeholder="支持到地级市"
-         v-model="address"
-        :options="address_check"
-        filterable></el-cascader>
-      </el-form-item>
+        <el-form-item label="上课地址" v-if="show==true">
+          <el-cascader placeholder="支持到地级市" v-model="address" :options="address_check" filterable></el-cascader>
+        </el-form-item>
         <el-form-item label="需求1">
           <el-input
             type="textarea"
@@ -181,36 +173,49 @@
         <i class="el-icon-circle-check" type="success"></i>
       </div>
       <div class="succ_word">
-        <el-link icon="el-icon-edit" type="primary" href="./ApplicationAdd">继续添加排课需求</el-link>
+        <el-link icon="el-icon-edit" type="primary" href="./">继续添加排课需求</el-link>
         <el-link type="primary" href="./ApplyNeedsList">
-          查看排课需求列表
+          排课需求列表
           <i class="el-icon-view el-icon--right"></i>
         </el-link>
       </div>
     </div>
 
     <el-button @click="goBack" v-if="active==1||active==2">取消</el-button>
-    <el-button style="margin-top: 12px;background-color:#e6563a; border:none;color:white;" @click="pre" v-if="active==2">上一步</el-button>
-    <el-button style="margin-top: 12px;background-color:#e6563a; border:none;color:white;" @click="next" v-if="active==1">下一步</el-button>
-    <el-button type="primary" style="background-color:#e6563a; border:none;color:white;" @click="onSubmit" v-if="active==2">立即创建</el-button>
+    <el-button
+      style="margin-top: 12px;background-color:#e6563a; border:none;color:white;"
+      @click="pre"
+      v-if="active==2"
+    >上一步</el-button>
+    <el-button
+      style="margin-top: 12px;background-color:#e6563a; border:none;color:white;"
+      @click="next"
+      v-if="active==1"
+    >下一步</el-button>
+    <el-button
+      type="primary"
+      style="background-color:#e6563a; border:none;color:white;"
+      @click="onSubmit"
+      v-if="active==2"
+    >立即创建</el-button>
     <!-- 设置充值链接 -->
     <!-- <div style="display:none" cols="20" id="biao1">{{copyurl1}}</div> -->
   </div>
 </template>
 
 <script>
-import {mapState}  from 'vuex'
+import { mapState } from "vuex";
 import studens_url from "../../config/config";
 export default {
   data() {
     return {
       show: "false",
       address_check: [], //上课地址的数据
-      address:"",  //上课地址
+      address: "", //上课地址
       input: "",
       input1: "",
       input2: "",
-      value:'',
+      value: "",
       value_1: "",
       valueDate: "",
       active: 1,
@@ -229,8 +234,7 @@ export default {
       options: [], //课程名称的数据
       options_: [], //总数据的数据
       radio: "", //上课地点的选择
-      editableTabsValue: "0",
-      editableTabsValue_1: "0", //增添项的长度
+
       editableTabs_1: [],
       editableTabs: [
         //新增的内容的数据数组(学生)
@@ -259,12 +263,12 @@ export default {
     //           return $("#time"+i).val()*$("#mach"+i).val()
     //               }
     //  }
-    ...mapState(['region_list'])
+    ...mapState(["region_list"])
   },
   mounted() {},
   methods: {
-     whereGo(a) {
-        if (a == "2") {
+    whereGo(a) {
+      if (a == "2") {
         this.show = true;
         this.address_check = this.region_list;
       } else {
@@ -288,8 +292,8 @@ export default {
       if (minu < 10) minu = "0" + minu;
       if (sec < 10) sec = "0" + sec;
       var time = "";
-      time = year + "" + month + date + hour + minu 
-      let timer=JSON.parse(time)
+      time = year + "" + month + date + hour + minu;
+      let timer = JSON.parse(time);
       return timer;
       // //设置得到当前日期的函数的执行间隔时间，每1000毫秒刷新一次。
       // var timer = setTimeout("writeCurrentDate()", 1000);
@@ -300,15 +304,13 @@ export default {
       // alert()
     },
     deleteTest_1() {
-      this.editableTabs_1.pop(this.editableTabsValue_1);
+      this.editableTabs_1.pop(this.editableTabs_1);
     },
     deleteTest() {
       this.editableTabs.pop(this.tabIndex);
     },
     result() {
-      for (let i = 0; i < this.items_add.length; i++) {
-
-      }
+      for (let i = 0; i < this.items_add.length; i++) {}
     },
     getdata() {
       let parms = {
@@ -347,15 +349,15 @@ export default {
     },
     createStudent() {
       // var checkVal=document.getElementsByClassName("checkVal")
-      // console.log(checkVal)
+      // console.log(checkVal)  /api_students_data
     },
 
     //获取学生列表
     getStudent() {
-      let parms = {
-        admin_id: this.getdataCookie("admin_id")
-      };
-      this.$apis.students.students_list(parms).then(res => {
+      // let parms = {
+      //   admin_id: this.getdataCookie("admin_id")
+      // };
+      this.$apis.students.get_students_data().then(res => {
         if (res.data.code == 1) {
           this.options_1 = res.data.data.list;
           for (let i = 0; i < this.options_1.length; i++) {
@@ -369,6 +371,7 @@ export default {
     handleChange_1(targetName) {
       var lastName = targetName.length == 1 ? targetName[0] : targetName[1];
       let oneArr = this.options_.filter(item => item.subject_name == lastName);
+      console.log(oneArr)
       if (oneArr.length == 0) {
         for (let i = 0; i < this.options_.length; i++) {
           var val = this.options_[i];
@@ -378,62 +381,67 @@ export default {
             // if(val_1.length==1){
             let oneArr_1 = val_1.filter(item => item.subject_name == lastName); //对子元素进行赛选
             if (oneArr_1.length > 0) {
-              let newTabName = ++this.tabIndex_1 + "";
-              console.log(oneArr_1[0].id);
+              //let newTabName = ++this.tabIndex_1 + "";
+             // console.log(oneArr_1[0].id);
               this.editableTabs_1.push({
                 title: oneArr_1[0].subject_name,
-                times: 10,
+                subject_id: oneArr_1[0].id, //科目id
+                classhour: 10,
                 price: 1000,
-                course_type: "", //课程类型
-                course_id: oneArr_1[0].id, //课程id
-                is_one: "", //一对一？
-                is_group: "" //班课?
+                course_type: 0, //课程类型
+                 course_id:0, //班课
+                is_one: 1, //一对一？
+                is_group: 0 //班课?
               });
-              this.editableTabsValue_1 = newTabName;
+              console.log(this.editableTabs_1)
+             // this.editableTabsValue_1 = newTabName;
             }
           }
         }
       } else {
         //没有子元素
-        console.log(oneArr[0].id);
-        let newTabName = ++this.tabIndex_1 + "";
+        //console.log(oneArr[0].id);
+        //let newTabName = ++this.tabIndex_1 + "";
         this.editableTabs_1.push({
-          title: lastName,
-          times: 10,
-          price: 1000,
-          course_type: "", //课程类型
-          course_id: oneArr[0].id, //课程id
-          is_one: "", //一对一？
-          is_group: "" //班课?
+                title: oneArr[0].subject_name,
+                subject_id: oneArr[0].id, //科目id
+                classhour: 10,
+                price: 1000,
+                course_type: 0, //课程类型
+                course_id:0, //班课
+                is_one: 1, //一对一？
+                is_group: 0 //自主班课?
         });
-        this.editableTabsValue_1 = newTabName;
+        console.log(this.editableTabs_1)
+       // this.editableTabsValue_1 = newTabName;
         // this.subject_id.push({student_id:checkOne[0].id})
       }
     },
     //学生姓名选择产生的变化
     handleChange(targetName) {
-      console.log(this.writeCurrentDate());
+      //console.log(this.writeCurrentDate());
       var checkOne = this.options_1.filter(
         item => item.username == targetName[0]
       );
-      let newTabName = ++this.tabIndex + "";
+     // let newTabName = ++this.tabIndex + "";
       this.editableTabs.push({
         name: targetName[0],
         tel: checkOne[0].tel,
         id: checkOne[0].id
       });
+  
       // this.student_data.push({student_id:checkOne[0].id})//注入学生id
-      this.editableTabsValue = newTabName;
+      //this.editableTabsValue = newTabName;
     },
 
     onSubmit() {
-      for (let i = 0; i < this.editableTabsValue_1.length; i++) {}
+     // for (let i = 0; i < this.editableTabsValue_1.length; i++) {}
       let parms = {
         title: this.title,
         expiry_date: this.valueDate,
         remarks: this.feedback,
         course_address: this.radio,
-        address:this.address,
+        address: this.address,
         need_one: this.need_one,
         need_two: this.need_two,
         need_three: this.need_three,
@@ -443,6 +451,7 @@ export default {
 
       parms.subjects_data = this.subjects_data;
       parms.students_data = this.students_data;
+      console.log(parms)
       this.$apis.common.application_add(parms).then(res => {
         if (res.data.code == 1) {
           this.$message({
@@ -454,12 +463,13 @@ export default {
       });
     },
     next() {
-      for (let i = 0; i < this.editableTabsValue.length; i++) {
+         // console.log(this.editableTabs)
+      for (let i = 0; i < this.editableTabs.length; i++) {
         this.students_data.push({
           student_id: $("#students" + i).html()
         });
       }
-      for (let i = 0; i < this.editableTabsValue_1.length; i++) {
+      for (let i = 0; i < this.editableTabs_1.length; i++) {
         this.subjects_data.push({
           subject_id: $("#course_id" + i).html() * 1,
           classhour: $("#time" + i).val() * 1,

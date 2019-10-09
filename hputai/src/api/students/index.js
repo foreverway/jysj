@@ -7,6 +7,12 @@ export default {
             return shuju.getdata(url,params)
            },
 
+           //学生数据接口
+            get_students_data (params) {
+          let url='/api/api_students_data'
+          return shuju.getdata(url,params)
+         },
+
            //添加学员  /api_students_add
            students_add (params) {
             let url='/api/api_students_add'
