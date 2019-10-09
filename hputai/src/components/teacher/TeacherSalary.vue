@@ -82,6 +82,7 @@ export default {
     return {
       msg: "",
       tableData: [],
+      teacher_data:[],
       params: {
         teacher_id: "",
         subject_id: "",

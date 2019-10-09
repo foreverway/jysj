@@ -41,7 +41,7 @@
           <el-table-column prop="course_address" label="地点"></el-table-column>
           <el-table-column prop="subject_name" label="科目"></el-table-column>
           <el-table-column prop="live_name" label="直播平台"></el-table-column>
-          <el-table-column label="操作" width="250" @click="dialogVisible_other = true">
+          <el-table-column label="操作" width="220" @click="dialogVisible_other = true" fixed="right">
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -164,7 +164,7 @@
           <el-table-column prop="course_address" label="地点"></el-table-column>
           <el-table-column prop="subject_name" label="科目"></el-table-column>
           <el-table-column prop="live_name" label="直播平台"></el-table-column>
-          <el-table-column label="操作" width="320" >
+          <el-table-column label="操作" width="320" fixed="right">
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -801,9 +801,9 @@ export default {
 } */
 .posi_right {
   position: absolute;
-  width: 50%;
-  left: 640px;
-  top: 290px;
+  width: 65%;
+  left: 440px;
+  top: 195px;
   border: 1px solid block;
   border: 1px solid silver;
 }
