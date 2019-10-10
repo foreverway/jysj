@@ -4,16 +4,19 @@ import Vue from 'vue'
 import $ from 'jquery'
 import VCharts from 'v-charts'
 import App from './App'
-import router from './router'
-import store from './store'//引入store
+
 // [ 可选组件 ] 图表
 
 import apis from './api/apiList'
 import 'babel-polyfill';
-import '../theme/index.css'
 import ElementUI from 'element-ui';
+import '../theme/index.css'
+
 // import 'element-ui/lib/theme-chalk/index.css';
 
+//把组件放在第三方样式之后，在main.js中引入顺序决定了打包后css的顺序
+import router from './router'
+import store from './store'//引入store
 Vue.prototype.$apis = apis
 Vue.use(ElementUI);
 Vue.use(VCharts);

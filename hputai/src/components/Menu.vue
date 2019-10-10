@@ -415,20 +415,30 @@ export default {
    /* position: fixed; */
     display:inline-block;
      overflow-y: auto;
-     width: 100%;
+     width: calc(100% - 200px);
     margin-left:200px;
     margin-top:50px;
     height: 100%;
 }
+.left[data-v-98c1a456], .right[data-v-98c1a456] {
+    height: 100%;
+    overflow-y: auto;
+    display: inline-block;
+    position: fixed}
+
 .el-submenu__title {
   pointer-events: none !important;
 }
-.header[data-v-9bcc0be2] {
+.header {
   position: fixed;
   top: 0;
   left: 0;
   z-index: 5;
+    height: 61px;
+      width: 100%;
+      background: #fff;
 }
+
 #changeC {
   color: #e6563a !important;
 }
@@ -457,11 +467,7 @@ export default {
   width: 200px;
   min-height: 100vh;
 }
-.header {
-  height: 61px;
-  background: #ffffff;
-  width: 100%;
-}
+
 .banquan {
   text-align: center;
   height: 60px;

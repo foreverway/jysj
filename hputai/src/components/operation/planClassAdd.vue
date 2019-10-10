@@ -38,7 +38,7 @@
       </el-form-item>
       <el-form-item :inline="true" label="班主任">
         <el-cascader
-          v-model="form.banzhuren_live"
+          v-model="form.banzhuren_id"
           :options="this.banzhuren_list_new"
           :props="{ expandTrigger: 'hover' }"
           :show-all-levels="false"
@@ -47,7 +47,7 @@
       </el-form-item>
       <el-form-item :inline="true" label="助教">
         <el-cascader
-          v-model="form.helpTeacher_live"
+          v-model="form.zhujiao_id"
           :options="this.zhujiao_data_new"
           :props="{ expandTrigger: 'hover' }"
           :show-all-levels="false"
@@ -58,7 +58,7 @@
         <!-- <span class="demonstration">hover 触发子菜单</span> -->
         <!-- 用el-autocomplete -->
         <el-cascader
-          v-model="form.jiaowu_live"
+          v-model="form.jiaowu_id"
           :options="this.jiaowu_data_new"
           :props="{ expandTrigger: 'hover' }"
           :show-all-levels="false"
@@ -101,7 +101,7 @@
         <div class="add_ul">
           <p id="sss">课时</p>
           <p width="300px">开始时间</p>
-          <p width="300px">结束时间</p>
+          <p width="300px">周几</p>
           <p>直播类型</p>
           <p>观看端</p>
           <p>操作</p>
@@ -122,12 +122,7 @@
             ></el-date-picker>
           </p>
           <p>
-            <el-date-picker
-              v-model="value_data_end"
-              value-format="timestamp"
-              type="datetime"
-              placeholder="结束日期"
-            ></el-date-picker>
+           {{}}
           </p>
           <!-- <p @click="milti">总额</p> -->
           <p>
@@ -156,7 +151,7 @@
         <div class="add_ul_new" v-for="(item,i) in editableTabs_1" :key="i">
           <span style="display:none;" v-bind:id="'course_id'+ i">{{item.course_id}}</span>
           <p>
-            <el-input v-model.number="item.times" v-bind:id="'classhour' + i" placeholder="排几节课?"></el-input>
+            <el-input v-model.number="item.times" v-bind:id="'classhour' + i" ></el-input>
           </p>
           <p>
             <!-- <el-input v-model.number="item.price" v-bind:id="'mach' + i" placeholder="单价(元)"></el-input> -->
@@ -206,9 +201,11 @@
         </div>
       </el-form-item>
     </el-form>
+    <el-button type="primary" @click="onSubmit">提交</el-button>
+
 
     <el-button @click="goBack">取消</el-button>
-    <el-button type="primary" @click="onSubmit">就这样吧</el-button>
+
     <!-- 查看学生课表 -->
     <el-dialog title="提示" :visible.sync="stu_centerDialogVisible" width="60%" center>
       <span>{{this.seestudentname}}学生课表</span>
@@ -323,23 +320,6 @@
                 <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label>
           <p>{{seeclassneeds.need_three}}</p>
         </el-form-item>
-        <!-- <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="学生:">
-          <el-table
-            :data="seeclassneeds.students"
-            style="border:1px solid silver;margin: 0; border-bottom:none;"
-          >
-            <el-table-column property="classhour" label="科目"></el-table-column>
-            <el-table-column property="start_time" label="考试类别"></el-table-column>
-            <el-table-column property="week" label="考试时间"></el-table-column>
-            <el-table-column property="live_type" label="单项1"></el-table-column>
-            <el-table-column property="play_type" label="单项2"></el-table-column>
-            <el-table-column property="week" label="单项3"></el-table-column>
-            <el-table-column property="live_type" label="单项4"></el-table-column>
-            <el-table-column property="play_type" label="单项5"></el-table-column>
-            <el-table-column property="live_type" label="总分"></el-table-column>
-            <el-table-column property="play_type" label="目标分数"></el-table-column>
-          </el-table>
-        </el-form-item> -->
         <el-form-item
           style="border:1px solid silver;margin: 0; border-bottom:none;background-color:silver;"
           label="需求五:"
@@ -433,9 +413,9 @@ export default {
         //总表格
         value_live: "",
         teacher_live: "",  //选择的讲师的id
-        banzhuren_live: "",
-        helpTeacher_live: "",
-        jiaowu_live: "",
+        banzhuren_id: "",
+        zhujiao_id: "",
+        jiaowu_id: "",
         radio: ""
       },
       apply_data: {}, //根据报名表id获取的数据
@@ -594,8 +574,9 @@ export default {
       this.get_student_course({
         //查看学生课表
         params,
-        url: "/api/api_student_course"
+        url: "/api/api_getstudent_course"
       });
+      console.log(this.student_course)
       this.seestudentclass = this.student_course;
       this.seestudentname = b;
     },
@@ -699,9 +680,9 @@ export default {
         app_id: this.$route.query.id, //报名表id
         live_id: this.form.value_live[0], //直播平台id
         teacher_id: this.form.teacher_live[0], //讲师id
-        banzhuren_id: this.form.banzhuren_live[0], //班主任id
-        zhujiao_id: this.form.helpTeacher_live[0], //助教id
-        jiaowu_id: this.form.jiaowu_live[0], //教务id
+        banzhuren_id: this.form.banzhuren_id[0], //班主任id
+        zhujiao_id: this.form.zhujiao_id[0], //助教id
+        jiaowu_id: this.form.jiaowu_id[0], //教务id
         // students_id: this.apply_data.students,  //学生id  string
         classhour: this.$route.query.classhour * 1, //课时
         course_address: this.radio * 1 //1线上，2线下
@@ -796,6 +777,8 @@ export default {
         .then(res => {
           if (res.data.code == 1) {
             this.apply_data = res.data.data;
+            this.form= this.apply_data
+            console.log(this.apply_data)
           } else {
             this.$message({
               type: "info",
