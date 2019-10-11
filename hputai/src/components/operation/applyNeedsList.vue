@@ -428,7 +428,7 @@ export default {
            break;
 
           case 'click_see_plan':  //查看排课
-       if (b.app_status == "已确认"||b.app_status == "授课考勤中"||b.app_status == "已结课") {
+       if (b.app_status == "已排课待确认"||b.app_status == "已确认"||b.app_status == "授课考勤中"||b.app_status == "已结课") {
 
            this.dialogTableVisible_table = true
                let parms = {

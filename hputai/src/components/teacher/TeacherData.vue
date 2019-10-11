@@ -55,20 +55,127 @@
 
       <el-table-column align="center" label="时间">
         <template slot-scope="scope">
-<p>{{scope.row.classhour}}</p>
+          <p>{{scope.row.classhour}}</p>
         </template>
       </el-table-column>
       <el-table-column label="授课类型" prop="course_type"></el-table-column>
        <el-table-column label="已上/待上" prop="course_status"></el-table-column>
       <el-table-column align="center" label="操作" width="280px" fixed="right">
         <template slot-scope="scope">
-              <el-button size='mini' type="primary">录播</el-button>
-              <el-button size='mini' type="primary">考勤数据</el-button>
-              <el-button size='mini' type="primary">查看反馈</el-button>
+              <el-button size='mini' type="primary" @click="watchVideo(scope.row)">录播</el-button>
+              <el-button size='mini' type="primary" @click="checkWork(scope.row)">考勤数据</el-button>
+              <el-button size='mini' type="primary" @click="feedback(scope.row)">查看反馈</el-button>
           <!-- <el-button size="mini" type="success" @click="toAssess(scope.row.teacher_id)">进行评价</el-button> -->
         </template>
       </el-table-column>
     </el-table>
+    <!-- 看录播 -->
+    <!-- 查看数据 -->
+    <el-dialog
+  title="考勤信息"
+  :visible.sync="checkopen"
+  width="50%"
+  >
+  <el-form :label-position="labelPosition" :inline="true" label-width="80px" :model="check_data">
+  <el-form-item label="课时">
+    <p>{{check_data.classhour}}</p>
+  </el-form-item>
+ <el-form-item label="反馈一">
+        <p>{{check_data.remarks}}</p>
+  </el-form-item>
+  <el-form-item label="反馈二">
+        <p>{{check_data.remarks1}}</p>
+  </el-form-item>
+  <el-form-item label="反馈三">
+        <p>{{check_data.remarks2}}</p>
+  </el-form-item>
+  <el-form-item label="反馈四">
+        <p>{{check_data.remarks3}}</p>
+  </el-form-item>
+  <el-form-item label="学生课时">
+        <p>{{check_data.student_classhour}}</p>
+  </el-form-item>
+  <el-form-item label="老师课时">
+        <p>{{check_data.teacher_classhour}}</p>
+  </el-form-item>
+  <el-form-item label="实上课时">
+        <p>{{check_data.true_classhour}}</p>
+  </el-form-item>
+
+</el-form>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="checkopen = false">取 消</el-button>
+    <el-button type="primary" @click="checkopen = false">确 定</el-button>
+  </span>
+</el-dialog>
+    <!-- 查看反馈 -->
+    <el-dialog
+  title="反馈信息"
+  :visible.sync="feedopen"
+  width="50%"
+  >
+  <el-form :label-position="labelPosition" :inline="true" label-width="80px" :model="feed_data">
+  <el-form-item label="班主任">
+    <p>{{feed_data.banzhuren_name}}</p>
+  </el-form-item>
+ <el-form-item label="课时">
+        <p>{{feed_data.classhour}}</p>
+  </el-form-item>
+   <el-form-item label="课程地址">
+        <p>{{feed_data.course_address}}</p>
+  </el-form-item>
+   <el-form-item label="细节一">
+        <p>{{feed_data.details_1}}</p>
+  </el-form-item>
+  <el-form-item label="细节二">
+        <p>{{feed_data.details_2}}</p>
+  </el-form-item>
+ <el-form-item label="细节三">
+        <p>{{feed_data.details_3}}</p>
+  </el-form-item>
+   <el-form-item label="细节四">
+        <p>{{feed_data.details_4}}</p>
+  </el-form-item>
+   <el-form-item label="细节五">
+        <p>{{feed_data.details_5}}</p>
+  </el-form-item>
+  <el-form-item label="细节六">
+        <p>{{feed_data.details_6}}</p>
+  </el-form-item>
+ <el-form-item label="细节七">
+        <p>{{feed_data.details_7}}</p>
+  </el-form-item>
+   <el-form-item label="细节八">
+        <p>{{feed_data.details_8}}</p>
+  </el-form-item>
+   <el-form-item label="细节九">
+        <p>{{feed_data.details_9}}</p>
+  </el-form-item>
+  <el-form-item label="结束时间">
+        <p>{{feed_data.end_time}}</p>
+  </el-form-item>
+ <el-form-item label="反馈类型">
+        <p>{{feed_data.feedback_type}}</p>
+  </el-form-item>
+   <el-form-item label="开始时间">
+        <p>{{feed_data.start_time}}</p>
+  </el-form-item>
+   <el-form-item label="学生姓名">
+        <p>{{feed_data.student_name}}</p>
+  </el-form-item>
+  <el-form-item label="学科姓名">
+        <p>{{feed_data.subject_name}}</p>
+  </el-form-item>
+ <el-form-item label="老师姓名">
+        <p>{{feed_data.teacher_name}}</p>
+  </el-form-item>
+
+</el-form>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="feedopen = false">取 消</el-button>
+    <el-button type="primary" @click="feedopen = false">确 定</el-button>
+  </span>
+</el-dialog>
     <span v-if="msg.data">
       <el-pagination
         style="margin-top:30px; float: right;"
@@ -91,6 +198,10 @@ export default {
     return {
       msg: "",
       tableData: [],
+      labelPosition:'right',
+      teacher_data:[],  //老师列表数据
+      check_data:{},//考勤数据
+      feed_data:{}, //反馈数据
       params: {
         teacher_id: "",
         subject_id: "",
@@ -98,7 +209,10 @@ export default {
         start_time: "",
         end_time: "",
         page: "1"
-      }
+      },
+      checkopen:false, //考勤的弹出
+      feedopen:false  , //反馈的弹出
+
     };
   },
   created() {
@@ -116,7 +230,39 @@ export default {
         return index + page;
       }
     },
-
+    watchVideo(){
+    },
+    checkWork(result){  //考勤数据
+     
+        if(result.course_id!==null){
+             this.checkopen=true
+      this.$apis.common.attendance_details({course_id:result.course_id}).then(res=>{
+        if(res.data.code==1){
+              this.check_data=res.data.data
+        }
+      }) 
+        }else{
+          this.$message({
+            type:"warning",
+            message:"参数丢失，请咨询研发部"
+          })
+        }
+ 
+    },
+    feedback(result){  //反馈数据
+            if(result.course_id!==null){
+      this.$apis.common.course_feedback({course_id:result.course_id}).then(res=>{
+        if(res.data.code==1){
+            this.feed_data=res.data.data
+        }
+      })
+      this.feedopen=true}else{
+                  this.$message({
+            type:"warning",
+            message:"参数丢失，请咨询研发部"
+          })
+      }
+    },
     current(num) {
       //当前页数
       this.params.page = num;

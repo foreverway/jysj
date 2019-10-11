@@ -30,6 +30,7 @@
         <el-cascader
           v-model="value"
           :options="options"
+          filterable
           :props="{ expandTrigger: 'hover' }"
           :show-all-levels="false"
           @change="handleChange_1"

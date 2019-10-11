@@ -663,7 +663,7 @@ export default {
       for (let i = 0; i < this.editableTabs_1.length; i++) {
         all_hour += $("#classhour" + i).val() * 1;
       }
-      if(all_hour<=this.form.classhour * 1){
+      if(all_hour<this.form.classhour * 1){
       this.editableTabs_1.push({
         classhour: "",
         start_time: "", //选择开始日期

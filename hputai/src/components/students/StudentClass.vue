@@ -757,7 +757,7 @@ export default {
     //获取学生列表
     getStudent() {
       let parms = {
-        admin_id: this.getdataCookie("admin_id")
+        is_data: 1
       };
       this.$apis.students.students_list(parms).then(res => {
         if (res.data.code == 1) {

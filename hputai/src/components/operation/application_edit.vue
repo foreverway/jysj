@@ -26,7 +26,7 @@
           :show-all-levels="false"
           @change="handleChange_1"
           clearable
-
+          filterable
         ></el-cascader>
       </el-form-item>
 
@@ -87,6 +87,7 @@
           :options="options1"
           @change="handleChange"
           filterable
+          clearable
         ></el-cascader>
         <div class="add_ul">
           <p>学生姓名</p>
@@ -217,7 +218,7 @@ export default {
   },
   created() {
     this.getdata();
-    // this.getStudent();
+     this.getStudent();
   },
   computed: {
 
@@ -244,7 +245,6 @@ export default {
             this.edit_data=res.data.data
             this.title=this.edit_data.title
             this.feedback=this.edit_data.remarks
-              console.log(res.data.data)
               this.valueDate=res.data.data.expiry_date
               this.need_one=this.edit_data.needs_data.need_one
               this.need_two=this.edit_data.needs_data.need_two
@@ -294,9 +294,7 @@ export default {
     },
     //获取学生列表
     getStudent() {
-      // let parms = {
-      //   admin_id: this.getdataCookie("admin_id")
-      // };
+
       this.$apis.students.get_students_data().then(res => {
         if (res.data.code == 1) {
           this.options_1 = res.data.data.list;
