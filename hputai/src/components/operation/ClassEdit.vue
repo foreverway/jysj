@@ -1,11 +1,5 @@
 <template>
   <div class="main">
-    <!-- 设置充值链接 -->
-    <!-- <el-page-header content="添加销售进程管控">
-    </el-page-header>-->
-    <!-- <el-row>
-  <el-button type="primary">添加销售进程管控</el-button>
-    </el-row>-->
     <div class="main_head">|&nbsp;编辑排课信息</div>
     <!--  <el-input  style="width:200px" v-model="money"  placeholder="请输入充值金额" ></el-input>
     <el-button type="primary" v-show="money>0" @click="copyUrl">生成并复制充值链接</el-button>-->
@@ -18,65 +12,62 @@
         <el-button type="primary" plain @click="seeClassNeeds(2)">查看排课需求</el-button>
       </el-form-item>
       <el-form-item :inline="true" label="直播平台">
-            <el-select v-model="form.live_id" clearable placeholder="请选择">
-    <el-option
-      v-for="item in this.live_list_new"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value"
-      @change="handleChange_live">
-    </el-option>
-  </el-select>
-
+        <el-select v-model="form.live_id" clearable filterable placeholder="请选择">
+          <el-option
+            v-for="item in this.live_list_new"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+            @change="handleChange_live"
+          ></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item :inline="true" label="讲师">
-  <el-select v-model="form.teacher_id" clearable placeholder="请选择">
-    <el-option
-      v-for="item in this.teacher_data_new"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value"
-      @change="handleChange_teacher">
-    </el-option>
-  </el-select>
+        <el-select v-model="form.teacher_id" filterable clearable placeholder="请选择">
+          <el-option
+            v-for="item in this.teacher_data_new"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+            @change="handleChange_teacher"
+          ></el-option>
+        </el-select>
         <el-button type="primary" plain @click="seeTeacherClass(2)">查看老师课表</el-button>
       </el-form-item>
       <el-form-item :inline="true" label="班主任">
-            <el-select v-model="form.banzhuren_id" clearable placeholder="请选择">
-    <el-option
-      v-for="item in this.banzhuren_list_new"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value"
-      @change="handleChange_banzhuren">
-    </el-option>
-  </el-select>
+        <el-select v-model="form.banzhuren_id" filterable clearable placeholder="请选择">
+          <el-option
+            v-for="item in this.banzhuren_list_new"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+            @change="handleChange_banzhuren"
+          ></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item :inline="true" label="助教">
-   <el-select v-model="form.zhujiao_id" clearable placeholder="请选择">
-    <el-option
-      v-for="item in this.zhujiao_data_new"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value"
-      @change="handleChange_help">
-    </el-option>
-  </el-select>
-
+        <el-select v-model="form.zhujiao_id" filterable clearable placeholder="请选择">
+          <el-option
+            v-for="item in this.zhujiao_data_new"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+            @change="handleChange_help"
+          ></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item :inline="true" label="教务专员">
         <!-- <span class="demonstration">hover 触发子菜单</span> -->
         <!-- 用el-autocomplete -->
-           <el-select v-model="form.jiaowu_id" clearable placeholder="请选择">
-    <el-option
-      v-for="item in this.jiaowu_data_new"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value"
-      @change="handleChange_money">
-    </el-option>
-  </el-select>
-
+        <el-select v-model="form.jiaowu_id" filterable clearable placeholder="请选择">
+          <el-option
+            v-for="item in this.jiaowu_data_new"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+            @change="handleChange_money"
+          ></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item :inline="true" label="课时">
         <p>{{parseInt(this.form.classhour)}}</p>
@@ -186,7 +177,7 @@
               type="datetime"
               placeholder="星期"
             ></el-date-picker>-->
-            <el-input v-model.number="item.week" v-bind:id="'end_time' + i" placeholder="星期"></el-input>
+            <el-input v-model.number="item.week"  v-bind:id="'end_time' + i" placeholder="星期"></el-input>
           </p>
           <p>
             <select
@@ -540,14 +531,13 @@ export default {
       this.dialogTableVisible_seeapplytable = true;
       let params = {
         // app_id: this.apply_data.app_id
-        app_id:this.$route.query.id
+        app_id: this.$route.query.id
       };
 
-      this.$apis.common.get_application(params).then(res=>{
-        if(res.data.code==1){
-          this.seeapplytable=res.data.data
+      this.$apis.common.get_application(params).then(res => {
+        if (res.data.code == 1) {
+          this.seeapplytable = res.data.data;
         }
-        
       });
       // this.seeapplytable = this.application;
     },
@@ -570,8 +560,8 @@ export default {
         teacher_id: this.form.teacher_id * 1
       };
       if (!this.form.teacher_id * 1 == "") {
-        teacher_id: this.form.teacher_id * 1
-      };
+        teacher_id: this.form.teacher_id * 1;
+      }
       if (!this.form.teacher_id * 1 == "") {
         this.dialogTableVisible_seeTeacherClass = true;
         this.get_teacher_course({
@@ -659,30 +649,31 @@ export default {
     handleChange_money() {},
 
     handleChange_1(targetName) {
- var all_hour = 0;
+      var all_hour = 0;
       for (let i = 0; i < this.editableTabs_1.length; i++) {
         all_hour += $("#classhour" + i).val() * 1;
       }
-      if(all_hour<this.form.classhour * 1){
-      this.editableTabs_1.push({
-        classhour: "",
-        start_time: "", //选择开始日期
-        week: "", //星期
-       // course_id: "", //周几
-        course_type: "1", //课程类型
-        play_type: "1"
-      });
-      }else{
-          this.$message({
-              type:"warning",
-              message:'请核对剩余课时'
-          })
+      if (all_hour < this.form.classhour * 1) {
+        this.editableTabs_1.push({
+          classhour: "",
+          start_time: "", //选择开始日期
+          week: "", //星期
+          // course_id: "", //周几
+          course_type: "1", //课程类型
+          play_type: "1"
+        });
+      } else {
+        this.$message({
+          type: "warning",
+          message: "请核对剩余课时"
+        });
       }
 
       // this.editableTabs_1 = newTabName;
       // }
     },
     onSubmit() {
+      this.subjects_data = [];
       var all_hour = 0;
       for (let i = 0; i < this.editableTabs_1.length; i++) {
         all_hour += $("#classhour" + i).val() * 1;
@@ -695,15 +686,15 @@ export default {
         this.subjects_data.push({
           classhour: $("#classhour" + i).val() * 1,
           start_time: dateToMs($("#start_time" + i).val()),
-         // week: $("#end_time" + i).val(),
-         // course_id: $("#course_id" + i).html(),
+          // week: $("#end_time" + i).val(),
+          // course_id: $("#course_id" + i).html(),
           course_type: $("#course_type" + i).val(),
           play_type: $("#play_type" + i).val()
         });
       }
-      console.log(this.form)
+      console.log(this.form);
       let parms = {
-        app_id: this.$route.query.id*1, //报名表id
+        app_id: this.$route.query.id * 1, //报名表id
         live_id: this.form.live_id, //直播平台id
         teacher_id: this.form.teacher_id, //讲师id
         banzhuren_id: this.form.banzhuren_id, //班主任id
@@ -721,27 +712,24 @@ export default {
       // console.log(all_hour*1,'填入时间')
       // console.log(this.$route.query.classhour*1,'总时间')
       if (all_hour * 1 <= this.form.classhour * 1) {
-        // console.log(parms)
-        // console.log(this.form)
-        this.$apis.common.application_arrange_put(parms).then(res => {
-          if (res.data.code == 1) {
-            this.$message({
-              type: "success",
-              message: "添加成功"
-            });
-            this.$router.go(-1);
-          } else {
-            this.editableTabs_1 = [];
-            this.subjects_data = [];
-            this.$message({
-              type: "warning",
-              message: res.data.msg
-            });
-          }
-        });
+        console.log(parms)
+        //console.log(this.form)
+        // this.$apis.common.application_arrange_put(parms).then(res => {
+        //   if (res.data.code == 1) {
+        //     this.$message({
+        //       type: "success",
+        //       message: "添加成功"
+        //     });
+        //     this.$router.go(-1);
+        //   } else {
+
+        //     this.$message({
+        //       type: "warning",
+        //       message: res.data.msg
+        //     });
+        //   }
+        // });
       } else {
-        this.editableTabs_1 = [];
-        this.subjects_data = [];
         this.$message({
           type: "warning",
           message: "排课时间不足"
@@ -777,7 +765,7 @@ export default {
         .then(res => {
           if (res.data.code == 1) {
             this.form = res.data.data;
-            console.log(this.form)
+            console.log(this.form);
             this.form.teacher_id = res.data.data.teacher_id;
             this.editableTabs_1 = res.data.data.course_data;
             this.apply_data.students = res.data.data.students;

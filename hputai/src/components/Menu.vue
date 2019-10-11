@@ -1,74 +1,69 @@
 <template>
   <div class="main">
- 
-      <el-container class="youCom" direction="horizontal"  style="  border: 1px solid #eee">
-          <el-header >
-         <div class="header">
-           <img href="#top" src="../assets/logo.png" height="50" alt style="padding:5px;float:left;" />
-           <div class="users" style="width:180px;">
-             <el-dropdown trigger="click">
-               <span class="el-dropdown-link">
-                 <img src="../assets/touxiang.png" alt class="touxiang" />
-                 <span style="display:inline-block;width:88px;">{{this.getdataCookie("admin_name")}}</span>
-                 <i class="el-icon-caret-bottom el-icon--right"></i>
-               </span>
-               <el-dropdown-menu slot="dropdown">
-                 <el-dropdown-item class="clearfix">设置</el-dropdown-item>
-                 <el-dropdown-item class="clearfix">
-                   <span @click="delCookie('usertoken')">退出</span>
-                 </el-dropdown-item>
-               </el-dropdown-menu>
-             </el-dropdown>
-           </div>
-         </div>
-       </el-header>
-       <div class="left">
-  <el-aside  width="195px" style="   overflow-x:hidden; background-color: rgb(238, 241, 246)">
-     <div style="height:55px;">
-     </div>
-           <el-menu
-             class="el-menu-vertical-demo"
-             router
-             :default-openeds="openeds"
-             background-color="#ffffff"
-             text-color="#000"
-             active-text-color="#fff"
-             @select="selectMenu"
-             style="  overflow-x:hidden;"
-           >
-             <el-menu-item index="/">
-               <i class="el-icon-s-home"></i>
-               <span slot="title">首页</span>
-             </el-menu-item>
-             <span v-for="(item,index) in rolemenu" :key="index">
-               <!-- 刷新出首层菜单名字 style="pointer-events: none;" -->
-               <el-submenu index="index" id="click_1" style="pointer-events: none;">
-                 <template slot="title">
-                   <i :class="item.menu_icon"></i>
-                   <span slot="title" class="changeC">{{item.menu_name}}</span>
-                 </template>
-                 <span v-for="(items,index1) in item.children" :key="index1">
-                   <!-- 刷新出次级菜单名字 -->
-                   <el-menu-item :index="items.menu_url" route style="pointer-events:painted;">
-                     <template slot="title">
-                       <span slot="title">{{items.menu_name}}</span>
-                     </template>
-                   </el-menu-item>
-                 </span>
-               </el-submenu>
-             </span>
-           </el-menu>
-   </el-aside>
-       </div>
-       <div class="right">
-
-    <el-main>
-    <router-view />
-     </el-main>
-       </div>
-     
- 
- </el-container>
+    <el-container class="youCom main" direction="horizontal" style="  border: 1px solid #eee">
+      <el-header>
+        <div class="header">
+          <img href="#top" src="../assets/logo.png" height="50" alt style="padding:5px;float:left;" />
+          <div class="users" style="width:180px;">
+            <el-dropdown trigger="click">
+              <span class="el-dropdown-link">
+                <img src="../assets/touxiang.png" alt class="touxiang" />
+                <span style="display:inline-block;width:88px;">{{this.getdataCookie("admin_name")}}</span>
+                <i class="el-icon-caret-bottom el-icon--right"></i>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item class="clearfix">设置</el-dropdown-item>
+                <el-dropdown-item class="clearfix">
+                  <span @click="delCookie('usertoken')">退出</span>
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </div>
+        </div>
+      </el-header>
+      <div class="left">
+        <el-aside width="195px" style="   overflow-x:hidden; background-color: rgb(238, 241, 246)">
+          <div style="height:55px;"></div>
+          <el-menu
+            class="el-menu-vertical-demo"
+            router
+            :default-openeds="openeds"
+            background-color="#ffffff"
+            text-color="#000"
+            active-text-color="#fff"
+            @select="selectMenu"
+            style="  overflow-x:hidden;"
+          >
+            <el-menu-item index="/">
+              <i class="el-icon-s-home"></i>
+              <span slot="title">首页</span>
+            </el-menu-item>
+            <span v-for="(item,index) in rolemenu" :key="index">
+              <!-- 刷新出首层菜单名字 style="pointer-events: none;" -->
+              <el-submenu index="index" id="click_1" style="pointer-events: none;">
+                <template slot="title">
+                  <i :class="item.menu_icon"></i>
+                  <span slot="title" class="changeC">{{item.menu_name}}</span>
+                </template>
+                <span v-for="(items,index1) in item.children" :key="index1">
+                  <!-- 刷新出次级菜单名字 -->
+                  <el-menu-item :index="items.menu_url" route style="pointer-events:painted;">
+                    <template slot="title">
+                      <span slot="title">{{items.menu_name}}</span>
+                    </template>
+                  </el-menu-item>
+                </span>
+              </el-submenu>
+            </span>
+          </el-menu>
+        </el-aside>
+      </div>
+      <div class="right">
+        <el-main>
+          <router-view />
+        </el-main>
+      </div>
+    </el-container>
   </div>
 </template>
 
@@ -83,7 +78,7 @@ export default {
       admin_name: "",
       openeds: ["1", "2", "3"],
       peopleInfo: {},
-      seeHeight:document.body.scrollHeight
+      seeHeight: document.body.scrollHeight
     };
   },
   created() {
@@ -124,8 +119,6 @@ export default {
         $(addAttr).attr("class", "");
       }
     });
-
-
   },
   computed: mapState([
     "banzhuren_list",
@@ -140,11 +133,10 @@ export default {
     //     $('.youCom').height(document.documentElement.clientHeight)
     // console.log(document.documentElement.clientHeight)
     // window.location.reload();
-    
   },
   methods: {
     selectMenu(index, indexPath) {
-      console.log(document.body.scrollHeight)
+      console.log(document.body.scrollHeight);
       //实现点击子菜单父菜单出现
       var menuList = $(".changeC");
       for (let y = 0; y < menuList.length; y++) {
@@ -271,160 +263,160 @@ export default {
     // },
   },
   mounted() {}
-//     <el-container class="youCom" direction="horizontal" height="750px" style="  border: 1px solid #eee">
-//          <el-header >
-//         <div class="header">
-//           <img href="#top" src="../assets/logo.png" height="50" alt style="padding:5px;float:left;" />
-//           <div class="users" style="width:180px;">
-//             <el-dropdown trigger="click">
-//               <span class="el-dropdown-link">
-//                 <img src="../assets/touxiang.png" alt class="touxiang" />
-//                 <span style="display:inline-block;width:88px;">{{this.getdataCookie("admin_name")}}</span>
-//                 <i class="el-icon-caret-bottom el-icon--right"></i>
-//               </span>
-//               <el-dropdown-menu slot="dropdown">
-//                 <el-dropdown-item class="clearfix">设置</el-dropdown-item>
-//                 <el-dropdown-item class="clearfix">
-//                   <span @click="delCookie('usertoken')">退出</span>
-//                 </el-dropdown-item>
-//               </el-dropdown-menu>
-//             </el-dropdown>
-//           </div>
-//         </div>
-//       </el-header>
+  //     <el-container class="youCom" direction="horizontal" height="750px" style="  border: 1px solid #eee">
+  //          <el-header >
+  //         <div class="header">
+  //           <img href="#top" src="../assets/logo.png" height="50" alt style="padding:5px;float:left;" />
+  //           <div class="users" style="width:180px;">
+  //             <el-dropdown trigger="click">
+  //               <span class="el-dropdown-link">
+  //                 <img src="../assets/touxiang.png" alt class="touxiang" />
+  //                 <span style="display:inline-block;width:88px;">{{this.getdataCookie("admin_name")}}</span>
+  //                 <i class="el-icon-caret-bottom el-icon--right"></i>
+  //               </span>
+  //               <el-dropdown-menu slot="dropdown">
+  //                 <el-dropdown-item class="clearfix">设置</el-dropdown-item>
+  //                 <el-dropdown-item class="clearfix">
+  //                   <span @click="delCookie('usertoken')">退出</span>
+  //                 </el-dropdown-item>
+  //               </el-dropdown-menu>
+  //             </el-dropdown>
+  //           </div>
+  //         </div>
+  //       </el-header>
 
-//       <el-aside width="202px"  style="background-color: rgb(238, 241, 246)">
-//     <div style="height:55px;">
-//     </div>
-//           <el-menu
-//             class="el-menu-vertical-demo"
-//             router
-//             :default-openeds="openeds"
-//             background-color="#ffffff"
-//             text-color="#000"
-//             active-text-color="#fff"
-//             @select="selectMenu"
-//           >
-//             <el-menu-item index="/">
-//               <i class="el-icon-s-home"></i>
-//               <span slot="title">首页</span>
-//             </el-menu-item>
-//             <span v-for="(item,index) in rolemenu" :key="index">
-//               <!-- 刷新出首层菜单名字 style="pointer-events: none;" -->
-//               <el-submenu index="index" id="click_1" style="pointer-events: none;">
-//                 <template slot="title">
-//                   <i :class="item.menu_icon"></i>
-//                   <span slot="title" class="changeC">{{item.menu_name}}</span>
-//                 </template>
-//                 <span v-for="(items,index1) in item.children" :key="index1">
-//                   <!-- 刷新出次级菜单名字 -->
-//                   <el-menu-item :index="items.menu_url" route style="pointer-events:painted;">
-//                     <template slot="title">
-//                       <span slot="title">{{items.menu_name}}</span>
-//                     </template>
-//                   </el-menu-item>
-//                 </span>
-//               </el-submenu>
-//             </span>
-//           </el-menu>
-//   </el-aside>
-//     <el-main>
-//    <router-view />
-//     </el-main>
-// </el-container>
+  //       <el-aside width="202px"  style="background-color: rgb(238, 241, 246)">
+  //     <div style="height:55px;">
+  //     </div>
+  //           <el-menu
+  //             class="el-menu-vertical-demo"
+  //             router
+  //             :default-openeds="openeds"
+  //             background-color="#ffffff"
+  //             text-color="#000"
+  //             active-text-color="#fff"
+  //             @select="selectMenu"
+  //           >
+  //             <el-menu-item index="/">
+  //               <i class="el-icon-s-home"></i>
+  //               <span slot="title">首页</span>
+  //             </el-menu-item>
+  //             <span v-for="(item,index) in rolemenu" :key="index">
+  //               <!-- 刷新出首层菜单名字 style="pointer-events: none;" -->
+  //               <el-submenu index="index" id="click_1" style="pointer-events: none;">
+  //                 <template slot="title">
+  //                   <i :class="item.menu_icon"></i>
+  //                   <span slot="title" class="changeC">{{item.menu_name}}</span>
+  //                 </template>
+  //                 <span v-for="(items,index1) in item.children" :key="index1">
+  //                   <!-- 刷新出次级菜单名字 -->
+  //                   <el-menu-item :index="items.menu_url" route style="pointer-events:painted;">
+  //                     <template slot="title">
+  //                       <span slot="title">{{items.menu_name}}</span>
+  //                     </template>
+  //                   </el-menu-item>
+  //                 </span>
+  //               </el-submenu>
+  //             </span>
+  //           </el-menu>
+  //   </el-aside>
+  //     <el-main>
+  //    <router-view />
+  //     </el-main>
+  // </el-container>
 
-
-
-//    <el-container class="youCom" style="height:750px; border: 1px solid #eee"> 
-//   <el-aside width="202px" style="background-color: rgb(238, 241, 246)">
-//     <div style="height:55px;">
-//     </div>
-//           <el-menu
-//             class="el-menu-vertical-demo"
-//             router
-//             :default-openeds="openeds"
-//             background-color="#ffffff"
-//             text-color="#000"
-//             active-text-color="#fff"
-//             @select="selectMenu"
-//           >
-//             <el-menu-item index="/">
-//               <i class="el-icon-s-home"></i>
-//               <span slot="title">首页</span>
-//             </el-menu-item>
-//             <span v-for="(item,index) in rolemenu" :key="index">
-//               <!-- 刷新出首层菜单名字 style="pointer-events: none;" -->
-//               <el-submenu index="index" id="click_1" style="pointer-events: none;">
-//                 <template slot="title">
-//                   <i :class="item.menu_icon"></i>
-//                   <span slot="title" class="changeC">{{item.menu_name}}</span>
-//                 </template>
-//                 <span v-for="(items,index1) in item.children" :key="index1">
-//                   <!-- 刷新出次级菜单名字 -->
-//                   <el-menu-item :index="items.menu_url" route style="pointer-events:painted;">
-//                     <template slot="title">
-//                       <span slot="title">{{items.menu_name}}</span>
-//                     </template>
-//                   </el-menu-item>
-//                 </span>
-//               </el-submenu>
-//             </span>
-//           </el-menu>
-//   </el-aside>
-//   <el-container>
-//        <el-header >
-//         <div class="header">
-//           <img href="#top" src="../assets/logo.png" height="50" alt style="padding:5px;float:left;" />
-//           <div class="users" style="width:180px;">
-//             <el-dropdown trigger="click">
-//               <span class="el-dropdown-link">
-//                 <img src="../assets/touxiang.png" alt class="touxiang" />
-//                 <span style="display:inline-block;width:88px;">{{this.getdataCookie("admin_name")}}</span>
-//                 <i class="el-icon-caret-bottom el-icon--right"></i>
-//               </span>
-//               <el-dropdown-menu slot="dropdown">
-//                 <el-dropdown-item class="clearfix">设置</el-dropdown-item>
-//                 <el-dropdown-item class="clearfix">
-//                   <span @click="delCookie('usertoken')">退出</span>
-//                 </el-dropdown-item>
-//               </el-dropdown-menu>
-//             </el-dropdown>
-//           </div>
-//         </div>
-//       </el-header>
-//     <el-main>
-//    <router-view />
-//     </el-main>
-//   </el-container>
-// </el-container>
+  //    <el-container class="youCom" style="height:750px; border: 1px solid #eee">
+  //   <el-aside width="202px" style="background-color: rgb(238, 241, 246)">
+  //     <div style="height:55px;">
+  //     </div>
+  //           <el-menu
+  //             class="el-menu-vertical-demo"
+  //             router
+  //             :default-openeds="openeds"
+  //             background-color="#ffffff"
+  //             text-color="#000"
+  //             active-text-color="#fff"
+  //             @select="selectMenu"
+  //           >
+  //             <el-menu-item index="/">
+  //               <i class="el-icon-s-home"></i>
+  //               <span slot="title">首页</span>
+  //             </el-menu-item>
+  //             <span v-for="(item,index) in rolemenu" :key="index">
+  //               <!-- 刷新出首层菜单名字 style="pointer-events: none;" -->
+  //               <el-submenu index="index" id="click_1" style="pointer-events: none;">
+  //                 <template slot="title">
+  //                   <i :class="item.menu_icon"></i>
+  //                   <span slot="title" class="changeC">{{item.menu_name}}</span>
+  //                 </template>
+  //                 <span v-for="(items,index1) in item.children" :key="index1">
+  //                   <!-- 刷新出次级菜单名字 -->
+  //                   <el-menu-item :index="items.menu_url" route style="pointer-events:painted;">
+  //                     <template slot="title">
+  //                       <span slot="title">{{items.menu_name}}</span>
+  //                     </template>
+  //                   </el-menu-item>
+  //                 </span>
+  //               </el-submenu>
+  //             </span>
+  //           </el-menu>
+  //   </el-aside>
+  //   <el-container>
+  //        <el-header >
+  //         <div class="header">
+  //           <img href="#top" src="../assets/logo.png" height="50" alt style="padding:5px;float:left;" />
+  //           <div class="users" style="width:180px;">
+  //             <el-dropdown trigger="click">
+  //               <span class="el-dropdown-link">
+  //                 <img src="../assets/touxiang.png" alt class="touxiang" />
+  //                 <span style="display:inline-block;width:88px;">{{this.getdataCookie("admin_name")}}</span>
+  //                 <i class="el-icon-caret-bottom el-icon--right"></i>
+  //               </span>
+  //               <el-dropdown-menu slot="dropdown">
+  //                 <el-dropdown-item class="clearfix">设置</el-dropdown-item>
+  //                 <el-dropdown-item class="clearfix">
+  //                   <span @click="delCookie('usertoken')">退出</span>
+  //                 </el-dropdown-item>
+  //               </el-dropdown-menu>
+  //             </el-dropdown>
+  //           </div>
+  //         </div>
+  //       </el-header>
+  //     <el-main>
+  //    <router-view />
+  //     </el-main>
+  //   </el-container>
+  // </el-container>
 };
 </script>
   
 <style scoped>
-.left{
+.left {
   position: fixed;
-  top:0;
-  left:0;
+  top: 0;
+  left: 0;
   height: 100%;
   width: 195px;
   overflow-y: auto;
 
-  display:inline-block;
+  display: inline-block;
 }
-.right{
-   /* position: fixed; */
-    display:inline-block;
-     overflow-y: auto;
-     width: calc(100% - 200px);
-    margin-left:200px;
-    margin-top:50px;
-    height: 100%;
+.right {
+  /* position: fixed; */
+  display: inline-block;
+  overflow-y: auto;
+  width: calc(100% - 200px);
+  margin-left: 200px;
+  margin-top: 50px;
+  height: 100%;
 }
-.left[data-v-98c1a456], .right[data-v-98c1a456] {
-    height: 100%;
-    overflow-y: auto;
-    display: inline-block;
-    position: fixed}
+.left[data-v-98c1a456],
+.right[data-v-98c1a456] {
+  height: 100%;
+  overflow-y: auto;
+  display: inline-block;
+  position: fixed;
+}
 
 .el-submenu__title {
   pointer-events: none !important;
@@ -434,9 +426,9 @@ export default {
   top: 0;
   left: 0;
   z-index: 5;
-    height: 61px;
-      width: 100%;
-      background: #fff;
+  height: 61px;
+  width: 100%;
+  background: #fff;
 }
 
 #changeC {

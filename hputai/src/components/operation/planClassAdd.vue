@@ -1,6 +1,5 @@
 <template>
   <div class="main">
-
     <div class="main_head">|&nbsp;添加排课信息</div>
 
     <el-form ref="form" :model="form" label-width="120px">
@@ -11,58 +10,57 @@
         <el-button type="primary" plain @click="seeClassNeeds(2)">查看排课需求</el-button>
       </el-form-item>
       <el-form-item :inline="true" label="直播平台">
-           <el-select v-model="form.value_live" filterable clearable placeholder="请选择">
-    <el-option
-      v-for="item in this.live_list_new"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value">
-    </el-option>
-  </el-select>
+        <el-select v-model="form.value_live" filterable clearable placeholder="请选择">
+          <el-option
+            v-for="item in this.live_list_new"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item :inline="true" label="讲师">
-
- <el-select v-model="form.teacher_id" filterable clearable placeholder="请选择">
-    <el-option
-      v-for="item in this.teacher_data_new"
-      :key="item.value"
-      :label="item.label"
-       @change="handleChange_teacher"
-      :value="item.value">
-    </el-option>
-  </el-select>
+        <el-select v-model="form.teacher_id" filterable clearable placeholder="请选择">
+          <el-option
+            v-for="item in this.teacher_data_new"
+            :key="item.value"
+            :label="item.label"
+            @change="handleChange_teacher"
+            :value="item.value"
+          ></el-option>
+        </el-select>
         <el-button type="primary" plain @click="seeTeacherClass(2)">查看老师课表</el-button>
       </el-form-item>
       <el-form-item :inline="true" label="班主任">
         <el-select v-model="form.banzhuren_id" filterable clearable placeholder="请选择">
-    <el-option
-      v-for="item in this.banzhuren_list_new"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value">
-    </el-option>
-  </el-select>
+          <el-option
+            v-for="item in this.banzhuren_list_new"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
       </el-form-item>
 
       <el-form-item :inline="true" label="助教">
-<el-select v-model="form.zhujiao_id" filterable clearable placeholder="请选择">
-    <el-option
-      v-for="item in this.zhujiao_data_new"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value">
-    </el-option>
-  </el-select>
+        <el-select v-model="form.zhujiao_id" filterable clearable placeholder="请选择">
+          <el-option
+            v-for="item in this.zhujiao_data_new"
+            :key="item.value"
+            :label="item.label" 
+            :value="item.value"
+          ></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item :inline="true" label="教务专员">
-   <el-select v-model="form.jiaowu_id" clearable placeholder="请选择">
-    <el-option
-      v-for="item in this.jiaowu_data_new"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value">
-    </el-option>
-  </el-select>
+        <el-select v-model="form.jiaowu_id" filterable clearable placeholder="请选择">
+          <el-option
+            v-for="item in this.jiaowu_data_new"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item :inline="true" label="课时">
         <p>{{parseInt(this.$route.query.classhour)}}</p>
@@ -100,7 +98,7 @@
         <div class="add_ul">
           <p id="sss">课时</p>
           <p class="bigger">开始时间</p>
-          <p >星期</p>
+          <p>星期</p>
           <p>直播类型</p>
           <p>观看端</p>
           <p>操作</p>
@@ -114,20 +112,18 @@
           <p>
             <el-input v-model.number="item.times" v-bind:id="'classhour' + i"></el-input>
           </p>
-          <p  class="bigger">
+          <p class="bigger">
             <!-- <el-input v-model.number="item.price" v-bind:id="'mach' + i" placeholder="单价(元)"></el-input> -->
             <el-date-picker
-            
               v-model="item.start_time"
               v-bind:id="'start_time' + i"
               value-format="timestamp"
               type="datetime"
-              placeholder=""
+              placeholder
               @change="choose_time"
             ></el-date-picker>
           </p>
-          <p  v-bind:id="'week'+ i">
-              周次</p>
+          <p v-bind:id="'week'+ i">周次</p>
           <p>
             <select
               v-model="item.course_type"
@@ -340,7 +336,7 @@ export default {
       teacher_data_new: [], //讲师数据
       banzhuren_list_new: [], //班主任数据
       banzhuren_live: "",
-      input_hour:0, //用户已选科目课时
+      input_hour: 0, //用户已选科目课时
       zhujiao_data_new: [], //助教数据
       jiaowu_data_new: [], //财务专员
       input_class_time: "", //课时
@@ -509,13 +505,12 @@ export default {
         teacher_id: this.form.teacher_id * 1
       };
       if (!this.form.teacher_id * 1 == "") {
- 
         this.get_teacher_course({
           //查看老师课表
           params,
           url: "/api/api_teacher_course"
         });
-        console.log(Object.prototype.toString.call())
+        console.log(Object.prototype.toString.call());
 
         // if(Object.prototype.toString.call()){
         //          this.dialogTableVisible_seeTeacherClass = true;
@@ -526,7 +521,6 @@ export default {
         //   message: "此老师暂没有数据可查看"
         // });
         // }
-
       } else {
         this.$message({
           type: "worning",
@@ -593,39 +587,41 @@ export default {
       this.$router.push({ path: "/login" });
     },
     //选择日期之后生成周几
-    choose_time(result){
-      function msToDate (msec) {
-    let datetime = new Date(msec);
-    let year = datetime.getFullYear();
-    let month = datetime.getMonth();
-    let date = datetime.getDate();
-    let hour = datetime.getHours();
-    let minute = datetime.getMinutes();
-    let second = datetime.getSeconds();
-    let result1 = year + 
-                 '-' + 
-                 ((month + 1) >= 10 ? (month + 1) : '0' + (month + 1)) + 
-                 '-' + 
-                 ((date + 1) < 10 ? '0' + date : date) + 
-                 ' ' + 
-                 ((hour + 1) < 10 ? '0' + hour : hour) +
-                 ':' + 
-                 ((minute + 1) < 10 ? '0' + minute : minute) + 
-                 ':' + 
-                 ((second + 1) < 10 ? '0' + second : second);
-    let result2 = year + 
-                 '-' + 
-                 ((month + 1) >= 10 ? (month + 1) : '0' + (month + 1)) + 
-                 '-' + 
-                 ((date + 1) < 10 ? '0' + date : date);
-    let result = {
-        hasTime: result1,
-        withoutTime: result2
-    };
-    return result.withoutTime;
-}
-var modeTime=msToDate(result)
-//console.log(modeTime)
+    choose_time(result) {
+      function msToDate(msec) {
+        let datetime = new Date(msec);
+        let year = datetime.getFullYear();
+        let month = datetime.getMonth();
+        let date = datetime.getDate();
+        let hour = datetime.getHours();
+        let minute = datetime.getMinutes();
+        let second = datetime.getSeconds();
+        let result1 =
+          year +
+          "-" +
+          (month + 1 >= 10 ? month + 1 : "0" + (month + 1)) +
+          "-" +
+          (date + 1 < 10 ? "0" + date : date) +
+          " " +
+          (hour + 1 < 10 ? "0" + hour : hour) +
+          ":" +
+          (minute + 1 < 10 ? "0" + minute : minute) +
+          ":" +
+          (second + 1 < 10 ? "0" + second : second);
+        let result2 =
+          year +
+          "-" +
+          (month + 1 >= 10 ? month + 1 : "0" + (month + 1)) +
+          "-" +
+          (date + 1 < 10 ? "0" + date : date);
+        let result = {
+          hasTime: result1,
+          withoutTime: result2
+        };
+        return result.withoutTime;
+      }
+      var modeTime = msToDate(result);
+      //console.log(modeTime)
     },
     //获取报读科目列表
     addTest() {
@@ -640,31 +636,30 @@ var modeTime=msToDate(result)
     handleChange_1(targetName) {
       var all_hour = 0;
       for (let i = 0; i < this.editableTabs_1.length; i++) {
-       all_hour += $("#classhour" + i).val() * 1;
+        all_hour += $("#classhour" + i).val() * 1;
       }
- if(all_hour*1>=this.$route.query.classhour*1){
-   this.$message({
-     type:'warning',
-     message:'请核对课时'
-   })
- }else{
-      this.editableTabs_1.push({
-        classhour: "",
-        start_time: "", //选择开始日期
-       // input_week: "", //周几
-        course_type: "1", //课程类型
-        play_type: "1"
-      });
- }
-
+      if (all_hour * 1 >= this.$route.query.classhour * 1) {
+        this.$message({
+          type: "warning",
+          message: "请核对课时"
+        });
+      } else {
+        this.editableTabs_1.push({
+          classhour: "",
+          start_time: "", //选择开始日期
+          // input_week: "", //周几
+          course_type: "1", //课程类型
+          play_type: "1"
+        });
+      }
     },
     onSubmit() {
-      this.subjects_data=[]
+      this.subjects_data = [];
       var all_hour = 0;
       for (let i = 0; i < this.editableTabs_1.length; i++) {
         all_hour += $("#classhour" + i).val() * 1;
       }
-     
+
       for (let i = 0; i < this.editableTabs_1.length; i++) {
         function dateToMs(date) {
           let result = new Date(date).getTime();
@@ -689,7 +684,7 @@ var modeTime=msToDate(result)
         classhour: this.$route.query.classhour * 1, //课时
         course_address: this.radio * 1 //1线上，2线下
       };
-      
+
       var studentStr = this.apply_data.students.map((item, index, arr) => {
         return item.student_id;
       });
@@ -697,8 +692,8 @@ var modeTime=msToDate(result)
       parms.course_data = this.subjects_data;
       // console.log(  this.subjects_data)
       // console.log( parms.course_data)
-       //console.log(this.editableTabs_1.length,"提交的时候数组长度",this.editableTabs_1)
- console.log(parms,'总数据')
+      //console.log(this.editableTabs_1.length,"提交的时候数组长度",this.editableTabs_1)
+      console.log(parms, "总数据");
       if (all_hour * 1 == this.$route.query.classhour * 1) {
         //  console.log(parms)
         this.$apis.common.application_arrange_post(parms).then(res => {
@@ -709,7 +704,6 @@ var modeTime=msToDate(result)
             });
             this.$router.go(-1);
           } else {
-
             this.$message({
               type: "warning",
               message: res.data.msg
@@ -717,7 +711,6 @@ var modeTime=msToDate(result)
           }
         });
       } else {
-  
         this.$message({
           type: "warning",
           message: "排课时间不足"
@@ -754,7 +747,7 @@ var modeTime=msToDate(result)
           if (res.data.code == 1) {
             this.apply_data = res.data.data;
             this.form = this.apply_data;
-           // console.log(this.form)
+            // console.log(this.form)
           } else {
             this.$message({
               type: "info",
@@ -831,10 +824,8 @@ option {
   text-align: center;
   overflow: hidden;
 }
-.bigger{
-
+.bigger {
   width: 17% !important;
-
 }
 .stap_3 {
   width: 100%;

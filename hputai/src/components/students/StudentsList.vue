@@ -161,6 +161,7 @@ import { mapState } from 'vuex';
               this.$router.push({path:'/StudentsEdit',query:{id:b.id} })
             break;
             case "see_info" :
+              this.$router.push({path:'/StudentsInfo',query:{id:b.id}})
             break;
             case "copy_url" :
               this.dialogFormVisible1=true

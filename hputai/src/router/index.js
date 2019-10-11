@@ -45,6 +45,9 @@ import StudentMoneyMain from '@/components/students/StudentMoneyMain'  //学生�
 import NewMoney from '@/components/students/NewMoney'
 import VirtualMonney from '@/components/students/VirtualMonney'
 import LearningMoney from '@/components/students/LearningMoney'
+
+import StudentsInfo from '@/components/students/StudentsInfo'
+
 //师资管理
 import TeacherAssess from '@/components/teacher/TeacherAssess'  //老师评价
 import TeacherList from '@/components/teacher/TeacherList'  //老师列表TeacherData
@@ -179,8 +182,12 @@ export default new Router({
         },
         {
           path: '/StudentsList',
-          component: StudentsList
+          component: StudentsList,
         },
+          {
+            path: '/StudentsInfo',  //学生详情
+            component: StudentsInfo
+          },
         {
           path: '/AdminList',
           component: AdminList

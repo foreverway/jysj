@@ -348,21 +348,19 @@ export default {
     },
     //学生姓名选择产生的变化
     handleChange(targetName) {
-      console.log(this.writeCurrentDate());
       var checkOne = this.options_1.filter(
         item => item.username == targetName[0]
       );
-      let newTabName = ++this.tabIndex + "";
       this.editableTabs.push({
         student_name: targetName[0],
         tel: checkOne[0].tel,
         id: checkOne[0].id
       });
       // this.student_data.push({student_id:checkOne[0].id})//注入学生id
-      this.editableTabsValue = newTabName;
     },
 
     onSubmit() {
+      this.subjects_data = [];
       // for (let i = 0; i < this.editableTabs_1.length; i++) {}
       let parms = {
         title: this.title,
@@ -379,6 +377,7 @@ export default {
 
       parms.subjects_data = this.subjects_data;
       parms.students_data = this.students_data;
+      console.log(parms)
       this.$apis.common.application_edit_put(parms).then(res => {
         if (res.data.code == 1) {
           this.$message({
@@ -401,7 +400,10 @@ export default {
         });
       }
       for (let i = 0; i < this.editableTabs_1.length; i++) {
-        this.subjects_data.push({
+
+        //console.log(this.subjects_data)
+        if ($("#clas" + i).val() == 1) {
+                  this.subjects_data.push({
           subject_id: $("#course_id" + i).html() * 1,
           classhour: $("#time" + i).val() * 1,
           price: $("#mach" + i).val() * 1,
@@ -411,8 +413,6 @@ export default {
           is_one: $("#one" + i).val() * 1,
           is_group: $("#self" + i).val() * 1
         });
-        console.log(this.subjects_data)
-        if ($("#clas" + i).val() == 1) {
           // console.log($("#time"+i).val() + "  " + $("#mach"+i).val() + "  " + $("#sex"+i).val())
                let parms = {
         title: this.title,
@@ -429,6 +429,7 @@ export default {
 
       parms.subjects_data = this.subjects_data;
       parms.students_data = this.students_data;
+      console.log(parms)
       this.$apis.common.application_edit_put(parms).then(res => {
         if (res.data.code == 1) {
           this.$message({
@@ -443,14 +444,16 @@ export default {
           });
         }
       });
-          this.active = 3;
+         this.active = 3;
         } else {
-          this.active++;
+          //this.active++;
         }
       }
+       this.active++;
     },
     pre() {
       // if (
+        this.subjects_data = [];
       this.active--;
       //    < 2)
       // this.active = 1
