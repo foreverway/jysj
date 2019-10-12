@@ -99,7 +99,8 @@ export default new Router({
         },
         {
           path: '/ApplicationAdd',//ApplicationAdd添加报名需求列表
-          component: ApplicationAdd
+          component: ApplicationAdd,
+          name:'ApplicationAdd'
         },
         {
           path: '/ApplicationEdit',//ApplicationEdit编辑报名需求列表
@@ -111,11 +112,13 @@ export default new Router({
         },
         {
           path: '/ApplyNeedsList',//ApplyNeedsList添加报名需求列表
-          component: ApplyNeedsList
+          component: ApplyNeedsList,
+          name:'ApplyNeedsList'
         },
         {
           path: '/PlanClassAdd',//PlanClassAdd添加报名需求列表
-          component: PlanClassAdd
+          component: PlanClassAdd,
+          name:'PlanClassAdd'
         },
         {
           path: '/RechargeRecord',//RechargeRecord充值记录单

@@ -20,7 +20,7 @@
 
     <el-button type="primary" style="background-color:#e6563a; border:none;" @click="getdata">搜索</el-button>
     <router-link to="/ApplicationAdd">
-      <el-button type="primary"  style="float:right;background-color:#e6563a; border:none;">新建报名需求</el-button>
+      <el-button type="primary" style="float:right;background-color:#e6563a; border:none;">新建报名需求</el-button>
     </router-link>
     <el-table
       border
@@ -30,11 +30,7 @@
       :header-cell-style="{background:'#f4f4f4'}"
       style="width: 100%;margin:20px auto"
     >
-      <el-table-column
-      type="index"
-      label="序号"
-      width="50">
-    </el-table-column>
+      <el-table-column type="index" label="序号" width="50"></el-table-column>
       <!-- <el-table-column label="序号" prop="index" width="50"></el-table-column> -->
       <el-table-column prop="number" label="编号"></el-table-column>
       <el-table-column prop="title" label="标题"></el-table-column>
@@ -59,7 +55,7 @@
           <span v-for="(item,index) in getRolenenu()" :key="index">
             <!-- <router-link :to="'/SalelistEdit/'+ scope.row.id"> -->
             <el-button
-              type="button" 
+              type="button"
               size="mini"
               index="item.id"
               v-bind:id="item.menu_action"
@@ -72,10 +68,10 @@
     <!-- 分页 -->
     <!-- 审核意见 -->
     <el-dialog title="审核意见" :visible.sync="centerDialogVisible_shenghe" width="30%" center>
-      <el-form ref="form" >
+      <el-form ref="form">
         <el-form-item label="审核意见" v-model="is_pass">
-          <el-radio v-model="is_pass" label=1>同意</el-radio>
-          <el-radio v-model="is_pass" label=2>不同意</el-radio>
+          <el-radio v-model="is_pass" label="1">同意</el-radio>
+          <el-radio v-model="is_pass" label="2">不同意</el-radio>
         </el-form-item>
         <el-form-item :inline="true" label="班主任 ">
           <!-- <p>{{this.banzhuren_list_new}}</p> -->
@@ -116,65 +112,72 @@
     </el-dialog>
 
     <!-- 分页的设置 -->
-    <span  v-if="msg.data">
+    <span v-if="msg.data">
       <el-pagination
-      style=" float: right;margin-bottom: 30px;"
-      background
-      layout="prev, pager, next"
-      @prev-click="prev"
-      @next-click="next"
-      @current-change="current"
-      :page-size="10"
-      :total='msg.data.count'
+        style=" float: right;margin-bottom: 30px;"
+        background
+        layout="prev, pager, next"
+        @prev-click="prev"
+        @next-click="next"
+        @current-change="current"
+        :page-size="10"
+        :total="msg.data.count"
       ></el-pagination>
     </span>
-<el-dialog title="查看排课" :visible.sync="dialogTableVisible_table">
-    <el-form ref="form"  label-width="80px">
-      <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;"  label="标题:">
-        <p>{{gridData.title}}</p>
-      </el-form-item>
-       <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="讲师:">
-        <p>{{gridData.teacher_name?gridData.teacher_name:"未安排"}}</p>
-      </el-form-item>
-       <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;"  label="直播平台:">
-        <p>{{gridData.live_name?gridData.live_name:"未安排"}}</p>
-      </el-form-item>
-       <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="班主任:">
-        <p>{{gridData.banzhuren_name?gridData.banzhuren_name:"未安排"}}</p>
-      </el-form-item>
-       <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="助教老师:">
-        <p>{{gridData.zhujiao_name?gridData.zhujiao_name:"未安排"}}</p>
-      </el-form-item>
-       <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="教务专员:">
-        <p>无数据</p>
-      </el-form-item>
-       <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="课时:">
-        <p>{{gridData.classhour}}</p>
-      </el-form-item>
-       <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="线上/线下:">
-        <p>{{gridData.course_address}}</p>
-      </el-form-item>
-       <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="上课地址:">
-        <p>无数据</p>
-      </el-form-item>
-       <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="学生:">
-       <el-table :data="gridData.students" style="border:1px solid silver;margin: 0; border-bottom:none;" >
-         <el-table-column property="student_name" label="学生姓名"></el-table-column>
-
-       </el-table>
-      </el-form-item>
-      <el-form-item style="border:1px solid silver;border:1px solid silver;margin: 0; border-bottom:none;" label="排课">
-          <el-table :data="gridData_class" style="border:1px solid silver;margin: 0; border-bottom:none;">
-          <el-table-column property="classhour" label="课时" width="150"></el-table-column>
-          <el-table-column property="start_time" label="开始时间" width="200"></el-table-column>
-          <el-table-column property="week" label="星期"></el-table-column>
-           <el-table-column property="live_type" label="直播类型"></el-table-column>
-               <el-table-column property="play_type" label="观看端"></el-table-column>
-        </el-table>
-      </el-form-item>
-    </el-form>
-
-</el-dialog>
+    <el-dialog title="查看排课" :visible.sync="dialogTableVisible_table">
+      <el-form ref="form" label-width="80px">
+        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="标题:">
+          <p>{{gridData.title}}</p>
+        </el-form-item>
+        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="讲师:">
+          <p>{{gridData.teacher_name?gridData.teacher_name:"未安排"}}</p>
+        </el-form-item>
+        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="直播平台:">
+          <p>{{gridData.live_name?gridData.live_name:"未安排"}}</p>
+        </el-form-item>
+        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="班主任:">
+          <p>{{gridData.banzhuren_name?gridData.banzhuren_name:"未安排"}}</p>
+        </el-form-item>
+        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="助教老师:">
+          <p>{{gridData.zhujiao_name?gridData.zhujiao_name:"未安排"}}</p>
+        </el-form-item>
+        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="教务专员:">
+          <p>无数据</p>
+        </el-form-item>
+        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="课时:">
+          <p>{{gridData.classhour}}</p>
+        </el-form-item>
+        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="线上/线下:">
+          <p>{{gridData.course_address}}</p>
+        </el-form-item>
+        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="上课地址:">
+          <p>无数据</p>
+        </el-form-item>
+        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="学生:">
+          <el-table
+            :data="gridData.students"
+            style="border:1px solid silver;margin: 0; border-bottom:none;"
+          >
+            <el-table-column property="student_name" label="学生姓名"></el-table-column>
+          </el-table>
+        </el-form-item>
+        <el-form-item
+          style="border:1px solid silver;border:1px solid silver;margin: 0; border-bottom:none;"
+          label="排课"
+        >
+          <el-table
+            :data="gridData_class"
+            style="border:1px solid silver;margin: 0; border-bottom:none;"
+          >
+            <el-table-column property="classhour" label="课时" width="150"></el-table-column>
+            <el-table-column property="start_time" label="开始时间" width="200"></el-table-column>
+            <el-table-column property="week" label="星期"></el-table-column>
+            <el-table-column property="live_type" label="直播类型"></el-table-column>
+            <el-table-column property="play_type" label="观看端"></el-table-column>
+          </el-table>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -183,7 +186,7 @@ import { mapState, mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
-     app_id:"",//维持一个点击表的id
+      app_id: "", //维持一个点击表的id
       tip_banzhuren: [], //弹出层班主任
       money: "", //设置充值金额
       dialogFormVisible1: false,
@@ -193,16 +196,14 @@ export default {
       is_pass: "", //审核意见
       banzhuren_list_new: [], //班主任数据
       banzhuren_live: "",
-      moneymen_list_new: [
-      ], //教务专员
+      moneymen_list_new: [], //教务专员
       moneymen_live: "",
-      helpTeacher_list_new: [
-      ], //助教数据
+      helpTeacher_list_new: [], //助教数据
       helpTeacher_live: "",
       parms: {
         search: "",
         page: 1,
-        add_admin_id:'' //选择的
+        add_admin_id: "" //选择的
       },
       tableData: [],
       options: [],
@@ -211,13 +212,11 @@ export default {
       adviserList: "", //选定顾问的信息
       value1: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
       value2: "",
-      dialogTableVisible_table:'',  //点击查看排课
-      gridData:{
-    
-      },  //查看排课的数据
-      gridData_class:[],//排课的数组
+      dialogTableVisible_table: "", //点击查看排课
+      gridData: {}, //查看排课的数据
+      gridData_class: [], //排课的数组
 
-      dialogTableVisible_table: false,
+      dialogTableVisible_table: false
     };
   },
   created() {
@@ -253,15 +252,15 @@ export default {
     // this.getbanzhurenName();
   },
   mounted() {
-    // this.getbanzhurenName();       
+    // this.getbanzhurenName();
     // this.tip_banzhuren=JSON.stringfy(this.banzhuren_list)
   },
   watch: {},
   methods: {
     //用于分页的一些设置
-        current(num) {
+    current(num) {
       //当前页数
-      console.log(num)
+      console.log(num);
       this.parms.page = num;
       this.getdata();
     },
@@ -301,150 +300,175 @@ export default {
         var val = this.banzhuren_list[i];
         this.banzhuren_list_new.push({ value: val.id, label: val.banzhuren });
       }
-         for (let i = 0; i < this.zhujiao_data.length; i++) {
+      for (let i = 0; i < this.zhujiao_data.length; i++) {
         var val = this.zhujiao_data[i];
-        this.helpTeacher_list_new.push({ value: val.id, label: val.zhujiao_name });
+        this.helpTeacher_list_new.push({
+          value: val.id,
+          label: val.zhujiao_name
+        });
       }
-         for (let i = 0; i < this.jiaowu_data.length; i++) {
+      for (let i = 0; i < this.jiaowu_data.length; i++) {
         var val = this.jiaowu_data[i];
         this.moneymen_list_new.push({ value: val.id, label: val.jiaowu_name });
       }
     },
-   
+
     mommonAction(a, b) {
       switch (a) {
         case "click_edit":
-          if (b.app_status == "待审核"||b.app_status == "待排课"||b.app_status == "已排课待确认") {
-    this.$router.push({ path: "/ApplicationEdit", query:{id: b.id }});
-          }else{
-          this.$message({
-            message:"请按流程操作",
-            type:"warning"
-          })
+          if (
+            b.app_status == "待审核" ||
+            b.app_status == "待排课" ||
+            b.app_status == "已排课待确认"
+          ) {
+            this.$router.push({
+              path: "/ApplicationEdit",
+              query: { id: b.id }
+            });
+          } else {
+            this.$message({
+              message: "请按流程操作",
+              type: "warning"
+            });
           }
           break;
         case "click_test": //审核
-         if (b.app_status == "待审核") {
-          this.centerDialogVisible_shenghe = true;
-          mapState(["banzhuren_list",'zhujiao_data','jiaowu_data']);
-          this.app_id=b.id
-          this.getbanzhurenName();}else{
-                this.$message({
-            message:"请按流程操作",
-            type:"warning"
-          })
+          if (b.app_status == "待审核") {
+            this.centerDialogVisible_shenghe = true;
+            mapState(["banzhuren_list", "zhujiao_data", "jiaowu_data"]);
+            this.app_id = b.id;
+            this.getbanzhurenName();
+          } else {
+            this.$message({
+              message: "请按流程操作",
+              type: "warning"
+            });
           }
           break;
         case "click_sure":
           if (b.app_status == "已排课待确认") {
-         this.$confirm('确认课表后无法更改课表的信息, 是否确定?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-                  let parms = {
-            app_id:b.id
-          };
-          this.$apis.menber.application_operate(parms).then(res => {
-            if (res.data.code == 1) {
-              this.$message({
-                type: "success",
-                message: b.student_name + " 的报名表已确定成功"
+            this.$confirm("确认课表后无法更改课表的信息, 是否确定?", "提示", {
+              confirmButtonText: "确定",
+              cancelButtonText: "取消",
+              type: "warning"
+            })
+              .then(() => {
+                let parms = {
+                  app_id: b.id
+                };
+                this.$apis.menber.application_operate(parms).then(res => {
+                  if (res.data.code == 1) {
+                    this.$message({
+                      type: "success",
+                      message: b.student_name + " 的报名表已确定成功"
+                    });
+                    this.getdata();
+                  } else {
+                    this.$message.error(res.data.msg);
+                  }
+                });
+              })
+              .catch(() => {
+                this.$message({
+                  type: "info",
+                  message: "已取消确定"
+                });
               });
-              this.getdata();
-            } else {
-              this.$message.error(res.data.msg);
-            }
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消确定'
-          });          
-        });
-        }else{
-                            this.$message({
-            message:"请按流程操作",
-            type:"warning"
-          })
+          } else {
+            this.$message({
+              message: "请按流程操作",
+              type: "warning"
+            });
           }
           break;
 
         case "click_delete":
-          if (b.app_status == "待审核"||b.app_status == "待排课"||b.app_status == "已排课待确认") {
-        this.$confirm('此操作将永久删除该需求, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-             let parms = {
-            id: b.id
-          };
-          this.$apis.menber.application_del(parms).then(res => {
-            if (res.data.code == 1) {
-              this.$message({
-                type: "success",
-                message: b.student_name + " 的报名表已删除成功"
+          if (
+            b.app_status == "待审核" ||
+            b.app_status == "待排课" ||
+            b.app_status == "已排课待确认"
+          ) {
+            this.$confirm("此操作将永久删除该需求, 是否继续?", "提示", {
+              confirmButtonText: "确定",
+              cancelButtonText: "取消",
+              type: "warning"
+            })
+              .then(() => {
+                let parms = {
+                  id: b.id
+                };
+                this.$apis.menber.application_del(parms).then(res => {
+                  if (res.data.code == 1) {
+                    this.$message({
+                      type: "success",
+                      message: b.student_name + " 的报名表已删除成功"
+                    });
+                    this.getdata();
+                  } else {
+                    this.$message.error(res.data.msg);
+                  }
+                });
+              })
+              .catch(() => {
+                this.$message({
+                  type: "info",
+                  message: "已取消删除"
+                });
               });
-              this.getdata();
-            } else {
-              this.$message.error(res.data.msg);
-            }
-          });
-        }).catch(() => {
-          this.$message({ 
-            type: 'info',
-            message: '已取消删除'
-          });          
-        });}else{
+          } else {
             this.$message({
-            message:"此时不能删除",
-            type:"warning"
-          })
-        }
+              message: "此时不能删除",
+              type: "warning"
+            });
+          }
           break;
 
         case "cilck_plan_class":
           // 排课
           if (b.app_status == "待排课") {
-            this.$router.push({ path: "/PlanClassAdd", query: b });
+            this.$router.push({ path: "/PlanClassAdd", query: { id: b.id } });
           } else {
             this.$message({
               type: "warning",
-              message: "不是排课的时候"
+              message: "尚未审核，不能排课"
             });
           }
           break;
 
-          case 'click_plan_edit' :  //编辑排课
-                    if (b.app_status == "已排课待确认") {
-               this.$router.push({ path: "/ClassEdit", query:{id: b.id }});
-                    }else{
-           this.$message({
-            message:"只有已排课待确认时才可以操作",
-            type:"warning"
-          })
-                    }
-           break;
+        case "click_plan_edit": //编辑排课
+          if (b.app_status == "已排课待确认") {
+            this.$router.push({ path: "/ClassEdit", query: { id: b.id } });
+          } else {
+            this.$message({
+              message: "只有已排课待确认时才可以操作",
+              type: "warning"
+            });
+          }
+          break;
 
-          case 'click_see_plan':  //查看排课
-       if (b.app_status == "已排课待确认"||b.app_status == "已确认"||b.app_status == "授课考勤中"||b.app_status == "已结课") {
-
-           this.dialogTableVisible_table = true
-               let parms = {
-            app_id: b.id
-          };
-           this.$apis.menber.look_arrange(parms).then(res=>{
-             if(res.data.code==1){
-              this.gridData=res.data.data
-               this.gridData_class=res.data.data.course_data
-             }
-           })}else{
-                       this.$message({
-            message:'还不能查看',
-            type:"warning"
-          })
-           }
+        case "click_see_plan": //查看排课
+          if (
+            b.app_status == "已排课待确认" ||
+            b.app_status == "已确认" ||
+            b.app_status == "授课考勤中" ||
+            b.app_status == "已结课"
+          ) {
+            this.dialogTableVisible_table = true;
+            let parms = {
+              app_id: b.id
+            };
+            this.$apis.menber.look_arrange(parms).then(res => {
+              if (res.data.code == 1) {
+                this.gridData = res.data.data;
+                this.gridData_class = res.data.data.course_data;
+              }
+            });
+          } else {
+            this.$message({
+              message: "还不能查看",
+              type: "warning"
+            });
+          }
 
           break;
       }
@@ -455,29 +479,30 @@ export default {
     },
     submit_think() {
       //提交审核意见
-           let shenghe={
-                 app_id: this.app_id,
-                  banzhuren_id:this.banzhuren_live[0],
-                  jiaowu_id: this.moneymen_live[0],
-                  zhujiao_id: this.helpTeacher_live[0],
-                  is_pass: this.is_pass,
-                  remarks:this.textarea
-           }
+      let shenghe = {
+        app_id: this.app_id,
+        banzhuren_id: this.banzhuren_live[0],
+        jiaowu_id: this.moneymen_live[0],
+        zhujiao_id: this.helpTeacher_live[0],
+        is_pass: this.is_pass,
+        remarks: this.textarea
+      };
       this.$apis.common.application_audit(shenghe).then(res => {
         if (res.data.code == 1) {
-          location.reload() 
+          location.reload();
           this.$message({
-            message:"审核成功",
-            type:"success"
-          })
+            message: "审核成功",
+            type: "success"
+          });
         }
       });
       this.centerDialogVisible_shenghe = false;
     },
-    handleSizeChange(val) {    //分页每页多少条
-         let parms = {
+    handleSizeChange(val) {
+      //分页每页多少条
+      let parms = {
         admin_id: this.getdataCookie("admin_id"),
-        page:val*1
+        page: val * 1
       };
       this.$apis.common
         .application_list(parms)
@@ -494,8 +519,9 @@ export default {
           });
         });
     },
-    handleCurrentChange(val) {     //当前多少页
-      console.log(`当前页: ${val}`,this.tableData.length);
+    handleCurrentChange(val) {
+      //当前多少页
+      console.log(`当前页: ${val}`, this.tableData.length);
     },
     //获取顾问列表adviser_list
     getAdviser() {
@@ -526,16 +552,16 @@ export default {
       this.adviserList = this.options_all.filter(
         item => item.adviser == targetName
       );
-      if(targetName.length==0){
-         var parms = {
-        // admin_id: this.getdataCookie("admin_id"),
-        add_admin_id:''
+      if (targetName.length == 0) {
+        var parms = {
+          // admin_id: this.getdataCookie("admin_id"),
+          add_admin_id: ""
           //this.adviserList[0].id * 1 == "" ? "" : this.adviserList[0].id
-      };
-      }else{
-           var parms = {
-        add_admin_id:this.adviserList[0].id * 1
-      };
+        };
+      } else {
+        var parms = {
+          add_admin_id: this.adviserList[0].id * 1
+        };
       }
       this.$apis.common
         .application_list(parms)
@@ -596,12 +622,11 @@ export default {
       this.$router.push({ path: "/login" });
     },
     getdata() {
-      this.parms.admin_id=this.getdataCookie("admin_id")
+      this.parms.admin_id = this.getdataCookie("admin_id");
       this.$apis.common
         .application_list(this.parms)
         .then(res => {
           if (res.data.code == 1) {
-         
             this.msg = res.data;
             this.tableData = res.data.data.list;
           }
@@ -639,33 +664,39 @@ export default {
   font-weight: 900;
   /* line-height: 30px; */
 }
-#click_edit{ 
+#click_edit {
   /* //编辑 */
-  background-color: #3A8EFF !important;
-  color:white;
+  background-color: #3a8eff !important;
+  color: white;
 }
-#click_test{ /* //审核 */
-  background-color: #FF8500 !important;
-    color:white;
+#click_test {
+  /* //审核 */
+  background-color: #ff8500 !important;
+  color: white;
 }
-#click_plan_edit{ /* //编辑排课 */
-  background-color: #05D294 !important;
-    color:white;
+#click_plan_edit {
+  /* //编辑排课 */
+  background-color: #05d294 !important;
+  color: white;
 }
-#click_sure{ /* //确定 */
-  background-color: #FE6249 !important;
-    color:white;
+#click_sure {
+  /* //确定 */
+  background-color: #fe6249 !important;
+  color: white;
 }
-#click_delete{ /* //删除 */
-  background-color: #E95150 !important;
-    color:white;
+#click_delete {
+  /* //删除 */
+  background-color: #e95150 !important;
+  color: white;
 }
-#cilck_plan_class{ /* //排课 */
-  background-color: #2ADBCB !important;
-    color:white;
+#cilck_plan_class {
+  /* //排课 */
+  background-color: #2adbcb !important;
+  color: white;
 }
-#click_see_plan{ /* //查看排课 */
-  background-color: #7571FA !important;
-    color:white;
+#click_see_plan {
+  /* //查看排课 */
+  background-color: #7571fa !important;
+  color: white;
 }
 </style>

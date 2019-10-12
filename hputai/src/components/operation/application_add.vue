@@ -174,14 +174,16 @@
         <i class="el-icon-circle-check" type="success"></i>
       </div>
       <div class="succ_word">
-        <el-link icon="el-icon-edit" type="primary" href="./">继续添加排课需求</el-link>
-        <el-link type="primary" href="./ApplyNeedsList">
-          排课需求列表
-          <i class="el-icon-view el-icon--right"></i>
-        </el-link>
+        <el-button type="primary" style="background-color:#409eff;color:white;border:1px solid #409eff;" @click="toPlanClass">继续添加报名需求</el-button>
+        <el-button type="primary" style="background-color:#409eff;color:white;border:1px solid #409eff;" @click="toNeedsList">查看排课需求列表</el-button>
       </div>
     </div>
-
+    <el-button
+      type="primary"
+      style="background-color:#e6563a; border:none;color:white;"
+      @click="onSubmit"
+      v-if="active==2"
+    >确定</el-button>
     <el-button @click="goBack" v-if="active==1||active==2">取消</el-button>
     <el-button
       style="margin-top: 12px;background-color:#e6563a; border:none;color:white;"
@@ -193,12 +195,7 @@
       @click="next"
       v-if="active==1"
     >下一步</el-button>
-    <el-button
-      type="primary"
-      style="background-color:#e6563a; border:none;color:white;"
-      @click="onSubmit"
-      v-if="active==2"
-    >立即创建</el-button>
+
     <!-- 设置充值链接 -->
     <!-- <div style="display:none" cols="20" id="biao1">{{copyurl1}}</div> -->
   </div>
@@ -372,7 +369,7 @@ export default {
     handleChange_1(targetName) {
       var lastName = targetName.length == 1 ? targetName[0] : targetName[1];
       let oneArr = this.options_.filter(item => item.subject_name == lastName);
-      console.log(oneArr)
+     // console.log(oneArr)
       if (oneArr.length == 0) {
         for (let i = 0; i < this.options_.length; i++) {
           var val = this.options_[i];
@@ -382,8 +379,7 @@ export default {
             // if(val_1.length==1){
             let oneArr_1 = val_1.filter(item => item.subject_name == lastName); //对子元素进行赛选
             if (oneArr_1.length > 0) {
-              //let newTabName = ++this.tabIndex_1 + "";
-             // console.log(oneArr_1[0].id);
+
               this.editableTabs_1.push({
                 title: oneArr_1[0].subject_name,
                 subject_id: oneArr_1[0].id, //科目id
@@ -394,15 +390,12 @@ export default {
                 is_one: 1, //一对一？
                 is_group: 0 //班课?
               });
-              console.log(this.editableTabs_1)
+             // console.log(this.editableTabs_1)
              // this.editableTabsValue_1 = newTabName;
             }
           }
         }
       } else {
-        //没有子元素
-        //console.log(oneArr[0].id);
-        //let newTabName = ++this.tabIndex_1 + "";
         this.editableTabs_1.push({
                 title: oneArr[0].subject_name,
                 subject_id: oneArr[0].id, //科目id
@@ -413,9 +406,6 @@ export default {
                 is_one: 1, //一对一？
                 is_group: 0 //自主班课?
         });
-        console.log(this.editableTabs_1)
-       // this.editableTabsValue_1 = newTabName;
-        // this.subject_id.push({student_id:checkOne[0].id})
       }
     },
     //学生姓名选择产生的变化
@@ -424,19 +414,20 @@ export default {
       var checkOne = this.options_1.filter(
         item => item.username == targetName[0]
       );
-     // let newTabName = ++this.tabIndex + "";
       this.editableTabs.push({
         name: targetName[0],
         tel: checkOne[0].tel,
         id: checkOne[0].id
       });
-  
-      // this.student_data.push({student_id:checkOne[0].id})//注入学生id
-      //this.editableTabsValue = newTabName;
     },
-
+        toPlanClass(){
+      this.$router.push({path:'/ApplicationAdd'})
+    },
+    toNeedsList(){
+      this.$router.push({name:'ApplyNeedsList'})
+    },
     onSubmit() {
-     // for (let i = 0; i < this.editableTabsValue_1.length; i++) {}
+     // this.subjects_data=[]
       let parms = {
         title: this.title,
         expiry_date: this.valueDate,
@@ -460,40 +451,77 @@ export default {
             type: "success"
           });
           this.active = 3;
+        }else{
+            this.$message({
+            message:res.data.msg,
+            type: "success"
+          });
         }
       });
     },
-    next() {
-         // console.log(this.editableTabs)
-      for (let i = 0; i < this.editableTabs.length; i++) {
-        this.students_data.push({
-          student_id: $("#students" + i).html()
-        });
-      }
-      for (let i = 0; i < this.editableTabs_1.length; i++) {
+  next() {
+      this.editableTabs_1.forEach(item => {
         this.subjects_data.push({
-          subject_id: $("#course_id" + i).html() * 1,
-          classhour: $("#time" + i).val() * 1,
-          price: $("#mach" + i).val() * 1,
-          amount: $("#time" + i).val() * $("#mach" + i).val(),
-          course_type: $("#attr" + i).val(),
-          course_id: $("#course_id" + i).html() * 1,
-          is_one: $("#one" + i).val() * 1,
-          is_group: $("#self" + i).val() * 1
+          subject_id: item.subject_id,
+          classhour: item.classhour,
+          price: item.price,
+          amount: item.amount,
+          course_type: item.course_type,
+          course_id: item.course_id,
+          is_one: item.is_one,
+          is_group: item.is_group
         });
-        if ($("#clas" + i).val() == 1) {
-          // console.log($("#time"+i).val() + "  " + $("#mach"+i).val() + "  " + $("#sex"+i).val())
-          this.active = 3;
-        } else {
-          this.active++;
+      });
+      this.editableTabs.forEach(item => {
+        this.students_data.push({
+          student_id: item.student_id
+        });
+      });
+      this.editableTabs_1.forEach((item, i) => {
+        //console.log(this.subjects_data)
+        if (item.course_id == 1) {
+          this.parms = {
+            title: this.title,
+            expiry_date: this.valueDate,
+            remarks: this.feedback,
+            course_address: this.radio,
+            need_one: this.need_one,
+            need_two: this.need_two,
+            need_three: this.need_three,
+            need_four: this.need_four,
+            need_five: this.need_five,
+            app_id: this.$route.query.id
+          };
+
+          this.parms.subjects_data = this.subjects_data;
+          this.parms.students_data = this.students_data;
+          console.log(this.parms);
+          console.log(this.active)
+          // this.active = 3;
+          this.$apis.common.application_edit_put(this.parms).then(res => {
+            if (res.data.code == 1) {
+              this.$message({
+                message: "修改成功",
+                type: "success"
+              });
+              this.active = 3;
+            } else {
+              this.$message({
+                message: res.data.msg,
+                type: "warning"
+              });
+            }
+          });
         }
-      }
+      });
+      this.active++;
     },
     pre() {
-      // if (
+        this.parms.students_data = [];
+      this.parms.subjects_data = [];
+      this.students_data = [];
+      this.subjects_data = [];
       this.active--;
-      //    < 2)
-      // this.active = 1
     },
     goBack() {
       history.back(-1);

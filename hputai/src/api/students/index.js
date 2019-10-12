@@ -7,6 +7,11 @@ export default {
             return shuju.getdata(url,params)
            },
 
+                    //查看学生课表 
+         see_students_class (params) {
+          let url='/api/api_getstudent_course'
+          return shuju.getdata(url,params)
+         },
            //学生数据接口
             get_students_data (params) {
           let url='/api/api_students_data'

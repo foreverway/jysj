@@ -6,7 +6,7 @@
       <el-step title="填写需求情况"></el-step>
       <el-step title="填写完成"></el-step>
     </el-steps>
-    <el-form  label-width="120px" v-if="active==1">
+    <el-form label-width="120px" v-if="active==1">
       <el-form-item label="报名编号">
         <!-- 报名编号每次从后台拉取+1 -->
         <p>{{this.edit_data.number}}</p>
@@ -113,7 +113,7 @@
     <!-- 步骤二 -->
     <div v-if="active==2">
       <el-form>
-        <el-form-item label="上课地点" >
+        <el-form-item label="上课地点">
           <el-radio v-model="radio" label="1">线上</el-radio>
           <el-radio v-model="radio" label="2">线下</el-radio>
         </el-form-item>
@@ -155,18 +155,15 @@
         <i class="el-icon-circle-check" type="success"></i>
       </div>
       <div class="succ_word">
-        <el-link icon="el-icon-edit" type="primary" href="./ApplicationAdd">继续添加排课需求</el-link>
-        <el-link type="primary" href="./ApplicationAdd">
-          查看排课需求列表
-          <i class="el-icon-view el-icon--right"></i>
-        </el-link>
+        <el-button type="primary" style="background-color:#409eff;color:white;border:1px solid #409eff;" @click="toPlanClass">继续添加报名需求</el-button>
+        <el-button type="primary" style="background-color:#409eff;color:white;border:1px solid #409eff;" @click="toNeedsList">查看排课需求列表</el-button>
       </div>
     </div>
 
     <el-button @click="goBack" v-if="active==1||active==2">取消</el-button>
-    <el-button style="margin-top: 12px;" @click="pre" v-if="active==2||active==3">上一步</el-button>
+    <el-button style="margin-top: 12px;" @click="pre" v-if="active==2">上一步</el-button>
     <el-button style="margin-top: 12px;" @click="next" v-if="active==1">下一步</el-button>
-    <el-button type="primary" @click="onSubmit" style="" v-if="active==2">立即创建</el-button>
+    <el-button type="primary" @click="onSubmit" style v-if="active==2">立即创建</el-button>
     <!-- 设置充值链接 -->
     <!-- <div style="display:none" cols="20" id="biao1">{{copyurl1}}</div> -->
   </div>
@@ -180,11 +177,11 @@ export default {
       input: "",
       input1: "",
       input2: "",
-      value:"", //选择科目的值
+      value: "", //选择科目的值
       value_1: "",
       valueDate: "",
       active: 1,
-      edit_data:{},  //从编辑得来的数据
+      edit_data: {}, //从编辑得来的数据
       money: "",
       parms: {
         search: "",
@@ -197,13 +194,11 @@ export default {
       options_1: [], //学生数组总数据
       options: [], //课程名称的数据
       options_: [], //总数据的数据
-      radio: '1', //上课地点的选择
+      radio: "1", //上课地点的选择
       editableTabs_1: [],
       editableTabs: [
         //新增的内容的数据数组(学生)
       ],
-      tabIndex: 0,
-      tabIndex_1: 0,
       students_data: [], //用户id
       subjects_data: [], //学科数据
       feedback: "", //反馈
@@ -213,16 +208,19 @@ export default {
       need_two: "",
       need_three: "",
       need_four: "",
-      need_five: ""
+      need_five: "",
+      parms: {
+        //提交的数据
+        subjects_data: [],
+        students_data: []
+      }
     };
   },
   created() {
     this.getdata();
-     this.getStudent();
+    this.getStudent();
   },
-  computed: {
-
-  },
+  computed: {},
   mounted() {},
   methods: {
     //生成学员编号
@@ -237,28 +235,29 @@ export default {
       let parms = {
         admin_id: this.getdataCookie("admin_id")
       };
-        let parms1 = {
-       id:this.$route.query.id
+      let parms1 = {
+        id: this.$route.query.id
       };
-      this.$apis.menber.application_edit(parms1).then(res=>{
-        if(res.data.code==1){   //从编辑的位置获取之前的信息
-            this.edit_data=res.data.data
-            this.title=this.edit_data.title
-            this.feedback=this.edit_data.remarks
-              this.valueDate=res.data.data.expiry_date
-              this.need_one=this.edit_data.needs_data.need_one
-              this.need_two=this.edit_data.needs_data.need_two
-              this.need_three=this.edit_data.needs_data.need_three
-              this.need_four=this.edit_data.needs_data.need_four
-              this.need_five=this.edit_data.needs_data.need_five
-            // this.radio=this.edit_data.needs_data.course_address  这里是用户在线上还是线下
-               this.editableTabs_1=this.edit_data.subjects_data  //学科数据
-            this.editableTabs=this.edit_data.students_data    //学生数据
-            let subArr =this.edit_data.subjects_data  //原学科数据的数组
-                // console.log(subArr)   //需要用户科目  手机号  学生姓名的id
-                // console.log(this.editableTabs)//在这里循环得到想要的数据
+      this.$apis.menber.application_edit(parms1).then(res => {
+        if (res.data.code == 1) {
+          //从编辑的位置获取之前的信息
+          this.edit_data = res.data.data;
+          this.title = this.edit_data.title;
+          this.feedback = this.edit_data.remarks;
+          this.valueDate = res.data.data.expiry_date;
+          this.need_one = this.edit_data.needs_data.need_one;
+          this.need_two = this.edit_data.needs_data.need_two;
+          this.need_three = this.edit_data.needs_data.need_three;
+          this.need_four = this.edit_data.needs_data.need_four;
+          this.need_five = this.edit_data.needs_data.need_five;
+          // this.radio=this.edit_data.needs_data.course_address  这里是用户在线上还是线下
+          this.editableTabs_1 = this.edit_data.subjects_data; //学科数据
+          this.editableTabs = this.edit_data.students_data; //学生数据
+          let subArr = this.edit_data.subjects_data; //原学科数据的数组
+          // console.log(subArr)   //需要用户科目  手机号  学生姓名的id
+          // console.log(this.editableTabs)//在这里循环得到想要的数据
         }
-      })
+      });
       //获取科目的数据
       this.$apis.common.subject_list(parms).then(res => {
         if (res.data.code == 1) {
@@ -290,11 +289,9 @@ export default {
         }
       });
     },
-    createStudent() {
-    },
+    createStudent() {},
     //获取学生列表
     getStudent() {
-
       this.$apis.students.get_students_data().then(res => {
         if (res.data.code == 1) {
           this.options_1 = res.data.data.list;
@@ -324,7 +321,7 @@ export default {
                 classhour: 10,
                 price: 1000,
                 course_type: 0, //课程类型
-                 course_id:0, //班课
+                course_id: 0, //班课
                 is_one: 1, //一对一？
                 is_group: 0 //班课?
               });
@@ -334,14 +331,14 @@ export default {
       } else {
         //没有子元素
         this.editableTabs_1.push({
-                subject_name: oneArr[0].subject_name,
-                subject_id: oneArr[0].id, //科目id
-                classhour: 10,
-                price: 1000,
-                course_type: 0, //课程类型
-                course_id:0, //班课
-                is_one: 1, //一对一？
-                is_group: 0 //自主班课?
+          subject_name: oneArr[0].subject_name,
+          subject_id: oneArr[0].id, //科目id
+          classhour: 10,
+          price: 1000,
+          course_type: 0, //课程类型
+          course_id: 0, //班课
+          is_one: 1, //一对一？
+          is_group: 0 //自主班课?
         });
         // this.subject_id.push({student_id:checkOne[0].id})
       }
@@ -358,11 +355,14 @@ export default {
       });
       // this.student_data.push({student_id:checkOne[0].id})//注入学生id
     },
-
+    toPlanClass(){
+      this.$router.push({path:'/ApplicationAdd'})
+    },
+    toNeedsList(){
+      this.$router.push({name:'ApplyNeedsList'})
+    },
     onSubmit() {
-      this.subjects_data = [];
-      // for (let i = 0; i < this.editableTabs_1.length; i++) {}
-      let parms = {
+      this.parms = {
         title: this.title,
         expiry_date: this.valueDate,
         remarks: this.feedback,
@@ -372,13 +372,14 @@ export default {
         need_three: this.need_three,
         need_four: this.need_four,
         need_five: this.need_five,
-        app_id:this.$route.query.id
+        app_id: this.$route.query.id,
+        students_data: [],
+        subjects_data: []
       };
-
-      parms.subjects_data = this.subjects_data;
-      parms.students_data = this.students_data;
-      console.log(parms)
-      this.$apis.common.application_edit_put(parms).then(res => {
+      this.parms.subjects_data = this.subjects_data;
+      this.parms.students_data = this.students_data;
+      console.log(this.parms);
+      this.$apis.common.application_edit_put(this.parms).then(res => {
         if (res.data.code == 1) {
           this.$message({
             message: "修改成功",
@@ -394,69 +395,69 @@ export default {
       });
     },
     next() {
-      for (let i = 0; i < this.editableTabs.length; i++) {
-        this.students_data.push({
-          student_id: $("#students" + i).html()
+      this.editableTabs_1.forEach(item => {
+        this.subjects_data.push({
+          subject_id: item.subject_id,
+          classhour: item.classhour,
+          price: item.price,
+          amount: item.amount,
+          course_type: item.course_type,
+          course_id: item.course_id,
+          is_one: item.is_one,
+          is_group: item.is_group
         });
-      }
-      for (let i = 0; i < this.editableTabs_1.length; i++) {
-
-        //console.log(this.subjects_data)
-        if ($("#clas" + i).val() == 1) {
-                  this.subjects_data.push({
-          subject_id: $("#course_id" + i).html() * 1,
-          classhour: $("#time" + i).val() * 1,
-          price: $("#mach" + i).val() * 1,
-          amount: $("#time" + i).val() * $("#mach" + i).val(),
-          course_type: $("#attr" + i).val()*1,
-          course_id: $("#clas" + i).val()*1 ,
-          is_one: $("#one" + i).val() * 1,
-          is_group: $("#self" + i).val() * 1
-        });
-          // console.log($("#time"+i).val() + "  " + $("#mach"+i).val() + "  " + $("#sex"+i).val())
-               let parms = {
-        title: this.title,
-        expiry_date: this.valueDate,
-        remarks: this.feedback,
-        course_address: this.radio,
-        need_one: this.need_one,
-        need_two: this.need_two,
-        need_three: this.need_three,
-        need_four: this.need_four,
-        need_five: this.need_five,
-        app_id:this.$route.query.id
-      };
-
-      parms.subjects_data = this.subjects_data;
-      parms.students_data = this.students_data;
-      console.log(parms)
-      this.$apis.common.application_edit_put(parms).then(res => {
-        if (res.data.code == 1) {
-          this.$message({
-            message: "修改成功",
-            type: "success"
-          });
-          this.active = 3;
-        }else{
-            this.$message({
-            message:res.data.msg,
-            type: "warning"
-          });
-        }
       });
-         this.active = 3;
-        } else {
-          //this.active++;
-        }
-      }
-       this.active++;
+        this.editableTabs.forEach(item => {
+        this.students_data.push({
+          student_id: item.student_id
+        });
+      });
+   this.editableTabs_1.forEach((item,i) => {
+        //console.log(this.subjects_data)
+        if (item.course_id==1) {
+          this.parms = {
+            title: this.title,
+            expiry_date: this.valueDate,
+            remarks: this.feedback,
+            course_address: this.radio,
+            need_one: this.need_one,
+            need_two: this.need_two,
+            need_three: this.need_three,
+            need_four: this.need_four,
+            need_five: this.need_five,
+            app_id: this.$route.query.id
+          };
+
+          this.parms.subjects_data = this.subjects_data;
+          this.parms.students_data = this.students_data;
+          console.log(this.parms);
+          this.$apis.common.application_edit_put(this.parms).then(res => {
+            if (res.data.code == 1) {
+              this.$message({
+                message: "修改成功",
+                type: "success"
+              });
+              this.active = 3;
+            }else{
+                this.$message({
+                message:res.data.msg,
+                type: "warning"
+              });
+            }
+          });
+        } 
+      })
+      this.active++;
     },
     pre() {
-      // if (
-        this.subjects_data = [];
+
+      console.log(this.parms);
+      this.parms.students_data = [];
+      this.parms.subjects_data = [];
+      this.students_data = [];
+      this.subjects_data = [];
       this.active--;
-      //    < 2)
-      // this.active = 1
+
     },
     goBack() {
       history.back(-1);

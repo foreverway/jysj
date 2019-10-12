@@ -5,7 +5,7 @@
     <el-form ref="form" :model="form" label-width="120px">
       <el-form-item label="标题">
         <!-- 标题是从上一个页面拉去过来的信息 -->
-        <p style="width:200px;display:inline-block;">{{this.$route.query.title}}</p>
+        <p style="width:200px;display:inline-block;">{{this.apply_data.title}}</p>
         <el-button type="primary" plain @click="seeApplyTable(2)">查看报名表</el-button>
         <el-button type="primary" plain @click="seeClassNeeds(2)">查看排课需求</el-button>
       </el-form-item>
@@ -63,7 +63,7 @@
         </el-select>
       </el-form-item>
       <el-form-item :inline="true" label="课时">
-        <p>{{parseInt(this.$route.query.classhour)}}</p>
+        <p>{{parseInt(this.apply_data.classhour)}}</p>
       </el-form-item>
       <el-form-item label="上课地点" v-model="radio">
         <el-radio-group v-model="radio" @change="whereGo(radio)">
@@ -153,7 +153,7 @@
         </div>
       </el-form-item>
     </el-form>
-    <el-button type="primary" @click="onSubmit">提交</el-button>
+    <el-button type="primary" @click="onSubmit">确定</el-button>
 
     <el-button @click="goBack">取消</el-button>
 
@@ -528,18 +528,24 @@ export default {
         });
       }
     },
+    // again(a,b){this.seeStudentClass(a, b)},
     seeStudentClass(a, b) {
       //查看学生课表
+              // this.again(a,b)
       let params = {
         student_id: a
       };
       this.stu_centerDialogVisible = true;
-      this.get_student_course({
-        //查看学生课表
-        params,
-        url: "/api/api_getstudent_course"
-      });
-      this.seestudentclass = this.student_course;
+      this.$apis.students.see_students_class(params).then(res=>{
+        if(res.data.code==1){
+
+      if(Object.prototype.toString.call(res.data.data).substr(8,5)=="Objec"){
+        this.seestudentclass=[]
+      }else{
+     this.seestudentclass = res.data.data;
+      }
+        }
+      })
       this.seestudentname = b;
     },
     getLiveName() {
@@ -638,7 +644,7 @@ export default {
       for (let i = 0; i < this.editableTabs_1.length; i++) {
         all_hour += $("#classhour" + i).val() * 1;
       }
-      if (all_hour * 1 >= this.$route.query.classhour * 1) {
+      if (all_hour * 1 >= this.apply_data.classhour * 1) {
         this.$message({
           type: "warning",
           message: "请核对课时"
@@ -674,14 +680,14 @@ export default {
       }
 
       let parms = {
-        app_id: this.$route.query.id, //报名表id
+        app_id: this.apply_data.app_id, //报名表id
         live_id: this.form.value_live, //直播平台id
         teacher_id: this.form.teacher_id, //讲师id
         banzhuren_id: this.form.banzhuren_id, //班主任id
         zhujiao_id: this.form.zhujiao_id, //助教id
         jiaowu_id: this.form.jiaowu_id, //教务id
         // students_id: this.apply_data.students,  //学生id  string
-        classhour: this.$route.query.classhour * 1, //课时
+        classhour: this.apply_data.classhour * 1, //课时
         course_address: this.radio * 1 //1线上，2线下
       };
 
@@ -694,7 +700,7 @@ export default {
       // console.log( parms.course_data)
       //console.log(this.editableTabs_1.length,"提交的时候数组长度",this.editableTabs_1)
       console.log(parms, "总数据");
-      if (all_hour * 1 == this.$route.query.classhour * 1) {
+      if (all_hour * 1 == this.apply_data.classhour * 1) {
         //  console.log(parms)
         this.$apis.common.application_arrange_post(parms).then(res => {
           if (res.data.code == 1) {
@@ -737,7 +743,7 @@ export default {
     }, // 复制链接
 
     get_apply_data() {
-      //获取该报名表的信息
+      //获取该报名表的信息s
       let parms = {
         app_id: this.$route.query.id
       };

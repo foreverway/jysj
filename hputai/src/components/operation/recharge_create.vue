@@ -136,7 +136,7 @@
         </el-select>
       </el-form-item>
       <el-form-item style="width:100%;margin-left:30px">
-        <el-button type="primary" @click="add('form')">提交</el-button>
+        <el-button type="primary" @click="add('form')">确定</el-button>
         <el-button @click="goback">取消</el-button>
       </el-form-item>
     </el-form>
@@ -257,11 +257,13 @@ export default {
       this.$apis.common.teacher_list_only().then(res => {
         // 获取班主任数据
         if (res.data.code == 1) {
+ 
           this.teacher = res.data.data.list;
           let num = parseInt(this.getdataCookie("admin_uid"));
           for (var i = 0; i < this.teacher.length; i++) {
-            if (this.teacher[i].id == num) {
-              this.form.teacher = this.teacher[i].id;
+            if (this.teacher[i].teacher_id == num) {
+              this.form.teacher = this.teacher[i].teacher_id;
+              //console.log(this.teacher[i].teacher_id)
             }
           }
         }
@@ -304,11 +306,14 @@ export default {
         if (res.data.code == 1) {
           this.tipname = "";
           let num = parseInt(res.data.data.banzhuren_id);
-          for (var i = 0; i < this.teacher.length; i++) {
-            if (this.teacher[i].id == num) {
-              this.form.teacher = num;
-            }
-          }
+          this.form.teacher = num;
+          // console.log(num)
+          // for (var i = 0; i < this.teacher.length; i++) {
+          //   if (this.teacher[i].teacher_id == num) {
+          //    console.log(this.teacher[i])
+          //     this.form.teacher = num;
+          //   }
+          // }
         }
       });
       }

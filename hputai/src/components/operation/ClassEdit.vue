@@ -584,12 +584,17 @@ export default {
       };
 
       this.stu_centerDialogVisible = true;
-      this.get_student_course({
-        //查看学生课表
-        params,
-        url: "/api/api_getstudent_course"
-      });
-      this.seestudentclass = this.student_course;
+      this.$apis.students.see_students_class(params).then(res=>{
+        if(res.data.code==1){
+         // console.log(res.data.data)
+         // console.log(Object.prototype.toString.call(res.data.data).substr(8,5))
+      if(Object.prototype.toString.call(res.data.data).substr(8,5)=="Objec"){
+        this.seestudentclass=[]
+      }else{
+     this.seestudentclass = res.data.data;
+      }
+        }
+      })
       this.seestudentname = b;
     },
     getLiveName() {

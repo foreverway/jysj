@@ -58,14 +58,16 @@
         </el-table-column>
            <el-table-column
            fixed="right"
-            prop=""
-            label="操作" width="140">
+            prop
+            label="操作" 
+            width="200px">
                <template slot-scope="scope">
                   <span v-for="(item,index) in getStuList()" :key="index">
              <el-button
-              type="text"
-              size="medium"
+              type="button"
+              size="mini"
               index="item.id"
+              v-bind:id="item.menu_action"
                @click="trueAction(item.menu_action,scope.row)" 
             >{{item.menu_name}}</el-button>
           </span> 
@@ -232,5 +234,21 @@ import { mapState } from 'vuex';
   font-size: 26px;
   margin:15px 0;
   font-weight: 700;
+}
+#del_this{
+ background-color: #fe6249 !important;
+  color: white;
+}
+#edit_list{
+  background-color: #3a8eff !important;
+  color: white;
+}
+#see_info{
+  background-color: #05d294 !important;
+  color: white;
+}
+#copy_url{
+  background-color: #7571fa !important;
+  color: white;
 }
 </style>
