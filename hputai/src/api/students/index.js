@@ -84,7 +84,7 @@ export default {
    return shuju.getdata(url, parms)
  },
     
-   // 添加报名需求列表 /api_attendance_list
+   // 考勤列表接口
    attendance_list (params) {
     let url='/api/api_attendance_list'
     return shuju.getdata(url,params)

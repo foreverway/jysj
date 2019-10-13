@@ -43,12 +43,9 @@
           <el-table-column prop="live_name" label="直播平台"></el-table-column>
           <el-table-column label="操作" width="220" @click="dialogVisible_other = true" fixed="right">
             <template slot-scope="scope">
-              <el-button
-                size="mini"
-                v-if="scope.row.ready_txt=='准备直播'"
-                style="color:red"
-              >
-                <a @click="nowVideo(scope.row.course_id)">{{scope.row.ready_txt}}</a></el-button>
+              <el-button size="mini" v-if="scope.row.ready_txt=='准备直播'" style="color:red">
+                <a @click="nowVideo(scope.row.course_id)">{{scope.row.ready_txt}}</a>
+              </el-button>
               <el-button
                 size="mini"
                 v-if="scope.row.ready_txt=='未知状态'"
@@ -58,16 +55,14 @@
                 size="mini"
                 v-if="scope.row.ready_txt=='待直播'"
                 style="color:white;background-color:#409eff;"
-              >
-{{scope.row.ready_txt}}
-              
-              </el-button>
-                    <el-button
+              >{{scope.row.ready_txt}}</el-button>
+              <el-button
                 size="mini"
                 v-if="scope.row.ready_txt=='直播中'"
                 style="color:white;background-color:#409eff;"
               >
-              <a @click="nowVideo(scope.row.course_id)">{{scope.row.ready_txt}}</a></el-button>
+                <a @click="nowVideo(scope.row.course_id)">{{scope.row.ready_txt}}</a>
+              </el-button>
               <!-- 如果有人他进入不了直播他就只能来这 -->
               <!-- <div style="width:120px; display:inline-block;">
                 <el-select v-model="value_other" :change="changeSele()" placeholder="请选择">
@@ -78,16 +73,20 @@
                     :value="item.value_other"
                   ></el-option>
                 </el-select>
-              </div> -->
-            <el-dropdown @command="changeSele(scope.row.course_id)" style="border:1px orange solid;cursor:pointer;">
-              <span class="el-dropdown-link">
-                直播备用方法<i class="el-icon-arrow-down el-icon--right"></i>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command="a" style="width:100px;text-align:center;">方法一</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-           
+              </div>-->
+              <el-dropdown
+                @command="changeSele(scope.row.course_id)"
+                style="border:1px orange solid;cursor:pointer;"
+              >
+                <span class="el-dropdown-link">
+                  直播备用方法
+                  <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item command="a" style="width:100px;text-align:center;">方法一</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+
               <el-button
                 size="mini"
                 v-if="scope.row.feedback_txt=='讲师填写反馈'"
@@ -115,38 +114,45 @@
           layout="total, sizes, prev, pager, next"
           :total="tableData.length"
         ></el-pagination>
-         <el-dialog
-            title="其他方式进入教室"
-            :visible.sync="centerDialogVisible"
-            center>
-             <el-dialog
-              width="30%"
-              title="使用手机扫码下载"
-              :visible.sync="innerVisible"
-              append-to-body>
-              <div class='flex_div'>
-                   <img :src=otherWey.mobileDownloadUrl>
-              </div>
-              </el-dialog>
-            <el-form label-width="80px" :model="otherWey"   v-model="labelPosition"
-            :label-position="labelPosition">
+        <el-dialog title="其他方式进入教室" :visible.sync="centerDialogVisible" center>
+          <el-dialog width="30%" title="使用手机扫码下载" :visible.sync="innerVisible" append-to-body>
+            <div class="flex_div">
+              <img :src="otherWey.mobileDownloadUrl" />
+            </div>
+          </el-dialog>
+          <el-form
+            label-width="80px"
+            :model="otherWey"
+            v-model="labelPosition"
+            :label-position="labelPosition"
+          >
             <el-form-item label="方式一：参与码进入教室" style="font-weight:700;">
-              <p v-if="otherWey.code">你的参与码：<span style="color:orange;">{{otherWey.code}}</span></p>
-              <p v-if="!otherWey.code">你的参与码：<span style="color:orange;">暂未生成</span></p>
+              <p v-if="otherWey.code">
+                你的参与码：
+                <span style="color:orange;">{{otherWey.code}}</span>
+              </p>
+              <p v-if="!otherWey.code">
+                你的参与码：
+                <span style="color:orange;">暂未生成</span>
+              </p>
               <p>打开“云端课堂”的PC端或者APP端，输入参与码，即可进入教室。</p>
-              <p><el-button @click='toPc()'>Windows版下载</el-button><el-button @click='toMac()'>Mac版下载</el-button><el-button @click='toMob()'>手机版下载</el-button>（或在手机应用市场搜索“云端课堂”即可下载）</p>
+              <p>
+                <el-button @click="toPc()">Windows版下载</el-button>
+                <el-button @click="toMac()">Mac版下载</el-button>
+                <el-button @click="toMob()">手机版下载</el-button>（或在手机应用市场搜索“云端课堂”即可下载）
+              </p>
             </el-form-item>
             <el-form-item label="方式二：网页端进入教室" style="font-weight:700;">
-              <el-button @click='nowSee()'>点击这里即可进入教室</el-button>
-             <p>或者复制下方链接在其他浏览器打开</p>
-            <p>{{otherWey.webUrl}}</p>
+              <el-button @click="nowSee()">点击这里即可进入教室</el-button>
+              <p>或者复制下方链接在其他浏览器打开</p>
+              <p>{{otherWey.webUrl}}</p>
             </el-form-item>
           </el-form>
-            <span slot="footer" class="dialog-footer">
-              <el-button @click="closeDio">取 消</el-button>
-              <el-button type="primary" @click="closeDio">确 定</el-button>
-            </span>
-          </el-dialog>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="closeDio">取 消</el-button>
+            <el-button type="primary" @click="closeDio">确 定</el-button>
+          </span>
+        </el-dialog>
       </div>
       <!-- 已上课表 -->
       <div class="table_div data_list posi_right" v-if="change_value=='2'">
@@ -214,8 +220,10 @@
           :total="tableData.length"
         ></el-pagination>
         <!-- 填写课堂反馈 -->
-        <el-dialog title="收货地址" :visible.sync="dialogFromVisible">
-          <p style="font-size:18px;height:30px;margin:10px 0;">课程信息</p>
+        <el-dialog title="填写课堂反馈" :visible.sync="dialogFromVisible">
+          <!-- <p style="font-size:18px;height:30px;margin:10px 0;">课程信息</p> -->
+          <p style="margin:10px 0;"><span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>课程信息</p>
+
           <ul :data="gridData">
             <li>
               <span>课程名称</span>
@@ -231,31 +239,27 @@
             </li>
             <li>
               <span>上课时间</span>
-              <span style="border:0;">{{gridData.start_time}}</span>
+              <span style=" border-top-style:hidden;">{{gridData.start_time}}</span>
             </li>
             <li>
               <span>结束时间</span>
-              <span style="border:0;">{{gridData.end_time}}</span>
+              <span style=" border-top-style:hidden;">{{gridData.end_time}}</span>
             </li>
             <li>
               <span>时长</span>
-              <span>{{gridData.classhour}}</span>
+              <span style=" border-top-style:hidden;">{{gridData.classhour}}</span>
             </li>
             <li>
               <span>授课方式</span>
-              <span>{{gridData.course_address}}</span>
+              <span>{{formLabelAlign.course_address}}</span>
             </li>
-            <li>
-              <span>地点</span>
-              <span>{{gridData.course_address}}</span>
-            </li>
-            <li>
-              <span></span>
-              <span></span>
+            <li style="width:64%;">
+              <span style="width:15%;">地点</span>
+              <span style="width:84%;">{{formLabelAlign.course_address}}</span>
             </li>
           </ul>
           <div style="clear:both;"></div>
-          <p style="font-size:18px;height:30px;margin:10px 0;">反馈内容</p>
+          <p style="margin:10px 0;"><span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>反馈内容</p>
           <el-form :model="form" label-width="200px">
             <el-form-item label="类型">
               <el-radio-group v-model="form.feedback_type">
@@ -306,7 +310,9 @@
           </el-form>
         </el-dialog>
         <!-- 查看课堂反馈 -->
-        <el-dialog title="这是老师的反馈" :visible.sync="dialogVisible">
+        <el-dialog title="老师反馈" :visible.sync="dialogVisible" width="900px">
+          <p style="margin:10px 0;"><span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>课程信息</p>
+
           <ul :data="formLabelAlign">
             <li>
               <span>课程名称</span>
@@ -321,63 +327,63 @@
               <span>{{formLabelAlign.banzhuren_name}}</span>
             </li>
             <li>
-              <span>上课时间</span>
-              <span style="border:0;">{{formLabelAlign.start_time}}</span>
+              <span >上课时间</span>
+              <span style=" border-top-style:hidden;">{{formLabelAlign.start_time}}</span>
             </li>
             <li>
               <span>结束时间</span>
-              <span style="border:0;">{{formLabelAlign.end_time}}</span>
+              <span style=" border-top-style:hidden;">{{formLabelAlign.end_time}}</span>
             </li>
             <li>
               <span>时长</span>
-              <span>{{formLabelAlign.classhour}}</span>
+              <span style=" border-top-style:hidden;">{{formLabelAlign.classhour}}</span>
             </li>
             <li>
               <span>授课方式</span>
               <span>{{formLabelAlign.course_address}}</span>
             </li>
-            <li>
-              <span></span>
-              <span></span>
+            <li style="width:64%;">
+              <span style="width:15%;">地点</span>
+              <span style="width:84%;">{{formLabelAlign.course_address}}</span>
             </li>
-            <li>
-              <span></span>
-              <span></span>
-            </li>
+       
           </ul>
-          <div style="clear:both;"></div>
+          <div style="clear:both;">
+
+          </div>
+          <p style="margin:10px 0;"><span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>反馈内容</p>
           <el-form label-width="200px" :model="formLabelAlign">
             <el-form-item
-              label="本次授课内容"
+              label="本次授课内容:"
               v-if="formLabelAlign.feedback_type=='2'||formLabelAlign.feedback_type=='1'"
             >
               <p>{{formLabelAlign.details_1}}</p>
             </el-form-item>
             <el-form-item
-              label="课堂配合度和积极性"
+              label="课堂配合度和积极性:"
               v-if="formLabelAlign.feedback_type=='2'||formLabelAlign.feedback_type=='1'"
             >
-              <span>{{formLabelAlign.details_2}}</span>
+              <span >{{formLabelAlign.details_2}}</span>
             </el-form-item>
-            <el-form-item label="学生的主要问题和建议" v-if="formLabelAlign.feedback_type=='1'">
+            <el-form-item label="学生的主要问题和建议:" v-if="formLabelAlign.feedback_type=='1'">
               <span>{{formLabelAlign.details_3}}</span>
             </el-form-item>
-            <el-form-item label="课时建议" v-if="formLabelAlign.feedback_type=='1'">
+            <el-form-item label="课时建议:" v-if="formLabelAlign.feedback_type=='1'">
               <span>{{formLabelAlign.details_4}}</span>
             </el-form-item>
-            <el-form-item label="课程阶段安排及课时建议" v-if="formLabelAlign.feedback_type=='1'">
+            <el-form-item label="课程阶段安排及课时建议:" v-if="formLabelAlign.feedback_type=='1'">
               <span>{{formLabelAlign.details_5}}</span>
             </el-form-item>
-            <el-form-item label="上次课知识点掌握情况" v-if="formLabelAlign.feedback_type=='2'">
+            <el-form-item label="上次课知识点掌握情况:" v-if="formLabelAlign.feedback_type=='2'">
               <span>{{formLabelAlign.details_6}}</span>
             </el-form-item>
-            <el-form-item label="作业" v-if="formLabelAlign.feedback_type=='2'">
+            <el-form-item label="作业:" v-if="formLabelAlign.feedback_type=='2'">
               <span>{{formLabelAlign.details_7}}</span>
             </el-form-item>
-            <el-form-item label="课程期间学生总体表现" v-if="formLabelAlign.feedback_type=='3'">
+            <el-form-item label="课程期间学生总体表现:" v-if="formLabelAlign.feedback_type=='3'">
               <span>{{formLabelAlign.details_8}}</span>
             </el-form-item>
-            <el-form-item label="下一步学习方案建议" v-if="formLabelAlign.feedback_type=='3'">
+            <el-form-item label="下一步学习方案建议:" v-if="formLabelAlign.feedback_type=='3'">
               <span>{{formLabelAlign.details_9}}</span>
             </el-form-item>
           </el-form>
@@ -387,9 +393,7 @@
           </span>
         </el-dialog>
         <!-- 其他方式进入课表 other_enter -->
-         
       </div>
-          
     </div>
   </div>
 </template>
@@ -403,8 +407,8 @@ export default {
   data() {
     return {
       value: "",
-        labelPosition: 'top',//其他方法进入直播排在顶部
-         innerVisible: false, //内层弹框
+      labelPosition: "top", //其他方法进入直播排在顶部
+      innerVisible: false, //内层弹框
       form: {
         feedback_type: "1",
         details_1: "",
@@ -422,7 +426,7 @@ export default {
         //学生姓名的数据
         // label:"username",
       ],
-   
+
       formLabelAlign: {}, //老师在这里疯狂反馈
       course: "", //课程ID
       //  radio:'1',//反馈类型
@@ -440,8 +444,8 @@ export default {
       dialogVisible: false, //查看课堂反馈
       gridData: {}, //弹出框的表格数据
       centerDialogVisible: false, //其他方式打开课表
-       otherWey: {} ,//从其他方法进入直播
-       num:0, //次数的变化
+      otherWey: {}, //从其他方法进入直播
+      num: 0 //次数的变化
     };
   },
   created() {
@@ -461,36 +465,35 @@ export default {
     }
   },
   methods: {
-      toPc(){
-         window.open(this.otherWey.windowsDowloadUrl)
-      },
-      toMac(){
-        window.open(this.otherWey.macDowloadUrl)
-      },
-      toMob(){
-        this.innerVisible = true
-       // window.open(this.otherWey.mobileDownloadUrl)
-      },
-      nowSee(){
-        window.open(this.otherWey.webUrl)
-      },
-    closeDio(){
-      this.value_other="";
+    toPc() {
+      window.open(this.otherWey.windowsDowloadUrl);
+    },
+    toMac() {
+      window.open(this.otherWey.macDowloadUrl);
+    },
+    toMob() {
+      this.innerVisible = true;
+      // window.open(this.otherWey.mobileDownloadUrl)
+    },
+    nowSee() {
+      window.open(this.otherWey.webUrl);
+    },
+    closeDio() {
+      this.value_other = "";
       this.centerDialogVisible = false;
     },
     changeSele(a) {
       //这是根据选中的值变化的函数
-      console.log(a)
+      console.log(a);
       this.centerDialogVisible = true;
-      let prams={
-        course_id:a
-      }
-      this.$apis.common.other_enter(prams).then(res=>{
-        if(res.data.code==1){
-          this.otherWey=res.data.data
-         
+      let prams = {
+        course_id: a
+      };
+      this.$apis.common.other_enter(prams).then(res => {
+        if (res.data.code == 1) {
+          this.otherWey = res.data.data;
         }
-      })
+      });
     },
 
     onSubmit() {
@@ -516,6 +519,7 @@ export default {
       this.$apis.common.course_feedback(parms).then(res => {
         if (res.data.code == 1) {
           this.formLabelAlign = res.data.data;
+          console.log(res.data.data)
         }
       });
     },
@@ -835,25 +839,46 @@ li {
   width: 32%;
   height: 30px;
   padding: 0;
-  margin: 0 0 0 -2px;
+  margin: 0 0 0 -1px;
 }
-li span {
-  display: inline-block;
+li span{
+    display: inline-block;
   float: left;
   width: 49%;
   height: 30px;
   line-height: 30px;
-  border: 1px silver solid;
 }
+li :nth-child(1) {
+   width: 30%;
+   text-align: center;
+   background-color: #F5F5F5;
+    /* border:1px solid #F5F5F5; */
+}
+/* .el-form-item__label {
+  background-color: silver !important;
+
+} */
+li :nth-child(2) {
+   width: 69%;
+   text-align: center;
+   border:1px solid #F5F5F5;
+}
+.el-dialog__body{
+  padding: 0px 20px;
+}
+/* .el-form-item__label {
+background-color: silver;
+} */
+
 /* li[data-v-83bc0558]{
   width: 100px !important;
   text-align: center;
 } */
-.flex_div{
-width: 100%;
+.flex_div {
+  width: 100%;
 }
-.flex_div img{
-width: 80%;
-margin:0 10%;
+.flex_div img {
+  width: 80%;
+  margin: 0 10%;
 }
 </style>

@@ -5,6 +5,7 @@
       placeholder="模糊搜索"
       v-model="parms.search"
       clearable
+      @change="getdata"
       style="width:300px"
     ></el-input>
 

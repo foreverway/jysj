@@ -4,7 +4,7 @@
 
     <div class="so_main_left">
       <el-form :inline="true" :model="form"  class="demo-form-inline">
-        <el-input class="so_input" clearable v-model="form.search" placeholder="请输入用户名"></el-input>
+        <el-input class="so_input" clearable v-model="form.search" @change="getadata" placeholder="请输入用户名"></el-input>
         <el-button type="primary"  @click="getadata" style="margin-left:5px;background-color:#e6563a; border:none;">搜索</el-button>
 
         <el-date-picker

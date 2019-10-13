@@ -31,7 +31,7 @@
 
 
         <p style="margin-top:40px">
-        <el-button type="primary" @click="postdata">立即创建</el-button>
+        <el-button type="primary" @click="postdata">确定</el-button>
             <el-button @click="goBack">取消</el-button>
         </p>
 
