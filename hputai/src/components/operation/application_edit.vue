@@ -160,10 +160,11 @@
       </div>
     </div>
 
-    <el-button @click="goBack" v-if="active==1||active==2">取消</el-button>
     <el-button style="margin-top: 12px;" @click="pre" v-if="active==2">上一步</el-button>
     <el-button style="margin-top: 12px;" @click="next" v-if="active==1">下一步</el-button>
-    <el-button type="primary" @click="onSubmit" style v-if="active==2">立即创建</el-button>
+    <el-button type="primary" @click="onSubmit"  v-if="active==2"> 确 定 </el-button>
+        <el-button @click="goBack" v-if="active==1||active==2">取消</el-button>
+
     <!-- 设置充值链接 -->
     <!-- <div style="display:none" cols="20" id="biao1">{{copyurl1}}</div> -->
   </div>
@@ -356,7 +357,7 @@ export default {
       // this.student_data.push({student_id:checkOne[0].id})//注入学生id
     },
     toPlanClass(){
-      this.$router.push({path:'/ApplicationAdd'})
+      this.$router.push({name:'ApplicationAdd'})
     },
     toNeedsList(){
       this.$router.push({name:'ApplyNeedsList'})
@@ -409,7 +410,7 @@ export default {
       });
         this.editableTabs.forEach(item => {
         this.students_data.push({
-          student_id: item.student_id
+          student_id: item.id
         });
       });
    this.editableTabs_1.forEach((item,i) => {

@@ -38,6 +38,7 @@ const store = new Vuex.Store({
     },
     get_teacher_data(state, all_goods) { //获取讲师列表
       state.teacher_data = all_goods
+      //console.log(all_goods)
     },
     get_zhujiao_data(state, all_goods) { //获取助教列表
       state.zhujiao_data = all_goods

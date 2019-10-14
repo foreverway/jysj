@@ -1,34 +1,21 @@
 <template>
   <div class="main">
-    <!-- 设置充值链接 -->
-    <!-- <el-page-header content="添加销售进程管控">
-    </el-page-header>-->
-    <!-- <el-row>
-  <el-button type="primary">添加销售进程管控</el-button>
-    </el-row>-->
     <div class="main_head">|&nbsp;添加报名需求</div>
-    <!--  <el-input  style="width:200px" v-model="money"  placeholder="请输入充值金额" ></el-input>
-    <el-button type="primary" v-show="money>0" @click="copyUrl">生成并复制充值链接</el-button>-->
     <el-steps :active="active" finish-status="success">
       <el-step title="填写报名情况"></el-step>
       <el-step title="填写需求情况"></el-step>
       <el-step title="填写完成"></el-step>
     </el-steps>
-    <el-form ref="form" :model="form" label-width="120px" v-if="active==1">
+    <el-form ref="form" :rules="rules" :model="form" label-width="120px" v-if="active==1">
       <el-form-item label="报名编号">
-        <!-- 报名编号每次从后台拉取+1 -->
         <p>{{this.writeCurrentDate()}}</p>
-        <!-- <el-input v-model="form.data_number" ></el-input> -->
       </el-form-item>
-      <el-form-item label="报名标题">
-        <el-input v-model="title"></el-input>
+      <el-form-item label="报名标题" prop="title">
+        <el-input v-model="form.title"></el-input>
       </el-form-item>
-
-      <el-form-item :inline="true" label="报读科目">
-        <!-- <span class="demonstration">hover 触发子菜单</span> -->
-        <!-- 用el-autocomplete -->
+      <el-form-item :inline="true" label="报读科目" prop="value">
         <el-cascader
-          v-model="value"
+          v-model="form.value"
           :options="options"
           filterable
           :props="{ expandTrigger: 'hover' }"
@@ -43,7 +30,6 @@
           <p id="sss">科目</p>
           <p>课时</p>
           <p>单价(元)</p>
-          <!-- <p @click="milti">总额</p> -->
           <p>课程性质</p>
           <p>班课</p>
           <p>一对一</p>
@@ -88,10 +74,10 @@
           <p @click=" deleteTest_1" style="cursor:pointer;">撤销</p>
         </div>
       </el-form-item>
-      <el-form-item label="学生姓名">
+      <el-form-item label="学生姓名" prop="value_1">
         <el-cascader
           placeholder="输入学生姓名"
-          v-model="value_1"
+          v-model="form.value_1"
           :options="options1"
           @change="handleChange"
           filterable
@@ -110,60 +96,61 @@
         </div>
       </el-form-item>
 
-      <el-form-item label="有效期限">
-        <p>：{{ this.valueDate }}</p>
+      <el-form-item label="有效期限" prop="valueDate">
+        <p>：{{ this.form.valueDate }}</p>
 
         <!-- <el-date-picker
       v-model="value1"
       type="date"
       placeholder="选择日期">
         </el-date-picker>-->
-        <el-date-picker v-model="valueDate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
+        <el-date-picker v-model="form.valueDate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
       </el-form-item>
-      <el-form-item label="备注说明">
-        <el-input type="textarea" v-model="feedback"></el-input>
+      <el-form-item label="备注说明" prop="feedback">
+        <el-input type="textarea" v-model="form.feedback"></el-input>
       </el-form-item>
     </el-form>
+
     <!-- 步骤二 -->
     <div v-if="active==2">
-      <el-form>
-        <el-form-item label="上课地点" v-model="radio">
-          <el-radio-group v-model="radio" @change="whereGo(radio)">
-            <el-radio v-model="radio" label="1">线上</el-radio>
-            <el-radio v-model="radio" label="2">线下</el-radio>
+      <el-form ref="form2" :rules="rules" :model="form2">
+        <el-form-item label="上课地点" prop="radio">
+          <el-radio-group v-model="form2.radio" @change="whereGo(form2.radio)">
+            <el-radio  :label="1">线上</el-radio>
+            <el-radio  :label="2">线下</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="上课地址" v-if="show==true">
-          <el-cascader placeholder="支持到地级市" v-model="address" :options="address_check" filterable></el-cascader>
+        <el-form-item label="上课地址" v-if="show==true" prop="address">
+          <el-cascader placeholder="支持到地级市" v-model="form2.address" :options="address_check" filterable></el-cascader>
         </el-form-item>
-        <el-form-item label="需求1">
+        <el-form-item label="需求1" prop="need_one">
           <el-input
             type="textarea"
-            v-model="need_one"
+            v-model="form2.need_one"
             maxlength="100"
             show-word-limit
             placeholder="学生排课项目、科目、考局（A-level必写）及课时"
           ></el-input>
         </el-form-item>
-        <el-form-item label="需求2">
+        <el-form-item label="需求2" prop="need_two">
           <el-input
             type="textarea"
-            v-model="need_two"
+            v-model="form2.need_two"
             placeholder="学生学习需求是什么？（零基础先修、同步辅导、巩固复习、强化冲刺）"
           ></el-input>
         </el-form-item>
-        <el-form-item label="需求3">
+        <el-form-item label="需求3" prop="need_three">
           <el-input
             type="textarea"
-            v-model="need_three"
+            v-model="form2.need_three"
             placeholder="学生之前的学习经历和学习基础（之前在那里上的学？学习基础怎么样？）"
           ></el-input>
         </el-form-item>
-        <el-form-item label="需求4">
-          <el-input type="textarea" v-model="need_four" placeholder="学生希望跟什么样的老师学习？"></el-input>
+        <el-form-item label="需求4" prop="need_four">
+          <el-input type="textarea" v-model="form2.need_four" placeholder="学生希望跟什么样的老师学习？"></el-input>
         </el-form-item>
-        <el-form-item label="需求5">
-          <el-input type="textarea" v-model="need_five" placeholder="学生上课时间期限，可排课时间？（北京时间）每次课上几小时？"></el-input>
+        <el-form-item label="需求5" prop="need_five">
+          <el-input type="textarea" v-model="form2.need_five" placeholder="学生上课时间期限，可排课时间？（北京时间）每次课上几小时？"></el-input>
         </el-form-item>
       </el-form>
     </div>
@@ -178,23 +165,24 @@
         <el-button type="primary" style="background-color:#409eff;color:white;border:1px solid #409eff;" @click="toNeedsList">查看排课需求列表</el-button>
       </div>
     </div>
-    <el-button
-      type="primary"
-      style="background-color:#e6563a; border:none;color:white;"
-      @click="onSubmit"
-      v-if="active==2"
-    >确定</el-button>
-    <el-button @click="goBack" v-if="active==1||active==2">取消</el-button>
-    <el-button
+        <el-button
       style="margin-top: 12px;background-color:#e6563a; border:none;color:white;"
       @click="pre"
       v-if="active==2"
     >上一步</el-button>
     <el-button
       style="margin-top: 12px;background-color:#e6563a; border:none;color:white;"
-      @click="next"
+      @click="next('form')"
       v-if="active==1"
     >下一步</el-button>
+    <el-button
+      type="primary"
+      style="background-color:#e6563a; border:none;color:white;"
+      @click="onSubmit('form2')"
+      v-if="active==2"
+    > 确 定 </el-button>
+    <el-button @click="goBack" v-if="active==1||active==2">取消</el-button>
+
 
     <!-- 设置充值链接 -->
     <!-- <div style="display:none" cols="20" id="biao1">{{copyurl1}}</div> -->
@@ -209,16 +197,64 @@ export default {
     return {
       show: "false",
       address_check: [], //上课地址的数据
-      address: "", //上课地址
       input: "",
       input1: "",
       input2: "",
-      value: "",
-      value_1: "",
-      valueDate: "",
       active: 1,
-      form: {},
-
+      form: {
+        title: "", //标题
+        value: "",  //报读科目
+        value_1: "", //学生姓名
+        valueDate: "", //有效期限
+        feedback:"", //备注说明
+      },
+      form2:{
+        need_one: "",
+        need_two: "",
+        need_three: "",
+        need_four: "",
+        need_five: "",
+        radio: "", //上课地点的选择
+        address: "", //上课地址
+      },
+  rules: {
+          title: [
+            { required: true, message: '请输入标题', trigger: 'blur' },
+          ],
+          value: [
+            { required: true, message: '请选择报读科目', trigger: 'change' }
+          ],
+          value_1: [
+            {  required: true, message: '请选择学生姓名', trigger: 'change' }
+          ],
+          valueDate: [
+            { required: true, message: '请选择有效期限', trigger: 'change' }
+          ],
+          feedback: [
+            { required: true, required: true, message: '请填写备注说明', trigger: 'blur' }
+          ],
+          radio: [
+            { required: true, message: '请选择上课地点', trigger: 'change' }
+          ],
+          address: [
+            { required: true, message: '请填写上课地址', trigger: 'change' }
+          ],
+          need_one: [
+            { required: true, required: true, message: '请填写反馈', trigger: 'blur' }
+          ],
+          need_two: [
+            { required: true, required: true, message: '请填写反馈', trigger: 'blur' }
+          ],
+          need_three: [
+            { required: true, required: true, message: '请填写反馈', trigger: 'blur' }
+          ],
+          need_four: [
+            { required: true, message: '请填写反馈', trigger: 'blur' }
+          ],
+          need_five: [
+            { required: true, message: '请填写反馈', trigger: 'blur' }
+          ],
+        },
       money: "",
       parms: {
         search: "",
@@ -231,7 +267,6 @@ export default {
       options_1: [], //学生数组总数据
       options: [], //课程名称的数据
       options_: [], //总数据的数据
-      radio: "", //上课地点的选择
 
       editableTabs_1: [],
       editableTabs: [
@@ -243,12 +278,8 @@ export default {
       subjects_data: [], //学科数据
       feedback: "", //反馈
       course_address: "", //上课线上或线下
-      title: "", //标题
-      need_one: "",
-      need_two: "",
-      need_three: "",
-      need_four: "",
-      need_five: ""
+
+
     };
   },
   created() {
@@ -421,24 +452,27 @@ export default {
       });
     },
         toPlanClass(){
-      this.$router.push({path:'/ApplicationAdd'})
+      this.$router.go(0)
     },
     toNeedsList(){
       this.$router.push({name:'ApplyNeedsList'})
     },
-    onSubmit() {
+    onSubmit(form2) {
      // this.subjects_data=[]
+           this.$refs[form2].validate((valid) => {
+          if (valid) {
+ 
       let parms = {
-        title: this.title,
-        expiry_date: this.valueDate,
-        remarks: this.feedback,
-        course_address: this.radio,
-        address: this.address,
-        need_one: this.need_one,
-        need_two: this.need_two,
-        need_three: this.need_three,
-        need_four: this.need_four,
-        need_five: this.need_five
+        title: this.form.title,
+        expiry_date: this.form.valueDate,
+        remarks: this.form.feedback,
+        course_address: this.form2.radio,
+        address: this.form2.address,
+        need_one: this.form2.need_one,
+        need_two: this.form2.need_two,
+        need_three: this.form2.need_three,
+        need_four: this.form2.need_four,
+        need_five: this.form2.need_five
       };
 
       parms.subjects_data = this.subjects_data;
@@ -458,8 +492,18 @@ export default {
           });
         }
       });
+               } else {
+                 this.$message({
+                message:'请按提示填写内容',
+                type: "warning"
+              });
+            return false;
+          }
+        });
     },
-  next() {
+  next(form) {
+            this.$refs[form].validate((valid) => {
+          if (valid) {
       this.editableTabs_1.forEach(item => {
         this.subjects_data.push({
           subject_id: item.subject_id,
@@ -474,30 +518,29 @@ export default {
       });
       this.editableTabs.forEach(item => {
         this.students_data.push({
-          student_id: item.student_id
+          student_id: item.id
         });
       });
       this.editableTabs_1.forEach((item, i) => {
         //console.log(this.subjects_data)
         if (item.course_id == 1) {
           this.parms = {
-            title: this.title,
-            expiry_date: this.valueDate,
-            remarks: this.feedback,
-            course_address: this.radio,
-            need_one: this.need_one,
-            need_two: this.need_two,
-            need_three: this.need_three,
-            need_four: this.need_four,
-            need_five: this.need_five,
+         title: this.form.title,
+        expiry_date: this.form.valueDate,
+        remarks: this.form.feedback,
+        course_address: this.form2.radio,
+        address: this.form2.address,
+        need_one: this.form2.need_one,
+        need_two: this.form2.need_two,
+        need_three: this.form2.need_three,
+        need_four: this.form2.need_four,
+        need_five: this.form2.need_five,
             app_id: this.$route.query.id
           };
 
           this.parms.subjects_data = this.subjects_data;
           this.parms.students_data = this.students_data;
           console.log(this.parms);
-          console.log(this.active)
-          // this.active = 3;
           this.$apis.common.application_edit_put(this.parms).then(res => {
             if (res.data.code == 1) {
               this.$message({
@@ -515,6 +558,14 @@ export default {
         }
       });
       this.active++;
+             } else {
+       this.$message({
+         type:"warning",
+         message:'请按照提示进行完善'
+       })           
+ return false;
+          }
+        });
     },
     pre() {
         this.parms.students_data = [];

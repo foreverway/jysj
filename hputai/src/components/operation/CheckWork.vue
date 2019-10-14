@@ -4,7 +4,7 @@
 
     <div class="so_main_left">
       <el-form :inline="true" :model="form"  class="demo-form-inline">
-        <el-input class="so_input" clearable v-model="form.search" @change="getadata" placeholder="请输入用户名"></el-input>
+        <el-input class="so_input" clearable v-model="form.search" @change="getadata" placeholder="搜索授课老师"></el-input>
         <el-button type="primary"  @click="getadata" style="margin-left:5px;background-color:#e6563a; border:none;">搜索</el-button>
 
         <el-date-picker
@@ -161,14 +161,18 @@
   <el-form-item label="异动实上课时备注" v-show="seeMoreData.attendance_type==2">
     <p style="width:100px" >{{seeMoreData.remarks1}}</p>
   </el-form-item>
-  <el-form-item label="老师核准" v-show="seeMoreData.attendance_type==2">
+  <el-form-item label="老师核准" >
     <p style="width:100px">{{seeMoreData.teacher_classhour	}}</p>
   </el-form-item>
    <el-form-item label="异动老师核准备注" v-show="seeMoreData.attendance_type==2">
      <p style="width:100px" >{{seeMoreData.remarks2}}</p>
   </el-form-item>
-   <el-form-item label="学生核准" v-show="seeMoreData.attendance_type==2">
+   <el-form-item label="学生核准" >
      <p style="width:100px">{{seeMoreData.student_classhour	}}</p>
+  </el-form-item>
+     <el-form-item label="备注" v-show="seeMoreData.attendance_type==1">
+     <p style="width:100px" v-show='seeMoreData.remarks'>{{seeMoreData.remarks	}}</p>
+     <p style="width:100px" v-show='seeMoreData.remarks==""'>没有备注</p>
   </el-form-item>
    <el-form-item label="异动学生核准的备注"  v-show="seeMoreData.attendance_type==2">
      <p style="width:100px">{{seeMoreData.remarks3}}</p>
@@ -367,6 +371,9 @@ export default {
 };
 </script>
 <style scoped>
+p{
+  text-align: center;
+}
 .so_input {
   width: 300px;
   margin-bottom: 20px;

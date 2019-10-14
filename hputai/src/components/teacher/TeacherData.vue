@@ -10,11 +10,20 @@
         placeholder="搜索教师名称，授课科目"
       ></el-input>
     </div>
-    <el-select clearable v-model="params.search" @input="getadata" placeholder="请选择状态">
-      <el-option v-for="item in teacher_data" :key="item.value" :label="item.label" :value="item.value"></el-option>
+    <el-select clearable filterable v-model="params.teacher_id"  @change="getadata" placeholder="选择讲师">
+      <el-option v-for="item in teacher_data" :key="item.id" :label="item.teacher_name" :value="item.id"></el-option>
     </el-select> 
-        <!-- <el-select clearable v-model="params.search" @input="getadata" placeholder="请选择状态">
-      <el-option v-for="item in teacher_data" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          <el-cascader
+        placeholder="选择科目"
+        v-model="params.subject_id"
+        clearable
+        :options="options"
+        :props="{ expandTrigger: 'hover' }"
+        :show-all-levels="false"
+        @change="handleChange_1"
+      ></el-cascader>
+    <!-- <el-select clearable v-model="params.subject_id" @input="getadata" placeholder="选择科目">
+      <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
     </el-select>  -->
     <span></span>
             <el-date-picker
@@ -45,24 +54,24 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="学员" width="180">
+      <el-table-column label="学员" width="80">
         <template slot-scope="scope">
           <p>{{ scope.row.student_name }}</p>
         </template>
       </el-table-column>
 
-      <el-table-column label="讲师" width="180" prop="teacher_name"></el-table-column>
+      <el-table-column label="讲师" width="100" prop="teacher_name"></el-table-column>
 
-      <el-table-column align="center" label="时间">
+      <el-table-column align="center" width="200" label="时间">
         <template slot-scope="scope">
-          <p>{{scope.row.classhour}}</p>
+          <p>{{scope.row.start_time}}</p>
         </template>
       </el-table-column>
       <el-table-column label="授课类型" prop="course_type"></el-table-column>
        <el-table-column label="已上/待上" prop="course_status"></el-table-column>
       <el-table-column align="center" label="操作" width="280px" fixed="right">
         <template slot-scope="scope">
-              <el-button size='mini' type="primary" @click="watchVideo(scope.row)">录播</el-button>
+              <el-button size='mini' type="primary" @click="openVideo(scope.row.playback_url)">录播</el-button>
               <el-button size='mini' type="primary" @click="checkWork(scope.row)">考勤数据</el-button>
               <el-button size='mini' type="primary" @click="feedback(scope.row)">查看反馈</el-button>
           <!-- <el-button size="mini" type="success" @click="toAssess(scope.row.teacher_id)">进行评价</el-button> -->
@@ -76,7 +85,7 @@
   :visible.sync="checkopen"
   width="50%"
   >
-  <el-form :label-position="labelPosition" :inline="true" label-width="80px" :model="check_data">
+  <el-form :label-position="labelPosition" label-width="80px" :model="check_data">
   <el-form-item label="课时">
     <p>{{check_data.classhour}}</p>
   </el-form-item>
@@ -114,7 +123,7 @@
   :visible.sync="feedopen"
   width="50%"
   >
-  <el-form :label-position="labelPosition" :inline="true" label-width="80px" :model="feed_data">
+  <el-form :label-position="labelPosition" label-width="80px" :model="feed_data">
   <el-form-item label="班主任">
     <p>{{feed_data.banzhuren_name}}</p>
   </el-form-item>
@@ -199,7 +208,7 @@ export default {
       msg: "",
       tableData: [],
       labelPosition:'right',
-      teacher_data:[],  //老师列表数据
+      //teacher_data:[],  //老师列表数据
       check_data:{},//考勤数据
       feed_data:{}, //反馈数据
       params: {
@@ -212,14 +221,19 @@ export default {
       },
       checkopen:false, //考勤的弹出
       feedopen:false  , //反馈的弹出
+      options_:[],
+      options:[],
 
     };
   },
   created() {
     this.$apis.students.getuilcode();
     this.getadata();
+   // mapState['teacher_data']
   },
-  computed:mapState['teacher_data'],
+  computed:{
+    ...mapState(['teacher_data'])
+  },
   methods: {
     //序号排列
     indexMethod(index) {
@@ -230,7 +244,38 @@ export default {
         return index + page;
       }
     },
-    watchVideo(){
+       openVideo(a) {
+      //观看录播
+      //  var iWidth=$(window).width();                         //弹出窗口的宽度;
+      if (a == "0") {
+        this.$message({
+          type: "warning",
+          message: "我们的直播数据还在生成中,你可以稍后再来",
+          duration: 4000
+        });
+      } else {
+        var iWidth = 1000;
+        var iHeight = 600;
+        var iTop = (window.screen.height - 30 - iHeight) / 2; //获得窗口的垂直位置;
+        var iLeft = (window.screen.width - 10 - iWidth) / 2; //获得窗口的水平位置;
+        window.open(
+          a,
+          name,
+          "height=" +
+            iHeight +
+            ",innerHeight=" +
+            iHeight +
+            ",width=" +
+            iWidth +
+            ",innerWidth=" +
+            iWidth +
+            ",top=" +
+            iTop +
+            ",left=" +
+            iLeft +
+            ",toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no"
+        );
+      }
     },
     checkWork(result){  //考勤数据
      
@@ -239,6 +284,7 @@ export default {
       this.$apis.common.attendance_details({course_id:result.course_id}).then(res=>{
         if(res.data.code==1){
               this.check_data=res.data.data
+              console.log(this.teacher_data)
         }
       }) 
         }else{
@@ -282,16 +328,58 @@ export default {
     toAssess(a) {
       console.log(a);
     },
-
-    getadata() {
+    handleChange_1(targetName) {
+      //选择科目
+      var lastName = targetName.length == 1 ? targetName[0] : targetName[1];
+ if(lastName!==undefined){
+this.params.subject_id= lastName.toString()
+ }
+        
+ 
       this.$apis.teacher.teaching_data(this.params).then(res => {
         this.msg = res.data;
-        
         this.tableData = res.data.data.list;
-      });
+      })
+    },
+    getadata() {
+
+      this.$apis.teacher.teaching_data(this.params).then(res => {
+        this.msg = res.data;
+        this.tableData = res.data.data.list;
+      })
+      //获取科目的数据
+     this.$apis.common.subject_list().then(res => {
+          if (res.data.code == 1) {
+            this.msg = res.data;
+            this.options_ = res.data.data;
+            for (let i = 0; i < this.options_.length; i++) {
+              var val = this.options_[i];
+              var children = [];
+              if (val.children) {
+                for (let j = 0; j < val.children.length; j++) {
+                  var val1 = val.children[j];
+                  children.push({
+                    value: val1.id,
+                    label: val1.subject_name
+                  });
+                }
+                this.options.push({
+                  value: val.id,
+                  label: val.subject_name,
+                  children: children
+                });
+              } else {
+                this.options.push({
+                  value: val.id,
+                  label: val.subject_name
+                });
+              }
+            }
+          }
+        });
     }
-  }
-};
+}
+}
 </script>
 <style scoped>
 .so_input {

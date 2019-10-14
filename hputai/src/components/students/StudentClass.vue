@@ -222,7 +222,7 @@
         <!-- 填写课堂反馈 -->
         <el-dialog title="填写课堂反馈" :visible.sync="dialogFromVisible">
           <!-- <p style="font-size:18px;height:30px;margin:10px 0;">课程信息</p> -->
-          <p style="margin:10px 0;"><span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>课程信息</p>
+          <p style="margin-bottom:10px;"><span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>课程信息</p>
 
           <ul :data="gridData">
             <li>
@@ -259,7 +259,7 @@
             </li>
           </ul>
           <div style="clear:both;"></div>
-          <p style="margin:10px 0;"><span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>反馈内容</p>
+          <p style="margin-bottom:10px;"><span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>反馈内容</p>
           <el-form :model="form" label-width="200px">
             <el-form-item label="类型">
               <el-radio-group v-model="form.feedback_type">
@@ -311,7 +311,7 @@
         </el-dialog>
         <!-- 查看课堂反馈 -->
         <el-dialog title="老师反馈" :visible.sync="dialogVisible" width="900px">
-          <p style="margin:10px 0;"><span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>课程信息</p>
+          <p style="margin-bottom:10px;"><span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>课程信息</p>
 
           <ul :data="formLabelAlign">
             <li>
@@ -351,7 +351,7 @@
           <div style="clear:both;">
 
           </div>
-          <p style="margin:10px 0;"><span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>反馈内容</p>
+          <p style="margin-bottom:10px;"><span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>反馈内容</p>
           <el-form label-width="200px" :model="formLabelAlign">
             <el-form-item
               label="本次授课内容:"
