@@ -92,7 +92,7 @@
     <!-- <p style="margin-top:30px"><span>累计金额：</span><span style="color:red">{{msg.data.givenamount}}</span></p> -->
     <!-- <el-button type="primary" @click="ifinputselect" style="margin-top:20px">审核</el-button> -->
     <!-- 教师课酬设置 -->
-    <el-dialog title="教师课酬设置" :visible.sync="centerDialogVisible_salary" width="50%">
+    <el-dialog title="教师课酬设置" :visible.sync="centerDialogVisible_salary" width="70%">
       <el-form label-width="100px" :model="teacher_salary_data">
         <el-form-item label="讲师姓名">
           <p>{{teacher_name}}</p>
@@ -401,11 +401,14 @@ this.editTeacher.address = res.data.data.address.split(',');
           this.centerDialogVisible_salary = true;
           this.$apis.common.teacher_dollars_get(params).then(res => {
             if (res.data.code == 1) {
+            //this.table.tableData = res.data.data;
+            //console.log(Object.prototype.toString.call(res.data.data).substr(8,5))
               this.teacher_name = b.teacher_name;
-              if (res.data.data instanceof Object) {
-                this.teacher = [];
+              if (Object.prototype.toString.call(res.data.data).substr(8,5)=='Objec') {
+                this.table.tableData = [];
               } else {
-                this.teacher = res.data.data;
+                this.table.tableData = res.data.data;
+             
               }
             }
           });
@@ -580,7 +583,7 @@ this.editTeacher.address = res.data.data.address.split(',');
               item => item.subject_name == lastName.subject_name
             ); //对子元素进行赛选
             if (oneArr_1.length > 0) {
-              let newTabName = ++this.tabIndex_1 + "";
+             // let newTabName = ++this.tabIndex_1 + "";
               this.table.tableData.push({
                 subject_id: lastName.id,
                 subject_name: lastName.subject_name,
@@ -589,6 +592,7 @@ this.editTeacher.address = res.data.data.address.split(',');
                 small_class: 1000, //课程类型
                 big_class: oneArr_1[0].id //课程id
               });
+              console.log( this.table.tableData)
             }
           }
         }
@@ -694,4 +698,6 @@ this.editTeacher.address = res.data.data.address.split(',');
   border: 1px solid silver;
   text-align: center;
 }
+p{
+padding: 0 10px;}
 </style>

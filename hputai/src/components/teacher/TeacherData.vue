@@ -27,7 +27,7 @@
     </el-select>  -->
     <span></span>
             <el-date-picker
-          style="margin-left:60px"
+          style="margin-left:20px"
           v-model="params.start_time"
           @change="getadata"
           type="datetime"
@@ -83,17 +83,19 @@
     <el-dialog
   title="考勤信息"
   :visible.sync="checkopen"
-  width="50%"
+  width="600px"
   >
-  <el-form :label-position="labelPosition" label-width="80px" :model="check_data">
+   <!-- <p style="margin-bottom:10px;"><span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>课程信息</p> -->
+
+  <el-form id="form_style" :label-position="labelPosition" :inline="true" label-width="120px"  :model="check_data">
   <el-form-item label="课时">
-    <p>{{check_data.classhour}}</p>
+    <p >{{check_data.classhour}}</p>
   </el-form-item>
  <el-form-item label="反馈一">
-        <p>{{check_data.remarks}}</p>
+        <p >{{check_data.remarks}}</p>
   </el-form-item>
   <el-form-item label="反馈二">
-        <p>{{check_data.remarks1}}</p>
+        <p >{{check_data.remarks1}}</p>
   </el-form-item>
   <el-form-item label="反馈三">
         <p>{{check_data.remarks2}}</p>
@@ -121,65 +123,86 @@
     <el-dialog
   title="反馈信息"
   :visible.sync="feedopen"
-  width="50%"
+  width="900px"
   >
-  <el-form :label-position="labelPosition" label-width="80px" :model="feed_data">
-  <el-form-item label="班主任">
-    <p>{{feed_data.banzhuren_name}}</p>
-  </el-form-item>
- <el-form-item label="课时">
-        <p>{{feed_data.classhour}}</p>
-  </el-form-item>
-   <el-form-item label="课程地址">
-        <p>{{feed_data.course_address}}</p>
-  </el-form-item>
-   <el-form-item label="细节一">
-        <p>{{feed_data.details_1}}</p>
-  </el-form-item>
-  <el-form-item label="细节二">
-        <p>{{feed_data.details_2}}</p>
-  </el-form-item>
- <el-form-item label="细节三">
-        <p>{{feed_data.details_3}}</p>
-  </el-form-item>
-   <el-form-item label="细节四">
-        <p>{{feed_data.details_4}}</p>
-  </el-form-item>
-   <el-form-item label="细节五">
-        <p>{{feed_data.details_5}}</p>
-  </el-form-item>
-  <el-form-item label="细节六">
-        <p>{{feed_data.details_6}}</p>
-  </el-form-item>
- <el-form-item label="细节七">
-        <p>{{feed_data.details_7}}</p>
-  </el-form-item>
-   <el-form-item label="细节八">
-        <p>{{feed_data.details_8}}</p>
-  </el-form-item>
-   <el-form-item label="细节九">
-        <p>{{feed_data.details_9}}</p>
-  </el-form-item>
-  <el-form-item label="结束时间">
-        <p>{{feed_data.end_time}}</p>
-  </el-form-item>
- <el-form-item label="反馈类型">
-        <p>{{feed_data.feedback_type}}</p>
-  </el-form-item>
-   <el-form-item label="开始时间">
-        <p>{{feed_data.start_time}}</p>
-  </el-form-item>
-   <el-form-item label="学生姓名">
-        <p>{{feed_data.student_name}}</p>
-  </el-form-item>
-  <el-form-item label="学科姓名">
-        <p>{{feed_data.subject_name}}</p>
-  </el-form-item>
- <el-form-item label="老师姓名">
-        <p>{{feed_data.teacher_name}}</p>
-  </el-form-item>
+     <p style="margin-bottom:10px;"><span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>课程信息</p>
 
-</el-form>
+          <ul :data="feed_data">
+            <li>
+              <span>学科姓名</span>
+              <span>{{feed_data.subject_name}}</span>
+            </li>
+            <li>
+              <span>教师姓名</span>
+              <span>{{feed_data.teacher_name}}</span>
+            </li>
+            <li>
+              <span>班主任</span>
+              <span>{{feed_data.banzhuren_name}}</span>
+            </li>
+            <li>
+              <span >上课时间</span>
+              <span style=" border-top-style:hidden;">{{feed_data.start_time}}</span>
+            </li>
+            <li>
+              <span>结束时间</span>
+              <span style=" border-top-style:hidden;">{{feed_data.end_time}}</span>
+            </li>
+            <li>
+              <span>时长</span>
+              <span style=" border-top-style:hidden;">{{feed_data.classhour}}</span>
+            </li>
+            <li>
+              <span>学生姓名</span>
+              <span>{{feed_data.student_name}}</span>
+            </li>
+             <li>
+              <span>反馈类型</span>
+              <span>{{feed_data.feedback_type}}</span>
+            </li>
+            <li >
+              <span >课程地址</span>
+              <span >{{feed_data.course_address}}</span>
+            </li>
+       
+          </ul>
+          <div style="clear:both;">
+          </div>
+          <p style="margin-bottom:10px;"><span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>反馈内容</p>
+          <el-form label-width="200px" :model="feed_data">
+            <el-form-item
+              label="本次授课内容:"
+            >
+              <p>{{feed_data.details_1}}</p>
+            </el-form-item>
+            <el-form-item
+              label="课堂配合度和积极性:"
+            >
+              <span >{{feed_data.details_2}}</span>
+            </el-form-item>
+            <el-form-item label="学生的主要问题和建议:" >
+              <span>{{feed_data.details_3}}</span>
+            </el-form-item>
+            <el-form-item label="课时建议:" >
+              <span>{{feed_data.details_4}}</span>
+            </el-form-item>
+            <el-form-item label="课程阶段安排及课时建议:" >
+              <span>{{feed_data.details_5}}</span>
+            </el-form-item>
+            <el-form-item label="上次课知识点掌握情况:">
+              <span>{{feed_data.details_6}}</span>
+            </el-form-item>
+            <el-form-item label="作业:" >
+              <span>{{feed_data.details_7}}</span>
+            </el-form-item>
+            <el-form-item label="课程期间学生总体表现:" >
+              <span>{{feed_data.details_8}}</span>
+            </el-form-item>
+            <el-form-item label="下一步学习方案建议:" >
+              <span>{{feed_data.details_9}}</span>
+            </el-form-item>
+          </el-form>
+
   <span slot="footer" class="dialog-footer">
     <el-button @click="feedopen = false">取 消</el-button>
     <el-button type="primary" @click="feedopen = false">确 定</el-button>
@@ -284,7 +307,7 @@ export default {
       this.$apis.common.attendance_details({course_id:result.course_id}).then(res=>{
         if(res.data.code==1){
               this.check_data=res.data.data
-              console.log(this.teacher_data)
+              console.log(this.check_data)
         }
       }) 
         }else{
@@ -382,15 +405,15 @@ this.params.subject_id= lastName.toString()
 }
 </script>
 <style scoped>
-.so_input {
+/* .so_input {
   width: 300px;
-}
+} */
 .so_main_left {
   float: left;
-  margin: 20px;
+  margin: 20px 5px;
 }
 .el-select {
-  margin: 20px 15px;
+  margin: 20px 5px;
 }
 .so_main_right {
   float: right;
@@ -411,5 +434,35 @@ this.params.subject_id= lastName.toString()
 }
 .hover_img:hover .hover_img_show {
   display: block;
+}
+#form_style p{
+  width:100px;
+}
+li {
+  list-style: none;
+  display: inline-block;
+  float: left;
+  width: 32%;
+  height: 30px;
+  padding: 0;
+  margin: 0 0 0 -1px;
+}
+li span{
+    display: inline-block;
+  float: left;
+  width: 49%;
+  height: 30px;
+  line-height: 30px;
+}
+li :nth-child(1) {
+   width: 30%;
+   text-align: center;
+   background-color: #F5F5F5;
+    /* border:1px solid #F5F5F5; */
+}
+li :nth-child(2) {
+   width: 69%;
+   text-align: center;
+   border:1px solid #F5F5F5;
 }
 </style>

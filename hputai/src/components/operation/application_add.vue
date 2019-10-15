@@ -214,7 +214,7 @@ export default {
         need_three: "",
         need_four: "",
         need_five: "",
-        radio: "", //上课地点的选择
+        radio: 1, //上课地点的选择
         address: "", //上课地址
       },
   rules: {
@@ -414,8 +414,8 @@ export default {
               this.editableTabs_1.push({
                 title: oneArr_1[0].subject_name,
                 subject_id: oneArr_1[0].id, //科目id
-                classhour: 10,
-                price: 1000,
+                classhour: '',
+                price: '',
                 course_type: 0, //课程类型
                  course_id:0, //班课
                 is_one: 1, //一对一？
@@ -430,8 +430,8 @@ export default {
         this.editableTabs_1.push({
                 title: oneArr[0].subject_name,
                 subject_id: oneArr[0].id, //科目id
-                classhour: 10,
-                price: 1000,
+                classhour: '',
+                price: '',
                 course_type: 0, //课程类型
                 course_id:0, //班课
                 is_one: 1, //一对一？
@@ -458,10 +458,8 @@ export default {
       this.$router.push({name:'ApplyNeedsList'})
     },
     onSubmit(form2) {
-     // this.subjects_data=[]
            this.$refs[form2].validate((valid) => {
           if (valid) {
- 
       let parms = {
         title: this.form.title,
         expiry_date: this.form.valueDate,

@@ -67,8 +67,8 @@
     </el-table>
     <!-- 分页 -->
     <!-- 审核意见 -->
-    <el-dialog title="审核意见" :visible.sync="centerDialogVisible_shenghe" width="30%" center>
-      <el-form ref="form">
+    <el-dialog title="审核意见" :visible.sync="centerDialogVisible_shenghe" width="40%" center>
+      <el-form ref="form" label-width="80px">
         <el-form-item label="审核意见" v-model="is_pass">
           <el-radio v-model="is_pass" label="1">同意</el-radio>
           <el-radio v-model="is_pass" label="2">不同意</el-radio>
@@ -124,7 +124,8 @@
         :total="msg.data.count"
       ></el-pagination>
     </span>
-    <el-dialog title="查看排课" :visible.sync="dialogTableVisible_table">
+    <!-- 查看排课 -->
+    <el-dialog title="查看排课" :visible.sync="dialogTableVisible_table" width="60%">
       <el-form ref="form" label-width="80px">
         <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="标题:">
           <p>{{gridData.title}}</p>
@@ -142,7 +143,7 @@
           <p>{{gridData.zhujiao_name?gridData.zhujiao_name:"未安排"}}</p>
         </el-form-item>
         <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="教务专员:">
-          <p>无数据</p>
+          <p>{{gridData.jiaowu_name?gridData.jiaowu_name:"未安排"}}</p>
         </el-form-item>
         <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="课时:">
           <p>{{gridData.classhour}}</p>
@@ -169,7 +170,7 @@
             :data="gridData_class"
             style="border:1px solid silver;margin: 0; border-bottom:none;"
           >
-            <el-table-column property="classhour" label="课时" width="150"></el-table-column>
+            <el-table-column property="classhour" label="课时" ></el-table-column>
             <el-table-column property="start_time" label="开始时间" width="200"></el-table-column>
             <el-table-column property="week" label="星期"></el-table-column>
             <el-table-column property="live_type" label="直播类型"></el-table-column>

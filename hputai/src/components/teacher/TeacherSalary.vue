@@ -10,8 +10,6 @@
         placeholder="搜索教师名称，授课科目"
       ></el-input>
     </div>
-
-     
     <span></span>
             <el-date-picker
           style="margin-left:60px"
@@ -44,15 +42,13 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="科目" width="180">
+      <el-table-column label="科目" width="180" align="center">
         <template slot-scope="scope">
           <p>{{ scope.row.subject_name }}</p>
         </template>
       </el-table-column>
-
-      <el-table-column label="线上/线下" width="180" prop="course_address"></el-table-column>
-
-
+      <el-table-column label="上课时间" width="180" prop="start_time"></el-table-column>
+      <el-table-column label="线上/线下"  prop="course_address"></el-table-column>
       <el-table-column label="授课类型" prop="teaching_type"></el-table-column>
        <el-table-column label="课酬标准" prop="dollars_standar"></el-table-column>
        <el-table-column label="应上课时" prop="classhour"></el-table-column>
@@ -131,10 +127,11 @@ export default {
 
     getadata() {
       this.$apis.teacher.teacher_list(this.params).then(res => {
+                //console.log(res)
+
         this.msg = res.data;
-        
         this.tableData = res.data.data.list;
-        console.log(this.tableData)
+       // console.log(this.tableData)
       });
     }
   }

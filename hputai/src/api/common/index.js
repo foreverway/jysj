@@ -19,7 +19,7 @@ export default {
     return shuju.getdata(url, params)
   },
   // 班主任数据 
-  adviser_list(params) {
+  banzhuren_list(params) {
     let url = '/api/api_banzhuren_list'
     return shuju.getdata(url, params)
   },
@@ -182,12 +182,12 @@ export default {
     return shuju.getdata(url, params)
   },
 
-  basedata_list(params) { //获取实收人数据接口
+  basedata_list(params) { //基础数据配置
     let url = "/api/api_basedata_list"
     return shuju.getdata(url, params)
   },
 
-  basedata_list_post(params) { //发送实收人数据接口
+  basedata_list_post(params) { //新增数据,删除数据-pos
     let url = "/api/api_basedata"
     return shuju.getdata(url, params)
   },

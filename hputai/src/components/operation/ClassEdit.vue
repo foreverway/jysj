@@ -98,8 +98,8 @@
       <el-form-item :inline="true" label="已选科目">
         <div class="add_ul">
           <p id="sss">课时</p>
-          <p width="300px">开始时间</p>
-          <p width="300px">星期</p>
+          <p >开始时间</p>
+          <p >星期</p>
           <p>直播类型</p>
           <p>观看端</p>
           <p>操作</p>
@@ -107,49 +107,6 @@
             <el-button type="primary" @click="handleChange_1">新增</el-button>
           </p>
         </div>
-
-        <!-- <div class="add_ul">
-          <p>
-            <el-input v-model="input_twice" placeholder="排几节课?"></el-input>
-          </p>
-          <p>
-            <el-date-picker
-              v-model="value_data_start"
-              value-format="timestamp"
-              type="datetime"
-              placeholder="开始日期"
-            ></el-date-picker>
-          </p>
-          <p>
-            <el-date-picker
-              v-model="value_data_end"
-              value-format="timestamp"
-              type="datetime"
-              placeholder="结束日期"
-            ></el-date-picker>
-          </p>
-          <p>
-            <el-select v-model="live_type" placeholder="直播类型是什么">
-              <el-option
-                v-for="item in options_type"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </p>
-          <p>
-            <el-select v-model="study_wey" placeholder="在哪看呢">
-              <el-option
-                v-for="item in options_wey"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </p>
-          <p @click="deleteTest_1" style="cursor:pointer;">撤销</p>
-        </div>-->
         <template></template>
         <div class="add_ul_new" v-for="(item,i) in editableTabs_1" :key="i">
           <span style="display:none;" v-bind:id="''+ i">{{item.course_id}}</span>
@@ -832,19 +789,24 @@ option {
   background-color: #fff;
   padding: 0;
   margin-right: -5px;
-  width: 12%;
+  width: 11%;
   border: 1px solid silver;
   text-align: center;
   overflow: hidden;
 }
-
+.add_ul :nth-child(2){
+  width: 17%;
+}
+.add_ul_new :nth-child(3){
+  width: 17%;
+}
 .add_ul_new p {
   list-style: none;
   display: inline-block;
   background-color: #fff;
   padding: 0;
   margin-right: -5px;
-  width: 12%;
+  width: 11%;
   border: 1px solid silver;
   text-align: center;
   overflow: hidden;

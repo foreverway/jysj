@@ -854,10 +854,6 @@ li :nth-child(1) {
    background-color: #F5F5F5;
     /* border:1px solid #F5F5F5; */
 }
-/* .el-form-item__label {
-  background-color: silver !important;
-
-} */
 li :nth-child(2) {
    width: 69%;
    text-align: center;

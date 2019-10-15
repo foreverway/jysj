@@ -226,7 +226,7 @@
     <el-dialog title="查看排课需求" :visible.sync="dialogTableVisible_seeClassNeeds">
       <el-form label-width="120px">
         <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="需求:">
-          <p>内容</p>
+          <p>无参数</p>
         </el-form-item>
         <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="上课地点:">
           <p>{{seeclassneeds.course_address}}</p>
@@ -252,19 +252,10 @@
         <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label>
           <p>{{seeclassneeds.need_two}}</p>
         </el-form-item>
-        <el-form-item
-          style="border:1px solid silver;margin: 0; border-bottom:none;background-color:silver;"
-          label="需求三:"
-        >
-          <p>学生目前学习情况(几年级?在哪里上学?之前考过的成绩怎么样?希望达到什么目标成绩）</p>
-        </el-form-item>
-        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label>
-          <p>{{seeclassneeds.need_three}}</p>
-        </el-form-item>
 
         <el-form-item
           style="border:1px solid silver;margin: 0; border-bottom:none;background-color:silver;"
-          label="需求四:"
+          label="需求三:"
         >
           <p>学生之前的学习经历和学习基础（之前在那里上的学？学习基础怎么样？）</p>
         </el-form-item>
@@ -273,7 +264,7 @@
         </el-form-item>
         <el-form-item
           style="border:1px solid silver;margin: 0; border-bottom:none;background-color:silver;"
-          label="需求五:"
+          label="需求四:"
         >
           <p>学生希望跟什么样的老师学习？</p>
         </el-form-item>
@@ -282,7 +273,7 @@
         </el-form-item>
         <el-form-item
           style="border:1px solid silver;margin: 0; border-bottom:none;background-color:silver;"
-          label="需求六:"
+          label="需求五:"
         >
           <p>学生上课时间期限，可排课时间？（北京时间）每次课上几小时？</p>
         </el-form-item>

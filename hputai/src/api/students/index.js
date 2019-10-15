@@ -45,18 +45,15 @@ export default {
             return shuju.deletedata(url,params)
            },
           
-                // 检查手机号和用户名
+                // 检查学生姓名
   ifusername (params) {
-   let url = '/api/pc_members_check'
-   return shuju.postdata(url, params)
- },
- ifuserphone (phone, address_type) {
-   let url = '/api/pc_members_check'
-   let parms = {
-     tel: phone,
-     address_type: address_type
-   }
-   return shuju.postdata(url, parms)
+   let url = '/api/api_recharge_check'
+   return shuju.getdata(url, params)
+ },// 检查学员手机号和用户名
+ ifuserphone (parms) {
+   let url = '/api/api_students_check'
+ 
+   return shuju.getdata(url, parms)
  },
    // 检查剩余学习币余额 
    user_learnmoney (parms) {

@@ -114,7 +114,7 @@
  width="800px"
   center>
 
-  <p style="height:40px;width:100%;padding:10px 15px;"><span style="display:inline-block;width:80px;">已排课时</span>{{this.unnormalData.classhour}}</p>
+  <div style="height:40px;width:100%;padding:10px 15px;"><span style="display:inline-block;width:80px;">已排课时</span>{{this.unnormalData.classhour}}</div>
   <el-form :inline="true"  :model="unnormalData" class="demo-form-inline">
 
   <el-form-item label="实上课时" label-width="80px">
@@ -149,15 +149,22 @@
   width="50%"
 >
   <el-form :inline="true" :label-position="labelPosition"  class="demo-form-inline" label-width="150px" :model="seeMoreData">
-  <el-form-item label="已排课时">
+  <el-form-item label="已排课时" v-show="seeMoreData.attendance_type==1">
     <p style="width:100px;">{{seeMoreData.classhour}}</p>
   </el-form-item>
   <!-- <el-form-item label="考勤状态">
     <p style="width:100px">{{seeMoreData.attendance_type}}</p>
   </el-form-item> -->
+      <el-form-item label="已排课时"  v-show="seeMoreData.attendance_type==2">
+    <p style="width:100px" >{{seeMoreData.classhour}}</p>
+  </el-form-item>
+   <el-form-item label=" " v-show="seeMoreData.attendance_type==2">
+    <p style="width:100px"></p>
+  </el-form-item>
   <el-form-item label="实上课时">
     <p style="width:100px">{{seeMoreData.true_classhour}}</p>
   </el-form-item>
+
   <el-form-item label="异动实上课时备注" v-show="seeMoreData.attendance_type==2">
     <p style="width:100px" >{{seeMoreData.remarks1}}</p>
   </el-form-item>

@@ -27,9 +27,9 @@
           <el-menu
             class="el-menu-vertical-demo"
             router
-            :default-openeds="openeds"
             background-color="#ffffff"
             text-color="#000"
+            :default-active="defaultUrl"
             active-text-color="#fff"
             @select="selectMenu"
             style="  overflow-x:hidden;"
@@ -76,7 +76,7 @@ export default {
       // ActiveMenu: this.$route.path,
       //  rolemenu:'',  菜单列表
       admin_name: "",
-      openeds: ["1", "2", "3"],
+      defaultUrl:'',
       peopleInfo: {},
       seeHeight: document.body.scrollHeight
     };
@@ -133,9 +133,13 @@ export default {
     //     $('.youCom').height(document.documentElement.clientHeight)
     // console.log(document.documentElement.clientHeight)
     // window.location.reload();
+    // let href =window.location.href;
+    this.defaultUrl=window.location.href.split('/#')[1] ;
+ 
   },
   methods: {
     selectMenu(index, indexPath) {
+         console.log(this.defaultUrl)
       console.log(document.body.scrollHeight);
       //实现点击子菜单父菜单出现
       var menuList = $(".changeC");

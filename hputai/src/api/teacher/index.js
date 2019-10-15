@@ -8,7 +8,7 @@ export default{
         return shuju.getdata(url,params)
     },
     teacher_list(params){  //教师课酬列表数据接口
-        let url='/api/api_teacher_dollars'
+        let url='/api/api_tdollars_list'
         return shuju.getdata(url,params)
     }
 }
