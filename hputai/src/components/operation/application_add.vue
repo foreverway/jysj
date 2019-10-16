@@ -13,6 +13,20 @@
       <el-form-item label="报名标题" prop="title">
         <el-input v-model="form.title"></el-input>
       </el-form-item>
+      <el-form-item label="上课地点" prop="radio">
+        <el-radio-group v-model="form.radio" @change="whereGo(form.radio)">
+          <el-radio :label="1">线上</el-radio>
+          <el-radio :label="2">线下</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="上课地址" v-if="show==true" prop="address">
+        <el-cascader
+          placeholder="支持到地级市"
+          v-model="form.address"
+          :options="address_check"
+          filterable
+        ></el-cascader>
+      </el-form-item>
       <el-form-item :inline="true" label="报读科目" prop="value">
         <el-cascader
           v-model="form.value"
@@ -114,15 +128,6 @@
     <!-- 步骤二 -->
     <div v-if="active==2">
       <el-form ref="form2" :rules="rules" :model="form2">
-        <el-form-item label="上课地点" prop="radio">
-          <el-radio-group v-model="form2.radio" @change="whereGo(form2.radio)">
-            <el-radio  :label="1">线上</el-radio>
-            <el-radio  :label="2">线下</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="上课地址" v-if="show==true" prop="address">
-          <el-cascader placeholder="支持到地级市" v-model="form2.address" :options="address_check" filterable></el-cascader>
-        </el-form-item>
         <el-form-item label="需求1" prop="need_one">
           <el-input
             type="textarea"
@@ -150,7 +155,11 @@
           <el-input type="textarea" v-model="form2.need_four" placeholder="学生希望跟什么样的老师学习？"></el-input>
         </el-form-item>
         <el-form-item label="需求5" prop="need_five">
-          <el-input type="textarea" v-model="form2.need_five" placeholder="学生上课时间期限，可排课时间？（北京时间）每次课上几小时？"></el-input>
+          <el-input
+            type="textarea"
+            v-model="form2.need_five"
+            placeholder="学生上课时间期限，可排课时间？（北京时间）每次课上几小时？"
+          ></el-input>
         </el-form-item>
       </el-form>
     </div>
@@ -161,11 +170,19 @@
         <i class="el-icon-circle-check" type="success"></i>
       </div>
       <div class="succ_word">
-        <el-button type="primary" style="background-color:#409eff;color:white;border:1px solid #409eff;" @click="toPlanClass">继续添加报名需求</el-button>
-        <el-button type="primary" style="background-color:#409eff;color:white;border:1px solid #409eff;" @click="toNeedsList">查看排课需求列表</el-button>
+        <el-button
+          type="primary"
+          style="background-color:#409eff;color:white;border:1px solid #409eff;"
+          @click="toPlanClass"
+        >继续添加报名需求</el-button>
+        <el-button
+          type="primary"
+          style="background-color:#409eff;color:white;border:1px solid #409eff;"
+          @click="toNeedsList"
+        >查看排课需求列表</el-button>
       </div>
     </div>
-        <el-button
+    <el-button
       style="margin-top: 12px;background-color:#e6563a; border:none;color:white;"
       @click="pre"
       v-if="active==2"
@@ -180,9 +197,8 @@
       style="background-color:#e6563a; border:none;color:white;"
       @click="onSubmit('form2')"
       v-if="active==2"
-    > 确 定 </el-button>
+    >确 定</el-button>
     <el-button @click="goBack" v-if="active==1||active==2">取消</el-button>
-
 
     <!-- 设置充值链接 -->
     <!-- <div style="display:none" cols="20" id="biao1">{{copyurl1}}</div> -->
@@ -203,58 +219,72 @@ export default {
       active: 1,
       form: {
         title: "", //标题
-        value: "",  //报读科目
+        value: "", //报读科目
         value_1: "", //学生姓名
         valueDate: "", //有效期限
-        feedback:"", //备注说明
+        feedback: "", //备注说明
+        radio: 1, //上课地点的选择
+        address: "" //上课地址
       },
-      form2:{
+      form2: {
         need_one: "",
         need_two: "",
         need_three: "",
         need_four: "",
-        need_five: "",
-        radio: 1, //上课地点的选择
-        address: "", //上课地址
+        need_five: ""
       },
-  rules: {
-          title: [
-            { required: true, message: '请输入标题', trigger: 'blur' },
-          ],
-          value: [
-            { required: true, message: '请选择报读科目', trigger: 'change' }
-          ],
-          value_1: [
-            {  required: true, message: '请选择学生姓名', trigger: 'change' }
-          ],
-          valueDate: [
-            { required: true, message: '请选择有效期限', trigger: 'change' }
-          ],
-          feedback: [
-            { required: true, required: true, message: '请填写备注说明', trigger: 'blur' }
-          ],
-          radio: [
-            { required: true, message: '请选择上课地点', trigger: 'change' }
-          ],
-          address: [
-            { required: true, message: '请填写上课地址', trigger: 'change' }
-          ],
-          need_one: [
-            { required: true, required: true, message: '请填写反馈', trigger: 'blur' }
-          ],
-          need_two: [
-            { required: true, required: true, message: '请填写反馈', trigger: 'blur' }
-          ],
-          need_three: [
-            { required: true, required: true, message: '请填写反馈', trigger: 'blur' }
-          ],
-          need_four: [
-            { required: true, message: '请填写反馈', trigger: 'blur' }
-          ],
-          need_five: [
-            { required: true, message: '请填写反馈', trigger: 'blur' }
-          ],
-        },
+      rules: {
+        title: [{ required: true, message: "请输入标题", trigger: "blur" }],
+        value: [
+          { required: true, message: "请选择报读科目", trigger: "change" }
+        ],
+        value_1: [
+          { required: true, message: "请选择学生姓名", trigger: "change" }
+        ],
+        valueDate: [
+          { required: true, message: "请选择有效期限", trigger: "change" }
+        ],
+        feedback: [
+          {
+            required: true,
+            required: true,
+            message: "请填写备注说明",
+            trigger: "blur"
+          }
+        ],
+        radio: [
+          { required: true, message: "请选择上课地点", trigger: "change" }
+        ],
+        address: [
+          { required: true, message: "请填写上课地址", trigger: "change" }
+        ],
+        need_one: [
+          {
+            required: true,
+            required: true,
+            message: "请填写反馈",
+            trigger: "blur"
+          }
+        ],
+        need_two: [
+          {
+            required: true,
+            required: true,
+            message: "请填写反馈",
+            trigger: "blur"
+          }
+        ],
+        need_three: [
+          {
+            required: true,
+            required: true,
+            message: "请填写反馈",
+            trigger: "blur"
+          }
+        ],
+        need_four: [{ required: true, message: "请填写反馈", trigger: "blur" }],
+        need_five: [{ required: true, message: "请填写反馈", trigger: "blur" }]
+      },
       money: "",
       parms: {
         search: "",
@@ -277,9 +307,7 @@ export default {
       students_data: [], //用户id
       subjects_data: [], //学科数据
       feedback: "", //反馈
-      course_address: "", //上课线上或线下
-
-
+      course_address: "" //上课线上或线下
     };
   },
   created() {
@@ -345,27 +373,56 @@ export default {
       let parms = {
         admin_id: this.getdataCookie("admin_id")
       };
-      //获取科目的数据
+      //整理获取科目的数据
       this.$apis.common.subject_list(parms).then(res => {
         if (res.data.code == 1) {
           this.msg = res.data;
           this.options_ = res.data.data;
+          // console.log(this.options_)
           for (let i = 0; i < this.options_.length; i++) {
             var val = this.options_[i];
-            var children = [];
+            let children = [];
             if (val.children) {
+              //如果有子元素
               for (let j = 0; j < val.children.length; j++) {
+                //对子元素进行遍历
                 var val1 = val.children[j];
-                children.push({
-                  value: val1.subject_name,
-                  label: val1.subject_name
-                });
+                if (val1.children) {
+                  //如果子元素有子元素
+                  //let children =[]
+                  for (let g = 0; g < val1.children.length; g++) {
+                    //对子元素进行遍历
+                    var val2 = val1.children[g];
+                    //console.log(val2)
+                    children.push({
+                      value: val1.subject_name,
+                      label: val1.subject_name,
+                      children: [
+                        {
+                          //将孙级添加到父级相对应的位置下
+                          value: val2.subject_name,
+                          label: val2.subject_name
+                        }
+                      ]
+                    });
+                    this.options.push({
+                      value: val.subject_name,
+                      label: val.subject_name,
+                      children: children
+                    });
+                  }
+                } else {
+                  children.push({
+                    value: val1.subject_name,
+                    label: val1.subject_name
+                  });
+                  this.options.push({
+                    value: val.subject_name,
+                    label: val.subject_name,
+                    children: children
+                  });
+                }
               }
-              this.options.push({
-                value: val.subject_name,
-                label: val.subject_name,
-                children: children
-              });
             } else {
               this.options.push({
                 value: val.subject_name,
@@ -373,6 +430,7 @@ export default {
               });
             }
           }
+          //console.log(this.options)
         }
       });
     },
@@ -398,44 +456,52 @@ export default {
     },
     //选择报读科目的函数
     handleChange_1(targetName) {
-      var lastName = targetName.length == 1 ? targetName[0] : targetName[1];
-      let oneArr = this.options_.filter(item => item.subject_name == lastName);
-     // console.log(oneArr)
-      if (oneArr.length == 0) {
-        for (let i = 0; i < this.options_.length; i++) {
-          var val = this.options_[i];
-          if (val.children) {
-            //如果有子元素
-            var val_1 = val.children.filter(item => item);
-            // if(val_1.length==1){
-            let oneArr_1 = val_1.filter(item => item.subject_name == lastName); //对子元素进行赛选
-            if (oneArr_1.length > 0) {
+      var lastName =
+        targetName.length == 1
+          ? targetName[0]
+          : targetName.length == 2
+          ? targetName[1]
+          : targetName[2];
 
-              this.editableTabs_1.push({
-                title: oneArr_1[0].subject_name,
-                subject_id: oneArr_1[0].id, //科目id
-                classhour: '',
-                price: '',
-                course_type: 0, //课程类型
-                 course_id:0, //班课
-                is_one: 1, //一对一？
-                is_group: 0 //班课?
-              });
-             // console.log(this.editableTabs_1)
-             // this.editableTabsValue_1 = newTabName;
-            }
+      const result = [];
+      let getNeed = arr => {
+        arr.forEach(v => {
+          result.push({
+            value: v.id,
+            label: v.subject_name,
+            offline_price: v.offline_price,
+            online_price: v.online_price
+          });
+          if (v.children instanceof Array) {
+            getNeed(v.children);
           }
-        }
+        });
+      };
+      getNeed(this.options_); //多维数组简化为二维数组(可以使用find，indexOf。findIndex查找返回)
+      var needArr = result.find((res, index, arr) => {
+        return (res.label = lastName);
+      });
+      if (this.form.radio == 1) {
+        this.editableTabs_1.push({
+          title: needArr.label,
+          subject_id: needArr.id, //科目id
+          classhour: "",
+          price: needArr.online_price,
+          course_type: 0, //课程类型
+          course_id: 0, //班课
+          is_one: 1, //一对一？
+          is_group: 0 //自主班课?
+        });
       } else {
         this.editableTabs_1.push({
-                title: oneArr[0].subject_name,
-                subject_id: oneArr[0].id, //科目id
-                classhour: '',
-                price: '',
-                course_type: 0, //课程类型
-                course_id:0, //班课
-                is_one: 1, //一对一？
-                is_group: 0 //自主班课?
+          title: needArr.label,
+          subject_id: needArr.id, //科目id
+          classhour: "",
+          price: needArr.offline_price,
+          course_type: 0, //课程类型
+          course_id: 0, //班课
+          is_one: 1, //一对一？
+          is_group: 0 //自主班课?
         });
       }
     },
@@ -451,122 +517,122 @@ export default {
         id: checkOne[0].id
       });
     },
-        toPlanClass(){
-      this.$router.go(0)
+    toPlanClass() {
+      this.$router.go(0);
     },
-    toNeedsList(){
-      this.$router.push({name:'ApplyNeedsList'})
+    toNeedsList() {
+      this.$router.push({ name: "ApplyNeedsList" });
     },
     onSubmit(form2) {
-           this.$refs[form2].validate((valid) => {
-          if (valid) {
-      let parms = {
-        title: this.form.title,
-        expiry_date: this.form.valueDate,
-        remarks: this.form.feedback,
-        course_address: this.form2.radio,
-        address: this.form2.address,
-        need_one: this.form2.need_one,
-        need_two: this.form2.need_two,
-        need_three: this.form2.need_three,
-        need_four: this.form2.need_four,
-        need_five: this.form2.need_five
-      };
-
-      parms.subjects_data = this.subjects_data;
-      parms.students_data = this.students_data;
-      console.log(parms)
-      this.$apis.common.application_add(parms).then(res => {
-        if (res.data.code == 1) {
-          this.$message({
-            message: "添加成功",
-            type: "success"
-          });
-          this.active = 3;
-        }else{
-            this.$message({
-            message:res.data.msg,
-            type: "success"
-          });
-        }
-      });
-               } else {
-                 this.$message({
-                message:'请按提示填写内容',
-                type: "warning"
-              });
-            return false;
-          }
-        });
-    },
-  next(form) {
-            this.$refs[form].validate((valid) => {
-          if (valid) {
-      this.editableTabs_1.forEach(item => {
-        this.subjects_data.push({
-          subject_id: item.subject_id,
-          classhour: item.classhour,
-          price: item.price,
-          amount: item.amount,
-          course_type: item.course_type,
-          course_id: item.course_id,
-          is_one: item.is_one,
-          is_group: item.is_group
-        });
-      });
-      this.editableTabs.forEach(item => {
-        this.students_data.push({
-          student_id: item.id
-        });
-      });
-      this.editableTabs_1.forEach((item, i) => {
-        //console.log(this.subjects_data)
-        if (item.course_id == 1) {
-          this.parms = {
-         title: this.form.title,
-        expiry_date: this.form.valueDate,
-        remarks: this.form.feedback,
-        course_address: this.form2.radio,
-        address: this.form2.address,
-        need_one: this.form2.need_one,
-        need_two: this.form2.need_two,
-        need_three: this.form2.need_three,
-        need_four: this.form2.need_four,
-        need_five: this.form2.need_five,
-            app_id: this.$route.query.id
+      this.$refs[form2].validate(valid => {
+        if (valid) {
+          let parms = {
+            title: this.form.title,
+            expiry_date: this.form.valueDate,
+            remarks: this.form.feedback,
+            course_address: this.form.radio,
+            address: this.form.address,
+            need_one: this.form2.need_one,
+            need_two: this.form2.need_two,
+            need_three: this.form2.need_three,
+            need_four: this.form2.need_four,
+            need_five: this.form2.need_five
           };
 
-          this.parms.subjects_data = this.subjects_data;
-          this.parms.students_data = this.students_data;
-          console.log(this.parms);
-          this.$apis.common.application_edit_put(this.parms).then(res => {
+          parms.subjects_data = this.subjects_data;
+          parms.students_data = this.students_data;
+          console.log(parms);
+          this.$apis.common.application_add(parms).then(res => {
             if (res.data.code == 1) {
               this.$message({
-                message: "修改成功",
+                message: "添加成功",
                 type: "success"
               });
               this.active = 3;
             } else {
               this.$message({
                 message: res.data.msg,
-                type: "warning"
+                type: "success"
               });
             }
           });
+        } else {
+          this.$message({
+            message: "请按提示填写内容",
+            type: "warning"
+          });
+          return false;
         }
       });
-      this.active++;
-             } else {
-       this.$message({
-         type:"warning",
-         message:'请按照提示进行完善'
-       })           
- return false;
-          }
-        });
+    },
+    next(form) {
+      this.$refs[form].validate(valid => {
+        if (valid) {
+          this.editableTabs_1.forEach(item => {
+            this.subjects_data.push({
+              subject_id: item.subject_id,
+              classhour: item.classhour,
+              price: item.price,
+              amount: item.amount,
+              course_type: item.course_type,
+              course_id: item.course_id,
+              is_one: item.is_one,
+              is_group: item.is_group
+            });
+          });
+          this.editableTabs.forEach(item => {
+            this.students_data.push({
+              student_id: item.id
+            });
+          });
+          this.editableTabs_1.forEach((item, i) => {
+            //console.log(this.subjects_data)
+            if (item.course_id == 1) {
+              this.parms = {
+                title: this.form.title,
+                expiry_date: this.form.valueDate,
+                remarks: this.form.feedback,
+                course_address: this.form.radio,
+                address: this.form.address,
+                need_one: this.form2.need_one,
+                need_two: this.form2.need_two,
+                need_three: this.form2.need_three,
+                need_four: this.form2.need_four,
+                need_five: this.form2.need_five,
+                app_id: this.$route.query.id
+              };
+
+              this.parms.subjects_data = this.subjects_data;
+              this.parms.students_data = this.students_data;
+              console.log(this.parms);
+              this.$apis.common.application_edit_put(this.parms).then(res => {
+                if (res.data.code == 1) {
+                  this.$message({
+                    message: "修改成功",
+                    type: "success"
+                  });
+                  this.active = 3;
+                } else {
+                  this.$message({
+                    message: res.data.msg,
+                    type: "warning"
+                  });
+                }
+              });
+            }
+          });
+          this.active++;
+        } else {
+          this.$message({
+            type: "warning",
+            message: "请按照提示进行完善"
+          });
+          return false;
+        }
+      });
     },
     pre() {
-        this.parms.students_data = [];
+      this.parms.students_data = [];
       this.parms.subjects_data = [];
       this.students_data = [];
       this.subjects_data = [];

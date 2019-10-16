@@ -29,7 +29,7 @@ export default {
             let url='/api/api_students_check'
             return shuju.getdata(url,params)
            },
-           //编辑获取学员信息 /api_students_edit
+           //编辑获取学员信息 
            students_edit (params) {
             let url='/api/api_students_edit'
             return shuju.getdata(url,params)

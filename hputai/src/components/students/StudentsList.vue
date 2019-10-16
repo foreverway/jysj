@@ -221,7 +221,7 @@ import { mapState } from 'vuex';
       this.$apis.students.students_list(this.parms).then(res=>{
               if(res.data.code==1){
                 this.msg=res.data
-                console.log(this.msg)
+                //console.log(this.msg)
                 this.tableData=res.data.data.list
               }
       })

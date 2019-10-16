@@ -2,10 +2,12 @@
     <div class="mian">
 
         <h4>进线项目配置</h4>
+        <span v-if="msg.data">
         <span  class="project1 reg"  v-for="(item,index) in msg.data.inproject_list" :key="index" @click="dorp('inproject',item.id)">
             <el-badge value="x" class="item" >
             <span>{{item.name}}</span>
             </el-badge>
+        </span>
         </span>
         <br><br>
          <el-input style="width:100px"
@@ -17,11 +19,14 @@
 <br>
 
  <h4>进线渠道配置</h4>
+         <span v-if="msg.data">
+
         <span class="project1 reg" v-for="(item,index) in msg.data.inchannel_list" :key="index" @click="dorp('inchannel',item.id)">
             <el-badge value="x" class="item" >
             <span >{{item.name}}</span>
             </el-badge>
         </span>
+         </span>
         <br><br>
          <el-input style="width:100px"
     size="mini"
@@ -32,11 +37,14 @@
 <br>
 
  <h4>接入人</h4>
+         <span v-if="msg.data">
+
         <span class="project1 reg"  v-for="(item,index) in msg.data.inpeople_list" :key="index" @click="dorp('inpeople',item.id)">
             <el-badge value="x" class="item" >
             <span >{{item.name}}</span>
             </el-badge>
         </span>
+         </span>
         <br><br>
          <el-input style="width:100px"
     size="mini"
@@ -46,11 +54,14 @@
 <br>
 
  <h4>学员等级配置</h4>
+         <span v-if="msg.data">
+
         <span class="project1 reg" v-for="(item,index) in msg.data.alevel_list" :key="index" @click="dorp('alevel',item.id)">
             <el-badge value="x" class="item" >
             <span >{{item.name}}</span>
             </el-badge>
         </span>
+         </span>
         <br><br>
          <el-input style="width:100px"
     size="mini"
@@ -60,11 +71,14 @@
 <br>
 
  <h4>赠送类别配置</h4>
+         <span v-if="msg.data">
+
         <span class="project1 reg" v-for="(item,index) in msg.data.giventype_list" :key="index" @click="dorp('giventype',item.id)">
             <el-badge value="x" class="item" >
             <span >{{item.name}}</span>
             </el-badge>
         </span>
+         </span>
         <br><br>
          <el-input style="width:100px"
     size="mini"
@@ -74,11 +88,14 @@
 <br>
 
  <h4>收款类别配置</h4>
+         <span v-if="msg.data">
+
         <span class="project1 reg" v-for="(item,index) in msg.data.collectionclass_list" :key="index" @click="dorp('collectionclass',item.id)">
             <el-badge value="x" class="item" >
             <span >{{item.name}}</span>
             </el-badge>
         </span>
+         </span>
         <br><br>
          <el-input style="width:100px"
     size="mini"
@@ -88,11 +105,14 @@
 <br>
  
  <h4>收款方式配置</h4>
+         <span v-if="msg.data">
+
         <span class="project1 reg" v-for="(item,index) in msg.data.collectiontype_list" :key="index" @click="dorp('collectiontype',item.id)">
             <el-badge value="x" class="item" >
             <span >{{item.name}}</span>
             </el-badge>
         </span>
+         </span>
         <br><br>
          <el-input style="width:100px"
     size="mini"
@@ -101,11 +121,15 @@
   </el-input>  <el-button size="mini" @click="adddata('collectiontype',inputmsg.collectiontype)"  type="primary" round>添加</el-button>
    <br>
  <h4>报课项目</h4>
+         <span v-if="msg.data">
+
         <span class="project1 reg" v-for="(item,index) in msg.data.classproject_list" :key="index" @click="dorp('classproject',item.id)">
             <el-badge value="x" class="item" >
             <span >{{item.name}}</span>
             </el-badge>
         </span>
+         </span>
+
         <br><br>
          <el-input style="width:100px"
     size="mini"

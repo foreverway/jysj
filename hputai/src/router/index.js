@@ -186,6 +186,7 @@ export default new Router({
         {
           path: '/StudentsList',
           component: StudentsList,
+          name:'StudentsList'
         },
           {
             path: '/StudentsInfo',  //学生详情

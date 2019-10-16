@@ -79,31 +79,31 @@
 <el-dialog
   title="正常页面"
   :visible.sync="centerDialogVisible_normal"
-  width="30%"
+  width="50%"
   center>
-  <el-form  label-width="80px" :model="normalData">
+  <el-form   :inline="true" label-width="150px" :model="normalData">
   <el-form-item label="已排课时">
     <!-- <el-input v-model="normalData.classhour"></el-input> -->
-    <p>{{this.normalData.classhour}}</p>
+    <p style="width:100px;">{{this.normalData.classhour}}</p>
   </el-form-item>
   <el-form-item label="实上课时">
     <!-- <el-input v-model="normalData.true_classhour"></el-input> -->
-        <p>{{this.normalData.classhour}}</p>
+        <p style="width:100px;">{{this.normalData.classhour}}</p>
   </el-form-item>
   <el-form-item label="老师核准">
     <!-- <el-input v-model="normalData.teacher_classhour"></el-input> -->
-            <p>{{this.normalData.classhour}}</p>
+            <p style="width:100px;">{{this.normalData.classhour}}</p>
   </el-form-item>
   <el-form-item label="学生核准">
     <!-- <el-input v-model="normalData.student_classhour"></el-input> -->
-    <p>{{this.normalData.classhour}}</p>
+    <p style="width:100px;">{{this.normalData.classhour}}</p>
   </el-form-item>
   <el-form-item label="备注">
     <el-input v-model="normalData.remarks"></el-input>
   </el-form-item>
 </el-form>
   <span slot="footer" class="dialog-footer">  
-    <el-button @click="normal_post()">取 消</el-button>
+    <el-button @click="centerDialogVisible_normal = false">取 消</el-button>
     <el-button type="primary" @click="normal_post">确 定</el-button>
   </span>
 </el-dialog>
@@ -152,9 +152,6 @@
   <el-form-item label="已排课时" v-show="seeMoreData.attendance_type==1">
     <p style="width:100px;">{{seeMoreData.classhour}}</p>
   </el-form-item>
-  <!-- <el-form-item label="考勤状态">
-    <p style="width:100px">{{seeMoreData.attendance_type}}</p>
-  </el-form-item> -->
       <el-form-item label="已排课时"  v-show="seeMoreData.attendance_type==2">
     <p style="width:100px" >{{seeMoreData.classhour}}</p>
   </el-form-item>
@@ -299,7 +296,7 @@ export default {
     },
     // 查看详情
     seeMore(result){  
-      console.log(result)
+      //console.log(result)
       this.centerDialogVisible_seeMore = true
       let params={
         course_id:result.row.course_id

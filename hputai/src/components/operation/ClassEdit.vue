@@ -165,9 +165,9 @@
         </div>
       </el-form-item>
     </el-form>
+    <el-button type="primary" @click="onSubmit">确认</el-button>
 
     <el-button @click="goBack">取消</el-button>
-    <el-button type="primary" @click="onSubmit">就这样吧</el-button>
     <!-- 查看学生课表 -->
     <el-dialog title="提示" :visible.sync="stu_centerDialogVisible" width="60%" center>
       <span>{{this.seestudentname}}学生课表</span>

@@ -15,7 +15,15 @@
       <el-form-item label="报名标题" prop="title">
         <el-input v-model="form.title"></el-input>
       </el-form-item>
-
+        <el-form-item label="上课地点" prop="radio">
+          <el-radio-group v-model="form.radio" @change="whereGo(form.radio)">
+            <el-radio  :label="1">线上</el-radio>
+            <el-radio  :label="2">线下</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="上课地址" v-if="show==true" prop="address">
+          <el-cascader placeholder="支持到地级市" v-model="form.address" :options="address_check" filterable></el-cascader>
+        </el-form-item>
       <el-form-item :inline="true" label="报读科目" prop="value">
         <el-cascader
           v-model="form.value"
@@ -111,15 +119,7 @@
     <!-- 步骤二 -->
     <div v-if="active==2">
       <el-form ref="form2" :rules="rules" :model="form2">
-        <el-form-item label="上课地点" prop="radio">
-          <el-radio-group v-model="form2.radio" @change="whereGo(form2.radio)">
-            <el-radio  :label="1">线上</el-radio>
-            <el-radio  :label="2">线下</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="上课地址" v-if="show==true" prop="address">
-          <el-cascader placeholder="支持到地级市" v-model="form2.address" :options="address_check" filterable></el-cascader>
-        </el-form-item>
+
         <el-form-item label="需求1" prop="need_one">
           <el-input
             type="textarea"
@@ -212,6 +212,8 @@ import { mapState } from 'vuex'
         value_1: "", //学生姓名
         valueDate: "", //有效期限
         feedback:"", //备注说明
+        radio: "", //上课地点的选择
+        address: "", //上课地址
       },
       form2:{
         need_one: "",
@@ -219,8 +221,7 @@ import { mapState } from 'vuex'
         need_three: "",
         need_four: "",
         need_five: "",
-        radio: "", //上课地点的选择
-        address: "", //上课地址
+
       },
         rules: {
           title: [
@@ -307,26 +308,49 @@ import { mapState } from 'vuex'
         }
       });
       //获取科目的数据
-      this.$apis.common.subject_list(parms).then(res => {
+           this.$apis.common.subject_list(parms).then(res => {
         if (res.data.code == 1) {
           this.msg = res.data;
           this.options_ = res.data.data;
+         // console.log(this.options_)
           for (let i = 0; i < this.options_.length; i++) {
             var val = this.options_[i];
-            var children = [];
-            if (val.children) {
-              for (let j = 0; j < val.children.length; j++) {
+            let children = [];
+            if (val.children) { //如果有子元素
+              for (let j = 0; j < val.children.length; j++) { //对子元素进行遍历
                 var val1 = val.children[j];
+                if(val1.children){  //如果子元素有子元素
+               //let children =[]
+                    for (let g = 0; g < val1.children.length; g++) { //对子元素进行遍历
+                    var val2 = val1.children[g];
+                    //console.log(val2)
+                    children.push({
+                        value: val1.subject_name,
+                        label: val1.subject_name,
+                        children:[{  //将孙级添加到父级相对应的位置下
+                            value: val2.subject_name,
+                            label: val2.subject_name,
+                        }]
+                      });
+                      this.options.push({
+                      value: val.subject_name,
+                      label: val.subject_name,
+                      children: children
+                    });
+                    }
+                }else{
                 children.push({
                   value: val1.subject_name,
                   label: val1.subject_name
                 });
-              }
-              this.options.push({
+                this.options.push({
                 value: val.subject_name,
                 label: val.subject_name,
                 children: children
               });
+                }
+              }
+
             } else {
               this.options.push({
                 value: val.subject_name,
@@ -334,8 +358,38 @@ import { mapState } from 'vuex'
               });
             }
           }
+          //console.log(this.options)
         }
       });
+      // this.$apis.common.subject_list(parms).then(res => {
+      //   if (res.data.code == 1) {
+      //     this.msg = res.data;
+      //     this.options_ = res.data.data;
+      //     for (let i = 0; i < this.options_.length; i++) {
+      //       var val = this.options_[i];
+      //       var children = [];
+      //       if (val.children) {
+      //         for (let j = 0; j < val.children.length; j++) {
+      //           var val1 = val.children[j];
+      //           children.push({
+      //             value: val1.subject_name,
+      //             label: val1.subject_name
+      //           });
+      //         }
+      //         this.options.push({
+      //           value: val.subject_name,
+      //           label: val.subject_name,
+      //           children: children
+      //         });
+      //       } else {
+      //         this.options.push({
+      //           value: val.subject_name,
+      //           label: val.subject_name
+      //         });
+      //       }
+      //     }
+      //   }
+      // });
     },
     createStudent() {},
     //获取学生列表
@@ -351,44 +405,55 @@ import { mapState } from 'vuex'
       });
     },
     //选择报读科目的函数
-    handleChange_1(targetName) {
-      var lastName = targetName.length == 1 ? targetName[0] : targetName[1];
-      let oneArr = this.options_.filter(item => item.subject_name == lastName);
-      if (oneArr.length == 0) {
-        for (let i = 0; i < this.options_.length; i++) {
-          var val = this.options_[i];
-          if (val.children) {
-            //如果有子元素
-            var val_1 = val.children.filter(item => item);
-            // if(val_1.length==1){
-            let oneArr_1 = val_1.filter(item => item.subject_name == lastName); //对子元素进行赛选
-            if (oneArr_1.length > 0) {
-              this.editableTabs_1.push({
-                subject_name: oneArr_1[0].subject_name,
-                subject_id: oneArr_1[0].id, //科目id
-                classhour: 10,
-                price: 1000,
-                course_type: 0, //课程类型
-                course_id: 0, //班课
-                is_one: 1, //一对一？
-                is_group: 0 //班课?
-              });
-            }
+   handleChange_1(targetName) {
+      var lastName =
+        targetName.length == 1
+          ? targetName[0]
+          : targetName.length == 2
+          ? targetName[1]
+          : targetName[2];
+
+      const result = [];
+      let getNeed = arr => {
+        arr.forEach(v => {
+          result.push({
+            value: v.id,
+            label: v.subject_name,
+            offline_price: v.offline_price,
+            online_price: v.online_price
+          });
+          if (v.children instanceof Array) {
+            getNeed(v.children);
           }
-        }
-      } else {
-        //没有子元素
+        });
+      };
+      getNeed(this.options_); //多维数组简化为二维数组(可以使用find，indexOf。findIndex查找返回)
+      var needArr = result.find((res, index, arr) => {
+        return (res.label = lastName);
+      });
+      console.log(needArr)
+      if (this.form.radio == 1) {
         this.editableTabs_1.push({
-          subject_name: oneArr[0].subject_name,
-          subject_id: oneArr[0].id, //科目id
-          classhour: 10,
-          price: 1000,
+          subject_name: needArr.label,
+          subject_id: needArr.id, //科目id
+          classhour: "",
+          price: needArr.online_price,
           course_type: 0, //课程类型
           course_id: 0, //班课
           is_one: 1, //一对一？
           is_group: 0 //自主班课?
         });
-        // this.subject_id.push({student_id:checkOne[0].id})
+      } else {
+        this.editableTabs_1.push({
+          subject_name: needArr.label,
+          subject_id: needArr.id, //科目id
+          classhour: "",
+          price: needArr.offline_price,
+          course_type: 0, //课程类型
+          course_id: 0, //班课
+          is_one: 1, //一对一？
+          is_group: 0 //自主班课?
+        });
       }
     },
     //学生姓名选择产生的变化
@@ -416,8 +481,8 @@ import { mapState } from 'vuex'
         title: this.form.title,
         expiry_date: this.form.valueDate,
         remarks: this.form.feedback,
-        course_address: this.form2.radio,
-        address: this.form2.address,
+        course_address: this.form.radio,
+        address: this.form.address,
         need_one: this.form2.need_one,
         need_two: this.form2.need_two,
         need_three: this.form2.need_three,
@@ -480,8 +545,8 @@ import { mapState } from 'vuex'
          title: this.form.title,
         expiry_date: this.form.valueDate,
         remarks: this.form.feedback,
-        course_address: this.form2.radio,
-        address: this.form2.address,
+        course_address: this.form.radio,
+        address: this.form.address,
         need_one: this.form2.need_one,
         need_two: this.form2.need_two,
         need_three: this.form2.need_three,
