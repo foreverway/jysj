@@ -262,12 +262,17 @@ export default {
       this.$apis.common.recharge_check(this.form.uname).then(res => {
         if (res.data.code == 1) {
           this.tipname = "";
+                   let banzhuren = this.banzhuren_list.find(item=>{
+            return item.id=res.data.data.banzhuren_id
+          })
           let num = parseInt(res.data.data.banzhuren_id);
-          for (var i = 0; i < this.teacher.length; i++) {
-            if (this.teacher[i].id == num) {
-              this.form.teacher = num;
-            }
-          }
+          this.form.teacher = banzhuren.banzhuren;
+          // let num = parseInt(res.data.data.banzhuren_id);
+          // for (var i = 0; i < this.teacher.length; i++) {
+          //   if (this.teacher[i].id == num) {
+          //     this.form.teacher = num;
+          //   }
+          // }
         }
       });
     },

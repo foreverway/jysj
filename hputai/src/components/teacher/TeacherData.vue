@@ -122,6 +122,7 @@
     <!-- 查看反馈 -->
     <el-dialog
   title="反馈信息"
+  :close-on-click-modal='false'
   :visible.sync="feedopen"
   width="900px"
   >

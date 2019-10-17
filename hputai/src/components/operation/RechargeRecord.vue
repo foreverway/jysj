@@ -315,6 +315,7 @@
     <!-- 表格结束 -->
     <el-dialog
       title="审核"
+      :close-on-click-modal='false'
       :visible.sync="dialogFormVisible4"
       width="300px"
     >

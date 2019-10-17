@@ -158,7 +158,7 @@
     <el-button @click="goBack">取消</el-button>
 
     <!-- 查看学生课表 -->
-    <el-dialog title="提示" :visible.sync="stu_centerDialogVisible" width="60%" center>
+    <el-dialog :close-on-click-modal='false' title="提示" :visible.sync="stu_centerDialogVisible" width="60%" center>
       <span>{{this.seestudentname}}学生课表</span>
       <el-table :data="seestudentclass" border>
         <el-table-column property="subject_name" label="科目"></el-table-column>
@@ -173,7 +173,7 @@
       </el-table>
     </el-dialog>
     <!-- 查看报名表 -->
-    <el-dialog title="查看报名表" :visible.sync="dialogTableVisible_seeapplytable">
+    <el-dialog :close-on-click-modal='false' title="查看报名表" :visible.sync="dialogTableVisible_seeapplytable">
       <el-form ref="form" label-width="120px">
         <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="参数:">
           <p>内容</p>
@@ -223,7 +223,7 @@
       </el-form>
     </el-dialog>
     <!-- 查看排课需求的弹框 -->
-    <el-dialog title="查看排课需求" :visible.sync="dialogTableVisible_seeClassNeeds">
+    <el-dialog :close-on-click-modal='false' title="查看排课需求" :visible.sync="dialogTableVisible_seeClassNeeds">
       <el-form label-width="120px">
         <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="需求:">
           <p>无参数</p>
@@ -283,7 +283,7 @@
       </el-form>
     </el-dialog>
     <!-- 查看老师课表 -->
-    <el-dialog :visible.sync="dialogTableVisible_seeTeacherClass">
+    <el-dialog :close-on-click-modal='false' :visible.sync="dialogTableVisible_seeTeacherClass">
       <span>查看{{}}老师课表</span>
       <el-table :data="seeteacherclass" border>
         <el-table-column property="course_address" label="上课地点"></el-table-column>

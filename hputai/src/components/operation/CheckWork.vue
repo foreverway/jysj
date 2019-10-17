@@ -78,6 +78,7 @@
 <!-- 正常的弹出页面 -->
 <el-dialog
   title="正常页面"
+  :close-on-click-modal='false'
   :visible.sync="centerDialogVisible_normal"
   width="50%"
   center>
@@ -109,6 +110,7 @@
 </el-dialog>
 <!-- 异动的弹出页面 -->
 <el-dialog
+:close-on-click-modal='false'
   title="异动页面"
   :visible.sync="centerDialogVisible_unnormal"
  width="800px"
@@ -144,6 +146,7 @@
 
 <!-- 查看详情的弹出页面 -->
 <el-dialog
+:close-on-click-modal='false'
   title="查看详情"
   :visible.sync="centerDialogVisible_seeMore"
   width="50%"

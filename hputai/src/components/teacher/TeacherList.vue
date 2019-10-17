@@ -3,12 +3,18 @@
     <h3>教师列表</h3>
     <div class="so_main_left">
       <el-form :inline="true" :model="form" class="demo-form-inline">
-        <el-input class="so_input" clearable v-model="form.search" @input="getadata" placeholder="请输入用户名"></el-input>
+        <el-input
+          class="so_input"
+          clearable
+          v-model="form.search"
+          @input="getadata"
+          placeholder="请输入用户名"
+        ></el-input>
         <!-- <el-button
           type="primary"
           @click="getadata"
           style="margin-left:5px;background-color:#e6563a; border:none;"
-        >搜索</el-button> -->
+        >搜索</el-button>-->
 
         <el-date-picker
           style="margin-left:60px"
@@ -64,35 +70,34 @@
       </el-table-column>
     </el-table>
     <!-- 老师信息的详情 -->
-    <el-dialog
-  title="老师详情"
-  :visible.sync="teacher_info"
-  width="50%"
->
- <el-form label-width="100px" :model="editTeacher">
+    <el-dialog title="老师详情" 
+    :close-on-click-modal='false'
+     :visible.sync="teacher_info" width="50%">
+      <el-form label-width="100px" :model="editTeacher">
         <el-form-item label="讲师姓名">
           <p>{{editTeacher.id?editTeacher.id:'暂无记录'}}</p>
         </el-form-item>
-            <el-form-item label="上课记录">
-            <p>{{editTeacher.id?editTeacher.id:'暂无记录'}}</p>
+        <el-form-item label="上课记录">
+          <p>{{editTeacher.id?editTeacher.id:'暂无记录'}}</p>
         </el-form-item>
-            <el-form-item label="课酬发放记录">
-            <p>{{editTeacher.id?editTeacher.id:'暂无记录'}}</p>
+        <el-form-item label="课酬发放记录">
+          <p>{{editTeacher.id?editTeacher.id:'暂无记录'}}</p>
         </el-form-item>
-            <el-form-item label="教授学生">
-            <p>{{editTeacher.id?editTeacher.id:'暂无记录'}}</p>
+        <el-form-item label="教授学生">
+          <p>{{editTeacher.id?editTeacher.id:'暂无记录'}}</p>
         </el-form-item>
-
- </el-form>
-       <span slot="footer" class="dialog-footer">
+      </el-form>
+      <span slot="footer" class="dialog-footer">
         <el-button @click="teacher_info = false">取 消</el-button>
         <el-button type="primary" @click="teacher_info = false">确 定</el-button>
       </span>
-</el-dialog>
+    </el-dialog>
     <!-- <p style="margin-top:30px"><span>累计金额：</span><span style="color:red">{{msg.data.givenamount}}</span></p> -->
     <!-- <el-button type="primary" @click="ifinputselect" style="margin-top:20px">审核</el-button> -->
     <!-- 教师课酬设置 -->
-    <el-dialog title="教师课酬设置" :visible.sync="centerDialogVisible_salary" width="70%">
+    <el-dialog 
+    :close-on-click-modal='false'
+     title="教师课酬设置" :visible.sync="centerDialogVisible_salary" width="70%">
       <el-form label-width="100px" :model="teacher_salary_data">
         <el-form-item label="讲师姓名">
           <p>{{teacher_name}}</p>
@@ -148,7 +153,9 @@
       </span>
     </el-dialog>
     <!-- 编辑弹窗 -->
-    <el-dialog title="编辑教师" :visible.sync="editDialog" width="50%">
+    <el-dialog 
+    :close-on-click-modal='false'
+     title="编辑教师" :visible.sync="editDialog" width="50%">
       <el-form label-width="100px" :model="editTeacher">
         <el-form-item label="讲师姓名">
           <p v-if="teacher_name">{{teacher_name}}</p>
@@ -177,9 +184,9 @@
           ></el-cascader>
         </el-form-item>
         <el-form-item label="类型">
-          <el-radio-group  v-model="editTeacher.part_time">
-          <el-radio  :label="1">全职</el-radio>
-          <el-radio  :label="2">兼职</el-radio>
+          <el-radio-group v-model="editTeacher.part_time">
+            <el-radio :label="1">全职</el-radio>
+            <el-radio :label="2">兼职</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="排课时间">
@@ -255,9 +262,9 @@ export default {
       form: {
         search: "", //搜索老师条件
         page: 1, //页码
-        teacher_id: "" ,//教师id,
-        start_time:'',
-        end_time:''
+        teacher_id: "", //教师id,
+        start_time: "",
+        end_time: ""
       },
       options: [], //课程名称的数据
       options_: [], //总数据的数据
@@ -266,14 +273,14 @@ export default {
       msg: {},
       centerDialogVisible_salary: false, //入扣款弹窗
       editDialog: false, //编辑教师弹窗
-      teacher_info:false,
+      teacher_info: false,
       // teacher: [
       editTeacher: {
         //编辑老师的信息
         part_time: "", //类型,
         teach_subjects: "", //所授科目
         can_class: "", //排课时间
-        address: '', //城市
+        address: "", //城市
         expiredate: "", //	合同到期
         introduction: "", //	教育简介
         bank_number: "",
@@ -340,7 +347,7 @@ export default {
   computed: mapState(["rolemenu", "region_list"]),
   methods: {
     //序号排列
-    teacherAction(a, b,c,d) {
+    teacherAction(a, b, c, d) {
       switch (a) {
         case "teacher_edit":
           this.editDialog = true;
@@ -349,16 +356,16 @@ export default {
             .then(res => {
               if (res.data.code == 1) {
                 this.editTeacher = res.data.data;
-                if( this.editTeacher.address){
-this.editTeacher.address = res.data.data.address.split(',');
+                if (this.editTeacher.address) {
+                  this.editTeacher.address = res.data.data.address.split(",");
                 }
-                
-                 this.editTeacher.teacher_id=b.teacher_id*1
-                    console.log(this.editTeacher)
-              //  this.editTeacher.part_time=res.data.data.part_time
-              
+
+                this.editTeacher.teacher_id = b.teacher_id * 1;
+                console.log(this.editTeacher);
+                //  this.editTeacher.part_time=res.data.data.part_time
+
                 this.teacher_id = b.teacher_id;
-               
+
                 this.editTeacher.files = [];
               }
             });
@@ -368,7 +375,7 @@ this.editTeacher.address = res.data.data.address.split(',');
           for (let i = 0; i < this.region_list.length; i++) {
             var val = this.region_list[i];
             var children = [];
-      
+
             if (val.children) {
               for (let j = 0; j < val.children.length; j++) {
                 var val1 = val.children[j];
@@ -390,8 +397,8 @@ this.editTeacher.address = res.data.data.address.split(',');
             }
           }
           break;
-        case "teacher_info":  //查看老师信息
-          this.teacher_info = true
+        case "teacher_info": //查看老师信息
+          this.teacher_info = true;
           break;
         case "teacher_salary":
           this.teacher_id = b.teacher_id;
@@ -401,35 +408,39 @@ this.editTeacher.address = res.data.data.address.split(',');
           this.centerDialogVisible_salary = true;
           this.$apis.common.teacher_dollars_get(params).then(res => {
             if (res.data.code == 1) {
-            //this.table.tableData = res.data.data;
-            //console.log(Object.prototype.toString.call(res.data.data).substr(8,5))
+              //this.table.tableData = res.data.data;
+              //console.log(Object.prototype.toString.call(res.data.data).substr(8,5))
               this.teacher_name = b.teacher_name;
-              if (Object.prototype.toString.call(res.data.data).substr(8,5)=='Objec') {
+              if (
+                Object.prototype.toString.call(res.data.data).substr(8, 5) ==
+                "Objec"
+              ) {
                 this.table.tableData = [];
               } else {
                 this.table.tableData = res.data.data;
-             
               }
             }
           });
           break;
         case "teacher_delete":
-           this.$confirm('此记录将会永久删除, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-        d.splice(c, 1);
-                 this.$message({
-            message: "删除成功",
-            type: "success"
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });          
-        });
+          this.$confirm("此记录将会永久删除, 是否继续?", "提示", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning"
+          })
+            .then(() => {
+              d.splice(c, 1);
+              this.$message({
+                message: "删除成功",
+                type: "success"
+              });
+            })
+            .catch(() => {
+              this.$message({
+                type: "info",
+                message: "已取消删除"
+              });
+            });
 
           break;
       }
@@ -487,7 +498,7 @@ this.editTeacher.address = res.data.data.address.split(',');
             type: "success",
             duration: 1500
           });
-          this.editDialog = false
+          this.editDialog = false;
         } else {
           this.$message.error(data.msg);
         }
@@ -524,59 +535,65 @@ this.editTeacher.address = res.data.data.address.split(',');
         if (res.data.code == 1) {
           this.msg = res.data;
           this.options_ = res.data.data;
-               this.$apis.common.subject_list(parms).then(res => {
-        if (res.data.code == 1) {
-          this.msg = res.data;
-          this.options_ = res.data.data;
-         // console.log(this.options_)
-          for (let i = 0; i < this.options_.length; i++) {
-            var val = this.options_[i];
-            let children = [];
-            if (val.children) { //如果有子元素
-              for (let j = 0; j < val.children.length; j++) { //对子元素进行遍历
-                var val1 = val.children[j];
-                if(val1.children){  //如果子元素有子元素
-               //let children =[]
-                    for (let g = 0; g < val1.children.length; g++) { //对子元素进行遍历
-                    var val2 = val1.children[g];
-                    //console.log(val2)
-                    children.push({
+          this.$apis.common.subject_list(parms).then(res => {
+            if (res.data.code == 1) {
+              this.msg = res.data;
+              this.options_ = res.data.data;
+              // console.log(this.options_)
+              for (let i = 0; i < this.options_.length; i++) {
+                var val = this.options_[i];
+                let children = [];
+                if (val.children) {
+                  //如果有子元素
+                  for (let j = 0; j < val.children.length; j++) {
+                    //对子元素进行遍历
+                    var val1 = val.children[j];
+                    if (val1.children) {
+                      //如果子元素有子元素
+                      //let children =[]
+                      for (let g = 0; g < val1.children.length; g++) {
+                        //对子元素进行遍历
+                        var val2 = val1.children[g];
+                        //console.log(val2)
+                        children.push({
+                          value: val1.subject_name,
+                          label: val1.subject_name,
+                          children: [
+                            {
+                              //将孙级添加到父级相对应的位置下
+                              value: val2.subject_name,
+                              label: val2.subject_name
+                            }
+                          ]
+                        });
+                        this.options.push({
+                          value: val.subject_name,
+                          label: val.subject_name,
+                          children: children
+                        });
+                      }
+                    } else {
+                      children.push({
                         value: val1.subject_name,
-                        label: val1.subject_name,
-                        children:[{  //将孙级添加到父级相对应的位置下
-                            value: val2.subject_name,
-                            label: val2.subject_name,
-                        }]
+                        label: val1.subject_name
                       });
                       this.options.push({
-                      value: val.subject_name,
-                      label: val.subject_name,
-                      children: children
-                    });
+                        value: val.subject_name,
+                        label: val.subject_name,
+                        children: children
+                      });
                     }
-                }else{
-                children.push({
-                  value: val1.subject_name,
-                  label: val1.subject_name
-                });
-                this.options.push({
-                value: val.subject_name,
-                label: val.subject_name,
-                children: children
-              });
+                  }
+                } else {
+                  this.options.push({
+                    value: val.subject_name,
+                    label: val.subject_name
+                  });
                 }
               }
-
-            } else {
-              this.options.push({
-                value: val.subject_name,
-                label: val.subject_name
-              });
+              //console.log(this.options)
             }
-          }
-          //console.log(this.options)
-        }
-      });
+          });
           // for (let i = 0; i < this.options_.length; i++) {
           //   var val = this.options_[i];
           //   var children = [];
@@ -603,11 +620,11 @@ this.editTeacher.address = res.data.data.address.split(',');
         }
       });
     },
-    choose_suj(targetName) {//科目赋值
+    choose_suj(targetName) {
+      //科目赋值
       var lastName = targetName.length == 1 ? targetName[0] : targetName[1];
       this.arr.push(lastName.subject_name);
       this.editTeacher.teach_subjects = this.arr.toString();
-      
     },
     choose_city(targetName) {
       //城市赋值
@@ -620,47 +637,60 @@ this.editTeacher.address = res.data.data.address.split(',');
     },
     //选择报读科目的函数
     handleChange_1(targetName) {
-      var lastName = targetName.length == 1 ? targetName[0] : targetName[1];
+      //var lastName = targetName.length == 1 ? targetName[0] : targetName[1];
+      var lastName =targetName.length==1?targetName[0]:(targetName.length==2?targetName[1]:targetName[2])
       //判断标题
-      let oneArr = this.options_.filter(
-        item => item.subject_name == lastName.subject_name
-      );
-      if (oneArr.length == 0) {
-        for (let i = 0; i < this.options_.length; i++) {
-          var val = this.options_[i];
-          if (val.children) {
-            //如果有子元素
-            var val_1 = val.children.filter(item => item);
-            // if(val_1.length==1){
-            let oneArr_1 = val_1.filter(
-              item => item.subject_name == lastName.subject_name
-            ); //对子元素进行赛选
-            if (oneArr_1.length > 0) {
-             // let newTabName = ++this.tabIndex_1 + "";
+      let result=[]
+      let oneArr=arr=>{ arr.forEach((item)=>{
+            result.push({value:item.id,label:item.subject_name});
+        if(item.children instanceof Array){
+          oneArr(item.children)
+        }
+      });
+      }
+      oneArr(this.options_)
+      var needArr=result.find((item,index,arr)=>{
+       return item.label==lastName
+      })
+      // let oneArr = this.options_.filter(
+      //   item => item.subject_name == lastName.subject_name
+      // );
+      // if (oneArr.length == 0) {
+      //   for (let i = 0; i < this.options_.length; i++) {
+      //     var val = this.options_[i];
+      //     if (val.children) {
+      //       //如果有子元素
+      //       var val_1 = val.children.filter(item => item);
+      //       // if(val_1.length==1){
+      //       let oneArr_1 = val_1.filter(
+      //         item => item.subject_name == lastName.subject_name
+      //       ); //对子元素进行赛选
+      //       if (oneArr_1.length > 0) {
+      //         // let newTabName = ++this.tabIndex_1 + "";
               this.table.tableData.push({
-                subject_id: lastName.id,
-                subject_name: lastName.subject_name,
+                subject_id: needArr.value,
+                subject_name: needArr.label,
                 online_type: 1,
                 one_to_one: 1000,
                 small_class: 1000, //课程类型
-                big_class: oneArr_1[0].id //课程id
+                big_class: 1000 //课程id
               });
-              console.log( this.table.tableData)
-            }
-          }
-        }
-      } else {
-        //没有子元素
-        //let newTabName = ++this.tabIndex_1 + "";
-        this.table.tableData.push({
-          subject_id: lastName.id,
-          subject_name: lastName.subject_name,
-          online_type: 1,
-          one_to_one: 1000,
-          small_class: 1000, //课程类型
-          big_class: oneArr[0].id //课程id
-        });
-      }
+      //         console.log(this.table.tableData);
+      //       }
+      //     }
+      //   }
+      // } else {
+      //   //没有子元素
+      //   //let newTabName = ++this.tabIndex_1 + "";
+      //   this.table.tableData.push({
+      //     subject_id: lastName.id,
+      //     subject_name: lastName.subject_name,
+      //     online_type: 1,
+      //     one_to_one: 1000,
+      //     small_class: 1000, //课程类型
+      //     big_class: oneArr[0].id //课程id
+      //   });
+      // }
     },
     indexMethod(index) {
       if (this.form.page == 1) {
@@ -751,6 +781,7 @@ this.editTeacher.address = res.data.data.address.split(',');
   border: 1px solid silver;
   text-align: center;
 }
-p{
-padding: 0 10px;}
+p {
+  padding: 0 10px;
+}
 </style>

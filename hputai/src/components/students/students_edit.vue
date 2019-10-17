@@ -166,7 +166,7 @@
               <el-option
                 v-for="item in teacher"
                 :key="item.id"
-                :label="item.teacher"
+                :label="item.banzhuren"
                 :value="item.id"
               ></el-option>
             </el-select>
@@ -397,14 +397,12 @@ export default {
     //    },
     //地区选择
     handleChange(value) {
-      console.log(value);
     },
     // 返回上一页
     goback() {
       javascript: history.back(-1);
     },
     getdata() {
-      console.log(this.$route.query.id)
       this.$apis.students.students_edit({id:this.$route.query.id}).then(res => {
         if (res.data.code == 1) {
           this.form = res.data.data;
@@ -435,7 +433,7 @@ export default {
               let num = parseInt(this.getdataCookie("admin_uid"));
               for (var i = 0; i < this.teacher.length; i++) {
                 if (this.teacher[i].id == num) {
-                  this.form.teacher = this.teacher[i].id;
+                  this.form.teacher = this.teacher[i].banzhuren;
                 }
               }
             }
@@ -505,7 +503,7 @@ export default {
             }
           });
         } else {
-          console.log("error submit!!");
+         // console.log("error submit!!");
           return false;
         }
       });

@@ -86,6 +86,7 @@
 
     <el-dialog
       title="预览"
+      :close-on-click-modal='false'
       :visible.sync="dialogFormVisible3"
       width="475px"
       custom-class="yulan_height"

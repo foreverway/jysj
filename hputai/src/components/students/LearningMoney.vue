@@ -30,7 +30,9 @@
 <el-button type="danger"  v-if="msg.data.isAdmin=='1'" @click="dialogVisible= true,form1.type=1">入款</el-button>
 <el-button type="primary"  v-if="msg.data.isAdmin=='1'" @click="dialogVisible= true,form1.type=2">扣款</el-button>
 
-<el-dialog :title="form1.type==1?'入款':'扣款'" :visible.sync="dialogVisible" width="500px" close-on-click-modal="false" >
+<el-dialog 
+:close-on-click-modal='false'
+:title="form1.type==1?'入款':'扣款'" :visible.sync="dialogVisible" width="500px" close-on-click-modal="false" >
   <el-form :model="form1">
       <el-form-item label="会员名" label-width="100px">
       <el-input v-model="form1.uname" @input="ifnamemoney" placeholder="请输入会员名"  style="width:200px"  ></el-input>

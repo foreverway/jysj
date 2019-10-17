@@ -41,7 +41,7 @@
             </el-menu-item>
             <span v-for="(item,index) in rolemenu" :key="index">
               <!-- 刷新出首层菜单名字 style="pointer-events: none;" -->
-              <el-submenu index="index" id="click_1" style="pointer-events: none;">
+              <el-submenu index="index" ref="getThis" id="click_1" style="pointer-events: none;">
                 <template slot="title">
                   <i :class="item.menu_icon"></i>
                   <span slot="title" class="changeC">{{item.menu_name}}</span>
@@ -111,22 +111,11 @@ export default {
     });
 
     this.$nextTick(function() {
-          this.getMen(); //
-      console.log('10',$(menuC)[0])
+      this.getMen(); //
       //实现菜单的展开 图标消失
-      var iconI = $(".el-icon-arrow-down");
-      var menuC = $(".el-submenu__title");
-      $(menuC)[0].click();
-      for (let i = 0; i < iconI.length; i++) {
-        var addAttr = $(iconI)[i];
-        $(addAttr).attr("class", "");
-      }
     });
   },
-  beforeMount(){
-
-  }
-  ,
+  beforeMount() {},
   computed: mapState([
     "banzhuren_list",
     "rolemenu",
@@ -137,9 +126,17 @@ export default {
     "region_list"
   ]),
   mounted() {
-    //      var menuC = $(".el-submenu__title");
-    // $(menuC)[0].click();
-    // console.log($(menuC)[0],'mounted')
+    //在login页就报错  说明在那时就执行
+
+    var iconI = $(".el-icon-arrow-down");
+    var menuC = $(".el-submenu__title");
+    $(menuC)[0].click();
+    console.log($(menuC)[0]);
+    console.log(this.$refs.this)
+    for (let i = 0; i < iconI.length; i++) {
+      var addAttr = $(iconI)[i];
+      $(addAttr).attr("class", "");
+    }
     this.defaultUrl = window.location.href.split("/#")[1];
   },
   methods: {
@@ -170,7 +167,6 @@ export default {
         }
       });
     },
-
     ...mapActions([
       "get_mune_list",
       "get_banzhuren_list",
@@ -239,16 +235,7 @@ export default {
         )
       });
     },
-    //       getIndex(){
-    // var arr =this.rolemenu.map((iten,index)=>{
-    //           return index
-    //       })
-    //       return arr
-    //       },
     getMen() {
-      //  $('.el-submenu__icon-arrow').attr('class','')
-      //   $('.el-icon-arrow-down').attr('class','')
-
       let params = {
         search: this.getdataCookie("admin_name")
       };
@@ -270,9 +257,7 @@ export default {
     //   }
     // })
     // },
-  },
-
- 
+  }
 };
 </script>
   

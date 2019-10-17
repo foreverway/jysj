@@ -87,7 +87,7 @@
 </el-pagination>
         </span>
         <!-- 设置充值链接 -->
-<el-dialog title="设置充值金额" :visible.sync="dialogFormVisible1" width="500px"  >
+<el-dialog title="设置充值金额" :visible.sync="dialogFormVisible1" width="500px" :close-on-click-modal='false' >
       <el-input  style="width:200px" v-model="money"  placeholder="请输入充值金额" ></el-input>
  <el-button type="primary" v-show="money>0" @click="dialogFormVisible1 = false,copyUrl( msg.data.recharge_url)">复制充值链接</el-button>
 
@@ -156,16 +156,16 @@ import { mapState } from 'vuex';
       },
       trueAction(a,b){
           switch(a){
-            case "del_this" :
+            case "del_this" : //删除学生列表
               this.admin_del(b)
             break;
-            case "edit_list" :
+            case "edit_list" : //编辑学生列表
               this.$router.push({path:'/StudentsEdit',query:{id:b.id} })
             break;
-            case "see_info" :
+            case "see_info" :  //查看学生列表详情
               this.$router.push({path:'/StudentsInfo',query:{id:b.id}})
             break;
-            case "copy_url" :
+            case "copy_url" :  //复制链接
               this.dialogFormVisible1=true
             break;
           }

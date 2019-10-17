@@ -114,7 +114,9 @@
           layout="total, sizes, prev, pager, next"
           :total="tableData.length"
         ></el-pagination>
-        <el-dialog title="其他方式进入教室" :visible.sync="centerDialogVisible" center>
+        <el-dialog 
+        :close-on-click-modal='false'
+        title="其他方式进入教室" :visible.sync="centerDialogVisible" center>
           <el-dialog width="30%" title="使用手机扫码下载" :visible.sync="innerVisible" append-to-body>
             <div class="flex_div">
               <img :src="otherWey.mobileDownloadUrl" />
@@ -220,7 +222,9 @@
           :total="tableData.length"
         ></el-pagination>
         <!-- 填写课堂反馈 -->
-        <el-dialog title="填写课堂反馈" :visible.sync="dialogFromVisible">
+        <el-dialog 
+        :close-on-click-modal='false'
+         title="填写课堂反馈" :visible.sync="dialogFromVisible">
           <!-- <p style="font-size:18px;height:30px;margin:10px 0;">课程信息</p> -->
           <p style="margin-bottom:10px;"><span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>课程信息</p>
 
@@ -310,7 +314,9 @@
           </el-form>
         </el-dialog>
         <!-- 查看课堂反馈 -->
-        <el-dialog title="老师反馈" :visible.sync="dialogVisible" width="900px">
+        <el-dialog  
+        :close-on-click-modal='false'
+        title="老师反馈" :visible.sync="dialogVisible" width="900px">
           <p style="margin-bottom:10px;"><span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>课程信息</p>
 
           <ul :data="formLabelAlign">

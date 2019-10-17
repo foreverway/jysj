@@ -479,7 +479,7 @@ export default {
       };
       getNeed(this.options_); //多维数组简化为二维数组(可以使用find，indexOf。findIndex查找返回)
       var needArr = result.find((res, index, arr) => {
-        return (res.label = lastName);
+        return (res.label == lastName);
       });
       if (this.form.radio == 1) {
         this.editableTabs_1.push({

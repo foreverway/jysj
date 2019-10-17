@@ -67,7 +67,7 @@
     </el-table>
     <!-- 分页 -->
     <!-- 审核意见 -->
-    <el-dialog title="审核意见" :visible.sync="centerDialogVisible_shenghe" width="40%" center>
+    <el-dialog :close-on-click-modal='false' title="审核意见" :visible.sync="centerDialogVisible_shenghe" width="40%" center>
       <el-form ref="form" label-width="80px">
         <el-form-item label="审核意见" v-model="is_pass">
           <el-radio v-model="is_pass" label="1">同意</el-radio>
@@ -125,7 +125,7 @@
       ></el-pagination>
     </span>
     <!-- 查看排课 -->
-    <el-dialog title="查看排课" :visible.sync="dialogTableVisible_table" width="60%">
+    <el-dialog :close-on-click-modal='false' title="查看排课" :visible.sync="dialogTableVisible_table" width="60%">
       <el-form ref="form" label-width="80px">
         <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="标题:">
           <p>{{gridData.title}}</p>

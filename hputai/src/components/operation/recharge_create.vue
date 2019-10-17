@@ -144,6 +144,7 @@
 </template>
 <script>
 // import { type } from "os";
+import {mapState} from 'vuex'
 export default {
   data() {
     var YanuIn_amount = (rules, value, callback) => {
@@ -205,6 +206,9 @@ export default {
   },
   created() {
     this.getdata();
+  },
+  computed:{
+    ...mapState(['banzhuren_list'])
   },
   methods: {
       YanuUname(rules, value, callback) {
@@ -305,8 +309,11 @@ export default {
       this.$apis.common.recharge_check({uname:this.form.uname}).then(res => {
         if (res.data.code == 1) {
           this.tipname = "";
+          let banzhuren = this.banzhuren_list.find(item=>{
+            return item.id=res.data.data.banzhuren_id
+          })
           let num = parseInt(res.data.data.banzhuren_id);
-          this.form.teacher = num;
+          this.form.teacher = banzhuren.banzhuren;
           // console.log(num)
           // for (var i = 0; i < this.teacher.length; i++) {
           //   if (this.teacher[i].teacher_id == num) {
