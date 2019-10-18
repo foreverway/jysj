@@ -26,7 +26,7 @@
   title="提示"
   :visible.sync="dialogVisible"
   width="30%"
-  :before-close="handleClose">
+  >
   <span>这是一段信息</span>
   <span slot="footer" class="dialog-footer">
     <el-button @click="dialogVisible = false">取 消</el-button>
@@ -46,7 +46,7 @@
             active-text-color="#fff"
             @select="selectMenu"
             style="  overflow-x:hidden;"
-            open="0"
+            :default-openeds="openeds"
           >
             <el-menu-item index="/">
               <i class="el-icon-s-home"></i>
@@ -54,7 +54,7 @@
             </el-menu-item>
             <span v-for="(item,index) in rolemenu" :key="index">
               <!-- 刷新出首层菜单名字 style="pointer-events: none;" -->
-              <el-submenu index="index" ref="getThis" id="click_1" style="pointer-events: none;">
+              <el-submenu :index="index.toString()" ref="getThis" id="click_1" style="pointer-events: none;">
                 <template slot="title">
                   <i :class="item.menu_icon"></i>
                   <span slot="title" class="changeC">{{item.menu_name}}</span>
@@ -90,6 +90,9 @@ export default {
       isCollapse: true,
       // ActiveMenu: this.$route.path,
       //  rolemenu:'',  菜单列表
+       openeds: ['0','1','2','3','4','5'],
+       urlList:[],
+ uniqueOpened: false,
       admin_name: "",
       defaultUrl: "/",
       peopleInfo: {},
@@ -143,18 +146,26 @@ export default {
   mounted() {
     //在login页就报错  说明在那时就执行
 
-    var iconI = $(".el-icon-arrow-down");
-    var menuC = $(".el-submenu__title");
-    $(menuC)[0].click();
-    console.log($(menuC)[0]);
-    console.log(this.$refs.this)
-    for (let i = 0; i < iconI.length; i++) {
-      var addAttr = $(iconI)[i];
-      $(addAttr).attr("class", "");
-    }
+    // var iconI = $(".el-icon-arrow-down");
+    // var menuC = $(".el-submenu__title");
+    // $(menuC)[0].click();
+    // // console.log($(menuC)[0]);
+    // // console.log(this.$refs.this)
+    // for (let i = 0; i < iconI.length; i++) {
+    //   var addAttr = $(iconI)[i];
+    //   $(addAttr).attr("class", "");
+    // }
+     let urlList=[]
+          this.rolemenu.forEach((item, index, array) => {
+        //遍历菜单
+              urlList.push(index.toString())
+      });
+       //this.openeds=urlList
+       //console.log(urlList)
     this.defaultUrl = window.location.href.split("/#")[1];
   },
   methods: {
+   
     selectMenu(index, indexPath) {
       console.log(this.defaultUrl);
       //console.log(document.body.scrollHeight);
@@ -165,6 +176,7 @@ export default {
       }
       this.rolemenu.forEach((item, index, array) => {
         //遍历菜单
+        let urlList=[]
         if (item.children) {
           //有子集
           for (let j = 0; j < item.children.length; j++) {
@@ -172,6 +184,9 @@ export default {
             let a = item.children.filter(function(item) {
               return item.menu_url == indexPath[1];
             });
+            item.children.forEach(res=>{
+              urlList.push(res.menu_url)
+            })
             if (a.length > 0) {
               $(menuList[index]).attr("id", "changeC");
               return index;
@@ -277,6 +292,10 @@ export default {
 </script>
   
 <style scoped>
+#click_1 /deep/ .el-icon-arrow-down:before{
+  content :'';
+  display:none;
+}
 .left {
   position: fixed;
   top: 0;
