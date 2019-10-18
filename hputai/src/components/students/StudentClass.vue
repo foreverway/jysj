@@ -316,7 +316,7 @@
         <!-- 查看课堂反馈 -->
         <el-dialog  
         :close-on-click-modal='false'
-        title="老师反馈" :visible.sync="dialogVisible" width="900px">
+        title="查看老师反馈" :visible.sync="dialogVisible" width="900px">
           <p style="margin-bottom:10px;"><span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>课程信息</p>
 
           <ul :data="formLabelAlign">
@@ -359,6 +359,14 @@
           </div>
           <p style="margin-bottom:10px;"><span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>反馈内容</p>
           <el-form label-width="200px" :model="formLabelAlign">
+            <el-form-item
+              label="反馈类型:"
+              
+            >
+              <p v-if='formLabelAlign.feedback_type==1'>试听/首次课程反馈</p>
+              <p v-if='formLabelAlign.feedback_type==2'>日常上课反馈</p>
+              <p v-if='formLabelAlign.feedback_type==3'>结课总结</p>
+            </el-form-item>
             <el-form-item
               label="本次授课内容:"
               v-if="formLabelAlign.feedback_type=='2'||formLabelAlign.feedback_type=='1'"

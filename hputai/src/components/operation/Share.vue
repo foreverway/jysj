@@ -1,5 +1,6 @@
 <template>
   <div class="main">
+        <div class="main_head"><span style="font-size:24px;color:#e6563a;">|&nbsp;</span>分享</div>
     <el-container style=" border: 1px solid #eee;height: 100vh;">
       <el-container>
         <el-header
@@ -12,8 +13,6 @@
             mode="horizontal"
             @select="handleSelect"
           >
-           
-
             <el-menu-item index="1">
               <router-link to="/ShareStatistical">
                 <span
@@ -23,7 +22,7 @@
                 >分享记录列表</span>
               </router-link>
             </el-menu-item>
-             <el-menu-item index="2">
+            <el-menu-item index="2">
               <router-link to="/ShareList">
                 <span
                   index="2"
@@ -33,7 +32,7 @@
               </router-link>
             </el-menu-item>
             <!-- <el-menu-item index v-if="isShowConfig==1"> -->
-             <el-menu-item index="3">
+            <el-menu-item index="3">
               <router-link to="/ShareArticleConfig">
                 <span
                   index="2"
@@ -44,7 +43,7 @@
             </el-menu-item>
           </el-menu>
           <!-- <el-dropdown el-dropdown-menu>
-          </el-dropdown> -->
+          </el-dropdown>-->
         </el-header>
 
         <el-main>
@@ -124,6 +123,14 @@ export default {
 </script>
 
 <style >
+.main_head {
+  margin: auto;
+  width: 96%;
+  height: 40px;
+  font-size: 22px;
+  font-weight: 900;
+  margin: 0 2%;
+}
 * {
   padding: 0;
   margin: 0;

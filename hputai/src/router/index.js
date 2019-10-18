@@ -1,82 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Menu from '@/components/Menu'
-// 后台用户路由
-import Login from '@/components/menber/login'
-import MainIndex from '@/components/menber/index' 
-import AdminList from '@/components/menber/admin_list' 
-import AdminAdd from '@/components/menber/admin_add' 
-import AdminEdit from '@/components/menber/admin_edit'
-//   操作
-import AddLink from '@/components/operation/addlink'
-import ApplicationAdd from '@/components/operation/application_add'  //添加报名需求列表
-import ApplicationEdit from '@/components/operation/application_edit'  //编辑报名需求列表
-import ClassEdit from '@/components/operation/ClassEdit'  //编辑报名需求列表
-import SalesList from '@/components/operation/sale_list.vue'
-import SalelistEdit from '@/components/operation/salelist_edit.vue'
-import Addsalepro from '@/components/operation/addsalepro'
-import ApplyNeedsList from '@/components/operation/applyNeedsList'  //报名需求列表
-import PlanClassAdd from '@/components/operation/PlanClassAdd'  //新添加排课
-import CheckWork from '@/components/operation/CheckWork'  //考勤
-import RechargeRecord from '@/components/operation/RechargeRecord'  //充值记录单
-import Rechargecreate from '@/components/operation/recharge_create'  //充值记录单
-import EditRecharge from '@/components/operation/edit_recharge'  //充值记录单
-import Share from '@/components/operation/Share'  //充值记录单
-
-   //分享页
-import ShareArticleConfig from '@/components/operation/share_page/share_article_config'
-import ShareList from '@/components/operation/share_page/share_list'
-import ShareListAdd from '@/components/operation/share_page/share_list_add'
-import AddDelmonney from '@/components/operation/share_page/add_del_money'
-import ShareRules from '@/components/operation/share_page/share_rules'
-import ShareStatistical from '@/components/operation/share_page/share_statistical'
-import ShareUser from '@/components/operation/share_page/share_user'
-import AddArticle from '@/components/operation/share_page/add_article'
-import AddArticleEdit from '@/components/operation/share_page/add_article_edit'
-import AddRules from '@/components/operation/share_page/add.rules'
-
-//学生路由
-import StudentsAdd from '@/components/students/students_add'
-import StudentsEdit from '@/components/students/students_edit'
-import StudentsList from '@/components/students/StudentsList'
-import StudentClass from '@/components/students/StudentClass'
-import ClassMain from '@/components/students/ClassMain'
-import StudentMoneyMain from '@/components/students/StudentMoneyMain'  //学生钱包在这里
-import NewMoney from '@/components/students/NewMoney'
-import VirtualMonney from '@/components/students/VirtualMonney'
-import LearningMoney from '@/components/students/LearningMoney'
-
-import StudentsInfo from '@/components/students/StudentsInfo'
-
-//师资管理
-import TeacherAssess from '@/components/teacher/TeacherAssess'  //老师评价
-import TeacherList from '@/components/teacher/TeacherList'  //老师列表TeacherData
-import TeacherData from '@/components/teacher/TeacherData'  //授课数据TeacherData
-import ToAssessTeacher from '@/components/teacher/ToAssessTeacher'  //评价老师ToAssessTeacher
-import TeacherSalary from '@/components/teacher/TeacherSalary'  //教师课酬列表数据接口
-
-//系统设置路由
-import SystemMain from '@/components/system/system_main'
-//系统设置
-import SysBase from '@/components/system/sys_base'
-// 系统短信配置
-import SysSms from '@/components/system/sys_sms'
-// 系统直播配置
-import LiveList from '@/components/system/live_list'
-import LiveAdd from '@/components/system/live_add'
-import LiveEdit from '@/components/system/live_edit'
-//系统科目设置
-import SubjectList from '@/components/system/subject_list'
-import SubjectAdd from '@/components/system/subject_add'
-import SubjectEdit from '@/components/system/subject_edit'
-
-//系统基础数据配置
-import Base from '@/components/system/base'
-
-//角色管理
-import RoleList from '@/components/menber/role_list' 
-import RoleAdd from '@/components/menber/role_add'
-import RoleEdit from '@/components/menber/role_edit'
 
 
 Vue.use(Router)
@@ -86,264 +9,264 @@ export default new Router({
     {
       path: '/login',
       name: 'Login',
-      component: Login
+      component: resolve=>require(['@/components/menber/login'],resolve)
     },
     {
       path: '/',
       name: 'Menu',
-      component: Menu,
+      component: resolve=>require(['@/components/Menu'],resolve),
       children: [
         {
           path: '/',
-          component: MainIndex
+          component: resolve=>require(['@/components/menber/index'],resolve)
         },
         {
           path: '/ApplicationAdd',//ApplicationAdd添加报名需求列表
-          component: ApplicationAdd,
+          component: resolve=>require(['@/components/operation/application_add'],resolve),
           name:'ApplicationAdd'
         },
         {
           path: '/ApplicationEdit',//ApplicationEdit编辑报名需求列表
-          component: ApplicationEdit
+          component: resolve=>require(['@/components/operation/application_edit'],resolve)
         },
         {
           path: '/ClassEdit',//编辑排课
-          component: ClassEdit
+          component:resolve=>require(['@/components/operation/ClassEdit'],resolve)
         },
         {
           path: '/ApplyNeedsList',//ApplyNeedsList添加报名需求列表
-          component: ApplyNeedsList,
+          component: resolve=>require(['@/components/operation/applyNeedsList'],resolve),
           name:'ApplyNeedsList'
         },
         {
           path: '/PlanClassAdd',//PlanClassAdd添加报名需求列表
-          component: PlanClassAdd,
+          component: resolve=>require(['@/components/operation/PlanClassAdd'],resolve),
           name:'PlanClassAdd'
         },
         {
           path: '/RechargeRecord',//RechargeRecord充值记录单
-          component: RechargeRecord
+          component: resolve=>require(['@/components/operation/RechargeRecord'],resolve)
         },
         {
           path: '/Rechargecreate',//Rechargecreate添加记录单
-          component: Rechargecreate
+          component: resolve=>require(['@/components/operation/recharge_create'],resolve)
         },
         {
           path: '/EditRecharge',//EditRecharge编辑充值记录单
-          component: EditRecharge
+          component: resolve=>require(['@/components/operation/edit_recharge'],resolve)
         },
         {
           path: '/CheckWork',//CheckWork  考勤
-          component: CheckWork
+          component: resolve=>require(['@/components/operation/CheckWork'],resolve)
         },
         {
           path: '/TeacherAssess',//TeacherAssess  老师评价
-          component: TeacherAssess
+          component:resolve=>require(['@/components/teacher/TeacherAssess'],resolve)
         },
         {
           path: '/TeacherList',//TeacherList  老师列表
-          component: TeacherList
+          component: resolve=>require(['@/components/teacher/TeacherList'],resolve)
         },
         {
           path: '/TeacherData',//TeacherData  老师列表
-          component: TeacherData
+          component: resolve=>require(['@/components/teacher/TeacherData'],resolve)
         },
         {
          // path: '/ToAssessTeacher/:id',//ToAssessTeacher  [评价老师]
           path: '/ToAssessTeacher',//ToAssessTeacher  [评价老师]
           name:"ToAssessTeacher",
-          component: ToAssessTeacher
+          component: resolve=>require(['@/components/teacher/ToAssessTeacher'],resolve)
         },
         {
            path: '/TeacherSalary',//TeacherSalary  [教师课酬列表数据接口]
            name:"TeacherSalary",
-           component: TeacherSalary
+           component: resolve=>require(['@/components/teacher/TeacherSalary'],resolve)
          },
         {
           path: '/AddLink',//
-          component: AddLink
+          component:resolve=>require(['@/components/operation/addlink'],resolve)
         },
         {
           path: '/Addsalepro',//
-          component: Addsalepro
+          component: resolve=>require(['@/components/operation/addsalepro'],resolve)
         },
         {
           path: '/SalesList',//
-          component:SalesList
+          component:resolve=>require(['@/components/operation/sale_list'],resolve)
         },
         {
           path: '/StudentsAdd',  //
-          component: StudentsAdd
+          component: resolve=>require(['@/components/students/students_add'],resolve)
         },
         {
           path: '/SalelistEdit',  //
-          component: SalelistEdit
+          component: resolve=>require(['@/components/operation/salelist_edit.vue'],resolve)
         },
         {
           path: '/StudentsEdit',  //StudentsEdit
-          component: StudentsEdit
+          component:resolve=>require(['@/components/students/students_edit'],resolve)
         },
         {
           path: '/StudentsList',
-          component: StudentsList,
+          component:resolve=>require(['@/components/students/StudentsList'],resolve),
           name:'StudentsList'
         },
           {
             path: '/StudentsInfo',  //学生详情
-            component: StudentsInfo
+            component: resolve=>require(['@/components/students/StudentsInfo'],resolve)
           },
         {
           path: '/AdminList',
-          component: AdminList
+          component: resolve=>require(['@/components/menber/admin_list'],resolve)
         },
         {
           path: '/AdminAdd',
-          component: AdminAdd
+          component: resolve=>require(['@/components/menber/admin_add'],resolve)
         },
         {
           path: '/AdminEdit/:id',
-          component: AdminEdit
+          component: resolve=>require(['@/components/menber/admin_edit'],resolve)
         },
         {
           path: '/SubjectList', //科目配置 
-          component: SubjectList
+          component: resolve=>require(['@/components/system/subject_list'],resolve)
         },
         {
           path: '/SubjectAdd', //科目添加  
-          component: SubjectAdd
+          component: resolve=>require(['@/components/system/subject_add'],resolve)
         },
         {
           path: '/SubjectEdit/:id', //科目编辑
-          component: SubjectEdit
+          component: resolve=>require(['@/components/system/subject_edit'],resolve)
         },
         {
           path: '/Base', //基础数据配置  
-          component: Base
+          component: resolve=>require(['@/components/system/base'],resolve)
         },
         {
           path: '/Share',
           name: 'Share',
-          component: Share,
+          component: resolve=>require(['@/components/operation/Share'],resolve),
           children: [
             {
               path: '/',
-              component: ShareStatistical
+              component: resolve=>require(['@/components/operation/share_page/share_statistical'],resolve)
             },
             {
               path: '/AddDelmonney',
-              component: AddDelmonney
+              component: resolve=>require(['@/components/operation/share_page/add_del_money'],resolve)
             },
             {
               path: '/ShareRules',
-              component: ShareRules
+              component: resolve=>require(['@/components/operation/share_page/share_rules'],resolve)
             },
             {
               path: '/ShareArticleConfig',
               name: 'ShareArticleConfig',
-              component: ShareArticleConfig
+              component: resolve=>require(['@/components/operation/share_page/share_article_config'],resolve)
             },
             {
               path: '/ShareList',
               name: 'ShareList',
-              component: ShareList
+              component: resolve=>require(['@/components/operation/share_page/share_list'],resolve)
             },
             {
               path: '/ShareListAdd',
               name: 'ShareListAdd',
-              component: ShareListAdd
+              component: resolve=>require(['@/components/operation/share_page/share_list_add'],resolve)
             },
             {
               path: '/ShareStatistical',
               name: 'ShareStatistical',
-              component: ShareStatistical
+              component: resolve=>require(['@/components/operation/share_page/share_statistical'],resolve)
             },
             {
               path: '/ShareUser',
               name: 'ShareUser',
-              component: ShareUser
+              component: resolve=>require(['@/components/operation/share_page/share_user'],resolve)
             },
             {
               path: '/AddArticleEdit/:id',
               name: 'AddArticleEdit',
-              component: AddArticleEdit
+              component: resolve=>require(['@/components/operation/share_page/add_article_edit'],resolve)
             },
             {
               path: '/AddArticle',
               name: 'AddArticle',
-              component: AddArticle
+              component: resolve=>require(['@/components/operation/share_page/add_article'],resolve)
             },
             {
               path: '/AddRules',
               name: 'AddRules',
-              component: AddRules
+              component: resolve=>require(['@/components/operation/share_page/add.rules'],resolve)
             }
           ]
         },
         {
           path: '/SystemMain', // 系统设置 
-          component: SystemMain,
+          component: resolve=>require(['@/components/system/system_main'],resolve),
           children:[
             {
               path: '/SystemMain',
-              component: SysBase
+              component: resolve=>require(['@/components/system/system_main'],resolve)
             },
             {
-              path: '/SysSms',
-              component: SysSms
+              path: '/SysSms', // 系统短信配置
+              component: resolve=>require(['@/components/system/sys_sms'],resolve)
             },
             {
-              path: '/LiveList',
-              component: LiveList
+              path: '/LiveList',// 系统直播配置
+              component: resolve=>require(['@/components/system/live_list'],resolve)
             },
             {
               path: '/LiveAdd',
-              component: LiveAdd
+              component: resolve=>require(['@/components/system/live_add'],resolve)
             },
             {
               path: '/LiveEdit/:id',
-              component: LiveEdit
+              component: resolve=>require(['@/components/system/live_edit'],resolve)
             },
             {
               path: '/RoleList',
-              component: RoleList
+              component: resolve=>require(['@/components/menber/role_list'],resolve)
             },
             {
               path: '/RoleAdd',
-              component: RoleAdd
+              component: resolve=>require(['@/components/menber/role_add'],resolve)
             },
             {
               path: '/RoleEdit/:id',
-              component: RoleEdit
+              component: resolve=>require(['@/components/menber/role_edit'],resolve)
             },
           ]
         },
     
         {
           path: '/ClassMain',// 学生课表 
-          component: ClassMain,
+          component: resolve=>require(['@/components/students/ClassMain'],resolve),
           children: [
             {
               path: '/',
-              component: StudentClass
+              component:resolve=>require(['@/components/students/StudentClass'],resolve)
             },
           ]
         },
 
         {
           path: '/StudentMoneyMain', // 学生充值记录
-          component: StudentMoneyMain,
+          component: resolve=>require(['@/components/students/StudentMoneyMain'],resolve),
           children:[
             {
               path:'/VirtualMonney',
-              component:VirtualMonney
+              component:resolve=>require(['@/components/students/VirtualMonney'],resolve)
             },
             {
               path:'/NewMoney',
-              component:NewMoney
+              component:resolve=>require(['@/components/students/NewMoney'],resolve)
             },
             {
               path:'/LearningMoney',
-              component:LearningMoney
+              component:resolve=>require(['@/components/students/LearningMoney'],resolve)
             }
           ]
         },

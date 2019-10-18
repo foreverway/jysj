@@ -8,17 +8,6 @@
       @change="getdata"
       style="width:300px"
     ></el-input>
-
-    <!-- <el-date-picker
-     value-format="yyyy-MM-dd HH:mm:ss"
-      v-model="value2"
-      type="datetimerange"
-      :picker-options="pickerOptions"
-      range-separator="至"
-      start-placeholder="开始日期"
-      end-placeholder="结束日期"
-      align="right"
-    ></el-date-picker> -->
            <el-date-picker
           style="margin-left:60px"
           v-model="form.start_time"
@@ -42,14 +31,13 @@
       <el-button type="primary"  style="float:right;background-color:#e6563a; border:none;">新建销售情况列表</el-button>
     </router-link>
 
-    <el-table :data="tableData" :header-cell-style="{background:'#f4f4f4'}" style="margin-top:20px">
+    <el-table :data="tableData" border :header-cell-style="{background:'#f4f4f4'}" style="margin-top:20px">
       <el-table-column label="序号" type="index" :index="indexMethod"></el-table-column>
-      <el-table-column prop="dtime" label="日期"></el-table-column>
+      <el-table-column prop="dtime" width="160px" label="日期"></el-table-column>
       <el-table-column prop="week" label="周次"></el-table-column>
       <el-table-column prop="follow_man" label="跟进人"></el-table-column>
       <el-table-column prop="team" label="	所属战队"></el-table-column>
       <el-table-column prop="team_leader" label="战队负责人"></el-table-column>
-      <el-table-column prop="consultant" label="顾问"></el-table-column>
       <el-table-column prop="data_number" label="编号"></el-table-column>
       <el-table-column prop="data_student_name" label="学生姓名"></el-table-column>
       <el-table-column prop="data_tag" label="数据标签"></el-table-column>
@@ -240,18 +228,15 @@ export default {
       this.$router.push({ path: "/login" });
     },
     getdata() {
-      console.log(this.form)
         this.parms.admin_id=this.getdataCookie("admin_id")
         let new_arr =[]
       this.$apis.common
         .salepro_list(this.parms)
         .then(res => {
           if (res.data.code == 1) {
-            // console.log(res.data.data);
             this.msg = res.data;
             if(this.form.end_time==null&&this.form.start_time==null){
          this.tableData = res.data.data.list;
-         console.log(this.tableData)
             }else{
               if(this.form.end_time!==null){
  new_arr=res.data.data.list.filter(item=>item.dtime<this.form.end_time)

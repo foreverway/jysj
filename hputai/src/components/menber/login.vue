@@ -152,7 +152,6 @@ export default {
 
           open1() {
     const h = this.$createElement;
-    console.log(this.peopleInfo.admin_name)
         this.$notify({
           title:'今天也有好心情吗?',
           duration:6000,

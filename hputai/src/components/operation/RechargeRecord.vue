@@ -2,11 +2,11 @@
   <div class="main" title="充值记录单">
     <h3>充值记录单</h3>
     <div class="so_main_left">
-      <el-form :inline="true" :model="form" label-width="90px">
-        <el-form-item label="学生姓名：">
+      <el-form :inline="true" :model="form" label-width="90px" >
+        <el-form-item label="学生姓名：" >
           <el-input
             clearable
-            style="width:180px"
+            style="width:150px"
             class="so_input"
             v-model="form.search"
             @input="getadata"
@@ -16,7 +16,7 @@
         <el-form-item label="实收人：">
           <el-select
             clearable
-            style="width:180px"
+            style="width:150px"
             class="so_input"
             v-model="form.in_people"
             filterable
@@ -29,7 +29,7 @@
         <el-form-item label="顾问1：">
           <el-select
             clearable
-            style="width:180px"
+            style="width:150px"
             v-model="form.consultant1"
             filterable
             placeholder="搜索选择"
@@ -47,7 +47,7 @@
         <el-form-item label="班主任：">
           <el-select
             clearable
-            style="width:180px"
+            style="width:150px"
             v-model="form.teacher"
             filterable
             placeholder="搜索选择"
@@ -61,7 +61,6 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <br />
         <el-form-item label="进线项目："  v-if="base_selct">
           <el-select
             clearable
@@ -155,7 +154,6 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <br />
         <el-form-item label="审核状态：">
           <el-select
             clearable

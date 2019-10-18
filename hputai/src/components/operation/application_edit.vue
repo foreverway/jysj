@@ -199,6 +199,8 @@ import { mapState } from 'vuex'
       options_: [], //总数据的数据
       radio: "1", //上课地点的选择
       editableTabs_1: [],
+      pushArray1: [], //线上数组
+      pushArray2: [], //线下数组
       editableTabs: [
         //新增的内容的数据数组(学生)
       ],
@@ -273,9 +275,9 @@ import { mapState } from 'vuex'
   mounted() {},
   methods: {
     //生成学员编号
-
     deleteTest_1() {
       this.editableTabs_1.pop(this.editableTabs_1);
+      this.form.value=''
     },
     deleteTest() {
       this.editableTabs.pop(this.tabIndex);
@@ -294,6 +296,7 @@ import { mapState } from 'vuex'
           this.form.title = this.edit_data.title;
           this.form.feedback = this.edit_data.remarks;
           this.form.valueDate = res.data.data.expiry_date;
+          this.form.redio=this.edit_data.course_address;
           this.form2.need_one = this.edit_data.needs_data.need_one;
           this.form2.need_two = this.edit_data.needs_data.need_two;
           this.form2.need_three = this.edit_data.needs_data.need_three;
@@ -320,10 +323,8 @@ import { mapState } from 'vuex'
               for (let j = 0; j < val.children.length; j++) { //对子元素进行遍历
                 var val1 = val.children[j];
                 if(val1.children){  //如果子元素有子元素
-               //let children =[]
                     for (let g = 0; g < val1.children.length; g++) { //对子元素进行遍历
                     var val2 = val1.children[g];
-                    //console.log(val2)
                     children.push({
                         value: val1.subject_name,
                         label: val1.subject_name,
@@ -350,7 +351,6 @@ import { mapState } from 'vuex'
               });
                 }
               }
-
             } else {
               this.options.push({
                 value: val.subject_name,
@@ -358,38 +358,8 @@ import { mapState } from 'vuex'
               });
             }
           }
-          //console.log(this.options)
         }
       });
-      // this.$apis.common.subject_list(parms).then(res => {
-      //   if (res.data.code == 1) {
-      //     this.msg = res.data;
-      //     this.options_ = res.data.data;
-      //     for (let i = 0; i < this.options_.length; i++) {
-      //       var val = this.options_[i];
-      //       var children = [];
-      //       if (val.children) {
-      //         for (let j = 0; j < val.children.length; j++) {
-      //           var val1 = val.children[j];
-      //           children.push({
-      //             value: val1.subject_name,
-      //             label: val1.subject_name
-      //           });
-      //         }
-      //         this.options.push({
-      //           value: val.subject_name,
-      //           label: val.subject_name,
-      //           children: children
-      //         });
-      //       } else {
-      //         this.options.push({
-      //           value: val.subject_name,
-      //           label: val.subject_name
-      //         });
-      //       }
-      //     }
-      //   }
-      // });
     },
     createStudent() {},
     //获取学生列表
@@ -412,7 +382,10 @@ import { mapState } from 'vuex'
           : targetName.length == 2
           ? targetName[1]
           : targetName[2];
-
+     let ifCheck=this.editableTabs_1.filter(res=>{
+       return res.title==lastName.toString()
+      })
+      if(ifCheck.length==0){
       const result = [];
       let getNeed = arr => {
         arr.forEach(v => {
@@ -431,9 +404,7 @@ import { mapState } from 'vuex'
       var needArr = result.find((res, index, arr) => {
         return (res.label = lastName);
       });
-      console.log(needArr)
-      if (this.form.radio == 1) {
-        this.editableTabs_1.push({
+        this.pushArray1.push({
           subject_name: needArr.label,
           subject_id: needArr.id, //科目id
           classhour: "",
@@ -443,8 +414,7 @@ import { mapState } from 'vuex'
           is_one: 1, //一对一？
           is_group: 0 //自主班课?
         });
-      } else {
-        this.editableTabs_1.push({
+        this.pushArray2.push({
           subject_name: needArr.label,
           subject_id: needArr.id, //科目id
           classhour: "",
@@ -454,6 +424,29 @@ import { mapState } from 'vuex'
           is_one: 1, //一对一？
           is_group: 0 //自主班课?
         });
+             if (this.form.radio == 1) {
+        this.editableTabs_1 = this.pushArray1;
+      } else {
+        this.editableTabs_1 = this.pushArray2;
+      } 
+            }else{
+        this.$message({
+          type:'warning',
+          message:"不可以重复选课"
+        })
+      }
+    },
+            whereGo(a) {
+      if (a == "2") {
+        this.show = true;
+        this.address_check = this.region_list;
+      } else {
+        this.show = false;
+      }
+      if (this.form.radio == 1) {
+        this.editableTabs_1 = this.pushArray1;
+      } else {
+        this.editableTabs_1 = this.pushArray2;
       }
     },
     //学生姓名选择产生的变化
@@ -490,11 +483,10 @@ import { mapState } from 'vuex'
         need_five: this.form2.need_five,
         app_id: this.$route.query.id,
         students_data: [],
-        subjects_data: []
+        subjects_data: [],
       };
       this.parms.subjects_data = this.subjects_data;
       this.parms.students_data = this.students_data;
-      console.log(this.parms);
       this.$apis.common.application_edit_put(this.parms).then(res => {
         if (res.data.code == 1) {
           this.$message({
@@ -554,7 +546,6 @@ import { mapState } from 'vuex'
         need_five: this.form2.need_five,
             app_id: this.$route.query.id
           };
-
           this.parms.subjects_data = this.subjects_data;
           this.parms.students_data = this.students_data;
           console.log(this.parms);
@@ -594,14 +585,7 @@ import { mapState } from 'vuex'
       this.active--;
 
     },
-        whereGo(a) {
-      if (a == "2") {
-        this.show = true;
-        this.address_check = this.region_list;
-      } else {
-        this.show = false;
-      }
-    },
+
     goBack() {
       history.back(-1);
     }, // 复制链接
@@ -700,6 +684,12 @@ option {
   justify-content: space-around;
   align-items: center;
   font-size: 25px;
+}
+select {
+  border: none;
+  width: 80%;
+  height: 40px;
+  text-align: center;
 }
 </style>
 

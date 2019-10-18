@@ -270,6 +270,7 @@ export default {
           message:'成功',
           type:"success"
         })
+        this.getadata();
              this.centerDialogVisible_normal = false
         }
       })
@@ -292,6 +293,7 @@ export default {
         })
        this.$apis.common.attendance_add(this.unnormalData).then(res=>{
         if(res.data.code==1){
+          this.getadata();
              this.centerDialogVisible_unnormal = false
         }
       })
@@ -327,6 +329,7 @@ export default {
             type: 'success',
             message: '转结成功!'
           });
+          this.getadata()
         }
       })
 

@@ -12,7 +12,9 @@
                 <i class="el-icon-caret-bottom el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item class="clearfix">设置</el-dropdown-item>
+                <el-dropdown-item class="clearfix">
+                  <span @click="dialogVisible = true">设置</span>
+                </el-dropdown-item>
                 <el-dropdown-item class="clearfix">
                   <span @click="delCookie('usertoken')">退出</span>
                 </el-dropdown-item>
@@ -20,6 +22,17 @@
             </el-dropdown>
           </div>
         </div>
+            <el-dialog
+  title="提示"
+  :visible.sync="dialogVisible"
+  width="30%"
+  :before-close="handleClose">
+  <span>这是一段信息</span>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+  </span>
+</el-dialog>
       </el-header>
       <div class="left">
         <el-aside width="195px" style="   overflow-x:hidden; background-color: rgb(238, 241, 246)">
@@ -65,6 +78,7 @@
         </el-main>
       </div>
     </el-container>
+
   </div>
 </template>
 
@@ -79,7 +93,8 @@ export default {
       admin_name: "",
       defaultUrl: "/",
       peopleInfo: {},
-      seeHeight: document.body.scrollHeight
+      seeHeight: document.body.scrollHeight,
+              dialogVisible: false
     };
   },
   created() {
@@ -142,7 +157,7 @@ export default {
   methods: {
     selectMenu(index, indexPath) {
       console.log(this.defaultUrl);
-      console.log(document.body.scrollHeight);
+      //console.log(document.body.scrollHeight);
       //实现点击子菜单父菜单出现
       var menuList = $(".changeC");
       for (let y = 0; y < menuList.length; y++) {

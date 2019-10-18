@@ -85,7 +85,7 @@
               <option label="是" value="1"></option>
             </select>
           </p>
-          <p @click=" deleteTest_1" style="cursor:pointer;">撤销</p>
+          <p @click=" deleteTest_1" style="cursor:pointer;color:white;background-color:#e6563a;">撤销</p>
         </div>
       </el-form-item>
       <el-form-item label="学生姓名" prop="value_1">
@@ -299,6 +299,8 @@ export default {
       options_: [], //总数据的数据
 
       editableTabs_1: [],
+      pushArray1: [], //线上数组
+      pushArray2: [], //线下数组
       editableTabs: [
         //新增的内容的数据数组(学生)
       ],
@@ -331,6 +333,11 @@ export default {
       } else {
         this.show = false;
       }
+      if (this.form.radio == 1) {
+        this.editableTabs_1 = this.pushArray1;
+      } else {
+        this.editableTabs_1 = this.pushArray2;
+      }
     },
     //生成学员编号
     writeCurrentDate() {
@@ -362,6 +369,7 @@ export default {
     },
     deleteTest_1() {
       this.editableTabs_1.pop(this.editableTabs_1);
+      this.form.value=''
     },
     deleteTest() {
       this.editableTabs.pop(this.tabIndex);
@@ -462,7 +470,10 @@ export default {
           : targetName.length == 2
           ? targetName[1]
           : targetName[2];
-
+      let ifCheck=this.editableTabs_1.filter(res=>{
+       return res.title==lastName.toString()
+      })
+      if(ifCheck.length==0){
       const result = [];
       let getNeed = arr => {
         arr.forEach(v => {
@@ -479,31 +490,40 @@ export default {
       };
       getNeed(this.options_); //多维数组简化为二维数组(可以使用find，indexOf。findIndex查找返回)
       var needArr = result.find((res, index, arr) => {
-        return (res.label == lastName);
+        return res.label == lastName;
+      });
+      this.pushArray1.push({
+        title: needArr.label,
+        subject_id: needArr.id, //科目id
+        classhour: "",
+        price: needArr.online_price,
+        course_type: 0, //课程类型
+        course_id: 0, //班课
+        is_one: 1, //一对一？
+        is_group: 0 //自主班课?
+      });
+      this.pushArray2.push({
+        title: needArr.label,
+        subject_id: needArr.id, //科目id
+        classhour: "",
+        price: needArr.offline_price,
+        course_type: 0, //课程类型
+        course_id: 0, //班课
+        is_one: 1, //一对一？
+        is_group: 0 //自主班课?
       });
       if (this.form.radio == 1) {
-        this.editableTabs_1.push({
-          title: needArr.label,
-          subject_id: needArr.id, //科目id
-          classhour: "",
-          price: needArr.online_price,
-          course_type: 0, //课程类型
-          course_id: 0, //班课
-          is_one: 1, //一对一？
-          is_group: 0 //自主班课?
-        });
+        this.editableTabs_1 = this.pushArray1;
       } else {
-        this.editableTabs_1.push({
-          title: needArr.label,
-          subject_id: needArr.id, //科目id
-          classhour: "",
-          price: needArr.offline_price,
-          course_type: 0, //课程类型
-          course_id: 0, //班课
-          is_one: 1, //一对一？
-          is_group: 0 //自主班课?
-        });
+        this.editableTabs_1 = this.pushArray2;
       }
+      }else{
+        this.$message({
+          type:'warning',
+          message:"不可以重复选课"
+        })
+      }
+
     },
     //学生姓名选择产生的变化
     handleChange(targetName) {
@@ -541,7 +561,6 @@ export default {
 
           parms.subjects_data = this.subjects_data;
           parms.students_data = this.students_data;
-          console.log(parms);
           this.$apis.common.application_add(parms).then(res => {
             if (res.data.code == 1) {
               this.$message({
@@ -604,7 +623,7 @@ export default {
 
               this.parms.subjects_data = this.subjects_data;
               this.parms.students_data = this.students_data;
-              console.log(this.parms);
+             // console.log(this.parms);
               this.$apis.common.application_edit_put(this.parms).then(res => {
                 if (res.data.code == 1) {
                   this.$message({
@@ -670,6 +689,12 @@ export default {
 };
 </script>
 <style scoped>
+select {
+  border: none;
+  width: 80%;
+  height: 40px;
+  text-align: center;
+}
 .main_head {
   margin: auto;
   width: 96%;
@@ -677,16 +702,10 @@ export default {
   font-size: 22px;
   font-weight: 900;
   margin: 0 2%;
-  /* line-height: 30px; */
 }
-/* *{
-       padding:0;
-       margin:0;
-     } */
+
 option {
-  /* height: 100%;
-       width:100%; */
-  /* appearance: none;   */
+
   border: none;
   font-size: 16px;
 }
