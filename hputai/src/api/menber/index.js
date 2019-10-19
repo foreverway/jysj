@@ -7,6 +7,14 @@ export default {
    let url='/api/api_admin_login'
    return shuju.postdata(url,params)
   },
+  admin_base(params){  //获取个人基本信息
+    let url='/api/api_admin_base'
+    return shuju.getdata(url,params)
+  },
+  admin_base_put(params){  //编辑保存个人基本信息接口
+    let url='/api/api_admin_base'
+    return shuju.putdata(url,params)
+  },
   // 忘记密码 /api_change_pass
   change_pass (params) {
     let url='/api/api_change_pass'

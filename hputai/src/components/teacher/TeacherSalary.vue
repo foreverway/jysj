@@ -5,14 +5,15 @@
        <el-input
         class="so_input"
         v-model="params.search"
-        @input="getadata"
+        @change="getadata"
         clearable
+        style="width:200px;" 
         placeholder="搜索教师名称，授课科目"
       ></el-input>
     </div>
     <span></span>
             <el-date-picker
-          style="margin-left:60px"
+          style="margin-left:20px"
           v-model="params.start_time"
           @change="getadata"
           type="datetime"
@@ -25,11 +26,12 @@
           v-model="params.end_time"
           type="datetime" 
           clearable
+          filterable
           value-format="yyyy-MM-dd H:mm:ss"
           placeholder="选择日期时间"
         ></el-date-picker>
-            <el-select clearable v-model="params.search" @input="getadata" placeholder="选择教师">
-      <el-option v-for="item in teacher_data" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            <el-select clearable v-model="params.teacher_id" filterable  @input="getadata" placeholder="选择教师">
+      <el-option v-for="item in teacher_data" :key="item.id" :label="item.teacher_name" :value="item.id"></el-option>
     </el-select> 
     <el-button type="primary" @click="getadata">搜索</el-button>
     <!-- 表格数据 -->
@@ -78,7 +80,6 @@ export default {
     return {
       msg: "",
       tableData: [],
-      teacher_data:[],
       params: {
         teacher_id: "",
         subject_id: "",
@@ -93,7 +94,7 @@ export default {
     this.$apis.students.getuilcode();
     this.getadata();
   },
-  computed:mapState['teacher_data'],
+  computed:mapState(['teacher_data']),
   methods: {
     //序号排列
     indexMethod(index) {
@@ -104,7 +105,6 @@ export default {
         return index + page;
       }
     },
-
     current(num) {
       //当前页数
       this.params.page = num;
@@ -113,6 +113,7 @@ export default {
     next() {
       this.params.page++;
       this.getadata();
+      console.log(this.teacher_data)
     },
     prev() {
       //上一页
@@ -122,16 +123,14 @@ export default {
       }
     },
     toAssess(a) {
-      console.log(a);
     },
 
     getadata() {
       this.$apis.teacher.teacher_list(this.params).then(res => {
-                //console.log(res)
-
+          if(res.data.code==1){
         this.msg = res.data;
         this.tableData = res.data.data.list;
-       // console.log(this.tableData)
+          }
       });
     }
   }

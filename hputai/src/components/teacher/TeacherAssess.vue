@@ -113,7 +113,7 @@ export default {
       }
     },
     toAssess(a) {
-      this.$router.push({ path: "./ToAssessTeacher", query: { id: a.teacher_id ,eval_status:a.eval_status} });
+      this.$router.push({ path: "./ToAssessTeacher", query: { id: a.teacher_id ,eval_status:a.eval_status,name:a.teacher_name} });
     },
 
     getadata() {

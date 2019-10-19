@@ -38,7 +38,6 @@ const store = new Vuex.Store({
     },
     get_teacher_data(state, all_goods) { //获取讲师列表
       state.teacher_data = all_goods
-      //console.log(all_goods)
     },
     get_zhujiao_data(state, all_goods) { //获取助教列表
       state.zhujiao_data = all_goods
@@ -75,7 +74,10 @@ const store = new Vuex.Store({
       shuju.getdata(url, {
         params
       }).then(res => {
-        commit("get_live_list", res.data.data);
+        if(res){
+          commit("get_live_list", res.data.data);
+
+        }
       })
     },
     get_mune_list({
@@ -85,7 +87,10 @@ const store = new Vuex.Store({
       params
     }) {
       shuju.getdata(url, params).then(res => {
-        commit("get_mune_list", res.data.data);
+        if(res){
+          commit("get_mune_list", res.data.data);
+
+        }
       })
     },
     get_banzhuren_list({

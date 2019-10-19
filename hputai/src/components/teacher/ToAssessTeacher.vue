@@ -1,6 +1,6 @@
 <template>
     <div>
-      <div class="head_word">教师评价</div>
+      <div class="head_word"><span style="color:#e6563a;">{{this.$route.query.name}}</span>教师评价</div>
 <el-form :model="form" :hide-required-asterisk='true' :label-position="labelPosition" :rules="rules" ref="form"  label-width="100px" class="demo-ruleForm">
   <el-form-item label="对老师评价" prop="contents">
     <el-input class="aa" type="textarea" width="200px" placeholder="内容可为：备课情况、教学态度、课堂互动、授课风格、教学设计、课后反馈及作业" v-model="form.contents"></el-input>

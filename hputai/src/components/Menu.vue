@@ -5,15 +5,15 @@
         <div class="header">
           <img href="#top" src="../assets/logo.png" height="50" alt style="padding:5px;float:left;" />
           <div class="users" style="width:180px;">
-            <el-dropdown trigger="click">
+            <el-dropdown trigger="click" class="forChoose">
               <span class="el-dropdown-link">
-                <img src="../assets/touxiang.png" alt class="touxiang" />
-                <span style="display:inline-block;width:88px;">{{this.getdataCookie("admin_name")}}</span>
+                <img :src='form.admin_head' alt class="touxiang" />
+                <span class="youName" >{{this.getdataCookie("admin_name")}}</span>
                 <i class="el-icon-caret-bottom el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item class="clearfix">
-                  <span @click="dialogVisible = true">设置</span>
+                  <div @click="dialogVisible = true">设置</div>
                 </el-dropdown-item>
                 <el-dropdown-item class="clearfix">
                   <span @click="delCookie('usertoken')">退出</span>
@@ -22,17 +22,76 @@
             </el-dropdown>
           </div>
         </div>
-            <el-dialog
-  title="提示"
-  :visible.sync="dialogVisible"
-  width="30%"
-  :before-close="handleClose">
-  <span>这是一段信息</span>
-  <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-  </span>
-</el-dialog>
+        <el-dialog title="我的基本信息" :visible.sync="dialogVisible" center width="600px">
+          <el-form ref="form" :model="form" status-icon :rules="rules" label-width="80px">
+            <el-form-item label="我的角色">
+              <!-- // <el-input v-model="form.role_name" style="width:200px;margin:0 15px;"></el-input> -->
+              <span class="selfSet">{{form.role_name}}</span>
+            </el-form-item>
+            <el-form-item label="更换头像">
+              <el-upload
+                class="upload-demo"
+                ref="upload"
+                action
+                :on-change="handlePreview"
+                :file-list="form.admin_head"
+                :auto-upload="false"
+              >
+                <el-avatar
+                  :size="15"
+                  style="margin:0 20px;"
+                  src="https://empty"
+                  @error="errorHandler"
+                >
+                  <img :src="form.admin_head" class="touxiang_edit" style />
+                </el-avatar>
+                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+              </el-upload>
+            </el-form-item>
+            <el-form-item label="名称">
+              <el-input v-model="form.admin_name" style="width:200px;margin:0 15px;"></el-input>
+            </el-form-item>
+            <el-form-item label="手机号">
+              <el-input v-model="form.admin_tel" style="width:200px;margin:0 15px;"></el-input>
+            </el-form-item>
+            <el-form-item label="微信号">
+              <el-input v-model="form.admin_weixin" style="width:200px;margin:0 15px;"></el-input>
+            </el-form-item>
+            <el-form-item label="QQ号">
+              <el-input v-model="form.admin_qq" style="width:200px;margin:0 15px;"></el-input>
+            </el-form-item>
+            <el-form-item
+              label="邮箱"
+              prop="admin_email"
+              :rules="[
+      { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+      { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+    ]"
+            >
+              <el-input v-model="form.admin_email" style="width:200px;margin:0 15px;"></el-input>
+            </el-form-item>
+            <el-form-item label="修改密码" prop="admin_pass">
+              <el-input
+                v-model="form.admin_pass"
+                type="password"
+                autocomplete="off"
+                style="width:200px;margin:0 15px;"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="确认密码" prop="admin_pass_sure">
+              <el-input
+                v-model="form.admin_pass_sure"
+                type="password"
+                autocomplete="off"
+                style="width:200px;margin:0 15px;"
+              ></el-input>
+            </el-form-item>
+          </el-form>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="submitForm('form')">确 定</el-button>
+          </span>
+        </el-dialog>
       </el-header>
       <div class="left">
         <el-aside width="195px" style="   overflow-x:hidden; background-color: rgb(238, 241, 246)">
@@ -46,7 +105,7 @@
             active-text-color="#fff"
             @select="selectMenu"
             style="  overflow-x:hidden;"
-            open="0"
+            :default-openeds="openeds"
           >
             <el-menu-item index="/">
               <i class="el-icon-s-home"></i>
@@ -54,7 +113,12 @@
             </el-menu-item>
             <span v-for="(item,index) in rolemenu" :key="index">
               <!-- 刷新出首层菜单名字 style="pointer-events: none;" -->
-              <el-submenu index="index" ref="getThis" id="click_1" style="pointer-events: none;">
+              <el-submenu
+                :index="index.toString()"
+                ref="getThis"
+                id="click_1"
+                style="pointer-events: none;"
+              >
                 <template slot="title">
                   <i :class="item.menu_icon"></i>
                   <span slot="title" class="changeC">{{item.menu_name}}</span>
@@ -78,23 +142,49 @@
         </el-main>
       </div>
     </el-container>
-
   </div>
 </template>
 
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
 export default {
+     inject:['reload'],//在export default下面加上这一段
   data() {
+    var validatePass = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入密码"));
+      } else {
+        if (this.form.admin_pass_sure !== "") {
+          this.$refs.form.validateField("admin_pass_sure");
+        }
+        callback();
+      }
+    };
+    var validatePass2 = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请再次输入密码"));
+      } else if (value !== this.form.admin_pass) {
+        callback(new Error("两次输入密码不一致!"));
+      } else {
+        callback();
+      }
+    };
     return {
       isCollapse: true,
-      // ActiveMenu: this.$route.path,
-      //  rolemenu:'',  菜单列表
       admin_name: "",
       defaultUrl: "/",
       peopleInfo: {},
       seeHeight: document.body.scrollHeight,
-              dialogVisible: false
+      dialogVisible: false,
+      openeds: ["0", "1", "2", "3", "4", "5"],
+      form: {
+        admin_head: "",
+        admin_email: ""
+      }, //个人信息
+      rules: {
+        admin_pass: [{ validator: validatePass, trigger: "blur" }],
+        admin_pass_sure: [{ validator: validatePass2, trigger: "blur" }]
+      }
     };
   },
   created() {
@@ -140,23 +230,59 @@ export default {
     "jiaowu_data",
     "region_list"
   ]),
+  updated() {
+    if (window.location.href.split("/#")[1] !== "login") {
+      sessionStorage.setItem("url", window.location.href.split("/#")[1]);
+    }
+    this.defaultUrl = sessionStorage.getItem("url");
+  },
   mounted() {
     //在login页就报错  说明在那时就执行
-
-    var iconI = $(".el-icon-arrow-down");
-    var menuC = $(".el-submenu__title");
-    $(menuC)[0].click();
-    console.log($(menuC)[0]);
-    console.log(this.$refs.this)
-    for (let i = 0; i < iconI.length; i++) {
-      var addAttr = $(iconI)[i];
-      $(addAttr).attr("class", "");
-    }
-    this.defaultUrl = window.location.href.split("/#")[1];
+    // var iconI = $(".el-icon-arrow-down");
+    // var menuC = $(".el-submenu__title");
+    // $(menuC)[0].click();
+    // for (let i = 0; i < iconI.length; i++) {
+    //   var addAttr = $(iconI)[i];
+    //   $(addAttr).attr("class", "");
+    // }
   },
   methods: {
+            //调用App.vue下的this.reload()方法，来改变v-if的状态
+        clickDiv(){//刷新按钮调用的方法
+          this.reload()
+        },
+    handlePreview(file) {
+      let reader = new FileReader();
+      reader.readAsDataURL(file.raw);
+      reader.onload = () => {
+        let _base64 = reader.result;
+        let ba = _base64.split(",");
+        this.form.admin_head = _base64;
+      };
+    },
+    errorHandler() {
+      //没有头像时候的回调
+      return true;
+    },
+    submitForm(form) {
+      this.$refs[form].validate(valid => {
+        if (valid) {
+          this.dialogVisible = false;
+          this.$apis.menber.admin_base_put(this.form).then(res => {
+            if (res.data.data == 1) {
+              this.$message({
+                type: "success",
+                message: res.data.msg
+              });
+            }
+          });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
     selectMenu(index, indexPath) {
-      console.log(this.defaultUrl);
       //console.log(document.body.scrollHeight);
       //实现点击子菜单父菜单出现
       var menuList = $(".changeC");
@@ -221,6 +347,7 @@ export default {
             document.cookie =
               name + "=" + cval + ";expires=" + exp.toGMTString();
             this.$message({ message: "用户已退出", type: "success" });
+            sessionStorage.setItem("url", "");
             this.$router.push({ path: "/login" });
           } else {
             this.$message.error("退出失败");
@@ -255,28 +382,38 @@ export default {
         search: this.getdataCookie("admin_name")
       };
       this.$apis.menber.admin_list(params).then(res => {
-        this.peopleInfo = res.data.data.list[0];
+        if (res && res.data.code == 1) {
+          this.peopleInfo = res.data.data.list[0];
+        }
+      }); //用户打招呼用语
+      this.$apis.menber.admin_base(params).then(res => {
+        if (res && res.data.code == 1) {
+          this.form = res.data.data; //获取编辑使用用户信息
+        }
       });
     }
-
-    // getmune(){
-    //   let parms={
-    //     admin_id:this.getdataCookie('admin_id')
-    //   }
-    //   //获取列表之前，先获取用户的id用于后台返回数据
-    // this.$apis.common.menu_list(parms).then(res=>{
-    //   if(res.data.code==1){
-    //         this.rolemenu=res.data.data
-    //   }else{
-    //      this.$router.push({path:'/login'})
-    //   }
-    // })
-    // },
   }
 };
 </script>
   
 <style scoped>
+.forChoose /deep/ .el-dropdown-menu__item{
+  width: 80px;
+    text-align: center;
+}
+.youName{
+display:inline-block;width:88px;
+font-weight:700;color:#FF8500;
+text-align: center;
+font-size:  17px;
+}
+#click_1 /deep/ .el-icon-arrow-down:before {
+  content: "";
+}
+.selfSet {
+  margin: 0 50px;
+  color: #ff755f;
+}
 .left {
   position: fixed;
   top: 0;
@@ -323,9 +460,23 @@ export default {
 .touxiang:hover {
   cursor: pointer;
 }
+.touxiang_edit {
+  display: inline-block;
+  vertical-align: middle;
+  float: left;
+  margin: 0 20px;
+  width: 40px;
+  height: 40px;
+  border: 1px solid white;
+  border-radius: 50%;
+}
 .touxiang {
   display: inline-block;
   vertical-align: middle;
+    width: 50px;
+  height: 50px;
+    border: 1px solid white;
+  border-radius: 50%;
   animation: run 8s linear 2s infinite;
 }
 @keyframes run {
