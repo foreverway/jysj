@@ -140,3 +140,8 @@ this.rolelist=res.data.data
     }
   }
 </script>
+<style >
+.ww{
+  font-style: italic;
+}
+</style>
