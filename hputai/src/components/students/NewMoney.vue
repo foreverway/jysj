@@ -73,7 +73,7 @@
   </el-table>
 <!-- <p style="margin-top:30px"><span>累计金额：</span><span style="color:red">{{msg.data.givenamount}}</span></p> -->
    <!-- <el-button type="primary" @click="ifinputselect" style="margin-top:20px">审核</el-button> -->
-
+<span v-if="msg.data">
 <el-pagination style="float:right;margin-top:20px;margin-bottom: 20px;"
   background
   layout="prev, pager, next"
@@ -83,6 +83,8 @@
    :page-size='10'
   :total="msg.data.count">
 </el-pagination>
+</span>
+
 
 </div>
  
@@ -92,7 +94,7 @@
   export default {
     data() {
       return {
-      tableData:'',
+      tableData:[],
        form:{ 
          search:'',//搜索学员姓名条件
          page:1,//页码

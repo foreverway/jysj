@@ -42,6 +42,9 @@
       <el-table-column label="状态" prop="eval_status"></el-table-column>
       <el-table-column align="center" label="操作" fixed="right">
         <template slot-scope="scope">
+          <!-- <router-link :to="{name:'ToAssessTeacher', params: {id: scope.row.teacher_id ,eval_status:scope.row.eval_status,name:scope.row.teacher_name}}">
+进行评价
+          </router-link> -->
           <el-button size="mini" type="success" @click="toAssess(scope.row)">进行评价</el-button>
         </template>
       </el-table-column>
@@ -113,7 +116,7 @@ export default {
       }
     },
     toAssess(a) {
-      this.$router.push({ path: "./ToAssessTeacher", query: { id: a.teacher_id ,eval_status:a.eval_status,name:a.teacher_name} });
+      this.$router.push({ name: "ToAssessTeacher", params: { id: a.teacher_id ,eval_status:a.eval_status,name:a.teacher_name} });
     },
 
     getadata() {

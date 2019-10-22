@@ -1,6 +1,6 @@
 <template>
     <div>
-      <div class="head_word"><span style="color:#e6563a;">{{this.$route.query.name}}</span>教师评价</div>
+      <div class="head_word"><span style="color:#e6563a;">{{this.$route.params.name}}</span>教师评价</div>
 <el-form :model="form" :hide-required-asterisk='true' :label-position="labelPosition" :rules="rules" ref="form"  label-width="100px" class="demo-ruleForm">
   <el-form-item label="对老师评价" prop="contents">
     <el-input class="aa" type="textarea" width="200px" placeholder="内容可为：备课情况、教学态度、课堂互动、授课风格、教学设计、课后反馈及作业" v-model="form.contents"></el-input>
@@ -35,7 +35,7 @@
                form:{
                    contents:'',
                    rate:5,
-                   teacher_id:this.$route.query.id
+                   teacher_id:this.$route.params.id
                },
                assessed:true, //你是否评价过
                assessList:'',
@@ -69,10 +69,10 @@
       this.$router.push({ path: "/login" });
     },
             getAssessList(){
-                     this.$apis.common.teacher_evaluation_get({teacher_id:this.$route.query.id}).then(res=>{
+                     this.$apis.common.teacher_evaluation_get({teacher_id:this.$route.params.id}).then(res=>{
                 if(res.data.code==1){
                     this.assessList=res.data.data
-                    if(this.$route.query.eval_status=='已评'){
+                    if(this.$route.params.eval_status=='已评'){
                       this.assessed=false
                     }
                     // //获取现在的用户名对比评论数据
@@ -102,6 +102,8 @@
                         message:"评价成功",
                         type:"success"
                     })
+                    this.form.contents=''
+                      this.getAssessList()
                 }else{
                      this.$message({
                         message:res.data.msg,

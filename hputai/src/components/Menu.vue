@@ -230,9 +230,14 @@ export default {
     "jiaowu_data",
     "region_list"
   ]),
-  updated() {
+  updated() {  //获取地址栏地址，如果#后面不是login就存入sessionStorage
+  var matchReg = /(?<=#\/).*?(?=\/)/;
     if (window.location.href.split("/#")[1] !== "login") {
       sessionStorage.setItem("url", window.location.href.split("/#")[1]);
+    }
+    if(window.location.href.match(matchReg)){
+      let twoUrl='/'+window.location.href.match(matchReg)[0]
+sessionStorage.setItem("url",twoUrl);
     }
     this.defaultUrl = sessionStorage.getItem("url");
   },
@@ -284,7 +289,7 @@ export default {
     },
     selectMenu(index, indexPath) {
       //console.log(document.body.scrollHeight);
-      //实现点击子菜单父菜单出现
+      //实现点击子菜单父菜单变化
       var menuList = $(".changeC");
       for (let y = 0; y < menuList.length; y++) {
         $(menuList[y]).attr("id", "");
@@ -405,7 +410,7 @@ export default {
 display:inline-block;width:88px;
 font-weight:700;color:#FF8500;
 text-align: center;
-font-size:  17px;
+font-size:  16px;
 }
 #click_1 /deep/ .el-icon-arrow-down:before {
   content: "";

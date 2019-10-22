@@ -14,7 +14,7 @@
             @select="handleSelect"
           >
             <el-menu-item index="1">
-              <router-link to="/ShareStatistical">
+              <router-link :to="{name:'ShareStatistical'}">
                 <span
                   index="1"
                   class="_span"
@@ -23,7 +23,7 @@
               </router-link>
             </el-menu-item>
             <el-menu-item index="2">
-              <router-link to="/ShareList">
+              <router-link :to="{name:'ShareList'}">
                 <span
                   index="2"
                   class="_span"
@@ -33,7 +33,7 @@
             </el-menu-item>
             <!-- <el-menu-item index v-if="isShowConfig==1"> -->
             <el-menu-item index="3">
-              <router-link to="/ShareArticleConfig">
+              <router-link :to="{name:'ShareArticleConfig'}">
                 <span
                   index="2"
                   class="_span"
@@ -64,7 +64,7 @@ export default {
     };
   },
   created() {
-    this.$common.getuilcode();
+    //this.$common.getuilcode();
     this.admin_name = this.getdataCookie("admin_name");
     this.admin_name = this.getdataCookie("admin_uid");
     this.getdata();

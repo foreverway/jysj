@@ -5,6 +5,7 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 export default new Router({
+  //以“/”开头的嵌套路径会被当作根路径，所以子路由上不用加“/”;在生成路由时，主路由上的path会被自动添加到子路由之前，所以子路由上的path不用在重新声明主路由上的path了
   routes: [
     {
       path: '/login',
@@ -61,8 +62,17 @@ export default new Router({
         },
         {
           path: '/TeacherAssess',//TeacherAssess  老师评价
-          component:resolve=>require(['@/components/teacher/TeacherAssess'],resolve)
+          component:resolve=>require(['@/components/teacher/TeacherAssess'],resolve),
+          // children:[
+ 
+          // ]
         },
+        {
+          // path: '/ToAssessTeacher/:id',//ToAssessTeacher  [评价老师]
+           path: '/TeacherAssess/ToAssessTeacher',
+           name:"ToAssessTeacher",
+           component: resolve=>require(['@/components/teacher/ToAssessTeacher'],resolve)
+         },
         {
           path: '/TeacherList',//TeacherList  老师列表
           component: resolve=>require(['@/components/teacher/TeacherList'],resolve)
@@ -71,12 +81,7 @@ export default new Router({
           path: '/TeacherData',//TeacherData  老师列表
           component: resolve=>require(['@/components/teacher/TeacherData'],resolve)
         },
-        {
-         // path: '/ToAssessTeacher/:id',//ToAssessTeacher  [评价老师]
-          path: '/ToAssessTeacher',//ToAssessTeacher  [评价老师]
-          name:"ToAssessTeacher",
-          component: resolve=>require(['@/components/teacher/ToAssessTeacher'],resolve)
-        },
+
         {
            path: '/TeacherSalary',//TeacherSalary  [教师课酬列表数据接口]
            name:"TeacherSalary",
@@ -99,7 +104,7 @@ export default new Router({
           component: resolve=>require(['@/components/students/students_add'],resolve)
         },
         {
-          path: '/SalelistEdit',  //
+          path: '/SalesList/SalelistEdit',  //
           component: resolve=>require(['@/components/operation/salelist_edit.vue'],resolve)
         },
         {
@@ -149,7 +154,7 @@ export default new Router({
           component: resolve=>require(['@/components/operation/Share'],resolve),
           children: [
             {
-              path: '/',
+              path: '/Share',
               component: resolve=>require(['@/components/operation/share_page/share_statistical'],resolve)
             },
             {
@@ -161,12 +166,12 @@ export default new Router({
               component: resolve=>require(['@/components/operation/share_page/share_rules'],resolve)
             },
             {
-              path: '/ShareArticleConfig',
+              path: 'ShareArticleConfig',
               name: 'ShareArticleConfig',
               component: resolve=>require(['@/components/operation/share_page/share_article_config'],resolve)
             },
             {
-              path: '/ShareList',
+              path: 'ShareList',
               name: 'ShareList',
               component: resolve=>require(['@/components/operation/share_page/share_list'],resolve)
             },
@@ -176,7 +181,7 @@ export default new Router({
               component: resolve=>require(['@/components/operation/share_page/share_list_add'],resolve)
             },
             {
-              path: '/ShareStatistical',
+              path: 'ShareStatistical',
               name: 'ShareStatistical',
               component: resolve=>require(['@/components/operation/share_page/share_statistical'],resolve)
             },
@@ -207,35 +212,35 @@ export default new Router({
           component: resolve=>require(['@/components/system/system_main'],resolve),
           children:[
             {
-              path: '/SystemMain',
-              component: resolve=>require(['@/components/system/system_main'],resolve)
+              path: '/',
+              component: resolve=>require(['@/components/system/sys_base'],resolve)
             },
             {
-              path: '/SysSms', // 系统短信配置
+              path: 'SysSms', // 系统短信配置
               component: resolve=>require(['@/components/system/sys_sms'],resolve)
             },
             {
-              path: '/LiveList',// 系统直播配置
+              path: 'LiveList',// 系统直播配置
               component: resolve=>require(['@/components/system/live_list'],resolve)
             },
             {
-              path: '/LiveAdd',
+              path: 'LiveAdd',
               component: resolve=>require(['@/components/system/live_add'],resolve)
             },
             {
-              path: '/LiveEdit/:id',
+              path: 'LiveEdit/:id',
               component: resolve=>require(['@/components/system/live_edit'],resolve)
             },
             {
-              path: '/RoleList',
+              path: 'RoleList',
               component: resolve=>require(['@/components/menber/role_list'],resolve)
             },
             {
-              path: '/RoleAdd',
+              path: 'RoleAdd',
               component: resolve=>require(['@/components/menber/role_add'],resolve)
             },
             {
-              path: '/RoleEdit/:id',
+              path: 'RoleEdit/:id',
               component: resolve=>require(['@/components/menber/role_edit'],resolve)
             },
           ]
@@ -253,19 +258,19 @@ export default new Router({
         },
 
         {
-          path: '/StudentMoneyMain', // 学生充值记录
+          path: '/StudentMoneyMain', // 学生账户明细
           component: resolve=>require(['@/components/students/StudentMoneyMain'],resolve),
           children:[
             {
-              path:'/VirtualMonney',
+              path:'VirtualMonney',
               component:resolve=>require(['@/components/students/VirtualMonney'],resolve)
             },
             {
-              path:'/NewMoney',
+              path:'NewMoney',
               component:resolve=>require(['@/components/students/NewMoney'],resolve)
             },
             {
-              path:'/LearningMoney',
+              path:'LearningMoney',
               component:resolve=>require(['@/components/students/LearningMoney'],resolve)
             }
           ]

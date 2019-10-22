@@ -136,7 +136,7 @@ export default {
       }
     },
     pushToEdit(a){
-            this.$router.push({path:'/SalelistEdit',query:{id:a}})
+            this.$router.push({path:'/SalesList/SalelistEdit',query:{id:a}})
     },
     // searchData(){
     //         this.$apis.common.salepro_list(this.parms)

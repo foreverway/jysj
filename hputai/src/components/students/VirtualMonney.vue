@@ -66,7 +66,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <p style="margin-top:30px">
+    <p style="margin-top:30px"  v-if="msg.data">
       <span>累计入款：</span>
       <span style="color:red">{{msg.data.inamount}}</span>
       <span>元</span>
@@ -75,7 +75,7 @@
       <span>元</span>
     </p>
     <!-- <el-button type="primary" @click="ifinputselect" style="margin-top:20px">审核</el-button> -->
-
+<span v-if="msg.data">
     <el-pagination
       style="float:right;"
       background
@@ -83,9 +83,10 @@
       @prev-click="prev"
       @next-click="next"
       @current-change="current"
-      page-size="10"
+      :page-size="10"
       :total="msg.data.count"
     ></el-pagination>
+    </span>
   </div>
 </template>
 
@@ -93,7 +94,7 @@
 export default {
   data() {
     return {
-      tableData: "",
+      tableData: [],
       form: {
         search: "", //搜索学员姓名条件
         page: 1, //页码

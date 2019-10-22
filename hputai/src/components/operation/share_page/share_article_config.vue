@@ -119,7 +119,7 @@ export default {
         end_time: ""
       },
       dialogFormVisible3: false,
-      tableData: ""
+      tableData: []
     };
   },
   created() {

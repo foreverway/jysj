@@ -30,7 +30,7 @@
     },
     created(){
       this.$nextTick(function(){
-    this.$router.push('/VirtualMonney')
+    this.$router.push('/StudentMoneyMain/VirtualMonney')
       })
     },
     methods: {
@@ -38,14 +38,13 @@
       handleClick(tab, event) {
         switch(tab.name){
           case "1":
-              this.$router.push('/VirtualMonney')
-        
+              this.$router.push('/StudentMoneyMain/VirtualMonney')
             break;
              case "2":
-              this.$router.push('/NewMoney')
+              this.$router.push('/StudentMoneyMain/NewMoney')
             break;
              case "3":
-                  this.$router.push('/LearningMoney')
+                  this.$router.push('/StudentMoneyMain/LearningMoney')
             break;
         }
       }

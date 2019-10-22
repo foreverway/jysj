@@ -8,11 +8,11 @@
              
                @select="handleSelect">
                 <el-menu-item index="/SystemMain">系统设置</el-menu-item>
-                <el-menu-item index="/SysSms">短信设置</el-menu-item>
+                <el-menu-item index="/SystemMain/SysSms">短信设置</el-menu-item>
              
-              <el-menu-item index="/RoleList">角色设置</el-menu-item> 
-                   <el-menu-item index="/LiveList">直播设置</el-menu-item>
-                    <el-menu-item index="6">其他设置</el-menu-item>
+              <el-menu-item index="/SystemMain/RoleList">角色设置</el-menu-item> 
+                   <el-menu-item index="/SystemMain/LiveList">直播设置</el-menu-item>
+                    <!-- <el-menu-item index="6">其他设置</el-menu-item> -->
             </el-menu>
     <router-view/>
     </div>
@@ -25,7 +25,7 @@
       };
     },
     created () {
-      console.log(this.$route.path)
+      this.activeIndex="/SystemMain/SystemMain"
     },
     methods: {
       handleSelect(key, keyPath) {
