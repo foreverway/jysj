@@ -18,7 +18,6 @@ export default {
           isRouterAlive: true//一开始router-view为true
         }
       },
-    
       methods: {
         reload() {
           this.isRouterAlive = false

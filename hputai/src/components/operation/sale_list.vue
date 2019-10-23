@@ -27,7 +27,7 @@
         ></el-date-picker>
 
     <el-button type="primary" style="background-color:#e6563a; border:none;"  @click="getdata">搜索</el-button>
-    <router-link to="/Addsalepro">
+    <router-link to="/SalesList/Addsalepro">
       <el-button type="primary"  style="float:right;background-color:#e6563a; border:none;">新建销售情况列表</el-button>
     </router-link>
 

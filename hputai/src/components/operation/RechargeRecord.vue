@@ -186,7 +186,7 @@
           placeholder="结束时间"
         ></el-date-picker>
 
-        <router-link to="/Rechargecreate">
+        <router-link to="/RechargeRecord/Rechargecreate">
           <!-- <el-button type="primary" v-if="this.menuArr[0].menu_name=='新增'">新增充值记录单</el-button> -->
          <el-button type="primary" v-if="ifHere(65)==true">新增充值记录单</el-button>
 
@@ -405,7 +405,7 @@ export default {
      return nameArr.includes(a)
     },
     toEdit(a) {
-      this.$router.push({ path: "/EditRecharge", query: { id: a } });
+      this.$router.push({ path: "/RechargeRecord/EditRecharge", query: { id: a } });
     },
     //审核
     shenhe(id) {

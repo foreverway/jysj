@@ -209,7 +209,8 @@ export default {
             document.cookie =
               "admin_name=" + res.data.data.admin_name + ";" + expires;
             this.getMen(res.data.data.admin_name);
-            if (sessionStorage.getItem("url") !== null) {
+           // console.log(sessionStorage.getItem("url"))
+            if (sessionStorage.getItem("url") !== null&&sessionStorage.getItem("url") !== "") {
               this.$router.push({ path: sessionStorage.getItem("url") });
             } else {
               this.$router.push({ path: "/" });

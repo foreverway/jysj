@@ -10,7 +10,7 @@
       style="width:300px"
     ></el-input>
     <el-button type="primary">搜索</el-button>
-    <router-link to="/AdminAdd">
+    <router-link to="/AdminList/AdminAdd">
       <el-button type="primary" style="float:right">新建账户</el-button>
     </router-link>
 
@@ -32,7 +32,7 @@
 
       <el-table-column prop="address" label="操作">
         <template slot-scope="scope">
-          <router-link :to="'/AdminEdit/'+ scope.row.admin_id">
+          <router-link :to="'/AdminList/AdminEdit/'+ scope.row.admin_id">
             <el-button type="text" size="small">编辑</el-button>
           </router-link>
           <el-button @click="admin_del(scope.row)" type="text" size="small">删除</el-button>

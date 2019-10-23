@@ -4,11 +4,13 @@
       <el-header>
         <div class="header">
           <img href="#top" src="../assets/logo.png" height="50" alt style="padding:5px;float:left;" />
-          <div class="users" style="width:180px;">
+          <div class="users" style="width:220px;">
+            <img :src='form.admin_head' alt class="touxiang" />
+
             <el-dropdown trigger="click" class="forChoose">
               <span class="el-dropdown-link">
-                <img :src='form.admin_head' alt class="touxiang" />
-                <span class="youName" >{{this.getdataCookie("admin_name")}}</span>
+                <!-- <span class="youName" >{{this.getdataCookie("admin_name")}}</span> -->
+                <span class="youName" >{{form.admin_name}}</span>
                 <i class="el-icon-caret-bottom el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
@@ -20,7 +22,9 @@
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
+              <span style="width:15px;height:5px;"></span>
           </div>
+        
         </div>
         <el-dialog title="我的基本信息" :visible.sync="dialogVisible" center width="600px">
           <el-form ref="form" :model="form" status-icon :rules="rules" label-width="80px">
@@ -120,7 +124,7 @@
                 style="pointer-events: none;"
               >
                 <template slot="title">
-                  <i :class="item.menu_icon"></i>
+                  <span class="data_color" id=""><i :class="item.menu_icon" ></i></span>
                   <span slot="title" class="changeC">{{item.menu_name}}</span>
                 </template>
                 <span v-for="(items,index1) in item.children" :key="index1">
@@ -219,6 +223,7 @@ export default {
       this.getMen(); //
       //实现菜单的展开 图标消失
     });
+   
   },
   beforeMount() {},
   computed: mapState([
@@ -242,6 +247,16 @@ sessionStorage.setItem("url",twoUrl);
     this.defaultUrl = sessionStorage.getItem("url");
   },
   mounted() {
+      var matchReg = /(?<=#\/).*?(?=\/)/;
+    if (window.location.href.split("/#")[1] !== "login") {
+      sessionStorage.setItem("url", window.location.href.split("/#")[1]);
+    }
+    if(window.location.href.match(matchReg)){
+      let twoUrl='/'+window.location.href.match(matchReg)[0]
+sessionStorage.setItem("url",twoUrl);
+    }
+    this.defaultUrl = sessionStorage.getItem("url");
+    console.log(this.defaultUrl)
     //在login页就报错  说明在那时就执行
     // var iconI = $(".el-icon-arrow-down");
     // var menuC = $(".el-submenu__title");
@@ -291,8 +306,11 @@ sessionStorage.setItem("url",twoUrl);
       //console.log(document.body.scrollHeight);
       //实现点击子菜单父菜单变化
       var menuList = $(".changeC");
+      var spanList = $(".data_color");
+      
       for (let y = 0; y < menuList.length; y++) {
         $(menuList[y]).attr("id", "");
+        $(spanList[y]).attr("id", "");
       }
       this.rolemenu.forEach((item, index, array) => {
         //遍历菜单
@@ -305,6 +323,7 @@ sessionStorage.setItem("url",twoUrl);
             });
             if (a.length > 0) {
               $(menuList[index]).attr("id", "changeC");
+              $(spanList[index]).attr("id", "i_color");
               return index;
             }
           }
@@ -402,15 +421,22 @@ sessionStorage.setItem("url",twoUrl);
 </script>
   
 <style scoped>
+/* #click_1 /deep/.el-submenu__title *{
+  vertical-align:center;
+} */
+.forChoose{
+  /* float:right; */
+}
 .forChoose /deep/ .el-dropdown-menu__item{
-  width: 80px;
+  /* //width: 80px; */
     text-align: center;
 }
 .youName{
-display:inline-block;width:88px;
+display:inline-block;
+margin:0 5px;
 font-weight:700;color:#FF8500;
 text-align: center;
-font-size:  16px;
+font-size:  15px;
 }
 #click_1 /deep/ .el-icon-arrow-down:before {
   content: "";
@@ -458,7 +484,9 @@ font-size:  16px;
   width: 100%;
   background: #fff;
 }
-
+#i_color /deep/ i{
+  color: #e6563a !important;
+}
 #changeC {
   color: #e6563a !important;
 }

@@ -2,7 +2,7 @@
 <div class="main">
      <div class="head_word">科目配置</div>
 <el-input placeholder="请输入搜索内容"  @change="getdata_1" v-model="search_value" clearable style="width:300px"></el-input> <el-button type="primary" >搜索</el-button>
- <router-link to="/SubjectAdd">
+ <router-link to="/SubjectList/SubjectAdd">
   <el-button type="primary" style="float:right">添加科目</el-button>
  </router-link>
   <el-table
@@ -36,7 +36,7 @@
       prop=""
       label="操作">
         <template slot-scope="scope">
-                  <router-link :to="'/SubjectEdit/'+ scope.row.id">
+                  <router-link :to="'/SubjectList/SubjectEdit/'+ scope.row.id">
         <el-button type="text" size="small">编辑 </el-button>
                   </router-link>
          <el-button @click="admin_del(scope.row)" type="text" size="small">删除</el-button>

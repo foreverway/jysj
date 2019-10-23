@@ -49,11 +49,11 @@ export default new Router({
           component: resolve=>require(['@/components/operation/RechargeRecord'],resolve)
         },
         {
-          path: '/Rechargecreate',//Rechargecreate添加记录单
+          path: '/RechargeRecord/Rechargecreate',//Rechargecreate添加记录单
           component: resolve=>require(['@/components/operation/recharge_create'],resolve)
         },
         {
-          path: '/EditRecharge',//EditRecharge编辑充值记录单
+          path: '/RechargeRecord/EditRecharge',//EditRecharge编辑充值记录单
           component: resolve=>require(['@/components/operation/edit_recharge'],resolve)
         },
         {
@@ -92,44 +92,47 @@ export default new Router({
           component:resolve=>require(['@/components/operation/addlink'],resolve)
         },
         {
-          path: '/Addsalepro',//
+          path: '/SalesList/Addsalepro',//
           component: resolve=>require(['@/components/operation/addsalepro'],resolve)
         },
         {
           path: '/SalesList',//
           component:resolve=>require(['@/components/operation/sale_list'],resolve)
         },
-        {
-          path: '/StudentsAdd',  //
-          component: resolve=>require(['@/components/students/students_add'],resolve)
-        },
+
         {
           path: '/SalesList/SalelistEdit',  //
           component: resolve=>require(['@/components/operation/salelist_edit.vue'],resolve)
         },
         {
-          path: '/StudentsEdit',  //StudentsEdit
+          path: '/StudentsList/StudentsInfo',  //查看学生详情
+          component: resolve=>require(['@/components/students/StudentsInfo'],resolve)
+        },
+        {
+          path: '/StudentsList/StudentsEdit',  //学生编辑
           component:resolve=>require(['@/components/students/students_edit'],resolve)
+        },
+        {
+          path: '/StudentsList/StudentsAdd',  //新建学生账号
+          name:'StudentsAdd',
+          component: resolve=>require(['@/components/students/students_add'],resolve)
         },
         {
           path: '/StudentsList',
           component:resolve=>require(['@/components/students/StudentsList'],resolve),
-          name:'StudentsList'
+          name:'StudentsList',
         },
-          {
-            path: '/StudentsInfo',  //学生详情
-            component: resolve=>require(['@/components/students/StudentsInfo'],resolve)
-          },
+
         {
           path: '/AdminList',
           component: resolve=>require(['@/components/menber/admin_list'],resolve)
         },
         {
-          path: '/AdminAdd',
+          path: '/AdminList/AdminAdd',
           component: resolve=>require(['@/components/menber/admin_add'],resolve)
         },
         {
-          path: '/AdminEdit/:id',
+          path: '/AdminList/AdminEdit/:id',
           component: resolve=>require(['@/components/menber/admin_edit'],resolve)
         },
         {
@@ -137,11 +140,11 @@ export default new Router({
           component: resolve=>require(['@/components/system/subject_list'],resolve)
         },
         {
-          path: '/SubjectAdd', //科目添加  
+          path: '/SubjectList/SubjectAdd', //科目添加  
           component: resolve=>require(['@/components/system/subject_add'],resolve)
         },
         {
-          path: '/SubjectEdit/:id', //科目编辑
+          path: '/SubjectList/SubjectEdit/:id', //科目编辑
           component: resolve=>require(['@/components/system/subject_edit'],resolve)
         },
         {

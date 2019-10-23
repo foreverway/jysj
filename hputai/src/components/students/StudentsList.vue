@@ -2,7 +2,7 @@
  <div class="main">
    <div class="head_word">学生列表</div>
 <el-input placeholder="请输入搜索内容" v-model="parms.search" @input="getdata" clearable style="width:300px"></el-input> <el-button style="background-color:#e6563a; border:none;" type="primary" >搜索</el-button>
- <router-link to="/StudentsAdd">
+ <router-link to="/StudentsList/StudentsAdd">
   <el-button type="primary" style="float:right;">新建学员账户</el-button>
  </router-link>
 
@@ -160,10 +160,10 @@ import { mapState } from 'vuex';
               this.admin_del(b)
             break;
             case "edit_list" : //编辑学生列表
-              this.$router.push({path:'/StudentsEdit',query:{id:b.id} })
+              this.$router.push({path:'/StudentsList/StudentsEdit',query:{id:b.id} })
             break;
             case "see_info" :  //查看学生列表详情
-              this.$router.push({path:'/StudentsInfo',query:{id:b.id}})
+              this.$router.push({path:'/StudentsList/StudentsInfo',query:{id:b.id}})
             break;
             case "copy_url" :  //复制链接
               this.dialogFormVisible1=true

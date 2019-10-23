@@ -25,7 +25,7 @@
       };
     },
     created () {
-      this.activeIndex="/SystemMain/SystemMain"
+     // this.activeIndex="/SystemMain/SystemMain"
     },
     methods: {
       handleSelect(key, keyPath) {
