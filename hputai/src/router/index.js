@@ -27,11 +27,11 @@ export default new Router({
           name:'ApplicationAdd'
         },
         {
-          path: '/ApplicationEdit',//ApplicationEdit编辑报名需求列表
+          path: 'ApplyNeedsList/ApplicationEdit',//ApplicationEdit编辑报名需求列表
           component: resolve=>require(['@/components/operation/application_edit'],resolve)
         },
         {
-          path: '/ClassEdit',//编辑排课
+          path: 'ApplyNeedsList/ClassEdit',//编辑排课
           component:resolve=>require(['@/components/operation/ClassEdit'],resolve)
         },
         {
@@ -227,11 +227,11 @@ export default new Router({
               component: resolve=>require(['@/components/system/live_list'],resolve)
             },
             {
-              path: 'LiveAdd',
+              path: 'LiveList/LiveAdd',
               component: resolve=>require(['@/components/system/live_add'],resolve)
             },
             {
-              path: 'LiveEdit/:id',
+              path: 'LiveList/LiveEdit/:id',
               component: resolve=>require(['@/components/system/live_edit'],resolve)
             },
             {
@@ -239,11 +239,11 @@ export default new Router({
               component: resolve=>require(['@/components/menber/role_list'],resolve)
             },
             {
-              path: 'RoleAdd',
+              path: 'RoleList/RoleAdd',
               component: resolve=>require(['@/components/menber/role_add'],resolve)
             },
             {
-              path: 'RoleEdit/:id',
+              path: 'RoleList/RoleEdit/:id',
               component: resolve=>require(['@/components/menber/role_edit'],resolve)
             },
           ]

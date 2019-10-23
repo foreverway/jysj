@@ -1,7 +1,7 @@
 <template>
  <div class="main">
 <el-input placeholder="请输入搜索内容" v-model="form.search" @input="getdata" clearable style="width:300px"></el-input> <el-button type="primary" >搜索</el-button>
- <router-link to="/LiveAdd">
+ <router-link to="LiveList/LiveAdd">
   <el-button type="primary" style="float:right">添加直播平台</el-button>
  </router-link>
 
@@ -53,7 +53,7 @@
             prop="address"
             label="操作">
              <template slot-scope="scope">
-                  <router-link :to="'/LiveEdit/'+ scope.row.id">
+                  <router-link :to="'LiveList/LiveEdit/'+ scope.row.id">
         <el-button type="text" size="small">编辑 </el-button>
                   </router-link>
          <el-button @click="admin_del(scope.row)" type="text" size="small">删除</el-button>

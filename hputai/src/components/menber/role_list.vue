@@ -1,7 +1,7 @@
  <template>
  <div class="main">
 <el-input placeholder="请输入搜索内容" v-model="form.search" @input="getdata" clearable style="width:300px"></el-input> <el-button type="primary" >搜索</el-button>
- <router-link to="/RoleAdd">
+ <router-link to="RoleList/RoleAdd">
   <el-button type="primary" style="float:right">创建角色</el-button>
  </router-link>
 
@@ -33,7 +33,7 @@
             prop="address"
             label="操作">
              <template slot-scope="scope">
-                  <router-link :to="'/RoleEdit/'+ scope.row.id">
+                  <router-link :to="'RoleList/RoleEdit/'+ scope.row.id">
         <el-button type="text" size="small">编辑 </el-button>
                   </router-link>
          <el-button @click="admin_del(scope.row)" type="text" size="small">删除</el-button>

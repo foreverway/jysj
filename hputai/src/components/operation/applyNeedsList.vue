@@ -323,7 +323,7 @@ export default {
             b.app_status == "已排课待确认"
           ) {
             this.$router.push({
-              path: "/ApplicationEdit",
+              path: "ApplyNeedsList/ApplicationEdit",
               query: { id: b.id }
             });
           } else {
@@ -435,10 +435,9 @@ export default {
             });
           }
           break;
-
         case "click_plan_edit": //编辑排课
           if (b.app_status == "已排课待确认") {
-            this.$router.push({ path: "/ClassEdit", query: { id: b.id } });
+            this.$router.push({ path: "ApplyNeedsList/ClassEdit", query: { id: b.id } });
           } else {
             this.$message({
               message: "只有已排课待确认时才可以操作",
