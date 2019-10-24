@@ -5,26 +5,30 @@
     <div class="head_word">充值链接</div>
     <el-input style="width:200px" v-model="money" placeholder="请输入充值金额"></el-input>
     <el-button type="primary" v-show="money>0" @click="copyUrl">生成并复制充值链接</el-button>
-  <!-- <el-button @click="showToast">demo</el-button> -->
-    <!-- 设置充值链接 -->
+    <!-- <zx-input v-model="inputvalue"></zx-input> -->
    <!-- // <div style="display:none" cols="20" id="biao1">{{copyurl1}}</div> -->
   </div>
 </template>
 
 <script>
 import studens_url from "../../config/config";
-// import toast from '../../templates/js/toast' ////引入toast函数
-// Vue.prototype.$toast = toast;      //给Vue对象添加$toast方法
+import Input from '../../templates/Input.vue'
 export default {
   data() {
     return {
-      money: ""
+      money: "",
+  inputvalue:''
     };
   },
+     components: {
+      'zx-input':Input
+    },
   methods: {
-    // showToast(){
-  	// 	this.$toast();              //现在就可以调用了
-    // },
+   selectFunc(value) {
+        this.selectValue2 = value
+        console.log(this.selectValue)
+        console.log(this.selectValue2)
+      },
     // 复制链接
     copyUrl() {
       let url = studens_url.student_url + "login/1/" + this.money;
@@ -50,4 +54,5 @@ export default {
   margin: 15px 0;
   font-weight: 700;
 }
+
 </style>

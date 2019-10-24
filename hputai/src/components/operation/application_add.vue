@@ -494,7 +494,7 @@ export default {
       });
       this.pushArray1.push({
         title: needArr.label,
-        subject_id: needArr.id, //科目id
+        subject_id: needArr.value, //科目id
         classhour: "",
         price: needArr.online_price,
         course_type: 0, //课程类型
@@ -504,7 +504,7 @@ export default {
       });
       this.pushArray2.push({
         title: needArr.label,
-        subject_id: needArr.id, //科目id
+        subject_id: needArr.value, //科目id
         classhour: "",
         price: needArr.offline_price,
         course_type: 0, //课程类型

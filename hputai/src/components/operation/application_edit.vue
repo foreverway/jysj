@@ -83,7 +83,7 @@
               <option label="是" value="1"></option>
             </select>
           </p>
-          <p @click=" deleteTest_1" style="cursor:pointer;">撤销</p>
+          <p @click=" deleteTest_1" style="cursor:pointer;color:white;background-color:#e6563a;">撤销</p>
         </div>
       </el-form-item>
       <el-form-item label="学生姓名" prop="value_1">
@@ -104,7 +104,7 @@
           <span style="display:none;" v-bind:id="'students'+ i">{{item.id}}</span>
           <p>{{ item.student_name}}</p>
           <p>{{item.tel}}</p>
-          <p @click=" deleteTest" style="cursor:pointer;">撤销</p>
+          <p @click=" deleteTest" style="cursor:pointer;color:white;background-color:#e6563a;">撤销</p>
         </div>
       </el-form-item>
 
@@ -197,7 +197,7 @@ import { mapState } from 'vuex'
       options_1: [], //学生数组总数据
       options: [], //课程名称的数据
       options_: [], //总数据的数据
-      radio: "1", //上课地点的选择
+     // radio: "1", //上课地点的选择
       editableTabs_1: [],
       pushArray1: [], //线上数组
       pushArray2: [], //线下数组
@@ -296,7 +296,7 @@ import { mapState } from 'vuex'
           this.form.title = this.edit_data.title;
           this.form.feedback = this.edit_data.remarks;
           this.form.valueDate = res.data.data.expiry_date;
-          this.form.redio=this.edit_data.course_address;
+          this.form.radio=this.edit_data.needs_data.course_address;
           this.form2.need_one = this.edit_data.needs_data.need_one;
           this.form2.need_two = this.edit_data.needs_data.need_two;
           this.form2.need_three = this.edit_data.needs_data.need_three;
@@ -402,11 +402,11 @@ import { mapState } from 'vuex'
       };
       getNeed(this.options_); //多维数组简化为二维数组(可以使用find，indexOf。findIndex查找返回)
       var needArr = result.find((res, index, arr) => {
-        return (res.label = lastName);
+        return (res.label == lastName);
       });
         this.pushArray1.push({
           subject_name: needArr.label,
-          subject_id: needArr.id, //科目id
+          subject_id: needArr.value, //科目id
           classhour: "",
           price: needArr.online_price,
           course_type: 0, //课程类型
@@ -416,7 +416,7 @@ import { mapState } from 'vuex'
         });
         this.pushArray2.push({
           subject_name: needArr.label,
-          subject_id: needArr.id, //科目id
+          subject_id: needArr.value, //科目id
           classhour: "",
           price: needArr.offline_price,
           course_type: 0, //课程类型
@@ -454,8 +454,9 @@ import { mapState } from 'vuex'
       var checkOne = this.options_1.filter(
         item => item.username == targetName[0]
       );
-      this.editableTabs.push({
-        student_name: targetName[0],
+      console.log(checkOne)
+      checkOne[0]&&this.editableTabs.push({
+        student_name: checkOne[0].username,
         tel: checkOne[0].tel,
         id: checkOne[0].id
       });
@@ -531,7 +532,6 @@ import { mapState } from 'vuex'
         });
       });
    this.editableTabs_1.forEach((item,i) => {
-        //console.log(this.subjects_data)
         if (item.course_id==1) {
           this.parms = {
          title: this.form.title,
@@ -548,7 +548,6 @@ import { mapState } from 'vuex'
           };
           this.parms.subjects_data = this.subjects_data;
           this.parms.students_data = this.students_data;
-          console.log(this.parms);
           this.$apis.common.application_edit_put(this.parms).then(res => {
             if (res.data.code == 1) {
               this.$message({
