@@ -14,11 +14,11 @@
                 <i class="el-icon-caret-bottom el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item class="clearfix">
-                  <div @click="dialogVisible = true">设置</div>
+                <el-dropdown-item >
+                  <div class="clearfix" @click="dialogVisible = true">设置</div>
                 </el-dropdown-item>
-                <el-dropdown-item class="clearfix">
-                  <span @click="delCookie('usertoken')">退出</span>
+                <el-dropdown-item >
+                  <p class="clearfix" @click="delCookie('usertoken')">退出</p>
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -428,7 +428,9 @@ sessionStorage.setItem("url",twoUrl);
 </script>
   
 <style scoped>
-
+.clearfix{
+  padding:0 20px;
+}
 .forChoose{
   /* float:right; */
 }
