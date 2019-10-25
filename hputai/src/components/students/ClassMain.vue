@@ -1,5 +1,5 @@
 <template>
-    <div class="main">
+    <div class="main ">
             <!-- <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
                 <el-menu-item index="1">待上课表</el-menu-item>
                 <el-menu-item index="2">已上课表</el-menu-item>
@@ -22,6 +22,9 @@
         // index:"1"
         activeName: '1'
       };
+    },
+    updated(){
+  
     },
     methods: {
       // handleSelect(key, keyPath) {

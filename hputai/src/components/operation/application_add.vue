@@ -39,11 +39,12 @@
         ></el-cascader>
       </el-form-item>
 
-      <el-form-item :inline="true" label="已选科目">
+      <el-form-item :inline="true" label="已排课时">
         <div class="add_ul">
           <p id="sss">科目</p>
           <p>课时</p>
           <p>单价(元)</p>
+          <p>总额</p>         
           <p>课程性质</p>
           <p>班课</p>
           <p>一对一</p>
@@ -58,6 +59,12 @@
           </p>
           <p>
             <el-input v-model.number="item.price" v-bind:id="'mach' + i" placeholder="单价(元)"></el-input>
+          </p>
+          <p v-if="item.price&&item.classhour">
+            {{item.price*item.classhour}}
+          </p>
+           <p v-if="item.price==''||item.classhour==''">
+            待填充
           </p>
           <!-- <p  v-bind:id="'all_mach' + i"  v-model=item.price>0</p> -->
           <p>
@@ -85,7 +92,8 @@
               <option label="是" value="1"></option>
             </select>
           </p>
-          <p @click=" deleteTest_1" style="cursor:pointer;color:white;background-color:#e6563a;">撤销</p>
+          <!-- <el-button @click="deleteTest_1" size='mini' style="color:white;background-color:#e6563a;">撤销</el-button> -->
+          <p  ><el-button @click="deleteTest_1" size='mini' style="color:white;background-color:#e6563a;">撤销</el-button></p>
         </div>
       </el-form-item>
       <el-form-item label="学生姓名" prop="value_1">
@@ -106,7 +114,7 @@
           <span style="display:none;" v-bind:id="'students'+ i">{{item.id}}</span>
           <p>{{item.name}}</p>
           <p>{{item.tel}}</p>
-          <p @click=" deleteTest" style="cursor:pointer;">撤销</p>
+           <p  ><el-button @click="deleteTest" size='mini' style="color:white;background-color:#e6563a;">撤销</el-button></p>
         </div>
       </el-form-item>
 
@@ -386,50 +394,53 @@ export default {
         if (res.data.code == 1) {
           this.msg = res.data;
           this.options_ = res.data.data;
-          // console.log(this.options_)
+console.log(this.options_)
           for (let i = 0; i < this.options_.length; i++) {
-            var val = this.options_[i];
-            let children = [];
+            var val = this.options_[i]; //初级菜单
+            //let children = [];
+            this.options.push({
+              value: val.subject_name,
+              label: val.subject_name,
+            });
             if (val.children) {
               //如果有子元素
               for (let j = 0; j < val.children.length; j++) {
                 //对子元素进行遍历
                 var val1 = val.children[j];
-                if (val1.children) {
-                  //如果子元素有子元素
-                  //let children =[]
-                  for (let g = 0; g < val1.children.length; g++) {
-                    //对子元素进行遍历
-                    var val2 = val1.children[g];
-                    //console.log(val2)
-                    children.push({
+                     this.options.children.push({
                       value: val1.subject_name,
-                      label: val1.subject_name,
-                      children: [
-                        {
-                          //将孙级添加到父级相对应的位置下
-                          value: val2.subject_name,
-                          label: val2.subject_name
-                        }
-                      ]
-                    });
-                    this.options.push({
-                      value: val.subject_name,
-                      label: val.subject_name,
-                      children: children
-                    });
-                  }
-                } else {
-                  children.push({
-                    value: val1.subject_name,
-                    label: val1.subject_name
-                  });
-                  this.options.push({
-                    value: val.subject_name,
-                    label: val.subject_name,
-                    children: children
-                  });
-                }
+                      label: val1.subject_name,   
+                       });
+              //   if (val1.children) {
+              //     //如果子元素有子元素
+              //     //let children =[]
+              //     for (let g = 0; g < val1.children.length; g++) {
+              //       //对子元素进行遍历
+              //       var val2 = val1.children[g];
+              //       //console.log(val2)
+              //       children.push({
+              //         value: val1.subject_name,
+              //         label: val1.subject_name,
+              //         children: [
+              //           {
+              //             //将孙级添加到父级相对应的位置下
+              //             value: val2.subject_name,
+              //             label: val2.subject_name
+              //           }
+              //         ]
+              //     //console.log(this.options)
+              //     }
+              //   } else {
+              //     children.push({
+              //       value: val1.subject_name,
+              //       label: val1.subject_name
+              //     });
+              //     this.options.push({
+              //       value: val.subject_name,
+              //       label: val.subject_name,
+              //       children: children
+              //     });
+              //   }
               }
             } else {
               this.options.push({
@@ -438,7 +449,7 @@ export default {
               });
             }
           }
-          //console.log(this.options)
+
         }
       });
     },
@@ -497,6 +508,7 @@ export default {
         subject_id: needArr.value, //科目id
         classhour: "",
         price: needArr.online_price,
+        amount:'',
         course_type: 0, //课程类型
         course_id: 0, //班课
         is_one: 1, //一对一？
@@ -507,6 +519,7 @@ export default {
         subject_id: needArr.value, //科目id
         classhour: "",
         price: needArr.offline_price,
+        amount:'',
         course_type: 0, //课程类型
         course_id: 0, //班课
         is_one: 1, //一对一？
@@ -592,13 +605,14 @@ export default {
               subject_id: item.subject_id,
               classhour: item.classhour,
               price: item.price,
-              amount: item.amount,
+              amount: item.classhour*item.price,
               course_type: item.course_type,
               course_id: item.course_id,
               is_one: item.is_one,
               is_group: item.is_group
             });
           });
+          //console.log(this.subjects_data)
           this.editableTabs.forEach(item => {
             this.students_data.push({
               student_id: item.id
@@ -755,6 +769,9 @@ option {
   justify-content: space-around;
   align-items: center;
   font-size: 25px;
+}
+p{
+  cursor:pointer;
 }
 </style>
 

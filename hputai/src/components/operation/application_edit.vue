@@ -36,12 +36,12 @@
         ></el-cascader>
       </el-form-item>
 
-      <el-form-item :inline="true" label="已选科目">
+      <el-form-item :inline="true" label="已排课时">
         <div class="add_ul">
           <p id="sss">科目</p>
           <p>课时</p>
           <p>单价(元)</p>
-          <!-- <p @click="milti">总额</p> -->
+          <p >总额</p>
           <p>课程性质</p>
           <p>班课</p>
           <p>一对一</p>
@@ -57,7 +57,12 @@
           <p>
             <el-input v-model.number="item.price" v-bind:id="'mach' + i" placeholder="单价(元)"></el-input>
           </p>
-          <!-- <p  v-bind:id="'all_mach' + i"  v-model=item.price>0</p> -->
+              <p v-if="item.price&&item.classhour">
+            {{item.price*item.classhour}}
+          </p>
+           <p v-if="item.price==''||item.classhour==''">
+            待填充
+          </p>
           <p>
             <select v-model="item.course_type" v-bind:id="'attr' + i" placeholder="课程性质">
               <option label="试听" value="2"></option>
@@ -83,7 +88,7 @@
               <option label="是" value="1"></option>
             </select>
           </p>
-          <p @click=" deleteTest_1" style="cursor:pointer;color:white;background-color:#e6563a;">撤销</p>
+          <p  ><el-button @click="deleteTest_1" size='mini' style="color:white;background-color:#e6563a;">撤销</el-button></p>
         </div>
       </el-form-item>
       <el-form-item label="学生姓名" prop="value_1">
@@ -104,7 +109,9 @@
           <span style="display:none;" v-bind:id="'students'+ i">{{item.id}}</span>
           <p>{{ item.student_name}}</p>
           <p>{{item.tel}}</p>
-          <p @click=" deleteTest" style="cursor:pointer;color:white;background-color:#e6563a;">撤销</p>
+           <p  ><el-button @click="deleteTest" size='mini' style="color:white;background-color:#e6563a;">撤销</el-button></p>
+
+          <!-- <p @click=" deleteTest" style="cursor:pointer;color:white;background-color:#e6563a;">撤销</p> -->
         </div>
       </el-form-item>
 
@@ -305,6 +312,7 @@ import { mapState } from 'vuex'
           // this.radio=this.edit_data.needs_data.course_address  这里是用户在线上还是线下
           this.editableTabs_1 = this.edit_data.subjects_data; //学科数据
           this.editableTabs = this.edit_data.students_data; //学生数据
+          console.log(this.edit_data.students_data)
           let subArr = this.edit_data.subjects_data; //原学科数据的数组
           // console.log(subArr)   //需要用户科目  手机号  学生姓名的id
           // console.log(this.editableTabs)//在这里循环得到想要的数据
@@ -408,6 +416,7 @@ import { mapState } from 'vuex'
           subject_name: needArr.label,
           subject_id: needArr.value, //科目id
           classhour: "",
+          amount:'',
           price: needArr.online_price,
           course_type: 0, //课程类型
           course_id: 0, //班课
@@ -418,6 +427,7 @@ import { mapState } from 'vuex'
           subject_name: needArr.label,
           subject_id: needArr.value, //科目id
           classhour: "",
+        amount:'',
           price: needArr.offline_price,
           course_type: 0, //课程类型
           course_id: 0, //班课
@@ -458,7 +468,7 @@ import { mapState } from 'vuex'
       checkOne[0]&&this.editableTabs.push({
         student_name: checkOne[0].username,
         tel: checkOne[0].tel,
-        id: checkOne[0].id
+        student_id: checkOne[0].id
       });
       // this.student_data.push({student_id:checkOne[0].id})//注入学生id
     },
@@ -519,7 +529,7 @@ import { mapState } from 'vuex'
           subject_id: item.subject_id,
           classhour: item.classhour,
           price: item.price,
-          amount: item.amount,
+          amount: item.classhour*item.price,
           course_type: item.course_type,
           course_id: item.course_id,
           is_one: item.is_one,
@@ -528,7 +538,7 @@ import { mapState } from 'vuex'
       });
         this.editableTabs.forEach(item => {
         this.students_data.push({
-          student_id: item.id
+          student_id: item.student_id
         });
       });
    this.editableTabs_1.forEach((item,i) => {
@@ -689,6 +699,9 @@ select {
   width: 80%;
   height: 40px;
   text-align: center;
+}
+p{
+  cursor:pointer;
 }
 </style>
 

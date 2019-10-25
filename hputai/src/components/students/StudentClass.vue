@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="main screen_he">
     <div class="data_main">
       <el-cascader
         placeholder="输入学生姓名"
@@ -19,12 +19,21 @@
         :show-all-levels="false"
         @change="handleChange_1"
       ></el-cascader>
-      <div style="height:50px"></div>
-      <el-calendar v-model="value" style="height:500px;">
+      <div style="height:20px"></div>
+      <!-- <el-calendar v-model="value" style="height:500px;">
         <template slot="dateCell" slot-scope="{date, data}">
           <p @click="searchDay(data.day)">{{data.day.slice(8)}}</p>
         </template>
-      </el-calendar>
+      </el-calendar> -->
+      <el-calendar>
+  <template
+    slot="dateCell"
+    slot-scope="{date, data}">
+    <p :class="data.isSelected ? 'is-selected' : ''" @click="searchDay(data.day)">
+           {{data.day.slice(8)}}{{ data.isSelected ? '✔️' : ''}}
+    </p>
+  </template>
+</el-calendar>
       <!-- 待上课表 -->
       <div class="table_div data_list posi_right" v-if="change_value=='1'">
         <el-table
@@ -471,6 +480,13 @@ export default {
     this.getStudent();
     this.getClassList();
   },
+  updated(){
+  // var bodyDiv=$('.screen_he')
+  //   $(bodyDiv)[0].style.height=$(window).height()*1-210+'px'
+  },
+  mounted(){
+
+  },
   computed: {},
   watch: {
     changeTab: function(value) {
@@ -863,18 +879,12 @@ export default {
   margin-left: 10px;
   float: left;
 }
-/* .flex_div{
-  width:100%;
-  height: 600px;
-  display:flex;
-  justify-content:space-around;
-  align-items: center;
-} */
+
 .posi_right {
   position: absolute;
   width: 65%;
   left: 440px;
-  top: 195px;
+  top: 165px;
   border: 1px solid block;
   border: 1px solid silver;
 }
@@ -894,11 +904,7 @@ export default {
 .prev .el-calendar-day {
   height: 35px !important;
 }
-/* .data_main[data-v-83bc0558]{
-  width: 300px !important;
-    float: left;
-    height: 600px !important;
-} */
+
 li {
   list-style: none;
   display: inline-block;

@@ -34,8 +34,9 @@ export default {
     inputload(event){  //绑定的input事件
 //     1.事件后不使用圆括号，event被自动当作实参传入
 // 2.使用圆括号，必须显式的传入event对象，如果不传入可能最终找到的是全局的window .event
-    console.log(event)
+    console.log(event.target.value)
       let value = event.target.value;   
+      //target 事件属性可返回事件的目标节点
       //$event的值 原生 dom 事件就是事件对象，自定义组件的事件就是 $emit 的第一个参数值   
       this.$emit('input', value)
       //此处的this为子组件触发父组件的方法  所以this指向为父组件

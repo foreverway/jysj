@@ -40,7 +40,7 @@ export default new Router({
           name:'ApplyNeedsList'
         },
         {
-          path: '/PlanClassAdd',//PlanClassAdd添加报名需求列表
+          path: 'ApplyNeedsList/PlanClassAdd',//PlanClassAdd添加报名需求列表
           component: resolve=>require(['@/components/operation/PlanClassAdd'],resolve),
           name:'PlanClassAdd'
         },
@@ -122,7 +122,6 @@ export default new Router({
           component:resolve=>require(['@/components/students/StudentsList'],resolve),
           name:'StudentsList',
         },
-
         {
           path: '/AdminList',
           component: resolve=>require(['@/components/menber/admin_list'],resolve)

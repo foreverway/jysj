@@ -95,7 +95,7 @@
         </div>
       </el-form-item>
 
-      <el-form-item :inline="true" label="已选科目">
+      <el-form-item :inline="true" label="已排课时">
         <div class="add_ul">
           <p id="sss">课时</p>
           <p >开始时间</p>
@@ -127,13 +127,7 @@
             ></el-date-picker>
           </p>
           <p>
-            <!-- <el-date-picker
-              v-model="item.week"
-              v-bind:id="'end_time' + i"
-              value-format="timestamp"
-              type="datetime"
-              placeholder="星期"
-            ></el-date-picker>-->
+
             <el-input v-model.number="item.week"  v-bind:id="'end_time' + i" placeholder="星期"></el-input>
           </p>
           <p>
@@ -161,7 +155,7 @@
               <option label="客户端" value="1">是</option>
             </select>
           </p>
-          <p @click="deleteTest_1" style="cursor:pointer;">撤销</p>
+          <p  ><el-button @click="deleteTest_1" size='mini' style="color:white;background-color:#e6563a;">撤销</el-button></p>
         </div>
       </el-form-item>
     </el-form>
@@ -682,23 +676,23 @@ export default {
       // console.log(all_hour*1,'填入时间')
       // console.log(this.$route.query.classhour*1,'总时间')
       if (all_hour * 1 <= this.form.classhour * 1) {
-        console.log(parms)
+        //console.log(parms)
         //console.log(this.form)
-        // this.$apis.common.application_arrange_put(parms).then(res => {
-        //   if (res.data.code == 1) {
-        //     this.$message({
-        //       type: "success",
-        //       message: "添加成功"
-        //     });
-        //     this.$router.go(-1);
-        //   } else {
+        this.$apis.common.application_arrange_put(parms).then(res => {
+          if (res.data.code == 1) {
+            this.$message({
+              type: "success",
+              message: "添加成功"
+            });
+            this.$router.go(-1);
+          } else {
 
-        //     this.$message({
-        //       type: "warning",
-        //       message: res.data.msg
-        //     });
-        //   }
-        // });
+            this.$message({
+              type: "warning",
+              message: res.data.msg
+            });
+          }
+        });
       } else {
         this.$message({
           type: "warning",

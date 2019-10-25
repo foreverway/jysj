@@ -427,7 +427,7 @@ export default {
         case "cilck_plan_class":
           // 排课
           if (b.app_status == "待排课") {
-            this.$router.push({ path: "/PlanClassAdd", query: { id: b.id } });
+            this.$router.push({ path: "ApplyNeedsList/PlanClassAdd", query: { id: b.id } });
           } else {
             this.$message({
               type: "warning",

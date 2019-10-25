@@ -4,9 +4,9 @@
       <el-header>
         <div class="header">
           <img href="#top" src="../assets/logo.png" height="50" alt style="padding:5px;float:left;" />
-          <div class="users" style="width:220px;">
+          <div class="users" >
             <img :src='form.admin_head' alt class="touxiang" />
-
+            <!-- <el-tooltip class="item" effect="light" content="Bottom Right 提示文字" placement="bottom-end"> -->
             <el-dropdown trigger="click" class="forChoose">
               <span class="el-dropdown-link">
                 <!-- <span class="youName" >{{this.getdataCookie("admin_name")}}</span> -->
@@ -22,11 +22,12 @@
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-              <span style="width:15px;height:5px;"></span>
+ <!-- </el-tooltip>      -->
+          <span style="width:15px;height:5px;"></span>
           </div>
-        
         </div>
-        <el-dialog title="我的基本信息" :visible.sync="dialogVisible" center width="600px">
+        <el-dialog title="我的基本信息"     :close-on-click-modal='false'
+ :visible.sync="dialogVisible" center width="600px">
           <el-form ref="form" :model="form" status-icon :rules="rules" label-width="80px">
             <el-form-item label="我的角色">
               <!-- // <el-input v-model="form.role_name" style="width:200px;margin:0 15px;"></el-input> -->
@@ -141,7 +142,7 @@
         </el-aside>
       </div>
       <div class="right">
-        <el-main>
+        <el-main class="this_height">
           <router-view />
         </el-main>
       </div>
@@ -181,6 +182,7 @@ export default {
       seeHeight: document.body.scrollHeight,
       dialogVisible: false,
       openeds: ["0", "1", "2", "3", "4", "5"],
+      visible: false,
       form: {
         admin_head: "",
         admin_email: ""
@@ -223,7 +225,7 @@ export default {
       this.getMen(); //
       //实现菜单的展开 图标消失
     });
-   
+ 
   },
   beforeMount() {},
   computed: mapState([
@@ -245,6 +247,10 @@ export default {
 sessionStorage.setItem("url",twoUrl);
     }
     this.defaultUrl = sessionStorage.getItem("url");
+      var bodyDiv=$('.right')
+    $(bodyDiv)[0].style.height=$(window).height()*1-50+'px'
+              var bodyDiv=$('.this_height')
+    $(bodyDiv)[0].style.height=$(window).height()*1-40+'px'
   },
   mounted() {
       var matchReg = /(?<=#\/).*?(?=\/)/;
@@ -256,7 +262,7 @@ sessionStorage.setItem("url",twoUrl);
 sessionStorage.setItem("url",twoUrl);
     }
     this.defaultUrl = sessionStorage.getItem("url");
-    console.log(this.defaultUrl)
+    //console.log(this.defaultUrl)
     //在login页就报错  说明在那时就执行
     // var iconI = $(".el-icon-arrow-down");
     // var menuC = $(".el-submenu__title");
@@ -266,6 +272,7 @@ sessionStorage.setItem("url",twoUrl);
     //   $(addAttr).attr("class", "");
     // }
   },
+
   methods: {
             //调用App.vue下的this.reload()方法，来改变v-if的状态
         clickDiv(){//刷新按钮调用的方法
@@ -421,9 +428,7 @@ sessionStorage.setItem("url",twoUrl);
 </script>
   
 <style scoped>
-/* #click_1 /deep/.el-submenu__title *{
-  vertical-align:center;
-} */
+
 .forChoose{
   /* float:right; */
 }
@@ -520,7 +525,9 @@ font-size:  15px;
     -webkit-transform: rotate(360deg);
   }
 }
-
+    /* .item {
+      margin: 4px;
+    } */
 .main {
   background: #f6f8f9;
   position: relative;
@@ -529,7 +536,6 @@ font-size:  15px;
   width: 200px;
   min-height: 100vh;
 }
-
 .banquan {
   text-align: center;
   height: 60px;
@@ -540,7 +546,8 @@ font-size:  15px;
 }
 .users {
   float: right;
-  width: 150px;
+  /* width: 0px; */
+  margin-right:3%;
   line-height: 61px;
 }
 .el-menu-item {

@@ -94,7 +94,7 @@
         </div>-->
       </el-form-item>
 
-      <el-form-item :inline="true" label="已选科目">
+      <el-form-item :inline="true" label="已排课时">
         <div class="add_ul">
           <p id="sss">课时</p>
           <p class="bigger">开始时间</p>
@@ -149,7 +149,7 @@
               <option label="客户端" value="1">是</option>
             </select>
           </p>
-          <p @click="deleteTest_1" style="cursor:pointer;">撤销</p>
+          <p  ><el-button @click="deleteTest_1" size='mini' style="color:white;background-color:#e6563a;">撤销</el-button></p>
         </div>
       </el-form-item>
     </el-form>
@@ -809,7 +809,12 @@ option {
   text-align: center;
   overflow: hidden;
 }
-
+.add_ul :nth-child(2){
+  width: 17%;
+}
+.add_ul_new :nth-child(3){
+  width: 17%;
+}
 .add_ul_new p {
   list-style: none;
   display: inline-block;
