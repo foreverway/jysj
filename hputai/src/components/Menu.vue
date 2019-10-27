@@ -6,14 +6,12 @@
           <img href="#top" src="../assets/logo.png" height="50" alt style="padding:5px;float:left;" />
           <div class="users" >
             <img :src='form.admin_head' alt class="touxiang" />
-            <!-- <el-tooltip class="item" effect="light" content="Bottom Right 提示文字" placement="bottom-end"> -->
-            <el-dropdown trigger="click" class="forChoose">
+            <el-dropdown trigger="click" >
               <span class="el-dropdown-link">
-                <!-- <span class="youName" >{{this.getdataCookie("admin_name")}}</span> -->
                 <span class="youName" >{{form.admin_name}}</span>
                 <i class="el-icon-caret-bottom el-icon--right"></i>
               </span>
-              <el-dropdown-menu slot="dropdown">
+              <el-dropdown-menu slot="dropdown" class="forChoose">
                 <el-dropdown-item >
                   <div class="clearfix" @click="dialogVisible = true">设置</div>
                 </el-dropdown-item>
@@ -436,6 +434,7 @@ sessionStorage.setItem("url",twoUrl);
 }
 .forChoose /deep/ .el-dropdown-menu__item{
   /* //width: 80px; */
+  padding:0px;
     text-align: center;
 }
 .youName{

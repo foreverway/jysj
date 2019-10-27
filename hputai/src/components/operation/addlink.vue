@@ -5,7 +5,7 @@
     <div class="head_word">充值链接</div>
     <el-input style="width:200px" v-model="money" placeholder="请输入充值金额"></el-input>
     <el-button type="primary" v-show="money>0" @click="copyUrl">生成并复制充值链接</el-button>
-    <!-- <zx-input v-model="inputvalue"></zx-input> -->
+    <!-- <zxbutton type="primary"></zxbutton> -->
    <!-- // <div style="display:none" cols="20" id="biao1">{{copyurl1}}</div> -->
   </div>
 </template>
@@ -13,6 +13,7 @@
 <script>
 import studens_url from "../../config/config";
 import Input from '../../templates/Input.vue'
+
 export default {
   data() {
     return {
@@ -21,7 +22,7 @@ export default {
     };
   },
      components: {
-      'zx-input':Input
+      'zx-input':Input  ,
     },
   methods: {
    selectFunc(value) {
