@@ -1,6 +1,7 @@
 <template>
   <div class="main">
-    <div class="main_head">|&nbsp;添加报名需求</div>
+                <zx-head title="添加报名需求" ></zx-head>
+
     <el-steps :active="active" finish-status="success">
       <el-step title="填写报名情况"></el-step>
       <el-step title="填写需求情况"></el-step>
@@ -405,45 +406,7 @@ export default {
           }
           addWord(this.options_)
            this.options=this.options_  
-              //   if (val1.children) {
-              //     //如果子元素有子元素
-              //     //let children =[]
-              //     for (let g = 0; g < val1.children.length; g++) {
-              //       //对子元素进行遍历
-              //       var val2 = val1.children[g];
-              //       //console.log(val2)
-              //       children.push({
-              //         value: val1.subject_name,
-              //         label: val1.subject_name,
-              //         children: [
-              //           {
-              //             //将孙级添加到父级相对应的位置下
-              //             value: val2.subject_name,
-              //             label: val2.subject_name
-              //           }
-              //         ]
-              //     //console.log(this.options)
-              //     }
-              //   } else {
-              //     children.push({
-              //       value: val1.subject_name,
-              //       label: val1.subject_name
-              //     });
-              //     this.options.push({
-              //       value: val.subject_name,
-              //       label: val.subject_name,
-              //       children: children
-              //     });
-              //   }
-          //     }
-          //   } else {
-          //     this.options.push({
-          //       value: val.subject_name,
-          //       label: val.subject_name
-          //     });
-          //   }
-          // }
-
+ 
         }
       });
     },
@@ -703,14 +666,7 @@ select {
   height: 40px;
   text-align: center;
 }
-.main_head {
-  margin: auto;
-  width: 96%;
-  height: 40px;
-  font-size: 22px;
-  font-weight: 900;
-  margin: 0 2%;
-}
+
 
 option {
 

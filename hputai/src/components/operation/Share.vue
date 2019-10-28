@@ -1,6 +1,7 @@
 <template>
   <div class="main">
-        <div class="main_head"><span style="font-size:24px;color:#e6563a;">|&nbsp;</span>分享</div>
+                <zx-head title="分享" ></zx-head>
+
     <el-container style=" border: 1px solid #eee;height: 100vh;">
       <el-container>
         <el-header
@@ -123,14 +124,7 @@ export default {
 </script>
 
 <style >
-.main_head {
-  margin: auto;
-  width: 96%;
-  height: 40px;
-  font-size: 22px;
-  font-weight: 900;
-  margin: 0 2%;
-}
+
 * {
   padding: 0;
   margin: 0;

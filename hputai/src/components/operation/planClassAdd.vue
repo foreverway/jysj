@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <div class="main_head">|&nbsp;添加排课信息</div>
+            <zx-head title="添加排课信息" ></zx-head>
 
     <el-form ref="form" :model="form" label-width="120px">
       <el-form-item label="标题">
@@ -772,15 +772,7 @@ export default {
 };
 </script>
 <style scoped>
-.main_head {
-  margin: auto;
-  width: 96%;
-  height: 40px;
-  font-size: 22px;
-  font-weight: 900;
-  margin: 0 2%;
-  /* line-height: 30px; */
-}
+
 /* *{
        padding:0;
        margin:0;

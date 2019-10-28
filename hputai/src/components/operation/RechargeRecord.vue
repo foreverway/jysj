@@ -1,6 +1,7 @@
 <template>
   <div class="main" title="充值记录单">
-    <h3>充值记录单</h3>
+                <zx-head title="充值记录单" ></zx-head>
+
     <div class="so_main_left">
       <el-form :inline="true" :model="form" label-width="90px" >
         <el-form-item label="学生姓名：" >

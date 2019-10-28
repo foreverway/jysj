@@ -11,6 +11,10 @@ import 'babel-polyfill';
 import ElementUI from 'element-ui';
 import '../theme/index.css'
 
+//引入公共头部
+import zxhead from './templates/Head';
+//全局注册组件
+Vue.component('zx-head', zxhead);
 // import 'element-ui/lib/theme-chalk/index.css';
 
 //把组件放在第三方样式之后，在main.js中引入顺序决定了打包后css的顺序

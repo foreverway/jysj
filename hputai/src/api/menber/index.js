@@ -100,5 +100,9 @@ export default {
    application_edit_put(params){ //编辑报名需求提交保存数据接口
     let url='/api/api_application_edit'
     return shuju.putdata(url,params)
+  },
+  index_data(params){ //编辑报名需求提交保存数据接口
+    let url='/api/api_index_data'
+    return shuju.getdata(url,params)
   }
 }

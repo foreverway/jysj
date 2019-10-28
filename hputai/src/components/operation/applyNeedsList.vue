@@ -1,6 +1,7 @@
 <template>
   <div class="main">
-    <div class="main_head">|&nbsp;报名需求列表</div>
+                <zx-head title="报名需求列表" ></zx-head>
+
     <el-input
       placeholder="随便搜点什么,自动匹配结果"
       v-model="parms.search"
@@ -655,15 +656,7 @@ export default {
   color: #f0f9eb;
   font-weight: 999;
 }
-.main_head {
-  margin: 0 2;
-  /* width: 1200px; */
-  width: 96%;
-  height: 40px;
-  font-size: 22px;
-  font-weight: 900;
-  /* line-height: 30px; */
-}
+
 #click_edit {
   /* //编辑 */
   background-color: #3a8eff !important;

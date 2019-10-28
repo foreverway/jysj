@@ -1,6 +1,5 @@
 <template>
   <div class="so_main">
-    <h3>学习币总额明细</h3>
     <div class="so_main_left">
       <el-form :inline="true" :model="form" class="demo-form-inline">
         <el-input class="so_input" v-model="form.search" @input="getadata" placeholder="请输入用户名"></el-input>
@@ -173,6 +172,6 @@ this.getadata()
   width: 300px;
   margin-bottom: 20px;
 }
-.so_main_left{float: left;margin-top: 20px}
+.so_main_left{float: left;margin-top: 5px}
 .so_main_right{float: right;}
 </style>

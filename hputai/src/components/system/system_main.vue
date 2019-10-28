@@ -1,6 +1,6 @@
 <template>
     <div class="main">
-         <!-- <div class="head_word">系统配置</div> -->
+        <!-- <zx-head title="系统配置" ></zx-head> -->
 
             <el-menu router :default-active="activeIndex"
              class="el-menu-demo"
@@ -38,11 +38,7 @@
 .el-menu-demo{
     margin-bottom: 20px;
 }
-.head_word {
-  font-size: 26px;
-  margin:10px 0;
-  font-weight: 700;
-}
+
 </style>
 
 

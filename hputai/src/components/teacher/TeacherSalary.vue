@@ -1,6 +1,7 @@
 <template>
   <div class="so_main">
-    <div class="head_word">教师课酬</div>
+            <zx-head title="教师课酬" ></zx-head>
+
      <div class="so_main_left"> 
        <el-input
         class="so_input"
@@ -153,10 +154,7 @@ export default {
 .yulan_height {
   height: 50vh;
 }
-.head_word {
-  font-size: 26px;
-  font-weight: 700;
-}
+
 .hover_img_main {
   position: relative;
 }

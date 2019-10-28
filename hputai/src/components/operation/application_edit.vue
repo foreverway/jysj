@@ -1,6 +1,7 @@
 <template>
   <div class="main">
-    <div class="main_head">|&nbsp;编辑报名需求</div>
+                <zx-head title="编辑报名需求" ></zx-head>
+
     <el-steps :active="active" finish-status="success">
       <el-step title="填写报名情况"></el-step>
       <el-step title="填写需求情况"></el-step>
@@ -638,15 +639,7 @@ import { mapState } from 'vuex'
 };
 </script>
 <style scoped>
-.main_head {
-  margin: auto;
-  width: 96%;
-  height: 40px;
-  font-size: 22px;
-  font-weight: 900;
-  margin: 0 2%;
-  /* line-height: 30px; */
-}
+
 /* *{
        padding:0;
        margin:0;

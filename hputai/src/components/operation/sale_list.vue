@@ -1,6 +1,7 @@
  <template>
   <div class="main">
-    <div class="main_head">|&nbsp;销售进程管控表</div>
+                <zx-head title="销售进程管控表" ></zx-head>
+
     <el-input
       placeholder="模糊搜索"
       v-model="parms.search"
@@ -259,13 +260,5 @@ export default {
 };
 </script>
 <style scoped>
-.main_head {
-  margin: 0 2;
-  /* width: 1200px; */
-  width: 96%;
-  height: 40px;
-  font-size: 22px;
-  font-weight: 900;
-  /* line-height: 30px; */
-}
+
 </style>

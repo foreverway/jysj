@@ -1,6 +1,7 @@
 ` <template>
   <div class="so_main">
-    <h3>教师列表</h3>
+                <zx-head title="教师列表" ></zx-head>
+
     <div class="so_main_left">
       <el-form :inline="true" :model="form" class="demo-form-inline">
         <el-input

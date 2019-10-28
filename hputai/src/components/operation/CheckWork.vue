@@ -1,6 +1,6 @@
 <template>
   <div class="so_main">
-    <div class="head_word">考勤与课时统计</div>
+        <zx-head title="考勤与课时统计" ></zx-head>
 
     <div class="so_main_left">
       <el-form :inline="true" :model="form"  class="demo-form-inline">
@@ -395,8 +395,5 @@ p{
 .so_main_right {
   float: right;
 }
-.head_word {
-  font-size: 26px;
-  font-weight: 700;
-}
+
 </style>

@@ -1,8 +1,6 @@
 <template>
 <div class="so_main">
-  <h3>现金钱包</h3>
 <div class="so_main_left">
-
  <el-form :inline="true" :model="form" class="demo-form-inline">
 <el-input class="so_input" v-model="form.search" @input="getadata" placeholder="请输入用户名"></el-input>
 <el-button type="primary" @click="getadata" style="margin-left:5px;background-color:#e6563a; border:none;">搜索</el-button>
@@ -173,6 +171,6 @@ this.getadata()
   width: 300px;
   margin-bottom: 20px;
 }
-.so_main_left{float: left;margin-top: 15px}
+.so_main_left{float: left;margin-top: 5px}
 
 </style>

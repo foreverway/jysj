@@ -229,7 +229,7 @@ export default {
 }
 .so_main_left {
   float: left;
-  margin-top: 20px;
+  margin-top: 5px;
 }
 .so_main_right {
   float: right;

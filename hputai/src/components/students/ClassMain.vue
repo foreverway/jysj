@@ -4,7 +4,7 @@
                 <el-menu-item index="1">待上课表</el-menu-item>
                 <el-menu-item index="2">已上课表</el-menu-item>
             </el-menu> -->
-             <div class="head_word">学生课表</div>
+             <zx-head title="学生课表" ></zx-head>
               <el-tabs v-model="activeName" @tab-click="handleClick">
     <el-tab-pane label="待上课表" name="1"></el-tab-pane>
     <el-tab-pane label="已上课表" name="2"></el-tab-pane>
@@ -48,10 +48,6 @@
     padding: 8px;
   height: 35px !important;
 }
-.head_word {
-  font-size: 26px;
-  margin:15px 0;
-  font-weight: 700;
-}
+
 </style>
 

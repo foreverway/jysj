@@ -2,7 +2,7 @@
   <div class="main">
     <!-- 设置充值链接 -->
 
-    <div class="head_word">充值链接</div>
+        <zx-head title="充值链接" ></zx-head>
     <el-input style="width:200px" v-model="money" placeholder="请输入充值金额"></el-input>
     <el-button type="primary" v-show="money>0" @click="copyUrl">生成并复制充值链接</el-button>
     <!-- <zx-button type="primary">ddd</zx-button> -->
@@ -50,11 +50,4 @@ export default {
   }
 };
 </script>
-<style  scoped>
-.head_word {
-  font-size: 26px;
-  margin: 15px 0;
-  font-weight: 700;
-}
 
-</style>

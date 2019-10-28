@@ -1,6 +1,7 @@
 <template>
   <div class="main">
-    <div class="main_head">|&nbsp;编辑排课信息</div>
+                <zx-head title="编辑排课信息" ></zx-head>
+
     <!--  <el-input  style="width:200px" v-model="money"  placeholder="请输入充值金额" ></el-input>
     <el-button type="primary" v-show="money>0" @click="copyUrl">生成并复制充值链接</el-button>-->
 
@@ -759,7 +760,7 @@ export default {
 };
 </script>
 <style scoped>
-.main_head {
+/* .main_head {
   margin: auto;
   width: 96%;
   height: 40px;
@@ -767,7 +768,7 @@ export default {
   font-weight: 900;
   margin: 0 2%;
   /* line-height: 30px; */
-}
+
 /* *{
        padding:0;
        margin:0;

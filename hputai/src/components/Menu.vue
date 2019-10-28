@@ -20,7 +20,6 @@
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
- <!-- </el-tooltip>      -->
           <span style="width:15px;height:5px;"></span>
           </div>
         </div>
@@ -123,7 +122,7 @@
                 style="pointer-events: none;"
               >
                 <template slot="title">
-                  <span class="data_color" id=""><i :class="item.menu_icon" ></i></span>
+                  <span class="data_color" id="" ><i  :class="item.menu_icon" ></i></span>
                   <span slot="title" class="changeC">{{item.menu_name}}</span>
                 </template>
                 <span v-for="(items,index1) in item.children" :key="index1">
@@ -426,6 +425,10 @@ sessionStorage.setItem("url",twoUrl);
 </script>
   
 <style scoped>
+.data_color{
+
+  margin-top:3px;
+}
 .clearfix{
   padding:0 20px;
 }
