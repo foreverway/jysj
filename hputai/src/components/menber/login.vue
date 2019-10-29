@@ -126,8 +126,11 @@ export default {
   },
   created() {
     this.getMen();
+
   },
   methods: {
+            // 浏览器检查结果
+
     getMen(a) {
       let params = {
         search: a

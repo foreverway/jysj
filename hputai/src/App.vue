@@ -18,7 +18,10 @@ export default {
           isRouterAlive: true//一开始router-view为true
         }
       },
+      created(){
+      },
       methods: {
+
         reload() {
           this.isRouterAlive = false
              //在修改数据之后使用 $nextTick，则可以在回调中获取更新后的 DOM

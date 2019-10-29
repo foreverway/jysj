@@ -308,7 +308,7 @@
     :close-on-click-modal='false'
     :visible.sync="dialogTableVisible_seeTeacherClass">
       <span>查看老师课表</span>
-      <el-table :data="seeteacherclass" border>
+      <el-table :data="seeteacherclass_data" border>
         <el-table-column property="course_address" label="上课地点"></el-table-column>
         <el-table-column property="address" label="线下上课地址"></el-table-column>
         <el-table-column property="subject_name" label="科目"></el-table-column>
@@ -332,7 +332,7 @@ export default {
       address_check: [], //上课地址的数据
       seeapplytable: {}, //弹出报名表数据
       seeclassneeds: {}, //弹出排课需求数据
-      seeteacherclass: [], //弹出老师课表数据
+      seeteacherclass_data: [], //弹出老师课表数据
       stu_centerDialogVisible: false, //学生课表的弹出层
       seestudentclass: [], //学生课表的弹出层数据
       seestudentname: [], //学生课表的弹出层学生名
@@ -520,20 +520,27 @@ export default {
         teacher_id: this.form.teacher_id * 1
       };
       if (!this.form.teacher_id * 1 == "") {
-        teacher_id: this.form.teacher_id * 1;
-      }
-      if (!this.form.teacher_id * 1 == "") {
-        this.dialogTableVisible_seeTeacherClass = true;
-        this.get_teacher_course({
-          //查看老师课表
-          params,
-          url: "/api/api_teacher_course"
+        this.$apis.operation.teacher_course(params).then(res=>{
+          if(res&&res.data.code==1){
+             if(Object.prototype.toString.call(res.data.data).split(7,6)==Array){
+              this.seeteacherclass_data=res.data.data
+              this.dialogTableVisible_seeTeacherClass=true
+            }else{
+             this.seeteacherclass_data=[]
+                           this.dialogTableVisible_seeTeacherClass=true
+
+            }
+          }else{
+                    this.$message({
+          type: "worning",
+          message: "此老师暂没有数据可查看"
         });
-        this.seeteacherclass = this.teacher_course;
+          }
+        });
       } else {
         this.$message({
           type: "worning",
-          message: "请选择老师"
+          message: "此老师暂没有数据可查看"
         });
       }
     },

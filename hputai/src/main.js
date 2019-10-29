@@ -4,10 +4,10 @@ import Vue from 'vue'
 import $ from 'jquery'
 import VCharts from 'v-charts'
 import App from './App'
+import 'babel-polyfill' //引入转化es6到es5的语法  支持ie
 // [ 可选组件 ] 图表
 
 import apis from './api/apiList'
-import 'babel-polyfill';
 import ElementUI from 'element-ui';
 import '../theme/index.css'
 

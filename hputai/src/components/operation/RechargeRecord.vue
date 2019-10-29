@@ -504,6 +504,7 @@ export default {
         // 获取班主任数据
         if (res.data.code == 1) {
           this.teacher = res.data.data.list;
+          console.log( this.teacher )
         }
       });
       this.$apis.common.adviser_list().then(res => {

@@ -127,7 +127,7 @@
           clearable
           style="width:200px"
           disabled
-          v-model="form.teacher"
+          v-model="form_banzhuren"
           filterable
           placeholder="搜索选择"
           @change="getadata"
@@ -165,6 +165,7 @@ export default {
       adviser: "", //顾问数据
       teacher: "", //班主任数据
       financeId: "", //关联充值id
+      form_banzhuren:'', //根据学生选择的班主任
       form: {
         uname: "", //用户名
         in_amount: "", //实收金额
@@ -267,7 +268,6 @@ export default {
           for (var i = 0; i < this.teacher.length; i++) {
             if (this.teacher[i].teacher_id == num) {
               this.form.teacher = this.teacher[i].teacher_id;
-              //console.log(this.teacher[i].teacher_id)
             }
           }
         }
@@ -307,20 +307,15 @@ export default {
     ifname() {
       if(this.form.uname!=''){
       this.$apis.common.recharge_check({uname:this.form.uname}).then(res => {
-        if (res.data.code == 1) {
+        if (res&&res.data.code == 1) {
           this.tipname = "";
           let banzhuren = this.banzhuren_list.find(item=>{
             return item.id=res.data.data.banzhuren_id
           })
           let num = parseInt(res.data.data.banzhuren_id);
-          this.form.teacher = banzhuren.banzhuren;
-          // console.log(num)
-          // for (var i = 0; i < this.teacher.length; i++) {
-          //   if (this.teacher[i].teacher_id == num) {
-          //    console.log(this.teacher[i])
-          //     this.form.teacher = num;
-          //   }
-          // }
+           this.form_banzhuren=banzhuren.banzhuren
+          this.form.teacher = num;
+
         }
       });
       }

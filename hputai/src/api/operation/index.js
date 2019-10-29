@@ -6,6 +6,10 @@ export default {
     let url='/api/api_application_add'
     return shuju.postdata(url,params)
    },
-   //刷新出已经添加的列表
+   //查看老师课表
+   teacher_course(params){
+    let url='/api/api_teacher_course'
+    return shuju.getdata(url,params)
+   }
 
 }
