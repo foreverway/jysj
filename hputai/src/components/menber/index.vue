@@ -3,32 +3,28 @@
     <marquee class="marquee_top">在使用新系统的过程中，如果遇到问题或者不懂的地方请向研发部反馈</marquee>
 
     <div class="header-num">
-      <div class="num" style="background:#5ab1ef">
+      <div class="num" style="background:#5ab1ef" @click='pushWey'>
         <div>
           <h1>{{this.data.my_counts}}</h1>
           <p>我的学员</p>
         </div>
-
         <i class="el-icon-s-custom"></i>
       </div>
-
-      <div class="num" style="background:#fa6e86">
+      <div class="num" style="background:#fa6e86"  @click='pushWey'>
         <div>
           <h1>{{this.data.new_counts}}</h1>
           <p>新增学员</p>
         </div>
         <i class="el-icon-circle-plus-outline"></i>
       </div>
-
-      <div class="num" style="background:#ffb980">
+      <div class="num" style="background:#ffb980"  @click='pushWey'>
         <div>
           <h1>{{this.data.bao_counts}}</h1>
           <p>保读学员</p>
         </div>
         <i class="el-icon-view"></i>
       </div>
-
-      <div class="num" style="background:#19d4ae">
+      <div class="num" style="background:#19d4ae"  @click='pushWey'>
         <div>
           <h1>{{this.data.vip_counts}}</h1>
           <p>vip学员</p>
@@ -140,8 +136,18 @@ export default {
   },
   created(){
     this.getDate()
+
+  },
+  mounted(){
+//       let mumber= $('.num')
+// for(let i=0;i<mumber.length;i++){
+// this.pushWey(i)
+// }
   },
   methods: {
+ pushWey(){  
+this.$router.push({path:'/StudentsList'})
+}  , 
     load() {
       alert(this.count);
       this.count += 2;
@@ -152,7 +158,7 @@ export default {
           this.data=res.data.data
         }
       })
-    }
+    },
   }
 };
 </script>
@@ -231,6 +237,11 @@ i {
 }
 .num h1 {
   font-size: 40px;
+    cursor:pointer;
+
+}
+.num p {
+  cursor:pointer;
 }
 .main1 {
   width: 700px;

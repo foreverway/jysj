@@ -22,8 +22,9 @@
             <el-radio  :label="2">线下</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="上课地址" v-if="show==true" prop="address">
-          <el-cascader placeholder="支持到地级市" v-model="form.address" :options="address_check" filterable></el-cascader>
+        <el-form-item label="上课地址" width="200px" v-if="form.radio==2" prop="address">
+          <!-- <el-cascader placeholder="支持到地级市" v-model="form.address" :options="address_check" filterable></el-cascader> -->
+      <el-input v-model="form.address"></el-input>
         </el-form-item>
       <el-form-item :inline="true" label="报读科目" prop="value">
         <el-cascader
@@ -216,6 +217,7 @@ import { mapState } from 'vuex'
       subjects_data: [], //学科数据
       feedback: "", //反馈
       course_address: "", //上课地址
+      address_check:[], //上课地址数组
       form: {
         title: "", //标题
         value: "",  //报读科目
@@ -280,7 +282,18 @@ import { mapState } from 'vuex'
   computed: {
     ...mapState(['region_list'])
   },
-  mounted() {},
+  mounted() {
+      let getId = arr => {
+    arr.forEach(v => {
+              v.value=v.label
+        if (v.children instanceof Array) {
+            getId(v.children)
+        }
+    });
+}
+getId(this.region_list);
+        this.address_check = this.region_list;
+  },
   methods: {
     //生成学员编号
     deleteTest_1() {
@@ -305,6 +318,8 @@ import { mapState } from 'vuex'
           this.form.feedback = this.edit_data.remarks;
           this.form.valueDate = res.data.data.expiry_date;
           this.form.radio=this.edit_data.needs_data.course_address;
+          this.form.address=this.edit_data.needs_data.address;
+
           this.form2.need_one = this.edit_data.needs_data.need_one;
           this.form2.need_two = this.edit_data.needs_data.need_two;
           this.form2.need_three = this.edit_data.needs_data.need_three;
@@ -460,10 +475,11 @@ import { mapState } from 'vuex'
     },
             whereGo(a) {
       if (a == "2") {
-        this.show = true;
-        this.address_check = this.region_list;
+        this.form.radio = 2;
+
+
       } else {
-        this.show = false;
+       this.form.radio==1
       }
       if (this.form.radio == 1) {
         this.editableTabs_1 = this.pushArray1;
@@ -498,7 +514,7 @@ import { mapState } from 'vuex'
         expiry_date: this.form.valueDate,
         remarks: this.form.feedback,
         course_address: this.form.radio,
-        address: this.form.address,
+        address: this.form.address.toString(),
         need_one: this.form2.need_one,
         need_two: this.form2.need_two,
         need_three: this.form2.need_three,
@@ -560,7 +576,7 @@ import { mapState } from 'vuex'
         expiry_date: this.form.valueDate,
         remarks: this.form.feedback,
         course_address: this.form.radio,
-        address: this.form.address,
+        address: this.form.address.toString(),
         need_one: this.form2.need_one,
         need_two: this.form2.need_two,
         need_three: this.form2.need_three,

@@ -233,6 +233,7 @@
         </el-form-item>
         <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="上课地址:">
           <p>{{seeclassneeds.address?seeclassneeds.address:"未安排"}}</p>
+
         </el-form-item>
         <el-form-item
           style="border:1px solid silver;margin: 0; border-bottom:none;background-color:silver;"
@@ -309,6 +310,7 @@ export default {
       address_check: [], //上课地址的数据
       seeapplytable: {}, //弹出报名表数据
       seeclassneeds: {}, //弹出排课需求数据
+      seeClassNeeds_address:[],//查看报名需求的地址
       seeteacherclass_data: [], //弹出老师课表数据
       stu_centerDialogVisible: false, //学生课表的弹出层
       seestudentclass: [], //学生课表的弹出层数据
@@ -490,6 +492,9 @@ export default {
         url: "/api/api_get_needs"
       });
       this.seeclassneeds = this.needs;
+   // console.log(this.region_list)地址总列表
+
+
     }, //查看老师课表的弹框
     seeTeacherClass() {
       let params = {

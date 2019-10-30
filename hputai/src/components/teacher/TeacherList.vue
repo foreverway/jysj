@@ -532,92 +532,21 @@ export default {
         admin_id: this.getdataCookie("admin_id")
       };
       //获取科目的数据
-      this.$apis.common.subject_list(parms).then(res => {
+           this.$apis.common.subject_list().then(res => {
         if (res.data.code == 1) {
           this.msg = res.data;
           this.options_ = res.data.data;
-          this.$apis.common.subject_list(parms).then(res => {
-            if (res.data.code == 1) {
-              this.msg = res.data;
-              this.options_ = res.data.data;
-              // console.log(this.options_)
-              for (let i = 0; i < this.options_.length; i++) {
-                var val = this.options_[i];
-                let children = [];
-                if (val.children) {
-                  //如果有子元素
-                  for (let j = 0; j < val.children.length; j++) {
-                    //对子元素进行遍历
-                    var val1 = val.children[j];
-                    if (val1.children) {
-                      //如果子元素有子元素
-                      //let children =[]
-                      for (let g = 0; g < val1.children.length; g++) {
-                        //对子元素进行遍历
-                        var val2 = val1.children[g];
-                        //console.log(val2)
-                        children.push({
-                          value: val1.subject_name,
-                          label: val1.subject_name,
-                          children: [
-                            {
-                              //将孙级添加到父级相对应的位置下
-                              value: val2.subject_name,
-                              label: val2.subject_name
-                            }
-                          ]
-                        });
-                        this.options.push({
-                          value: val.subject_name,
-                          label: val.subject_name,
-                          children: children
-                        });
-                      }
-                    } else {
-                      children.push({
-                        value: val1.subject_name,
-                        label: val1.subject_name
-                      });
-                      this.options.push({
-                        value: val.subject_name,
-                        label: val.subject_name,
-                        children: children
-                      });
-                    }
-                  }
-                } else {
-                  this.options.push({
-                    value: val.subject_name,
-                    label: val.subject_name
-                  });
-                }
-              }
-              //console.log(this.options)
+              let addWord=arr=>{
+            arr.forEach(item=>{
+              item.value=item.subject_name,
+              item.label=item.subject_name
+            if(item.children instanceof Array){
+                addWord(item.children)
             }
-          });
-          // for (let i = 0; i < this.options_.length; i++) {
-          //   var val = this.options_[i];
-          //   var children = [];
-          //   if (val.children) {
-          //     for (let j = 0; j < val.children.length; j++) {
-          //       var val1 = val.children[j];
-          //       children.push({
-          //         value: val1,
-          //         label: val1.subject_name
-          //       });
-          //     }
-          //     this.options.push({
-          //       value: val,
-          //       label: val.subject_name,
-          //       children: children
-          //     });
-          //   } else {
-          //     this.options.push({
-          //       value: val,
-          //       label: val.subject_name
-          //     });
-          //   }
-          // }
+          })
+          }
+          addWord(this.options_)
+           this.options=this.options_  
         }
       });
     },

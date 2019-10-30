@@ -338,7 +338,23 @@ export default {
     whereGo(a) {
       if (a == "2") {
         this.show = true;
-        this.address_check = this.region_list;
+        this.$apis.common.region_list().then(res=>{
+          if(res.data.code==1){
+            getId(res.data.options);
+          }
+        })
+  let getId = arr => {
+    arr.forEach(v => {
+              v.value=v.label
+        if (v.children instanceof Array) {
+            getId(v.children)
+        }
+    });
+  this.address_check = arr;
+}
+// getId(this.region_list);
+       // this.address_check = this.region_list;
+
       } else {
         this.show = false;
       }
@@ -377,7 +393,10 @@ export default {
       // alert()
     },
     deleteTest_1() {
-      this.editableTabs_1.pop(this.editableTabs_1);
+      //this.editableTabs_1.pop(this.editableTabs_1);
+       this.pushArray1.pop(this.pushArray1)
+       this.pushArray2.pop(this.pushArray2)
+
       this.form.value=''
     },
     deleteTest() {
@@ -493,7 +512,6 @@ export default {
           message:"不可以重复选课"
         })
       }
-
     },
     //学生姓名选择产生的变化
     handleChange(targetName) {
@@ -521,7 +539,7 @@ export default {
             expiry_date: this.form.valueDate,
             remarks: this.form.feedback,
             course_address: this.form.radio,
-            address: this.form.address,
+            address: this.form.address.toString(),
             need_one: this.form2.need_one,
             need_two: this.form2.need_two,
             need_three: this.form2.need_three,
@@ -583,7 +601,7 @@ export default {
                 expiry_date: this.form.valueDate,
                 remarks: this.form.feedback,
                 course_address: this.form.radio,
-                address: this.form.address,
+                address: this.form.address.toString(),
                 need_one: this.form2.need_one,
                 need_two: this.form2.need_two,
                 need_three: this.form2.need_three,
@@ -594,7 +612,6 @@ export default {
 
               this.parms.subjects_data = this.subjects_data;
               this.parms.students_data = this.students_data;
-             // console.log(this.parms);
               this.$apis.common.application_edit_put(this.parms).then(res => {
                 if (res.data.code == 1) {
                   this.$message({
