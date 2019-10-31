@@ -56,7 +56,7 @@
           <p>{{item.title}}</p>
           <span style="display:none;" v-bind:id="'course_id'+ i">{{item.subject_id}}</span>
           <p>
-            <el-input v-model.number="item.classhour" v-bind:id="'time' + i" placeholder="课时"></el-input>
+            <el-input v-model="item.classhour" v-bind:id="'time' + i" placeholder="课时"></el-input>
           </p>
           <p>
             <el-input v-model.number="item.price" v-bind:id="'mach' + i" placeholder="单价(元)"></el-input>
@@ -106,12 +106,12 @@
           filterable
           clearable
         ></el-cascader>
-        <div class="add_ul">
+        <div class="add_ul_2">
           <p>学生姓名</p>
           <p>手机号</p>
           <p>操作</p>
         </div>
-        <div class="add_ul_new" v-for="(item,i) in editableTabs" :key="i">
+        <div class="add_ul_2" v-for="(item,i) in editableTabs" :key="i">
           <span style="display:none;" v-bind:id="'students'+ i">{{item.id}}</span>
           <p>{{item.name}}</p>
           <p>{{item.tel}}</p>
@@ -654,7 +654,7 @@ export default {
       oInput.value = url;
       document.body.appendChild(oInput);
       oInput.select(); // 选择对象;
-      console.log(oInput.value);
+    //  console.log(oInput.value);
       document.execCommand("Copy"); // 执行浏览器复制命令
       this.$message({
         message: url + "已成功复制到剪切板",
@@ -719,6 +719,14 @@ option {
   width: 8%;
   border: 1px solid silver;
   text-align: center;
+}
+.add_ul p:nth-child(1) {
+  width: 14%;
+}
+
+.add_ul_new p:nth-child(1) {
+
+  width: 14%;
 }
 .stap_3 {
   width: 100%;

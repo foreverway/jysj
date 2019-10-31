@@ -15,25 +15,25 @@
             @select="handleSelect"
           >
             <el-menu-item index="1">
-              <router-link :to="{name:'ShareStatistical'}">
-                <span
-                  index="1"
-                  class="_span"
-                  style="display: inline-block; width: 100px;text-align: center;height: 60px;"
-                >分享记录列表</span>
-              </router-link>
-            </el-menu-item>
-            <el-menu-item index="2">
               <router-link :to="{name:'ShareList'}">
                 <span
-                  index="2"
+                  index="1"
                   class="_span"
                   style="display: inline-block; width: 100px;text-align: center;height: 60px;"
                 >分享素材列表</span>
               </router-link>
             </el-menu-item>
+            <el-menu-item index="2">
+              <router-link :to="{name:'ShareStatistical'}">
+                <span
+                  index="2"
+                  class="_span"
+                  style="display: inline-block; width: 100px;text-align: center;height: 60px;"
+                >分享记录列表</span>
+              </router-link>
+            </el-menu-item>
             <!-- <el-menu-item index v-if="isShowConfig==1"> -->
-            <el-menu-item index="3">
+            <el-menu-item index="3" v-if="isShowConfig==1">
               <router-link :to="{name:'ShareArticleConfig'}">
                 <span
                   index="2"
@@ -73,7 +73,7 @@ export default {
   methods: {
     //接收子组件传回的值
     function1(data) {
-      alert(data);
+      // alert(data);
       this.isShowConfig = data;
     },
 
@@ -114,8 +114,13 @@ export default {
       // Router.push("/")
     },
     getdata() {
-      this.$common.is_show_config(this.admin_uid).then(res => {
-        this.isShowConfig = res.data.data.permissions.isShowConfig;
+      // this.$common.is_show_config(this.admin_uid).then(res => {
+      //   this.isShowConfig = res.data.data.permissions.isShowConfig;
+      // });
+            this.$apis.common.share_config_list().then(res => {
+        this.msg = res.data;
+        this.tableData = res.data.data.list;
+        this.isShowConfig=res.data.data.permissions.isShowConfig
       });
     }
   },

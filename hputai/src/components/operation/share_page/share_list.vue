@@ -157,7 +157,7 @@ export default {
         type: "warning"
       })
         .then(() => {
-          this.$apis.common.del_share(row.id).then(res => {
+          this.$apis.common.del_share({id:row.id}).then(res => {
             if (res.data.code == 1) {
               this.$message({
                 type: "success",

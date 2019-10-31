@@ -54,7 +54,16 @@ export default {
     goback() {
       javascript: history.back(-1);
     },
+handlePreview (file) {
+       let reader = new FileReader()
+           reader.readAsDataURL(file.raw)
+            reader.onload = () => {
 
+                let _base64 = reader.result
+                let  ba=_base64.split(",")
+       this.form.src_img=_base64
+            }
+},
 
     onSubmit() {
       this.$apis.common.add_share_config(this.form).then(res => {
@@ -64,7 +73,8 @@ export default {
             message: "添加成功",
             type: "success"
           });
-          this.$router.push("/ShareArticleConfig");
+           this.$router.push("/Share/ShareArticleConfig");
+         // this.history.go(-1)
         } else {
           this.loading = false;
           this.$message.error(res.data.msg);

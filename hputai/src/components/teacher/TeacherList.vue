@@ -601,9 +601,9 @@ export default {
                 subject_id: needArr.value,
                 subject_name: needArr.label,
                 online_type: 1,
-                one_to_one: 1000,
-                small_class: 1000, //课程类型
-                big_class: 1000 //课程id
+                one_to_one: 0,
+                small_class: 0, //课程类型
+                big_class: 0 //课程id
               });
       //         console.log(this.table.tableData);
       //       }

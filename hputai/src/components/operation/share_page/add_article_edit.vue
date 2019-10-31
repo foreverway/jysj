@@ -87,7 +87,7 @@ export default {
             message: "保存成功",
             type: "success"
           });
-          this.$router.push("/ShareArticleConfig");
+          this.$router.push("/Share/ShareArticleConfig");
         } else {
           this.loading = false;
           this.$message.error(res.data.msg);

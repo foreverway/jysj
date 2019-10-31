@@ -25,7 +25,7 @@
       <el-table-column prop="student_status" label="状态"></el-table-column>
       <el-table-column prop="learnmoney" label="账户余额"></el-table-column>
       <el-table-column prop="first_time" label="首次缴费时间"></el-table-column>
-      <el-table-column fixed="right" prop label="操作" width="200px">
+      <el-table-column fixed="right" prop label="操作" width="220px">
         <template slot-scope="scope">
           <span v-for="(item,index) in getStuList()" :key="index">
             <el-button
@@ -152,6 +152,12 @@ export default {
         case "copy_url": //复制链接
           this.dialogFormVisible1 = true;
           break;
+        case "plan_class": //跳转排课
+          this.$router.push({
+            path: "/StudentsList/ApplicationAdd",
+            query: { id: b.id }
+          });
+          break;
       }
     },
     // 复制链接
@@ -227,7 +233,12 @@ export default {
   color: white;
 }
 #copy_url {
-  background-color: #7571fa !important;
+    background-color: #8896B5 !important;
+  color: white;
+}
+#plan_class{
+      background-color: #7571fa !important;
+
   color: white;
 }
 </style>

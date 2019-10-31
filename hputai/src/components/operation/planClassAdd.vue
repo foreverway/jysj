@@ -471,7 +471,6 @@ export default {
       let params = {
         app_id: this.apply_data.app_id
       };
-
       this.get_application({
         //查看报名表数据
         params,

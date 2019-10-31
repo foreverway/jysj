@@ -54,7 +54,7 @@
           <p>{{item.subject_name}}</p>
           <span style="display:none;" v-bind:id="'course_id'+ i">{{item.course_id}}</span>
           <p>
-            <el-input v-model.number="item.classhour" v-bind:id="'time' + i" placeholder="课时"></el-input>
+            <el-input v-model="item.classhour" v-bind:id="'time' + i" placeholder="课时"></el-input>
           </p>
           <p>
             <el-input v-model.number="item.price" v-bind:id="'mach' + i" placeholder="单价(元)"></el-input>
@@ -102,12 +102,12 @@
           filterable
           clearable
         ></el-cascader>
-        <div class="add_ul">
+        <div class="add_ul_2">
           <p>学生姓名</p>
           <p>手机号</p>
           <p>操作</p>
         </div>
-        <div class="add_ul_new" v-for="(item,i) in editableTabs" :key="i">
+        <div class="add_ul_2" v-for="(item,i) in editableTabs" :key="i">
           <span style="display:none;" v-bind:id="'students'+ i">{{item.id}}</span>
           <p>{{ item.student_name}}</p>
           <p>{{item.tel}}</p>
@@ -350,49 +350,6 @@ getId(this.region_list);
           }
           addWord(this.options_)
            this.options=this.options_  
-         // console.log(this.options_)
-          // for (let i = 0; i < this.options_.length; i++) {
-          //   var val = this.options_[i];
-          //   let children = [];
-          //   if (val.children) { //如果有子元素
-          //     for (let j = 0; j < val.children.length; j++) { //对子元素进行遍历
-          //       var val1 = val.children[j];
-          //       if(val1.children){  //如果子元素有子元素
-          //           for (let g = 0; g < val1.children.length; g++) { //对子元素进行遍历
-          //           var val2 = val1.children[g];
-          //           children.push({
-          //               value: val1.subject_name,
-          //               label: val1.subject_name,
-          //               children:[{  //将孙级添加到父级相对应的位置下
-          //                   value: val2.subject_name,
-          //                   label: val2.subject_name,
-          //               }]
-          //             });
-          //             this.options.push({
-          //             value: val.subject_name,
-          //             label: val.subject_name,
-          //             children: children
-          //           });
-          //           }
-          //       }else{
-          //       children.push({
-          //         value: val1.subject_name,
-          //         label: val1.subject_name
-          //       });
-          //       this.options.push({
-          //       value: val.subject_name,
-          //       label: val.subject_name,
-          //       children: children
-          //     });
-          //       }
-          //     }
-          //   } else {
-          //     this.options.push({
-          //       value: val.subject_name,
-          //       label: val.subject_name
-          //     });
-          //   }
-          // }
         }
       });
     },
@@ -677,15 +634,13 @@ option {
   border: 1px solid silver;
   text-align: center;
 }
-.add_ul_2 p {
-  list-style: none;
-  display: inline-block;
-  background-color: #fff;
-  padding: 0;
-  margin-right: -5px;
-  width: 12%;
-  border: 1px solid silver;
-  text-align: center;
+.add_ul p:nth-child(1) {
+  width: 14%;
+}
+
+.add_ul_new p:nth-child(1) {
+
+  width: 14%;
 }
 .add_ul_new p {
   list-style: none;
@@ -697,6 +652,17 @@ option {
   border: 1px solid silver;
   text-align: center;
 }
+.add_ul_2 p {
+  list-style: none;
+  display: inline-block;
+  background-color: #fff;
+  padding: 0;
+  margin-right: -5px;
+  width: 12%;
+  border: 1px solid silver;
+  text-align: center;
+}
+
 .stap_3 {
   width: 100%;
 }

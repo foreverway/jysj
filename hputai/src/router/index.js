@@ -21,11 +21,11 @@ export default new Router({
           path: '/',
           component: resolve=>require(['@/components/menber/index'],resolve)
         },
-        {
-          path: '/ApplicationAdd',//ApplicationAdd添加报名需求列表
-          component: resolve=>require(['@/components/operation/application_add'],resolve),
-          name:'ApplicationAdd'
-        },
+        // {
+        //   path: '/ApplicationAdd',//ApplicationAdd添加报名需求列表
+        //   component: resolve=>require(['@/components/operation/application_add'],resolve),
+        //   name:'ApplicationAdd'
+        // },
         {
           path: 'ApplyNeedsList/ApplicationEdit',//ApplicationEdit编辑报名需求列表
           component: resolve=>require(['@/components/operation/application_edit'],resolve)
@@ -109,6 +109,11 @@ export default new Router({
           component: resolve=>require(['@/components/students/StudentsInfo'],resolve)
         },
         {
+          path: '/StudentsList/ApplicationAdd',//ApplicationAdd添加报名需求列表
+          component: resolve=>require(['@/components/operation/application_add'],resolve),
+          name:'ApplicationAdd'
+        },
+        {
           path: '/StudentsList/StudentsEdit',  //学生编辑
           component:resolve=>require(['@/components/students/students_edit'],resolve)
         },
@@ -157,7 +162,7 @@ export default new Router({
           children: [
             {
               path: '/Share',
-              component: resolve=>require(['@/components/operation/share_page/share_statistical'],resolve)
+              component: resolve=>require(['@/components/operation/share_page/share_list'],resolve)
             },
             {
               path: '/AddDelmonney',

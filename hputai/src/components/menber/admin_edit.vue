@@ -93,7 +93,7 @@ export default {
      this.getdata();
   },
   mounted(){
-    console.log(this.$route.params)
+  //  console.log(this.$route.params)
   },
   methods: {
     onSubmit() {

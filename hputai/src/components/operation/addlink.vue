@@ -28,8 +28,7 @@ export default {
   methods: {
    selectFunc(value) {
         this.selectValue2 = value
-        console.log(this.selectValue)
-        console.log(this.selectValue2)
+
       },
     // 复制链接
     copyUrl() {
@@ -38,7 +37,7 @@ export default {
       oInput.value = url;
       document.body.appendChild(oInput);
       oInput.select(); // 选择对象;
-      console.log(oInput.value);
+      // console.log(oInput.value);
       document.execCommand("Copy"); // 执行浏览器复制命令
       this.$message({
         message: url + "已成功复制到剪切板",

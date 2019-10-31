@@ -177,22 +177,22 @@
           <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="form.reason"></el-input>
         </el-form-item>
 
-        <el-form-item label="升学目标:" style="width:550px" prop="target">
+        <el-form-item label="升学目标:" style="width:550px" >
           <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="form.target"></el-input>
         </el-form-item>
 
-        <el-form-item label="需求:" style="width:550px" prop="demand">
+        <el-form-item label="需求:" style="width:550px" >
           <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="form.demand"></el-input>
         </el-form-item>
 
-        <el-form-item label="潜在需求:" style="width:550px" prop="potential_demand">
+        <el-form-item label="潜在需求:" style="width:550px">
           <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="form.potential_demand"></el-input>
         </el-form-item>
 
-        <el-form-item label="客户性格:" style="width:550px" prop="character">
+        <el-form-item label="客户性格:" style="width:550px" >
           <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="form.character"></el-input>
         </el-form-item>
-        <el-form-item label="在意偏好:" style="width:550px" prop="preferences">
+        <el-form-item label="在意偏好:" style="width:550px" >
           <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="form.preferences"></el-input>
         </el-form-item>
       </div>
@@ -201,7 +201,7 @@
       <div class="input_1_main">
         <div class="input_1">
           <el-form-item label="用户等级评定：">
-            <el-select v-model="form.alevel" placeholder="请选择" style="width:300px" v-if="msg.data">
+            <el-select v-model="form.alevel" prop='grade' placeholder="请选择" style="width:300px" v-if="msg.data">
               <el-option
                 v-for="item in msg.data.alevel_list"
                 :key="item.id"
@@ -322,17 +322,8 @@ export default {
           { required: true, message: "此项不能为空", trigger: "blur" }
         ],
         reason: [{ required: true, message: "此项不能为空", trigger: "blur" }],
-        target: [{ required: true, message: "此项不能为空", trigger: "blur" }],
-        demand: [{ required: true, message: "此项不能为空", trigger: "blur" }],
-        potential_demand: [
-          { required: true, message: "此项不能为空", trigger: "blur" }
-        ],
-        character: [
-          { required: true, message: "此项不能为空", trigger: "blur" }
-        ],
-        preferences: [
-          { required: true, message: "此项不能为空", trigger: "blur" }
-        ]
+        grade: [{ required: true, message: "此项不能为空", trigger: "blur" }],
+
       }
     };
   },

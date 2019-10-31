@@ -99,7 +99,6 @@
         let parms={ 
            admin_tel:this.form.admin_tel
         }
-        console.log(parms)
           this.$apis.menber.check_tel(parms).then(res=>{
               if(res){
                    this.$message({

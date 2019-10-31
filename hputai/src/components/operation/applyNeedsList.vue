@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-                <zx-head title="报名需求列表" ></zx-head>
+    <zx-head title="排课需求"></zx-head>
 
     <el-input
       placeholder="随便搜点什么,自动匹配结果"
@@ -68,47 +68,117 @@
     </el-table>
     <!-- 分页 -->
     <!-- 审核意见 -->
-    <el-dialog :close-on-click-modal='false' title="审核意见" :visible.sync="centerDialogVisible_shenghe" width="40%" center>
-      <el-form ref="form" label-width="80px">
-        <el-form-item label="审核意见" v-model="is_pass">
-          <el-radio v-model="is_pass" label="1">同意</el-radio>
-          <el-radio v-model="is_pass" label="2">不同意</el-radio>
+    <el-dialog
+      :close-on-click-modal="false"
+      title="审核意见"
+      :visible.sync="centerDialogVisible_shenghe"
+      width="60%"
+      center
+    >
+      <el-form ref="form" label-width="120px">
+        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="参数:">
+          <p>内容</p>
         </el-form-item>
-        <el-form-item :inline="true" label="班主任 ">
-          <!-- <p>{{this.banzhuren_list_new}}</p> -->
-          <!-- this.tip_banzhuren -->
-          <el-cascader
-            v-model="banzhuren_live"
-            :options="this.banzhuren_list_new"
-            :props="{ expandTrigger: 'hover' }"
-            :show-all-levels="false"
-          ></el-cascader>
+        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="编号:">
+          <p>{{seeapplytable.number}}</p>
         </el-form-item>
-        <el-form-item :inline="true" label=" 助教 ">
-          <el-cascader
-            v-model="helpTeacher_live"
-            :options="this.helpTeacher_list_new"
-            :props="{ expandTrigger: 'hover' }"
-            :show-all-levels="false"
-          ></el-cascader>
+        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="报名表标题:">
+          <p>{{seeapplytable.title?seeapplytable.title:"未安排"}}</p>
         </el-form-item>
-        <el-form-item :inline="true" label="教务专员">
-          <!-- <span class="demonstration">hover 触发子菜单</span> -->
-          <!-- 用el-autocomplete -->
-          <el-cascader
-            v-model="moneymen_live"
-            :options="this.moneymen_list_new"
-            :props="{ expandTrigger: 'hover' }"
-            :show-all-levels="false"
-          ></el-cascader>
+        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="栏目:">
+          <p>{{seeapplytable.live_name?seeapplytable.live_name:"未安排"}}</p>
         </el-form-item>
-        <el-form-item :inline="true" label=" 意见 ">
-          <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="textarea"></el-input>
+        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="科目:">
+          <el-table
+            :data="seeapplytable.subjects_data"
+            style="border:1px solid silver;margin: 0; border-bottom:none;"
+          >
+            <el-table-column property="subject_name" label="科目"></el-table-column>
+            <el-table-column property="classhour" label="课时"></el-table-column>
+            <el-table-column property="amount" label="金额"></el-table-column>
+            <el-table-column property="course_id" label="班课"></el-table-column>
+            <el-table-column property="is_one" label="一对一"></el-table-column>
+          </el-table>
+        </el-form-item>
+        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="学生:">
+          <el-table
+            :data="seeapplytable.students_data"
+            style="border:1px solid silver;margin: 0; border-bottom:none;"
+          >
+            <el-table-column property="student_name" label="学生姓名" width="100"></el-table-column>
+            <el-table-column property="tel" label="手机" width="100"></el-table-column>
+          </el-table>
+        </el-form-item>
+        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="课程顾问:">
+          <p>{{seeapplytable.guwen_name}}</p>
+        </el-form-item>
+        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="课程有效期:">
+          <p>{{seeapplytable.expiry_date}}</p>
+        </el-form-item>
+        <el-form-item
+          style="border:1px solid silver;margin: 0; border-bottom:none;"
+          label="优惠说明及备注:"
+        >
+          <p>{{seeapplytable.remarks}}</p>
         </el-form-item>
       </el-form>
+      <el-form label-width="120px">
+        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="需求:">
+          <p>无参数</p>
+        </el-form-item>
+        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="上课地点:">
+          <p>{{seeclassneeds.course_address}}</p>
+        </el-form-item>
+        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="上课地址:">
+          <p>{{seeclassneeds.address?seeclassneeds.address:"未安排"}}</p>
+        </el-form-item>
+
+        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label>
+          <p>{{seeclassneeds.need_one}}</p>
+        </el-form-item>
+        <el-form-item
+          style="border:1px solid silver;margin: 0; border-bottom:none;background-color:silver;"
+          label="需求一:"
+        >
+          <p>学生学习需求是什么？（零基础先修、同步辅导、巩固复习、强化冲刺）</p>
+        </el-form-item>
+        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label>
+          <p>{{seeclassneeds.need_two}}</p>
+        </el-form-item>
+
+        <el-form-item
+          style="border:1px solid silver;margin: 0; border-bottom:none;background-color:silver;"
+          label="需求二:"
+        >
+          <p>学生之前的学习经历和学习基础（之前在那里上的学？学习基础怎么样？）</p>
+        </el-form-item>
+        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label>
+          <p>{{seeclassneeds.need_three}}</p>
+        </el-form-item>
+        <el-form-item
+          style="border:1px solid silver;margin: 0; border-bottom:none;background-color:silver;"
+          label="需求三:"
+        >
+          <p>学生希望跟什么样的老师学习？</p>
+        </el-form-item>
+        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label>
+          <p>{{seeclassneeds.need_four}}</p>
+        </el-form-item>
+        <el-form-item
+          style="border:1px solid silver;margin: 0; border-bottom:none;background-color:silver;"
+          label="需求四:"
+        >
+          <p>学生上课时间期限，可排课时间？（北京时间）每次课上几小时？</p>
+        </el-form-item>
+        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label>
+          <p>{{seeclassneeds.need_five}}</p>
+        </el-form-item>
+      </el-form>
+      <el-input placeholder="审核备注"></el-input>
       <span slot="footer" class="dialog-footer">
         <el-button @click="centerDialogVisible_shenghe = false">取 消</el-button>
-        <el-button type="primary" @click="submit_think">提交意见</el-button>
+        <el-button type="primary" @click="submit_think">审核不通过</el-button>
+        <el-button type="success" @click="submit_think">审核通过</el-button>
       </span>
     </el-dialog>
 
@@ -126,7 +196,12 @@
       ></el-pagination>
     </span>
     <!-- 查看排课 -->
-    <el-dialog :close-on-click-modal='false' title="查看排课" :visible.sync="dialogTableVisible_table" width="60%">
+    <el-dialog
+      :close-on-click-modal="false"
+      title="查看排课"
+      :visible.sync="dialogTableVisible_table"
+      width="60%"
+    >
       <el-form ref="form" label-width="80px">
         <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="标题:">
           <p>{{gridData.title}}</p>
@@ -171,7 +246,7 @@
             :data="gridData_class"
             style="border:1px solid silver;margin: 0; border-bottom:none;"
           >
-            <el-table-column property="classhour" label="课时" ></el-table-column>
+            <el-table-column property="classhour" label="课时"></el-table-column>
             <el-table-column property="start_time" label="开始时间" width="200"></el-table-column>
             <el-table-column property="week" label="星期"></el-table-column>
             <el-table-column property="live_type" label="直播类型"></el-table-column>
@@ -217,6 +292,8 @@ export default {
       dialogTableVisible_table: "", //点击查看排课
       gridData: {}, //查看排课的数据
       gridData_class: [], //排课的数组
+      seeapplytable: {}, //报名表数据
+      seeclassneeds: {}, //弹出排课需求数据
 
       dialogTableVisible_table: false
     };
@@ -246,7 +323,9 @@ export default {
     "teacher_data",
     "zhujiao_data",
     "jiaowu_data",
-    "rolemenu"
+    "rolemenu",
+        "application",
+    "needs",
   ]),
   // ...mapState()
   updated() {
@@ -281,6 +360,8 @@ export default {
       "get_mune_list",
       "get_banzhuren_list",
       "get_live_list",
+      "get_application",
+      "get_needs",
       "get_teacher_data",
       "get_zhujiao_data",
       "get_jiaowu_data"
@@ -337,12 +418,35 @@ export default {
         case "click_test": //审核
           if (b.app_status == "待审核") {
             this.centerDialogVisible_shenghe = true;
-            mapState(["banzhuren_list", "zhujiao_data", "jiaowu_data"]);
-            this.app_id = b.id;
+            let params = {
+              app_id: b.id
+            };
+            this.get_application({
+              //查看报名表数据
+              params,
+              url: "/api/api_get_application"
+            });
+            this.get_needs({
+              //查看排课需求
+              params,
+              url: "/api/api_get_needs"
+            });
+             mapState([
+              "needs",
+              "banzhuren_list",
+              "zhujiao_data",
+              "jiaowu_data",
+              "application"
+            ]);
+            console.log(this.application)
+            this.seeclassneeds = this.needs;
+            // this.app_id = b.id;
+            this.seeapplytable = this.application;
+
             this.getbanzhurenName();
           } else {
             this.$message({
-              message: "请按流程操作",
+              message: "待审核时方可以审核",
               type: "warning"
             });
           }
@@ -428,7 +532,10 @@ export default {
         case "cilck_plan_class":
           // 排课
           if (b.app_status == "待排课") {
-            this.$router.push({ path: "ApplyNeedsList/PlanClassAdd", query: { id: b.id } });
+            this.$router.push({
+              path: "ApplyNeedsList/PlanClassAdd",
+              query: { id: b.id }
+            });
           } else {
             this.$message({
               type: "warning",
@@ -438,7 +545,10 @@ export default {
           break;
         case "click_plan_edit": //编辑排课
           if (b.app_status == "已排课待确认") {
-            this.$router.push({ path: "ApplyNeedsList/ClassEdit", query: { id: b.id } });
+            this.$router.push({
+              path: "ApplyNeedsList/ClassEdit",
+              query: { id: b.id }
+            });
           } else {
             this.$message({
               message: "只有已排课待确认时才可以操作",
@@ -475,7 +585,7 @@ export default {
       }
     },
     getRolenenu() {
-      return this.rolemenu[1].children[2].children;
+      return this.rolemenu[1].children[1].children;
       //  console.log()
     },
     submit_think() {
