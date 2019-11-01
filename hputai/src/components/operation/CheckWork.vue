@@ -64,10 +64,10 @@
 </el-table-column>
 <el-table-column align="center" label="操作" width="200px" fixed="right">
      <template slot-scope="scope">
-          <div v-show="scope.row.attendance_status==2&&scope.row.is_forward!==1" style="color:#169BD5"><span style="cursor:pointer;" @click="seeMore(scope)">查看考勤详情</span><el-button type="danger" size="mini"  @click="payMoney(scope.row)" >{{opration[2].menu_name}}</el-button></div>
+          <div v-show="scope.row.attendance_status==2&&scope.row.is_forward!==1" style="color:#169BD5"><span style="cursor:pointer;" @click="seeMore(scope)">查看考勤详情</span><el-button type="danger" size="mini"  @click="payMoney(scope.row)" >转结</el-button></div>
           <div v-show="scope.row.attendance_status==1" style="color:#169BD5"><span style="cursor:pointer;" @click="seeMore(scope)">查看考勤详情</span></div>
-         <div v-show="scope.row.attendance_status==0" ><el-button size="mini" @click="normal(scope.row)" type="success">{{opration[0].menu_name}}</el-button><el-button size="mini" @click="unnormal(scope.row)" type="danger">{{opration[1].menu_name}}</el-button></div>
-         <div v-show="scope.row.is_forward==1" style="color:#169BD5"><span style="cursor:pointer;" @click="seeMore(scope)">查看考勤详情</span><el-button  @click="payMoney(scope.row)" type="info" disabled size="mini">{{opration[2].menu_name}}</el-button></div>
+         <div v-show="scope.row.attendance_status==0" ><el-button size="mini" @click="normal(scope.row)" type="success">正常</el-button><el-button size="mini" @click="unnormal(scope.row)" type="danger">异动</el-button></div>
+         <div v-show="scope.row.is_forward==1" style="color:#169BD5"><span style="cursor:pointer;" @click="seeMore(scope)">查看考勤详情</span><el-button  @click="payMoney(scope.row)" type="info" disabled size="mini">转结</el-button></div>
 
       </template>
 </el-table-column>

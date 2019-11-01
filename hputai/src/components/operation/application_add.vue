@@ -114,7 +114,7 @@
         <div class="add_ul_2" v-for="(item,i) in editableTabs" :key="i">
           <span style="display:none;" v-bind:id="'students'+ i">{{item.id}}</span>
           <p>{{item.name}}</p>
-          <p>{{item.tel}}</p>
+          <p>{{item.tel?item.tel:'没有电话'}}</p>
            <p  ><el-button @click="deleteTest" size='mini' style="color:white;background-color:#e6563a;">撤销</el-button></p>
         </div>
       </el-form-item>
@@ -136,34 +136,34 @@
 
     <!-- 步骤二 -->
     <div v-if="active==2">
-      <el-form ref="form2" :rules="rules" :model="form2">
-        <el-form-item label="需求1" prop="need_one">
+    <el-form ref="form2" :rules="rules" :model="form2">
+        <!-- <el-form-item label="" prop="need_one">
           <el-input
             type="textarea"
             v-model="form2.need_one"
             maxlength="100"
             show-word-limit
             placeholder="学生排课项目、科目、考局（A-level必写）及课时"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="需求2" prop="need_two">
+          ></el-input> --> -->
+        <!-- </el-form-item> -->
+        <el-form-item label="需求1" prop="need_two">
           <el-input
             type="textarea"
             v-model="form2.need_two"
             placeholder="学生学习需求是什么？（零基础先修、同步辅导、巩固复习、强化冲刺）"
           ></el-input>
         </el-form-item>
-        <el-form-item label="需求3" prop="need_three">
+        <el-form-item label="需求2" prop="need_three">
           <el-input
             type="textarea"
             v-model="form2.need_three"
             placeholder="学生之前的学习经历和学习基础（之前在那里上的学？学习基础怎么样？）"
           ></el-input>
         </el-form-item>
-        <el-form-item label="需求4" prop="need_four">
+        <el-form-item label="需求3" prop="need_four">
           <el-input type="textarea" v-model="form2.need_four" placeholder="学生希望跟什么样的老师学习？"></el-input>
         </el-form-item>
-        <el-form-item label="需求5" prop="need_five">
+        <el-form-item label="需求4" prop="need_five">
           <el-input
             type="textarea"
             v-model="form2.need_five"
@@ -229,7 +229,7 @@ export default {
       form: {
         title: "", //标题
         value: "", //报读科目
-        value_1: "", //学生姓名
+        value_1: this.$route.query.username, //学生姓名
         valueDate: "", //有效期限
         feedback: "", //备注说明
         radio: 1, //上课地点的选择
@@ -267,14 +267,7 @@ export default {
         address: [
           { required: true, message: "请填写上课地址", trigger: "change" }
         ],
-        need_one: [
-          {
-            required: true,
-            required: true,
-            message: "请填写反馈",
-            trigger: "blur"
-          }
-        ],
+
         need_two: [
           {
             required: true,
@@ -323,7 +316,6 @@ export default {
   },
   created() {
     this.getdata();
-    this.getStudent();
   },
   computed: {
     //     sum:function () {
@@ -333,8 +325,14 @@ export default {
     //  }
     ...mapState(["region_list"])
   },
-  mounted() {},
+  mounted() {
+    this.getStudent();
+
+  },
   methods: {
+    roundFun(value, n) {  //四舍五入算法
+  return Math.round(value*Math.pow(10,n))/Math.pow(10,n);
+},
     whereGo(a) {
       if (a == "2") {
         this.show = true;
@@ -425,7 +423,6 @@ export default {
           }
           addWord(this.options_)
            this.options=this.options_  
- 
         }
       });
     },
@@ -436,9 +433,7 @@ export default {
 
     //获取学生列表
     getStudent() {
-      // let parms = {
-      //   admin_id: this.getdataCookie("admin_id")
-      // };
+
       this.$apis.students.get_students_data().then(res => {
         if (res.data.code == 1) {
           this.options_1 = res.data.data.list;
@@ -446,6 +441,7 @@ export default {
             var val = this.options_1[i];
             this.options1.push({ value: val.username, label: val.username });
           }
+            this.handleChange_start(this.$route.query.username, this.options1)
         }
       });
     },
@@ -515,12 +511,24 @@ export default {
     },
     //学生姓名选择产生的变化
     handleChange(targetName) {
+      console.log(targetName[0])
       //console.log(this.writeCurrentDate());
       var checkOne = this.options_1.filter(
         item => item.username == targetName[0]
       );
       this.editableTabs.push({
         name: targetName[0],
+        tel: checkOne[0].tel,
+        id: checkOne[0].id
+      });
+    },
+        handleChange_start(targetName,a) {
+      let checkOne = a.filter(
+        item => 
+          item.label == targetName
+      );
+      this.editableTabs.push({
+        name: targetName,
         tel: checkOne[0].tel,
         id: checkOne[0].id
       });
@@ -540,7 +548,7 @@ export default {
             remarks: this.form.feedback,
             course_address: this.form.radio,
             address: this.form.address.toString(),
-            need_one: this.form2.need_one,
+            need_one: '',
             need_two: this.form2.need_two,
             need_three: this.form2.need_three,
             need_four: this.form2.need_four,
@@ -578,7 +586,7 @@ export default {
           this.editableTabs_1.forEach(item => {
             this.subjects_data.push({
               subject_id: item.subject_id,
-              classhour: item.classhour,
+              classhour:  this.roundFun(item.classhour,2),
               price: item.price,
               amount: item.classhour*item.price,
               course_type: item.course_type,

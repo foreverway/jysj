@@ -18,9 +18,16 @@
       filterable
       @change="showAdviser"
     ></el-cascader>
-
+    <el-select v-model="parms.app_status" clearable @change="getdata" placeholder="请选择状态">
+      <el-option
+        v-for="item in options_status"
+        :key="item.value_status"
+        :label="item.label"
+        :value="item.value"
+      ></el-option>
+    </el-select>
     <el-button type="primary" style="background-color:#e6563a; border:none;" @click="getdata">搜索</el-button>
-    <router-link to="/ApplicationAdd">
+    <router-link to="/StudentsList/ApplicationAdd">
       <el-button type="primary" style="float:right;background-color:#e6563a; border:none;">新建报名需求</el-button>
     </router-link>
     <el-table
@@ -75,6 +82,7 @@
       width="60%"
       center
     >
+      <p>报名表详情</p>
       <el-form ref="form" label-width="120px">
         <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="参数:">
           <p>内容</p>
@@ -122,6 +130,7 @@
           <p>{{seeapplytable.remarks}}</p>
         </el-form-item>
       </el-form>
+      <!-- <p>排课需求详情</p> -->
       <el-form label-width="120px">
         <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="需求:">
           <p>无参数</p>
@@ -133,9 +142,9 @@
           <p>{{seeclassneeds.address?seeclassneeds.address:"未安排"}}</p>
         </el-form-item>
 
-        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label>
+        <!-- <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label>
           <p>{{seeclassneeds.need_one}}</p>
-        </el-form-item>
+        </el-form-item>-->
         <el-form-item
           style="border:1px solid silver;margin: 0; border-bottom:none;background-color:silver;"
           label="需求一:"
@@ -174,16 +183,19 @@
           <p>{{seeclassneeds.need_five}}</p>
         </el-form-item>
       </el-form>
-      <el-input placeholder="审核备注"></el-input>
+      <div>
+        <span style="display:inline-block;width:100px;">审核备注:</span>
+        <el-input style="width:80%;" v-model="shenghe_value" placeholder="审核备注"></el-input>
+      </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="centerDialogVisible_shenghe = false">取 消</el-button>
-        <el-button type="primary" @click="submit_think">审核不通过</el-button>
-        <el-button type="success" @click="submit_think">审核通过</el-button>
+        <el-button type="primary" @click="tongguo(2)">审核不通过</el-button>
+        <el-button type="success" @click="tongguo(1)">审核通过</el-button>
       </span>
     </el-dialog>
 
     <!-- 分页的设置 -->
-    <span v-if="msg.data">
+    <span v-if="msg">
       <el-pagination
         style=" float: right;margin-bottom: 30px;"
         background
@@ -268,9 +280,9 @@ export default {
       money: "", //设置充值金额
       dialogFormVisible1: false,
       centerDialogVisible_shenghe: false,
-      textarea: "", //审核的输入框
-      msg: "",
-      is_pass: "", //审核意见
+      // textarea: "", //审核的输入框
+      // msg: "",
+      // is_pass: "", //审核意见
       banzhuren_list_new: [], //班主任数据
       banzhuren_live: "",
       moneymen_list_new: [], //教务专员
@@ -280,6 +292,7 @@ export default {
       parms: {
         search: "",
         page: 1,
+        app_status: "",
         add_admin_id: "" //选择的
       },
       tableData: [],
@@ -295,7 +308,35 @@ export default {
       seeapplytable: {}, //报名表数据
       seeclassneeds: {}, //弹出排课需求数据
 
-      dialogTableVisible_table: false
+      dialogTableVisible_table: false,
+      shenghe_value: "", //审核的输入框
+      msg: "",
+      options_status: [
+        {
+          value: 0,
+          label: "待审核"
+        },
+        {
+          value: 1,
+          label: "待排课"
+        },
+        {
+          value: 2,
+          label: "已排课待确认"
+        },
+        {
+          value: 3,
+          label: "已确认"
+        },
+        {
+          value: 4,
+          label: "已授课考勤中"
+        },
+        {
+          value: 5,
+          label: "已结课"
+        }
+      ]
     };
   },
   created() {
@@ -324,8 +365,8 @@ export default {
     "zhujiao_data",
     "jiaowu_data",
     "rolemenu",
-        "application",
-    "needs",
+    "application",
+    "needs"
   ]),
   // ...mapState()
   updated() {
@@ -338,6 +379,36 @@ export default {
   },
   watch: {},
   methods: {
+    tongguo(num) {
+      let shenghe = {
+        app_id: this.app_id,
+        banzhuren_id: this.banzhuren_live[0],
+        jiaowu_id: this.moneymen_live[0],
+        zhujiao_id: this.helpTeacher_live[0],
+        is_pass: this.is_pass,
+        remarks: this.shenghe_value
+      };
+      this.$apis.common.application_audit(shenghe).then(res => {
+        if (res.data.code == 1) {
+          if (this.form1.status == 1) {
+            this.$message({
+              type: "success",
+              message: "已通过审核"
+            });
+            this.centerDialogVisible_shenghe = true;
+            this.getdata();
+          } else {
+            this.$message({
+              type: "success",
+              message: " 已审核为不通过"
+            });
+            this.getdata();
+          }
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
+    },
     //用于分页的一些设置
     current(num) {
       //当前页数
@@ -431,22 +502,21 @@ export default {
               params,
               url: "/api/api_get_needs"
             });
-             mapState([
+            mapState([
               "needs",
               "banzhuren_list",
               "zhujiao_data",
               "jiaowu_data",
               "application"
             ]);
-            console.log(this.application)
+            // this.form1.app_id= b.id
             this.seeclassneeds = this.needs;
-            // this.app_id = b.id;
+            this.app_id = b.id;
             this.seeapplytable = this.application;
-
             this.getbanzhurenName();
           } else {
             this.$message({
-              message: "待审核时方可以审核",
+              message: "待审核状态时方可以审核",
               type: "warning"
             });
           }
@@ -588,27 +658,27 @@ export default {
       return this.rolemenu[1].children[1].children;
       //  console.log()
     },
-    submit_think() {
-      //提交审核意见
-      let shenghe = {
-        app_id: this.app_id,
-        banzhuren_id: this.banzhuren_live[0],
-        jiaowu_id: this.moneymen_live[0],
-        zhujiao_id: this.helpTeacher_live[0],
-        is_pass: this.is_pass,
-        remarks: this.textarea
-      };
-      this.$apis.common.application_audit(shenghe).then(res => {
-        if (res.data.code == 1) {
-          location.reload();
-          this.$message({
-            message: "审核成功",
-            type: "success"
-          });
-        }
-      });
-      this.centerDialogVisible_shenghe = false;
-    },
+    // submit_think() {
+    //   //提交审核意见
+    // let shenghe = {
+    //   app_id: this.app_id,
+    //   banzhuren_id: this.banzhuren_live[0],
+    //   jiaowu_id: this.moneymen_live[0],
+    //   zhujiao_id: this.helpTeacher_live[0],
+    //   is_pass: this.is_pass,
+    //   remarks: this.textarea
+    // };
+    //   this.$apis.common.application_audit(shenghe).then(res => {
+    //     if (res.data.code == 1) {
+    //       location.reload();
+    //       this.$message({
+    //         message: "审核成功",
+    //         type: "success"
+    //       });
+    //     }
+    //   });
+    //   this.centerDialogVisible_shenghe = false;
+    // },
     handleSizeChange(val) {
       //分页每页多少条
       let parms = {
@@ -619,6 +689,7 @@ export default {
         .application_list(parms)
         .then(res => {
           if (res.data.code == 1) {
+            console.log(res.data);
             this.msg = res.data;
             this.tableData = res.data.data.list;
           }
@@ -643,7 +714,7 @@ export default {
         .adviser_list(parms)
         .then(res => {
           if (res.data.code == 1) {
-            this.msg = res.data;
+            //this.msg = res.data;
             this.options_all = res.data.data.list;
             for (let i = 0; i < this.options_all.length; i++) {
               var val = this.options_all[i];
@@ -678,7 +749,7 @@ export default {
         .application_list(parms)
         .then(res => {
           if (res.data.code == 1) {
-            this.msg = res.data;
+            //this.msg = res.data;
             this.tableData = res.data.data.list;
           }
         })
@@ -734,6 +805,7 @@ export default {
     },
     getdata() {
       this.parms.admin_id = this.getdataCookie("admin_id");
+      console.log(this.parms)
       this.$apis.common
         .application_list(this.parms)
         .then(res => {

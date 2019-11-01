@@ -42,7 +42,7 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item :inline="true" label="助教">
+      <!-- <el-form-item :inline="true" label="助教">
         <el-select v-model="form.zhujiao_id" filterable clearable placeholder="请选择">
           <el-option
             v-for="item in this.zhujiao_data_new"
@@ -51,7 +51,7 @@
             :value="item.value"
           ></el-option>
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item :inline="true" label="教务专员">
         <el-select v-model="form.jiaowu_id" filterable clearable placeholder="请选择">
           <el-option
@@ -149,7 +149,7 @@
               <option label="客户端" value="1">是</option>
             </select>
           </p>
-          <p  ><el-button @click="deleteTest_1" size='mini' style="color:white;background-color:#e6563a;">撤销</el-button></p>
+          <p ><el-button @click="deleteTest_1" size='mini' style="color:white;background-color:#e6563a;">撤销</el-button></p>
         </div>
       </el-form-item>
     </el-form>
@@ -502,13 +502,13 @@ export default {
       if (!this.form.teacher_id * 1 == "") {
         this.$apis.operation.teacher_course(params).then(res=>{
           if(res&&res.data.code==1){
-             if(Object.prototype.toString.call(res.data.data).split(7,6)==Array){
+            //  if(Object.prototype.toString.call(res.data.data).substr(8,5)){
+              if(Object.prototype.toString.call(res.data.data).substr(8,5)=='Array'){
               this.seeteacherclass_data=res.data.data
               this.dialogTableVisible_seeTeacherClass=true
             }else{
              this.seeteacherclass_data=[]
-                           this.dialogTableVisible_seeTeacherClass=true
-
+             this.dialogTableVisible_seeTeacherClass=true
             }
           }else{
                     this.$message({
@@ -643,7 +643,7 @@ export default {
       if (all_hour * 1 >= this.apply_data.classhour * 1) {
         this.$message({
           type: "warning",
-          message: "请核对课时"
+          message: "很抱歉，没有足够的课时"
         });
       } else {
         this.editableTabs_1.push({
@@ -680,7 +680,7 @@ export default {
         live_id: this.form.value_live, //直播平台id
         teacher_id: this.form.teacher_id, //讲师id
         banzhuren_id: this.form.banzhuren_id, //班主任id
-        zhujiao_id: this.form.zhujiao_id, //助教id
+        zhujiao_id: '', //助教id
         jiaowu_id: this.form.jiaowu_id, //教务id
         // students_id: this.apply_data.students,  //学生id  string
         classhour: this.apply_data.classhour * 1, //课时
@@ -692,11 +692,9 @@ export default {
       });
       parms.students_id = studentStr.join();
       parms.course_data = this.subjects_data;
-      // console.log(  this.subjects_data)
-      // console.log( parms.course_data)
       //console.log(this.editableTabs_1.length,"提交的时候数组长度",this.editableTabs_1)
       console.log(parms, "总数据");
-      if (all_hour * 1 == this.apply_data.classhour * 1) {
+      if (all_hour * 1 <= this.apply_data.classhour * 1) {
         //  console.log(parms)
         this.$apis.common.application_arrange_post(parms).then(res => {
           if (res.data.code == 1) {
@@ -729,7 +727,6 @@ export default {
     },
     deleteTest_1() {
       this.editableTabs_1.pop(this.editableTabs_1);
-      //console.log(this.editableTabs_1,'删除方法里面',this.editableTabs_1.length)
       if (this.editableTabs_1.length == 0) {
         this.open4();
       }

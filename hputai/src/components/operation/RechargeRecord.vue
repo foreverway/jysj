@@ -202,7 +202,7 @@
     </div>
     <!-- 表格开始 -->
     <el-table :data="tableData" :header-cell-style="{background:'#f4f4f4'}" >
-      <el-table-column label="序号" type="index" :index="indexMethod"></el-table-column>
+      <el-table-column label="序号" type="index" ></el-table-column>
       <el-table-column :show-overflow-tooltip="true" align="center" label="学生姓名">
         <template slot-scope="scope">
           <span>{{ scope.row.uname }}</span>
@@ -358,20 +358,20 @@ export default {
       adviser: "", //顾问数据
       teacher: "", //班主任数据
       form: {
-        search: "", //搜索学员姓名条件
-        page: 1,
-        in_people: "", //实收人
-        inproject: "", //进线项目,课程id
-        inchannel: "", //进线渠道 ,进线渠道,1百度SEM,2转介绍
-        consultant1: "", //顾问1
-        teacher: "", //班主任
-        classproject:'',//报课项目
-        collection_class: "", //收款类别
-        collection_type: "", //收款方式，1微信，2支付宝，3银联转账，4用户自行充值
-        status: "", //审核状态，0待审核，1审核通过，2审核不通过
-        start_time: "", //搜索开始时间
-        end_time: "", //搜索结束时间
-        uid: "" //如果有uid,查询该用户的记录
+        // search: "", //搜索学员姓名条件
+         page: 1,
+        // in_people: "", //实收人
+        // inproject: "", //进线项目,课程id
+        // inchannel: "", //进线渠道 ,进线渠道,1百度SEM,2转介绍
+        // consultant1: "", //顾问1
+        // teacher: "", //班主任
+        // classproject:'',//报课项目
+        // collection_class: "", //收款类别
+        // collection_type: "", //收款方式，1微信，2支付宝，3银联转账，4用户自行充值
+        // status: "", //审核状态，0待审核，1审核通过，2审核不通过
+        // start_time: "", //搜索开始时间
+        // end_time: "", //搜索结束时间
+        // uid: "" //如果有uid,查询该用户的记录
       },
       menuArr:'',
       menuArr_:'',
@@ -454,32 +454,27 @@ export default {
     },
     //导出
     recharge_export() {
-      // this.$apis.common.recharge_export_table().then(res=>{
-      //   if(res.data.code==1){
-      //     console.log(res.deda)
-      //     return res.deda.data 
-      //   }
-      // })
       this.$message({
         type: "success",
         message: "正在导出,请稍等..."
       });
       let urls = "http://personal.test.hqjystudio.com";
       let parms = "";
+      this.form.teacher='杨懿俊'
       for (var key in this.form) {
         parms += key + "=" + this.form[key] + "&";
       }
       window.location.href = urls + "/api_recharge_export" + "?" + parms;
     },
     //序号排列
-    indexMethod(index) {
-      if (this.form.page == 1) {
-        return index + 1;
-      } else {
-        let page = (this.form.page - 1) * 10 + 1;
-        return index + page;
-      }
-    },
+    // indexMethod(index) {
+    //   if (this.form.page == 1) {
+    //     return index + 1;
+    //   } else {
+    //     let page = (this.form.page - 1) * 10 + 1;
+    //     return index + page;
+    //   }
+    // },
     getadata() {
       //总数据
       this.$apis.common.recharge_list(this.form).then(res => {
@@ -504,7 +499,6 @@ export default {
         // 获取班主任数据
         if (res.data.code == 1) {
           this.teacher = res.data.data.list;
-          console.log( this.teacher )
         }
       });
       this.$apis.common.adviser_list().then(res => {

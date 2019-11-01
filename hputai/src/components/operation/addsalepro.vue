@@ -6,12 +6,13 @@
       <el-input  style="width:200px" v-model="money"  placeholder="请输入充值金额" ></el-input>
     <el-button type="primary" v-show="money>0" @click="copyUrl">生成并复制充值链接</el-button>-->
     <el-form ref="form" :model="form" label-width="120px">
-      <el-form-item label="日期" style="width:335px">
+      <el-form-item label="数据获取时间" style="width:335px">
         <el-col :span="11">
           <el-date-picker type="date" placeholder="选择日期" v-model="form.dtime"></el-date-picker>
         </el-col>
       </el-form-item>
-      <el-form-item label="周次" style="width:335px">
+      <el-form-item label="数据更新时间
+      " style="width:335px">
         <el-input v-model="form.week"></el-input>
       </el-form-item>
       <el-form-item label="跟进人" style="width:335px">
@@ -37,6 +38,8 @@
           <el-option label="七天跟进" value="七天跟进"></el-option>
           <el-option label="退回" value="退回"></el-option>
           <el-option label="无效" value="无效"></el-option>
+         <el-option label="已报名" value="已报名"></el-option>
+
         </el-select>
       </el-form-item>
       <el-form-item label="建立了有效联系">
@@ -101,7 +104,7 @@
       <el-form-item label="预收金额" style="width:50%;">
         <el-input v-model="form.advance_amount"></el-input>
       </el-form-item>
-      <el-form-item label="客户反馈" style="width:50%;">
+      <el-form-item label="实际跟进情况" style="width:50%;">
         <el-input type="textarea" v-model="form.feedback"></el-input>
       </el-form-item>
       <el-form-item>

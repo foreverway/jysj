@@ -109,6 +109,8 @@
             :options="options"
             :props="{ expandTrigger: 'hover' }"
             :show-all-levels="false"
+            filterable
+            clearable
             @change="handleChange_1"
             @getCheckedNodes="getMore()"
           ></el-cascader>
@@ -567,7 +569,7 @@ export default {
     },
     //选择报读科目的函数
     handleChange_1(targetName) {
-      //var lastName = targetName.length == 1 ? targetName[0] : targetName[1];
+     this.value_suj=""
       var lastName =targetName.length==1?targetName[0]:(targetName.length==2?targetName[1]:targetName[2])
       //判断标题
       let result=[]
@@ -582,21 +584,6 @@ export default {
       var needArr=result.find((item,index,arr)=>{
        return item.label==lastName
       })
-      // let oneArr = this.options_.filter(
-      //   item => item.subject_name == lastName.subject_name
-      // );
-      // if (oneArr.length == 0) {
-      //   for (let i = 0; i < this.options_.length; i++) {
-      //     var val = this.options_[i];
-      //     if (val.children) {
-      //       //如果有子元素
-      //       var val_1 = val.children.filter(item => item);
-      //       // if(val_1.length==1){
-      //       let oneArr_1 = val_1.filter(
-      //         item => item.subject_name == lastName.subject_name
-      //       ); //对子元素进行赛选
-      //       if (oneArr_1.length > 0) {
-      //         // let newTabName = ++this.tabIndex_1 + "";
               this.table.tableData.push({
                 subject_id: needArr.value,
                 subject_name: needArr.label,
@@ -605,22 +592,8 @@ export default {
                 small_class: 0, //课程类型
                 big_class: 0 //课程id
               });
-      //         console.log(this.table.tableData);
-      //       }
-      //     }
-      //   }
-      // } else {
-      //   //没有子元素
-      //   //let newTabName = ++this.tabIndex_1 + "";
-      //   this.table.tableData.push({
-      //     subject_id: lastName.id,
-      //     subject_name: lastName.subject_name,
-      //     online_type: 1,
-      //     one_to_one: 1000,
-      //     small_class: 1000, //课程类型
-      //     big_class: oneArr[0].id //课程id
-      //   });
-      // }
+           this.value_suj=''
+
     },
     indexMethod(index) {
       if (this.form.page == 1) {

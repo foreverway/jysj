@@ -21,7 +21,7 @@
       <el-table-column prop="alevel" label="用户等级"></el-table-column>
       <el-table-column prop="banzhuren" label="班主任"></el-table-column>
       <el-table-column prop="consultant" label="顾问"></el-table-column>
-      <el-table-column prop="amount" label="总缴费额度"></el-table-column>
+      <el-table-column prop="amount" label="总学习币金额"></el-table-column>
       <el-table-column prop="student_status" label="状态"></el-table-column>
       <el-table-column prop="learnmoney" label="账户余额"></el-table-column>
       <el-table-column prop="first_time" label="首次缴费时间"></el-table-column>
@@ -155,7 +155,7 @@ export default {
         case "plan_class": //跳转排课
           this.$router.push({
             path: "/StudentsList/ApplicationAdd",
-            query: { id: b.id }
+            query: { username: b.username }
           });
           break;
       }

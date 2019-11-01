@@ -32,9 +32,9 @@
       <el-button type="primary"  style="float:right;background-color:#e6563a; border:none;">新建销售情况列表</el-button>
     </router-link>
 
-    <el-table :data="tableData" border :header-cell-style="{background:'#f4f4f4'}" style="margin-top:20px">
+    <el-table :data="tableData" border  :default-sort = "{prop: 'dtime', order: 'descending'}" :header-cell-style="{background:'#f4f4f4'}" style="margin-top:20px">
       <el-table-column label="序号" type="index" :index="indexMethod"></el-table-column>
-      <el-table-column prop="dtime" width="160px" label="日期"></el-table-column>
+      <el-table-column prop="dtime" width="160px"  sortable label="日期"></el-table-column>
       <el-table-column prop="week" label="周次"></el-table-column>
       <el-table-column prop="follow_man" label="跟进人"></el-table-column>
       <el-table-column prop="team" label="	所属战队"></el-table-column>
