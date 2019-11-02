@@ -34,8 +34,8 @@
 
     <el-table :data="tableData" border  :default-sort = "{prop: 'dtime', order: 'descending'}" :header-cell-style="{background:'#f4f4f4'}" style="margin-top:20px">
       <el-table-column label="序号" type="index" :index="indexMethod"></el-table-column>
-      <el-table-column prop="dtime" width="160px"  sortable label="日期"></el-table-column>
-      <el-table-column prop="week" label="周次"></el-table-column>
+      <el-table-column prop="dtime" width="130px"  sortable label="数据获取时间"></el-table-column>
+      <el-table-column prop="week" width="130px" sortable label="数据更新时间"></el-table-column>
       <el-table-column prop="follow_man" label="跟进人"></el-table-column>
       <el-table-column prop="team" label="	所属战队"></el-table-column>
       <el-table-column prop="team_leader" label="战队负责人"></el-table-column>

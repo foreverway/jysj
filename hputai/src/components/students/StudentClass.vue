@@ -574,6 +574,7 @@ export default {
     },
     getClassList(a) {
       this.$emit("update:changeTab", this.change_value);
+      //这里的this是父级的作用域  也就是执行父级的该函数
       let parms = {
         course_type: this.change_value,
         page: a ? a : 1
