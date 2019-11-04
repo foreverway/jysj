@@ -189,15 +189,25 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page.sync="currentPage"
-          :page-sizes="[6,8,10,12]"
-          :page-size="8"
-          layout="total, sizes, prev, pager, next"
-          :total="tableData.length"
-        ></el-pagination>
+    <p style="margin:10px;">
+      <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>
+学员账号明细
+    </p>
+     <el-container>
+      <el-header>
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+          <el-tab-pane label="学习币明细" name="1"></el-tab-pane>
+          <el-tab-pane label="现金钱包明细" name="2"></el-tab-pane>
+          <el-tab-pane label="福利钱包明细" name="3"></el-tab-pane>
+        </el-tabs>
+      </el-header>
+      <el-container>
+        <el-main>
+          <router-view />
+          <!-- 主体部分在这里显示 -->
+        </el-main>
+      </el-container>
+    </el-container>
         <!-- 填写课堂反馈 -->
         <el-dialog 
         :close-on-click-modal='false'
@@ -385,13 +395,16 @@
         </el-dialog>
         <!-- 其他方式进入课表 other_enter -->
       </div>
-
-    <el-pagination
-
-      :current-page.sync="currentPage"
-      layout="total, sizes, prev, pager, next"
-      :total="classData.length"
-    ></el-pagination>
+      <el-pagination
+        style="float:right;margin-top:20px;margin-bottom: 20px;"
+        background
+        layout="prev, pager, next"
+        @prev-click="prev"
+        @next-click="next"
+        @current-change="current"
+        :page-size="5"
+        :total="classData.length"
+      ></el-pagination>
     <el-button type="primary" style="margin:10px;" @click="goBack">确定</el-button>
   </div>
   </div>
@@ -403,6 +416,8 @@ export default {
       activeNames: ["1"],
       tableData: [], //表格数据
       form: {},
+            currentPage: 1, //当前页
+
       postFrom: {
         value: "",
         student_id: "",
@@ -413,19 +428,53 @@ export default {
       classData: [], //学生课表数据
       options: [], //课程名称的数据
       options_: [], //总数据的数据
-      pagesize: 5
+      pagesize: 5,
+      dialogFromVisible: false, //弹出框的设置
+      dialogVisible: false, //查看课堂反馈
+      gridData: {}, //弹出框的表格数据
+      centerDialogVisible: false, //其他方式打开课表
+      otherWey: {}, //从其他方法进入直播
+      num: 0, //次数的变化
+            formLabelAlign: {}, //老师在这里疯狂反馈
+      activeName: "1",
+      activeIndex: "1",
+      thisurl:''
     };
   },
   created() {
     this.getData();
     this.getClassList();
+        this.$nextTick(function() {
+         this.$router.push({path:"/StudentsList/StudentsInfo/VirtualMonney",
+          query:{id:this.$route.query.id}});
+    });
   },
   methods: {
     handleChange(val) {},
     goBack() {
       this.$router.go(-1);
     },
+        handleClick(tab, event) {
+      switch (tab.name) {
+        case "1":
+          this.$router.push({path:"/StudentsList/StudentsInfo/VirtualMonney",
+          query:{id:this.$route.query.id}});
+          break;
+        case "2":
+          this.$router.push({path:"/StudentsList/StudentsInfo/NewMoney",
+          query:{id:this.$route.query.id}});
+          break;
+        case "3":
+          this.$router.push({path:"/StudentsList/StudentsInfo/LearningMoney",
+          query:{id:this.$route.query.id}});
+          break;
+      }
+    },
     getData() {
+      let params={
+        is_by_student:1,
+        student_id:this.$route.query.id
+      }
       this.$apis.students //获取学生信息
         .students_edit({ id: this.$route.query.id })
         .then(res => {
@@ -434,18 +483,16 @@ export default {
           }
         });
       this.$apis.students //获取学生课表
-        .student_arranging_course({ student_id: this.$route.query.id })
+        .student_arranging_course(params)
         .then(res => {
           if (res.data.code == 1) {
-            if (
-              Object.prototype.toString.call(res.data.data).substr(8, 5) ==
-              "Objec"
-            ) {
+
+            if (res.data.data.count.length==0 ) {
               this.tableData = [];
             } else {
-              this.tableData = res.data.data;
+              this.tableData = res.data.data.list;
             }
-            // console.log(this.tableData);
+             console.log(this.tableData);
           }
         });
       //整理获取科目的数据
@@ -507,6 +554,22 @@ export default {
         }
       });
     },
+        current(num) {
+      //当前页数
+      this.form.page = num;
+      this.getadata();
+    },
+    next() {
+      this.form.page++;
+      this.getadata();
+    },
+    prev() {
+      //上一页
+      if (this.form.page > 1) {
+        this.form.page--;
+        this.getadata();
+      }
+    },
     openVideo(a) {
       //观看录播
       //  var iWidth=$(window).width();                         //弹出窗口的宽度;
@@ -540,6 +603,14 @@ export default {
         );
       }
     },
+        tableRowClassName({ row, rowIndex }) {//行变色的问题
+      if (rowIndex === 1) {
+        return "warning-row";
+      } else if (rowIndex === 3) {
+        return "success-row";
+      }
+      return "";
+    },
     fillFeedback(a) {
       this.dialogFromVisible = true;
       this.course = a;
@@ -551,6 +622,21 @@ export default {
           this.gridData = res.data.data;
         }
       });
+    },
+        onSubmit() {
+      this.form.course_id = this.course;
+      this.$apis.common.post_feedback_add(this.form).then(res => {
+        if (res.data.code == 1) {
+          (this.dialogFromVisible = false),
+            this.$message({
+              type: "success",
+              message: "提交成功"
+            });
+        }
+      });
+    },
+    onSubmit_1() {
+      this.dialogFromVisible = false;
     },
     fillFeedback_see(a) {
       let parms = {
@@ -579,13 +665,14 @@ export default {
     handleSizeChange(val) {
       this.pagesize = val * 1;
     },
-    handleCurrentChange(val) {
-      this.currentPage = val;
-      this.getClassList(val);
-    }
+
   },
 
-  mounted() {}
+  mounted() {
+ var name=this.$route.path.substring(this.$route.path.indexOf("/")+1);
+ this.url=name.substr(0,12)
+    
+  }
 };
 </script>
 <style scoped>

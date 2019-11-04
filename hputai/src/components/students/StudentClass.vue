@@ -6,6 +6,7 @@
         v-model="value_stu"
         :options="options1"
         clearable
+        
         @change="handleChange(value_stu)"
         filterable
       ></el-cascader>

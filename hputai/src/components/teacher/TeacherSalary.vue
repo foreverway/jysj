@@ -50,7 +50,7 @@
 
     <!-- 表格数据 -->
     <el-table :data="tableData" border :header-cell-style="{background:'#f4f4f4'}">
-      <el-table-column label="序号" type="index" width="80" align="center" ></el-table-column>
+      <el-table-column label="序号" type="index"   width="80" align="center" ></el-table-column>
 
       <el-table-column :show-overflow-tooltip="true" align="center" label="教师名称" width="200">
         <template slot-scope="scope">
@@ -122,14 +122,14 @@ export default {
       window.location.href = urls + "/api_dollars_export" + "?" + parms;
     },
     //序号排列
-    indexMethod(index) {
-      if (this.params.page == 1) {
-        return index + 1;
-      } else {
-        let page = (this.params.page - 1) * 10 + 1;
-        return index + page;
-      }
-    },
+    // indexMethod(index) {
+    //   if (this.params.page == 1) {
+    //     return index + 1;
+    //   } else {
+    //     let page = (this.params.page - 1) * 10 + 1;
+    //     return index + page;
+    //   }
+    // },
     current(num) {
       //当前页数
       this.params.page = num;
@@ -138,7 +138,6 @@ export default {
     next() {
       this.params.page++;
       this.getadata();
-      console.log(this.teacher_data);
     },
     prev() {
       //上一页

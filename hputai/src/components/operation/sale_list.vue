@@ -11,29 +11,31 @@
     ></el-input>
            <el-date-picker
           style="margin-left:60px"
-          v-model="form.start_time"
+          v-model="parms.start_time"
           @change="getdata"
           type="datetime"
           clearable
-          value-format="yyyy-MM-dd H:mm:ss"
+          value-format="yyyy-MM-dd HH:mm:ss"
           placeholder="选择日期时间"
         ></el-date-picker>至
         <el-date-picker
           @change="getdata"
-          v-model="form.end_time"
+          v-model="parms.end_time"
           type="datetime"
           clearable
-          value-format="yyyy-MM-dd H:mm:ss"
+          value-format="yyyy-MM-dd HH:mm:ss"
           placeholder="选择日期时间"
         ></el-date-picker>
 
-    <el-button type="primary" style="background-color:#e6563a; border:none;"  @click="getdata">搜索</el-button>
+    <el-button type="success"   @click="getdata">搜索</el-button>
+      <el-button type="primary" @click="recharge_export">导出</el-button>
+
     <router-link to="/SalesList/Addsalepro">
       <el-button type="primary"  style="float:right;background-color:#e6563a; border:none;">新建销售情况列表</el-button>
     </router-link>
 
     <el-table :data="tableData" border  :default-sort = "{prop: 'dtime', order: 'descending'}" :header-cell-style="{background:'#f4f4f4'}" style="margin-top:20px">
-      <el-table-column label="序号" type="index" :index="indexMethod"></el-table-column>
+      <el-table-column label="序号" type="index" ></el-table-column>
       <el-table-column prop="dtime" width="130px"  sortable label="数据获取时间"></el-table-column>
       <el-table-column prop="week" width="130px" sortable label="数据更新时间"></el-table-column>
       <el-table-column prop="follow_man" label="跟进人"></el-table-column>
@@ -85,15 +87,15 @@ export default {
       copyurl1: "",
       msg: "",
       parms: {
-        search: "",
-        page: 1,
-        admin_id:''
+        // search: "",
+        // page: 1,
+        // admin_id:''
       },
       tableData: [],
-      form:{
-        start_time:null,
-        end_time:null
-      },
+      // form:{
+      //   start_time:null,
+      //   end_time:null
+      // },
        value1: '',
     };
   },
@@ -118,6 +120,19 @@ export default {
   //   }
   // },
   methods: {
+            //导出
+    recharge_export() {
+      this.$message({
+        type: "success",
+        message: "正在导出,请稍等..."
+      });
+      let urls = "http://personal.test.hqjystudio.com";
+      let params = "";
+      for (var key in this.parms) {
+        params += key + "=" + this.parms[key] + "&";
+      }
+      window.location.href = urls + "/api_salepro_export" + "?" + params;
+    },
         //用于分页的一些设置
         current(num) {
       //当前页数
@@ -139,39 +154,16 @@ export default {
     pushToEdit(a){
             this.$router.push({path:'/SalesList/SalelistEdit',query:{id:a}})
     },
-    // searchData(){
-    //         this.$apis.common.salepro_list(this.parms)
-    //     .then(res => {
-    //       if (res.data.code == 1){
-    //         this.msg = res.data.msg;
-    //         let new_arr =[]
-    //     if(this.form.end_time!==""){
-    //       new_arr=res.data.data.list.filter(item=>item.dtime<this.form.end_time)
-    //            this.tableData = new_arr
-    //         }else if (this.form.start_time!==""){
-    //         new_arr=res.data.data.list.filter(item=>item.dtime>this.form.start_time)
-    //            this.tableData = new_arr
-    //         }else{
- 
-    //         }
-    //       }
-    //     })
-    //     .catch(() => {
-    //       this.$message({
-    //         type: "info",
-    //         message: "请求失败"
-    //       });
-    //     });
-    // },
+
     //序号排列
-    indexMethod(index) {
-      if (this.parms.page == 1) {
-        return index + 1;
-      } else {
-        let page = (this.parms.page - 1) * 10 + 1;
-        return index + page;
-      }
-    },
+    // indexMethod(index) {
+    //   if (this.parms.page == 1) {
+    //     return index + 1;
+    //   } else {
+    //     let page = (this.parms.page - 1) * 10 + 1;
+    //     return index + page;
+    //   }
+    // },
     // 复制链接
     copyUrl(data) {
       let url = data + "/" + this.money;
@@ -230,31 +222,26 @@ export default {
     },
     getdata() {
         this.parms.admin_id=this.getdataCookie("admin_id")
-        let new_arr =[]
       this.$apis.common
         .salepro_list(this.parms)
         .then(res => {
           if (res.data.code == 1) {
             this.msg = res.data;
-            if(this.form.end_time==null&&this.form.start_time==null){
-         this.tableData = res.data.data.list;
-            }else{
-              if(this.form.end_time!==null){
- new_arr=res.data.data.list.filter(item=>item.dtime<this.form.end_time)
-               this.tableData = new_arr
-              }else{
-      new_arr=res.data.data.list.filter(item=>item.dtime>this.form.start_time)
-               this.tableData = new_arr
-              }
-            }
+            this.tableData = res.data.data.list;
+//             if(this.form.end_time==null&&this.form.start_time==null){
+//          this.tableData = res.data.data.list;
+//             }else{
+//               if(this.form.end_time!==null){
+//  new_arr=res.data.data.list.filter(item=>item.dtime<this.form.end_time)
+//                this.tableData = new_arr
+//               }else{
+//       new_arr=res.data.data.list.filter(item=>item.dtime>this.form.start_time)
+//                this.tableData = new_arr
+//               }
+//             }
           }
         })
-        // .catch(() => {
-        //   this.$message({
-        //     type: "info",
-        //     message: "请求失败"
-        //   });
-        // });
+
     }
   }
 };

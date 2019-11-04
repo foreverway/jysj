@@ -64,10 +64,10 @@
 </el-table-column>
 <el-table-column align="center" label="操作" width="200px" fixed="right">
      <template slot-scope="scope">
-          <div v-show="scope.row.attendance_status==2&&scope.row.is_forward!==1" style="color:#169BD5"><span style="cursor:pointer;" @click="seeMore(scope)">查看考勤详情</span><el-button type="danger" size="mini"  @click="payMoney(scope.row)" >转结</el-button></div>
+          <div v-show="scope.row.attendance_status==2&&scope.row.is_forward!==1" style="color:#169BD5"><span style="cursor:pointer;" @click="seeMore(scope)">查看考勤详情</span><el-button type="danger" size="mini"  @click="payMoney(scope.row)" >结转</el-button></div>
           <div v-show="scope.row.attendance_status==1" style="color:#169BD5"><span style="cursor:pointer;" @click="seeMore(scope)">查看考勤详情</span></div>
          <div v-show="scope.row.attendance_status==0" ><el-button size="mini" @click="normal(scope.row)" type="success">正常</el-button><el-button size="mini" @click="unnormal(scope.row)" type="danger">异动</el-button></div>
-         <div v-show="scope.row.is_forward==1" style="color:#169BD5"><span style="cursor:pointer;" @click="seeMore(scope)">查看考勤详情</span><el-button  @click="payMoney(scope.row)" type="info" disabled size="mini">转结</el-button></div>
+         <div v-show="scope.row.is_forward==1" style="color:#169BD5"><span style="cursor:pointer;" @click="seeMore(scope)">查看考勤详情</span><el-button  @click="payMoney(scope.row)" type="info" disabled size="mini">结转</el-button></div>
 
       </template>
 </el-table-column>
@@ -281,7 +281,7 @@ export default {
       this.centerDialogVisible_unnormal = true
     },
     unnormal_post(){
-      if( parseFloat(this.unnormalData.classhour)==this.unnormalData.true_classhour*1&&parseFloat(this.unnormalData.classhour)==this.unnormalData.true_classhour*1 &&parseFloat(this.unnormalData.classhour)==this.unnormalData.student_classhour*1){
+      if( parseFloat(this.unnormalData.classhour)>=this.unnormalData.true_classhour*1&&parseFloat(this.unnormalData.classhour)==this.unnormalData.true_classhour*1 &&parseFloat(this.unnormalData.classhour)==this.unnormalData.student_classhour*1){
         this.$message({
           message:'请填写关于异动的情况',
           type:"warning"
@@ -318,7 +318,7 @@ export default {
        let params={
         course_id:data.course_id
       }
-        this.$confirm('此操作将确定转结, 是否继续?', '提示', {
+        this.$confirm('此操作将确定结转, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -327,7 +327,7 @@ export default {
         if(res.data.code==1){
            this.$message({
             type: 'success',
-            message: '转结成功!'
+            message: '结转成功!'
           });
           this.getadata()
         }
@@ -336,7 +336,7 @@ export default {
         }).catch(() => {
           this.$message({
             type: 'info',
-            message: '已取消转结'
+            message: '已取消结转'
           });          
         });
 

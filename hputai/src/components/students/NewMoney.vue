@@ -2,8 +2,8 @@
 <div class="so_main">
 <div class="so_main_left">
  <el-form :inline="true" :model="form" class="demo-form-inline">
-<el-input class="so_input" v-model="form.search" @input="getadata" placeholder="请输入用户名"></el-input>
-<el-button type="primary" @click="getadata" style="margin-left:5px;background-color:#e6563a; border:none;">搜索</el-button>
+<el-input v-if="this.url!=='StudentsList'" class="so_input" v-model="form.search" @input="getadata" placeholder="请输入用户名"></el-input>
+<el-button v-if="this.url!=='StudentsList'" type="primary" @click="getadata" style="margin-left:5px;background-color:#e6563a; border:none;">搜索</el-button>
 
  <el-date-picker style="margin-left:60px"
       v-model="form.start_time"  @change="getadata"
@@ -100,6 +100,14 @@
            end_time:'',//搜索结束时间
             uid:'',//如果有uid,查询该用户的记录
        },
+              formStudent:{ 
+         search:'',//搜索学员姓名条件
+         page:1,//页码
+          start_time:'',//搜索开始时间
+           end_time:'',//搜索结束时间
+            uid:'',//如果有uid,查询该用户的记录
+            is_by_student:1, //在详情页使用
+       },
        form1:{  // 入款和扣款
           amount:'' ,//金额
            reason:'', //理由
@@ -108,13 +116,24 @@
        },
          msg:{},
         dialogFormVisible1:false,//入扣款弹窗
-
+        url:''
       }
     },
       created () {
          this.$apis.students.getuilcode()
-      this.getadata()
     },
+      mounted() {
+           var name=this.$route.path.substring(this.$route.path.indexOf("/")+1);
+ this.url=name.substr(0,12)
+           this.getadata()
+
+  },
+//       watch: {
+// $route(to, from) {
+//  var name=this.$route.path.substring(this.$route.path.indexOf("/")+1);
+//  this.url=name.substr(0,12)
+// }
+// },
     methods: {
      //序号排列
       indexMethod(index) {
@@ -156,12 +175,22 @@ this.getadata()
  })
       },
         getadata(){
-            this.$apis.students.cash_list(this.form).then(res => {
+          if(this.url=='StudentsList'){
+                        this.$apis.students.cash_list(this.formStudent).then(res => {
               if(res.data.code==1){
                    this.msg=res.data
                this.tableData = res.data.data.list
               }
                 })
+          }else{
+                        this.$apis.students.cash_list(this.form).then(res => {
+              if(res.data.code==1){
+                   this.msg=res.data
+               this.tableData = res.data.data.list
+              }
+                })
+          }
+
         }
     }
   }

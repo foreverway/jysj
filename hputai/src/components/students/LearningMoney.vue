@@ -2,10 +2,11 @@
   <div class="so_main">
     <div class="so_main_left">
       <el-form :inline="true" :model="form" class="demo-form-inline">
-        <el-input class="so_input" v-model="form.search" placeholder="请输入用户名"></el-input>
+        <el-input v-if="this.url!=='StudentsList'" class="so_input" v-model="form.search" placeholder="请输入用户名"></el-input>
         <el-button
           type="primary"
           @click="getadata"
+          v-if="this.url!=='StudentsList'"
           style="margin-left:5px;background-color:#e6563a; border:none;"
         >搜索</el-button>
 
@@ -76,6 +77,7 @@
     </div>
     <!-- 表格数据 -->
     <el-table
+    
       :header-cell-style="{background:'#f4f4f4'}"
       ref="multipleTable"
       border
@@ -140,6 +142,14 @@ export default {
         end_time: "", //搜索结束时间
         uid: "" //如果有uid,查询该用户的记录
       },
+                    formStudent:{ 
+         search:'',//搜索学员姓名条件
+         page:1,//页码
+          start_time:'',//搜索开始时间
+           end_time:'',//搜索结束时间
+            uid:'',//如果有uid,查询该用户的记录
+            is_by_student:1, //在详情页使用
+       },
       form1: {
         // 入款和扣款
         amount: "", //金额
@@ -148,13 +158,27 @@ export default {
         type: "" //入款还是扣款，1入款，2扣款
       },
       msg: {},
+              url:'',//判别是否详情页
+
       dialogVisible: false //入扣款弹窗
     };
   },
   created() {
     this.$apis.students.getuilcode();
-    this.getadata();
   },
+        mounted() {
+ var name=this.$route.path.substring(this.$route.path.indexOf("/")+1);
+ this.url=name.substr(0,12)
+          this.getadata()
+
+  },
+//       watch: {
+// $route(to, from) {
+//  var name=this.$route.path.substring(this.$route.path.indexOf("/")+1);
+//  this.url=name.substr(0,12)
+//  console.log(this.url)
+// }
+// },
   methods: {
     //验证姓名和学币余额
     ifnamemoney() {
@@ -212,12 +236,23 @@ export default {
       });
     },
     getadata() {
-      this.$apis.students.wallet_list(this.form).then(res => {
+                if(this.url=='StudentsList'){
+                        this.$apis.students.wallet_list(this.formStudent).then(res => {
         if (res.data.code == 1) {
           this.msg = res.data;
           this.tableData = res.data.data.list;
         }
       });
+                }else{
+                        this.$apis.students.wallet_list(this.form).then(res => {
+        if (res.data.code == 1) {
+          this.msg = res.data;
+          this.tableData = res.data.data.list;
+        }
+      });
+                }
+
+
     }
   }
 };

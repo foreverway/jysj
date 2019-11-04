@@ -28,8 +28,10 @@
     <el-cascader
       placeholder="选择科目"
       v-model="params.subject_id"
-      clearable
+      
+      filterable
       :options="options"
+      clearable
       :props="{ expandTrigger: 'hover' }"
       :show-all-levels="false"
       @change="handleChange_1"
@@ -56,9 +58,11 @@
       placeholder="选择日期时间"
     ></el-date-picker>
     <el-button type="primary" @click="getadata">搜索</el-button>
+        <!-- <el-button type="primary" @click="recharge_export">导出</el-button> -->
+
     <!-- 表格数据 -->
     <el-table :data="tableData" border :header-cell-style="{background:'#f4f4f4'}">
-      <el-table-column label="序号" type="index" width="80" align="center" :index="indexMethod"></el-table-column>
+      <el-table-column label="序号" type="index" width="80" align="center" ></el-table-column>
 
       <el-table-column :show-overflow-tooltip="true" align="center" label="科目" width="200">
         <template slot-scope="scope">
@@ -249,12 +253,12 @@ export default {
       check_data: {}, //考勤数据
       feed_data: {}, //反馈数据
       params: {
-        teacher_id: "",
-        subject_id: "",
-        search: "",
-        start_time: "",
-        end_time: "",
-        page: "1"
+        // teacher_id: "",
+         //subject_id: "",
+        // search: "",
+        // start_time: "",
+        // end_time: "",
+        // page: "1"
       },
       checkopen: false, //考勤的弹出
       feedopen: false, //反馈的弹出
@@ -271,6 +275,19 @@ export default {
     ...mapState(["teacher_data"])
   },
   methods: {
+            //导出
+    recharge_export() {
+      this.$message({
+        type: "success",
+        message: "正在导出,请稍等..."
+      });
+      let urls = "http://personal.test.hqjystudio.com";
+      let parms = "";
+      for (var key in this.params) {
+        parms += key + "=" + this.params[key] + "&";
+      }
+      window.location.href = urls + "/api_dollars_export" + "?" + parms;
+    },
     //序号排列
     indexMethod(index) {
       if (this.params.page == 1) {
@@ -371,15 +388,13 @@ export default {
     },
     handleChange_1(targetName) {
       //选择科目
-      var lastName = targetName.length == 1 ? targetName[0] : targetName[1];
+      var lastName = targetName.length == 1 ? targetName[0] : (targetName.length == 2?targetName[1]:targetName[2]);
       if (lastName !== undefined) {
         this.params.subject_id = lastName.toString();
-      }
 
-      this.$apis.teacher.teaching_data(this.params).then(res => {
-        this.msg = res.data;
-        this.tableData = res.data.data.list;
-      });
+      }
+              this.getadata()
+
     },
     getadata() {
       this.$apis.teacher.teaching_data(this.params).then(res => {
@@ -389,7 +404,6 @@ export default {
       //获取科目的数据
            this.$apis.common.subject_list().then(res => {
         if (res.data.code == 1) {
-          this.msg = res.data;
           this.options_ = res.data.data;
               let addWord=arr=>{
             arr.forEach(item=>{

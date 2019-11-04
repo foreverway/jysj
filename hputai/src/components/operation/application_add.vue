@@ -146,27 +146,27 @@
             placeholder="学生排课项目、科目、考局（A-level必写）及课时"
           ></el-input> --> -->
         <!-- </el-form-item> -->
-        <el-form-item label="需求1" prop="need_two">
+        <el-form-item label="需求1" prop="need_one">
           <el-input
             type="textarea"
-            v-model="form2.need_two"
+            v-model="form2.need_one"
             placeholder="学生学习需求是什么？（零基础先修、同步辅导、巩固复习、强化冲刺）"
           ></el-input>
         </el-form-item>
-        <el-form-item label="需求2" prop="need_three">
+        <el-form-item label="需求2" prop="need_two">
           <el-input
             type="textarea"
-            v-model="form2.need_three"
+            v-model="form2.need_two"
             placeholder="学生之前的学习经历和学习基础（之前在那里上的学？学习基础怎么样？）"
           ></el-input>
         </el-form-item>
-        <el-form-item label="需求3" prop="need_four">
-          <el-input type="textarea" v-model="form2.need_four" placeholder="学生希望跟什么样的老师学习？"></el-input>
+        <el-form-item label="需求3" prop="need_three">
+          <el-input type="textarea" v-model="form2.need_three" placeholder="学生希望跟什么样的老师学习？"></el-input>
         </el-form-item>
-        <el-form-item label="需求4" prop="need_five">
+        <el-form-item label="需求4" prop="need_four">
           <el-input
             type="textarea"
-            v-model="form2.need_five"
+            v-model="form2.need_four"
             placeholder="学生上课时间期限，可排课时间？（北京时间）每次课上几小时？"
           ></el-input>
         </el-form-item>
@@ -240,7 +240,6 @@ export default {
         need_two: "",
         need_three: "",
         need_four: "",
-        need_five: ""
       },
       rules: {
         title: [{ required: true, message: "请输入标题", trigger: "blur" }],
@@ -285,7 +284,7 @@ export default {
           }
         ],
         need_four: [{ required: true, message: "请填写反馈", trigger: "blur" }],
-        need_five: [{ required: true, message: "请填写反馈", trigger: "blur" }]
+        need_one: [{ required: true, message: "请填写反馈", trigger: "blur" }]
       },
       money: "",
       parms: {
@@ -548,11 +547,10 @@ export default {
             remarks: this.form.feedback,
             course_address: this.form.radio,
             address: this.form.address.toString(),
-            need_one: '',
-            need_two: this.form2.need_two,
-            need_three: this.form2.need_three,
-            need_four: this.form2.need_four,
-            need_five: this.form2.need_five
+            need_one: this.form2.need_two,
+            need_two: this.form2.need_three,
+            need_three:this.form2.need_four ,
+            need_four:  this.form2.need_five,
           };
 
           parms.subjects_data = this.subjects_data;

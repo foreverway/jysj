@@ -224,6 +224,12 @@ export default {
     });
  
   },
+  watch: {
+
+$route(to, from) {
+ var name=this.$route.path.substring(this.$route.path.indexOf("/")+1);
+}
+},
   beforeMount() {},
   computed: mapState([
     "banzhuren_list",

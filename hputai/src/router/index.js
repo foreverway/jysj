@@ -106,7 +106,22 @@ export default new Router({
         },
         {
           path: '/StudentsList/StudentsInfo',  //查看学生详情
-          component: resolve=>require(['@/components/students/StudentsInfo'],resolve)
+          name:'StudentsInfo',
+          component: resolve=>require(['@/components/students/StudentsInfo'],resolve),
+          children:[
+            {
+              path:'VirtualMonney',
+              component:resolve=>require(['@/components/students/VirtualMonney'],resolve)
+            },
+            {
+              path:'NewMoney',
+              component:resolve=>require(['@/components/students/NewMoney'],resolve)
+            },
+            {
+              path:'LearningMoney',
+              component:resolve=>require(['@/components/students/LearningMoney'],resolve)
+            }
+          ]
         },
         {
           path: '/StudentsList/ApplicationAdd',//ApplicationAdd添加报名需求列表
