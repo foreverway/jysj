@@ -6,6 +6,7 @@
       <span style="font-weight:700;color:orange;margin:0 5px;">{{form.username}}</span>
       <span>的详情</span>
     </zx-head>
+    
     <div style="margin:0 50px;">
     <p style="margin:10px;">
       <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>基本信息
@@ -202,7 +203,7 @@
         </el-tabs>
       </el-header>
       <el-container>
-        <el-main>
+        <el-main style="height:600px;padding:0;">
           <router-view />
           <!-- 主体部分在这里显示 -->
         </el-main>
@@ -395,7 +396,7 @@
         </el-dialog>
         <!-- 其他方式进入课表 other_enter -->
       </div>
-      <el-pagination
+      <!-- <el-pagination
         style="float:right;margin-top:20px;margin-bottom: 20px;"
         background
         layout="prev, pager, next"
@@ -404,8 +405,8 @@
         @current-change="current"
         :page-size="5"
         :total="classData.length"
-      ></el-pagination>
-    <el-button type="primary" style="margin:10px;" @click="goBack">确定</el-button>
+      ></el-pagination> -->
+    <el-button type="primary" class="back" @click="goBack" >确定</el-button>
   </div>
   </div>
 </template>
@@ -438,8 +439,14 @@ export default {
             formLabelAlign: {}, //老师在这里疯狂反馈
       activeName: "1",
       activeIndex: "1",
-      thisurl:''
+      thisurl:'',
     };
+  },
+  watch:{
+    mouseDown:function(){
+
+    }
+
   },
   created() {
     this.getData();
@@ -448,11 +455,50 @@ export default {
          this.$router.push({path:"/StudentsList/StudentsInfo/VirtualMonney",
           query:{id:this.$route.query.id}});
     });
+      
+
+                  var scrollFunc = function(e) {
+    e = e || window.event;
+    if (e.wheelDelta) { //判断浏览器IE，谷歌滑轮事件               
+        if (e.wheelDelta > 0) { //当滑轮向上滚动时  
+
+        
+          //  $('.back').css("opacity","0"); 
+$('.back').fadeOut()
+        }
+        if (e.wheelDelta < 0) { //当滑轮向下滚动时
+$('.back').fadeIn()
+// $('.back').css("opacity","1"); 
+
+        } 
+
+
+        
+    } else if (e.detail) { //Firefox滑轮事件  
+        if (e.detail > 0) { //当滑轮向上滚动时  
+            console.log("滑轮向上滚动");
+
+        }
+        if (e.detail < 0) { //当滑轮向下滚动时  
+            console.log("滑轮向下滚动");
+
+
+        }
+    }
+}
+//给页面绑定滑轮滚动事件  
+if (document.addEventListener) { //firefox  
+    document.addEventListener('DOMMouseScroll', scrollFunc, false);
+}
+//滚动滑轮触发scrollFunc方法  //ie 谷歌  
+window.onmousewheel = document.onmousewheel = scrollFunc;
   },
   methods: {
+
     handleChange(val) {},
     goBack() {
-      this.$router.go(-1);
+      // this.$router.go(-1);
+      this.$router.push({path:'/StudentsList'})
     },
         handleClick(tab, event) {
       switch (tab.name) {
@@ -492,7 +538,6 @@ export default {
             } else {
               this.tableData = res.data.data.list;
             }
-             console.log(this.tableData);
           }
         });
       //整理获取科目的数据
@@ -716,5 +761,16 @@ li :nth-child(2) {
   width: 69%;
   text-align: center;
   box-shadow: 0 0 0 1px #f5f5f5;
+}
+.back{
+ 
+position:fixed;
+bottom:20px;
+margin:0 auto;
+left:50%;
+/* right:0; */
+z-index:1000;
+width:100px;
+
 }
 </style>

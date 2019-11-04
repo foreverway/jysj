@@ -10,23 +10,42 @@
           style="margin-left:5px;background-color:#e6563a; border:none;"
         >搜索</el-button>
 
-        <el-date-picker
-          style="margin-left:60px"
-          v-model="form.start_time"
+   <div   v-if="this.url=='StudentsList'"    style="float:right; margin:0 0 15px 17px;"
+
+><el-date-picker
           @change="getadata"
-          type="datetime"
+          v-model="form.start_time"
           clearable
+          type="datetime"
           value-format="yyyy-MM-dd H:mm:ss"
           placeholder="选择日期时间"
         ></el-date-picker>至
         <el-date-picker
           @change="getadata"
           v-model="form.end_time"
-          type="datetime"
           clearable
+          type="datetime"
           value-format="yyyy-MM-dd H:mm:ss"
           placeholder="选择日期时间"
-        ></el-date-picker>
+        ></el-date-picker></div>
+          <div   v-if="this.url!=='StudentsList'"   
+
+><el-date-picker
+          @change="getadata"
+          v-model="form.start_time"
+          clearable
+          type="datetime"
+          value-format="yyyy-MM-dd H:mm:ss"
+          placeholder="选择日期时间"
+        ></el-date-picker>至
+        <el-date-picker
+          @change="getadata"
+          v-model="form.end_time"
+          clearable
+          type="datetime"
+          value-format="yyyy-MM-dd H:mm:ss"
+          placeholder="选择日期时间"
+        ></el-date-picker></div>
       </el-form>
     </div>
 
