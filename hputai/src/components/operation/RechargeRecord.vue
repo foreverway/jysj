@@ -62,10 +62,11 @@
             ></el-option>
           </el-select>
         </el-form-item>
+        <br/>
         <el-form-item label="进线项目："  v-if="base_selct">
           <el-select
             clearable
-            style="width:180px"
+            style="width:150px"
             v-model="form.inproject"
             @change="getadata"  
             filterable
@@ -84,7 +85,7 @@
         <el-form-item label="进线渠道：">
           <el-select
             clearable
-            style="width:180px"
+            style="width:150px"
             v-model="form.inchannel"
             placeholder="请选择"
             @change="getadata"
@@ -103,7 +104,7 @@
         <el-form-item label="收款类别：">
           <el-select
             clearable
-            style="width:140px"
+            style="width:150px"
             v-model="form.collection_class"
             placeholder="请选择"
             @change="getadata"
@@ -122,7 +123,7 @@
         <el-form-item label="收款方式：">
           <el-select
             clearable
-            style="width:140px"
+            style="width:150px"
             v-model="form.collection_type"
             placeholder="请选择"
             @change="getadata"
@@ -136,7 +137,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-
+<br/>
                 <el-form-item label="报课项目">
           <el-select
             clearable

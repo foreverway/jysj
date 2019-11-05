@@ -47,7 +47,7 @@
                 >
                   <img :src="form.admin_head" class="touxiang_edit" style />
                 </el-avatar>
-                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                <el-button slot="trigger" size="small" type="primary">选取本地图片</el-button>
               </el-upload>
             </el-form-item>
             <el-form-item label="名称">
@@ -241,12 +241,15 @@ $route(to, from) {
     "region_list"
   ]),
   updated() {  //获取地址栏地址，如果#后面不是login就存入sessionStorage
-  var matchReg = /(?<=#\/).*?(?=\/)/;
+        //var matchReg = /(?<=#\/).*?(?=\/)/;
+
+  //console.log(this.$route.path)//使用route方法获取路径  在使用split对/进行切割
+  // var matchReg = /(?<=#\/).*?(?=\/)/;//使用正则零宽断言来取出第一位地址
     if (window.location.href.split("/#")[1] !== "login") {
       sessionStorage.setItem("url", window.location.href.split("/#")[1]);
     }
-    if(window.location.href.match(matchReg)){
-      let twoUrl='/'+window.location.href.match(matchReg)[0]
+    if(this.$route.path.split('/')[1]){
+      let twoUrl='/'+this.$route.path.split('/')[1]
 sessionStorage.setItem("url",twoUrl);
     }
     this.defaultUrl = sessionStorage.getItem("url");
@@ -256,12 +259,19 @@ sessionStorage.setItem("url",twoUrl);
     $(bodyDiv)[0].style.height=$(window).height()*1-40+'px'
   },
   mounted() {
-      var matchReg = /(?<=#\/).*?(?=\/)/;
-    if (window.location.href.split("/#")[1] !== "login") {
+//       var matchReg = /(?<=#\/).*?(?=\/)/;
+//     if (window.location.href.split("/#")[1] !== "login") {
+//       sessionStorage.setItem("url", window.location.href.split("/#")[1]);
+//     }
+//     if(window.location.href.match(matchReg)){
+//       let twoUrl='/'+window.location.href.match(matchReg)[0]
+// sessionStorage.setItem("url",twoUrl);
+//     }
+ if (window.location.href.split("/#")[1] !== "login") {
       sessionStorage.setItem("url", window.location.href.split("/#")[1]);
     }
-    if(window.location.href.match(matchReg)){
-      let twoUrl='/'+window.location.href.match(matchReg)[0]
+    if(this.$route.path.split('/')[1]){
+      let twoUrl='/'+this.$route.path.split('/')[1]
 sessionStorage.setItem("url",twoUrl);
     }
     this.defaultUrl = sessionStorage.getItem("url");
@@ -559,6 +569,7 @@ font-size:  15px;
   /* width: 0px; */
   margin-right:3%;
   line-height: 61px;
+  cursor:pointer;
 }
 .el-menu-item {
   background-color: rgb(235, 232, 232) !important;

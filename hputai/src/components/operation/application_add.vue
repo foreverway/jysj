@@ -144,7 +144,7 @@
             maxlength="100"
             show-word-limit
             placeholder="学生排课项目、科目、考局（A-level必写）及课时"
-          ></el-input> --> -->
+          ></el-input> --> 
         <!-- </el-form-item> -->
         <el-form-item label="需求1" prop="need_one">
           <el-input
@@ -202,8 +202,7 @@
       v-if="active==1"
     >下一步</el-button>
     <el-button
-      type="primary"
-      style="background-color:#e6563a; border:none;color:white;"
+      type="success"
       @click="onSubmit('form2')"
       v-if="active==2"
     >确 定</el-button>
@@ -510,16 +509,16 @@ export default {
     },
     //学生姓名选择产生的变化
     handleChange(targetName) {
-      console.log(targetName[0])
       //console.log(this.writeCurrentDate());
       var checkOne = this.options_1.filter(
         item => item.username == targetName[0]
       );
       this.editableTabs.push({
         name: targetName[0],
-        tel: checkOne[0].tel,
+        tel: checkOne[0].tel?checkOne[0].tel:'没有电话',
         id: checkOne[0].id
       });
+
     },
         handleChange_start(targetName,a) {
       let checkOne = a.filter(
@@ -528,7 +527,7 @@ export default {
       );
       this.editableTabs.push({
         name: targetName,
-        tel: checkOne[0].tel,
+        tel: checkOne[0].tel?checkOne[0].tel:'没有电话',
         id: checkOne[0].id
       });
     },
@@ -547,14 +546,15 @@ export default {
             remarks: this.form.feedback,
             course_address: this.form.radio,
             address: this.form.address.toString(),
-            need_one: this.form2.need_two,
-            need_two: this.form2.need_three,
-            need_three:this.form2.need_four ,
-            need_four:  this.form2.need_five,
+            need_one: this.form2.need_one,
+            need_two: this.form2.need_two,
+            need_three:this.form2.need_three ,
+            need_four:  this.form2.need_four,
           };
 
           parms.subjects_data = this.subjects_data;
           parms.students_data = this.students_data;
+
           this.$apis.common.application_add(parms).then(res => {
             if (res.data.code == 1) {
               this.$message({
@@ -594,6 +594,7 @@ export default {
             });
           });
           //console.log(this.subjects_data)
+          
           this.editableTabs.forEach(item => {
             this.students_data.push({
               student_id: item.id
@@ -612,7 +613,6 @@ export default {
                 need_two: this.form2.need_two,
                 need_three: this.form2.need_three,
                 need_four: this.form2.need_four,
-                need_five: this.form2.need_five,
                 app_id: this.$route.query.id
               };
 

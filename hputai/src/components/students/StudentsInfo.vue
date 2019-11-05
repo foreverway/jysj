@@ -131,6 +131,16 @@
       <el-table-column prop="app_status" label="状态" width="180"></el-table-column>
       <el-table-column prop="address" label="操作"></el-table-column>
     </el-table>
+          <el-pagination
+        style="float:right;margin-top:20px;margin-bottom: 20px;"
+        background
+        layout="prev, pager, next"
+        @prev-click="prev"
+        @next-click="next"
+        @current-change="current"
+        :page-size="5"
+        :total="tableData.length"
+      ></el-pagination>
     <div style="clear:both;"></div>
     <p style="margin:10px;">
       <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>学员课表
@@ -190,6 +200,16 @@
             </template>
           </el-table-column>
         </el-table>
+                  <el-pagination
+        style="float:right;margin-top:20px;margin-bottom: 20px;"
+        background
+        layout="prev, pager, next"
+        @prev-click="prev"
+        @next-click="next"
+        @current-change="current"
+        :page-size="5"
+        :total="classData.length"
+      ></el-pagination>
     <p style="margin:10px;">
       <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>
 学员账号明细
@@ -406,7 +426,7 @@
         :page-size="5"
         :total="classData.length"
       ></el-pagination> -->
-    <el-button type="primary" class="back" @click="goBack" >确定</el-button>
+    <!-- <el-button type="primary" class="back" @click="goBack" >确定</el-button> -->
   </div>
   </div>
 </template>

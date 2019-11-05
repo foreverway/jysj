@@ -105,6 +105,7 @@
         </el-form-item>
         <el-form-item label="选择科目">
           <el-cascader
+          ref='cascader'
             v-model="value_suj"
             :options="options"
             :props="{ expandTrigger: 'hover' }"
@@ -569,7 +570,16 @@ export default {
     },
     //选择报读科目的函数
     handleChange_1(targetName) {
-     this.value_suj=""
+     let obj = {} 
+     //此处为借鉴源码里面的方法，执行清除
+obj.stopPropagation = () =>{}
+try{
+    this.$refs.cascader.clearValue(obj)//旧方法
+}catch(err){
+    this.$refs.cascader.handleClear(obj)//新版本
+}
+//this.$refs.cascader.clearValue(obj)
+
       var lastName =targetName.length==1?targetName[0]:(targetName.length==2?targetName[1]:targetName[2])
       //判断标题
       let result=[]
@@ -592,7 +602,7 @@ export default {
                 small_class: 0, //课程类型
                 big_class: 0 //课程id
               });
-           this.value_suj=''
+           this.value_suj=null
 
     },
     indexMethod(index) {

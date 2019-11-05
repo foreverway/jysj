@@ -173,7 +173,7 @@ export default {
   },
 
   recharge_list(params) { //获取充值记录单列表
-    // let url = "/api/api_recharge_list"
+     let url = "/api/api_recharge_list"
     return shuju.getdata(url, params)
   },
 

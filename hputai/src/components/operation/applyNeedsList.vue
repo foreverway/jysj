@@ -28,7 +28,7 @@
     </el-select>
     <el-button type="primary" style="background-color:#e6563a; border:none;" @click="getdata">搜索</el-button>
     <router-link to="/StudentsList/ApplicationAdd">
-      <el-button type="primary" style="float:right;background-color:#e6563a; border:none;">新建报名需求</el-button>
+      <!-- <el-button type="primary" style="float:right;background-color:#e6563a; border:none;">新建报名需求</el-button> -->
     </router-link>
     <el-table
       border
@@ -282,7 +282,7 @@ export default {
       centerDialogVisible_shenghe: false,
       // textarea: "", //审核的输入框
       // msg: "",
-      // is_pass: "", //审核意见
+       is_pass: "", //审核意见
       banzhuren_list_new: [], //班主任数据
       banzhuren_live: "",
       moneymen_list_new: [], //教务专员
@@ -385,23 +385,25 @@ export default {
         banzhuren_id: this.banzhuren_live[0],
         jiaowu_id: this.moneymen_live[0],
         zhujiao_id: this.helpTeacher_live[0],
-        is_pass: this.is_pass,
+        is_pass: num,
         remarks: this.shenghe_value
       };
       this.$apis.common.application_audit(shenghe).then(res => {
         if (res.data.code == 1) {
-          if (this.form1.status == 1) {
+          if (num == 1) {
             this.$message({
               type: "success",
               message: "已通过审核"
             });
-            this.centerDialogVisible_shenghe = true;
+            this.centerDialogVisible_shenghe = false;
             this.getdata();
           } else {
             this.$message({
-              type: "success",
+              type: "warning",
               message: " 已审核为不通过"
             });
+              this.centerDialogVisible_shenghe = false;
+
             this.getdata();
           }
         } else {

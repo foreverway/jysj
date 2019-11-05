@@ -1,6 +1,6 @@
  <template>
   <div class="main">
-                <zx-head title="销售进程管控表" ></zx-head>
+    <zx-head title="销售进程管控表"></zx-head>
 
     <el-input
       placeholder="模糊搜索"
@@ -9,34 +9,40 @@
       @change="getdata"
       style="width:300px"
     ></el-input>
-           <el-date-picker
-          style="margin-left:60px"
-          v-model="parms.start_time"
-          @change="getdata"
-          type="datetime"
-          clearable
-          value-format="yyyy-MM-dd HH:mm:ss"
-          placeholder="选择日期时间"
-        ></el-date-picker>至
-        <el-date-picker
-          @change="getdata"
-          v-model="parms.end_time"
-          type="datetime"
-          clearable
-          value-format="yyyy-MM-dd HH:mm:ss"
-          placeholder="选择日期时间"
-        ></el-date-picker>
+    <el-date-picker
+      style="margin-left:60px"
+      v-model="parms.start_time"
+      @change="getdata"
+      type="datetime"
+      clearable
+      value-format="yyyy-MM-dd HH:mm:ss"
+      placeholder="选择日期时间"
+    ></el-date-picker>至
+    <el-date-picker
+      @change="getdata"
+      v-model="parms.end_time"
+      type="datetime"
+      clearable
+      value-format="yyyy-MM-dd HH:mm:ss"
+      placeholder="选择日期时间"
+    ></el-date-picker>
 
-    <el-button type="success"   @click="getdata">搜索</el-button>
-      <el-button type="primary" @click="recharge_export">导出</el-button>
+    <el-button type="success" @click="getdata">搜索</el-button>
+    <el-button type="primary" @click="recharge_export">导出</el-button>
 
     <router-link to="/SalesList/Addsalepro">
-      <el-button type="primary"  style="float:right;background-color:#e6563a; border:none;">新建销售情况列表</el-button>
+      <el-button type="primary" style="float:right;background-color:#e6563a; border:none;">新建销售情况列表</el-button>
     </router-link>
 
-    <el-table :data="tableData" border  :default-sort = "{prop: 'dtime', order: 'descending'}" :header-cell-style="{background:'#f4f4f4'}" style="margin-top:20px">
-      <el-table-column label="序号" type="index" ></el-table-column>
-      <el-table-column prop="dtime" width="130px"  sortable label="数据获取时间"></el-table-column>
+    <el-table
+      :data="tableData"
+      border
+      :default-sort="{prop: 'week', order: 'descending'}"
+      :header-cell-style="{background:'#f4f4f4'}"
+      style="margin-top:20px"
+    >
+      <el-table-column label="序号" type="index"></el-table-column>
+      <el-table-column prop="dtime" width="130px" label="数据获取时间"></el-table-column>
       <el-table-column prop="week" width="130px" sortable label="数据更新时间"></el-table-column>
       <el-table-column prop="follow_man" label="跟进人"></el-table-column>
       <el-table-column prop="team" label="	所属战队"></el-table-column>
@@ -57,7 +63,7 @@
       <el-table-column prop="feedback" label="客户反馈"></el-table-column>
       <el-table-column fixed="right" prop label="操作" width="140">
         <template slot-scope="scope">
-            <el-button type="text" size="small"  @click="pushToEdit(scope.row.id)">编辑</el-button>
+          <el-button type="text" size="small" @click="pushToEdit(scope.row.id)">编辑</el-button>
           <el-button @click="salepro_del(scope.row)" type="text" size="small">删除</el-button>
           <!-- <el-button type="text" size="small"  @click="dialogFormVisible1=1">复制链接</el-button> -->
         </template>
@@ -65,15 +71,16 @@
     </el-table>
     <!-- 分页 -->
     <span v-if="msg.data">
-     <el-pagination style="margin-top:30px; float: right;" 
-  background
-  layout="prev, pager, next"
-  @prev-click="prev"
-  @next-click="next"
-  @current-change="current"
-  :page-size='10'
-  :total="msg.data.count">
-     </el-pagination>
+      <el-pagination
+        style="margin-top:30px; float: right;"
+        background
+        layout="prev, pager, next"
+        @prev-click="prev"
+        @next-click="next"
+        @current-change="current"
+        :page-size="10"
+        :total="msg.data.count"
+      ></el-pagination>
     </span>
   </div>
 </template>
@@ -96,15 +103,14 @@ export default {
       //   start_time:null,
       //   end_time:null
       // },
-       value1: '',
+      value1: ""
     };
   },
   created() {
     this.getdata();
     // console.log( this.getdata())
   },
-  mounted() {
-  },
+  mounted() {},
   // watch:{
   //   form:function(before,after){
   //       if(this.form.end_time!==""){
@@ -120,7 +126,7 @@ export default {
   //   }
   // },
   methods: {
-            //导出
+    //导出
     recharge_export() {
       this.$message({
         type: "success",
@@ -133,10 +139,10 @@ export default {
       }
       window.location.href = urls + "/api_salepro_export" + "?" + params;
     },
-        //用于分页的一些设置
-        current(num) {
+    //用于分页的一些设置
+    current(num) {
       //当前页数
-      console.log(num)
+      console.log(num);
       this.parms.page = num;
       this.getdata();
     },
@@ -151,8 +157,8 @@ export default {
         this.getdata();
       }
     },
-    pushToEdit(a){
-            this.$router.push({path:'/SalesList/SalelistEdit',query:{id:a}})
+    pushToEdit(a) {
+      this.$router.push({ path: "/SalesList/SalelistEdit", query: { id: a } });
     },
 
     //序号排列
@@ -221,31 +227,25 @@ export default {
       this.$router.push({ path: "/login" });
     },
     getdata() {
-        this.parms.admin_id=this.getdataCookie("admin_id")
-      this.$apis.common
-        .salepro_list(this.parms)
-        .then(res => {
-          if (res.data.code == 1) {
-            this.msg = res.data;
-            this.tableData = res.data.data.list;
-//             if(this.form.end_time==null&&this.form.start_time==null){
-//          this.tableData = res.data.data.list;
-//             }else{
-//               if(this.form.end_time!==null){
-//  new_arr=res.data.data.list.filter(item=>item.dtime<this.form.end_time)
-//                this.tableData = new_arr
-//               }else{
-//       new_arr=res.data.data.list.filter(item=>item.dtime>this.form.start_time)
-//                this.tableData = new_arr
-//               }
-//             }
+      this.parms.admin_id = this.getdataCookie("admin_id");
+      this.$apis.common.salepro_list(this.parms).then(res => {
+        if (res.data.code == 1) {
+          this.msg = res.data;
+          function compare(p) {
+            return function(m, n) {
+              var a = m[p];
+              var b = n[p];
+              return a - b;
+            };
           }
-        })
+          this.tableData = res.data.data.list;
 
+          this.tableData.sort(compare("week"));
+        }
+      });
     }
   }
 };
 </script>
 <style scoped>
-
 </style>
