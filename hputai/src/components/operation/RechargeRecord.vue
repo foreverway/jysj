@@ -55,9 +55,9 @@
             @change="getadata"
           >
             <el-option
-              v-for="item in teacher"
+              v-for="item in banzhuren_list"
               :key="item.id"
-              :label="item.teacher_name"
+              :label="item.banzhuren"
               :value="item.id"
             ></el-option>
           </el-select>
@@ -357,7 +357,7 @@ export default {
       people: "", //实收人=顾问数据+班主任数据
       classs: "", // 进项线目数据
       adviser: "", //顾问数据
-      teacher: "", //班主任数据
+      banzhuren: "", //班主任数据
       form: {
         // search: "", //搜索学员姓名条件
          page: 1,
@@ -386,9 +386,11 @@ export default {
       }
     };
   },
-  computed: mapState(["rolemenu"], "banzhuren_list"),
+  computed: mapState(["rolemenu", "banzhuren_list"]),
   created() {
     //this.$apis.common.getuilcode()
+        mapState(["rolemenu"], "banzhuren_list")
+
     this.getadata();
     this.adminid = this.getdataCookie("admin_uid");
    // this.$nextTick(function(){
@@ -461,7 +463,7 @@ export default {
       });
       let urls = "http://personal.test.hqjystudio.com";
       let parms = "";
-      this.form.teacher='杨懿俊'
+      // this.form.teacher='杨懿俊'
       for (var key in this.form) {
         parms += key + "=" + this.form[key] + "&";
       }
@@ -494,14 +496,16 @@ export default {
         //获取基础数据
         if (res.data.code == 1) {
           this.base_selct = res.data;
+          this.banzhuren=this.banzhuren_list
         }
       });
-      this.$apis.common.teacher_list_only().then(res => {
-        // 获取班主任数据
-        if (res.data.code == 1) {
-          this.teacher = res.data.data.list;
-        }
-      });
+      // this.$apis.common.teacher_list_only().then(res => {
+      //   // 获取班主任数据
+      //   if (res.data.code == 1) {
+      //     this.teacher = res.data.data.list;
+      //     console.log(this.teacher)
+      //   }
+      // });
       this.$apis.common.adviser_list().then(res => {
         //获取顾问数据
         if (res.data.code == 1) {

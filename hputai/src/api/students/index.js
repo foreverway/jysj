@@ -7,7 +7,7 @@ export default {
             return shuju.getdata(url,params)
            },
 
-           //学生排课列表接口
+           //排课列表接口
            student_arranging_course(params){
              let url="/api/api_arranging_course"
              return shuju.getdata(url,params)

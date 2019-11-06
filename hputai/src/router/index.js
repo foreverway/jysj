@@ -129,6 +129,11 @@ export default new Router({
           name:'ApplicationAdd'
         },
         {
+          path: '/StudentsList/application_edit_copy',//编辑页面
+          component: resolve=>require(['@/components/operation/application_edit_copy'],resolve),
+          name:'ApplicationAdd'
+        },
+        {
           path: '/StudentsList/StudentsEdit',  //学生编辑
           component:resolve=>require(['@/components/students/students_edit'],resolve)
         },

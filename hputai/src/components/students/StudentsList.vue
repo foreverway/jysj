@@ -1,6 +1,6 @@
  <template>
   <div class="main">
-    <zx-head title="学生列表" ></zx-head>
+    <zx-head title="我的学员" ></zx-head>
     <el-input
       placeholder="请输入搜索内容"
       v-model="parms.search"
@@ -144,10 +144,19 @@ export default {
           });
           break;
         case "see_info": //查看学生列表详情
+        console.log(b.learnmoney)
+        if(b.learnmoney>0){
           this.$router.push({
             path: "/StudentsList/StudentsInfo",
             query: { id: b.id }
           });
+        }else{
+          this.$message({
+            type:"warning",
+            message:'账户余额不足'
+          })
+        }
+
           break;
         case "copy_url": //复制链接
           this.dialogFormVisible1 = true;

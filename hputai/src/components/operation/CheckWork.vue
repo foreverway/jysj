@@ -1,6 +1,6 @@
 <template>
   <div class="so_main">
-        <zx-head title="考勤与课时统计" ></zx-head>
+        <zx-head title="考勤" ></zx-head>
 
     <div class="so_main_left">
       <el-form :inline="true" :model="form"  class="demo-form-inline">
@@ -281,13 +281,8 @@ export default {
       this.centerDialogVisible_unnormal = true
     },
     unnormal_post(){
-      if( parseFloat(this.unnormalData.classhour)>=this.unnormalData.true_classhour*1&&parseFloat(this.unnormalData.classhour)==this.unnormalData.true_classhour*1 &&parseFloat(this.unnormalData.classhour)==this.unnormalData.student_classhour*1){
-        this.$message({
-          message:'请填写关于异动的情况',
-          type:"warning"
-        })
-      }else{
-              this.$message({
+      if( this.unnormalData.classhour>=this.unnormalData.true_classhour*1&&this.unnormalData.classhour>=this.unnormalData.true_classhour*1 &&this.unnormalData.classhour>=this.unnormalData.student_classhour*1){
+                      this.$message({
           message:'登记成功',
           type:"success"
         })
@@ -297,6 +292,12 @@ export default {
              this.centerDialogVisible_unnormal = false
         }
       })
+
+      }else{
+        this.$message({
+          message:'请填写关于异动的情况',
+          type:"warning"
+        })
       }
     },
     // 查看详情

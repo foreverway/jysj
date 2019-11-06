@@ -1,151 +1,156 @@
 <template>
-  <div >
+  <div>
     <!-- <p><span>学员</span><span style="font-weight:700;color:orange;margin:0 5px;">{{form.username}}</span><span>的详情</span></p> -->
     <zx-head title>
       <span>学员</span>
       <span style="font-weight:700;color:orange;margin:0 5px;">{{form.username}}</span>
       <span>的详情</span>
     </zx-head>
-    
-    <div style="margin:0 50px;">
-    <p style="margin:10px;">
-      <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>基本信息
-    </p>
-    <ul :data="form">
-      <li>
-        <span>地区</span>
-        <span>{{form.subject_name}}</span>
-      </li>
-      <li>
-        <span>手机号</span>
-        <span>{{form.tel}}</span>
-      </li>
-      <li>
-        <span>学员等级</span>
-        <span>{{form.alevel}}</span>
-      </li>
-      <li>
-        <span>性别</span>
-        <span style=" border-top-style:hidden;">{{form.sex}}</span>
-      </li>
-      <li>
-        <span>年龄</span>
-        <span style=" border-top-style:hidden;">{{form.age}}</span>
-      </li>
-      <li>
-        <span>学校</span>
-        <span style=" border-top-style:hidden;">{{form.school}}</span>
-      </li>
-      <li>
-        <span>年级</span>
-        <span>{{form.grade}}</span>
-      </li>
-      <li>
-        <span>微信/QQ</span>
-        <span>{{form.weixin_qq}}</span>
-      </li>
-      <li>
-        <span>监护人</span>
-        <span>{{form.guardian}}</span>
-      </li>
-    </ul>
-    <ul :data="form">
-      <li>
-        <span>监护人联系方式</span>
-        <span>{{form.guardian_phone}}</span>
-      </li>
-      <li>
-        <span>通讯地址</span>
-        <span>{{form.always_address}}</span>
-      </li>
-      <li>
-        <span>进线编号</span>
-        <span>{{form.in_number}}</span>
-      </li>
-      <li>
-        <span>进线项目</span>
-        <span style=" border-top-style:hidden;">{{form.inproject}}</span>
-      </li>
-      <li>
-        <span>进线渠道</span>
-        <span style=" border-top-style:hidden;">{{form.end_time}}</span>
-      </li>
-      <li>
-        <span>接入人</span>
-        <span style=" border-top-style:hidden;">{{form.inchannel}}</span>
-      </li>
-      <li>
-        <span>班主任</span>
-        <span>{{form.banzhuren_id}}</span>
-      </li>
-      <li>
-        <span>顾问</span>
-        <span></span>
-      </li>
-      <li>
-        <span>升学指导</span>
-        <span></span>
-      </li>
-      <li>
-        <span>教学主管</span>
-        <span></span>
-      </li>
-    </ul>
-    <div style="clear:both;"></div>
-    <p style="margin:10px;">
-      <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>排课列表
-    </p>
-    <el-cascader
-      v-model="postFrom.value"
-      :options="options"
-      filterable
-      :props="{ expandTrigger: 'hover' }"
-      :show-all-levels="false"
-      @change="getData"
-      clearable
-    ></el-cascader>
-    <el-date-picker
-      style="margin-left:60px"
-      v-model="postFrom.start_time"
-      @change="getData"
-      type="datetime"
-      clearable
-      value-format="yyyy-MM-dd H:mm:ss"
-      placeholder="选择日期时间"
-    ></el-date-picker>至
-    <el-date-picker
-      @change="getData"
-      v-model="postFrom.end_time"
-      type="datetime"
-      clearable
-      value-format="yyyy-MM-dd H:mm:ss"
-      placeholder="选择日期时间"
-    ></el-date-picker>
-    <div style="margin:10px"></div>
 
-    <el-table border :data="tableData">
-      <el-table-column prop="title" label="报名标题" width="180"></el-table-column>
-      <el-table-column prop="number" label="编号" width="180"></el-table-column>
-      <el-table-column prop="subject_name" label="科目"></el-table-column>
-      <el-table-column prop="course_type" label="类型" width="180"></el-table-column>
-      <el-table-column prop="app_status" label="状态" width="180"></el-table-column>
-      <el-table-column prop="address" label="操作"></el-table-column>
-    </el-table>
-          <el-pagination
-        style="float:right;margin-top:20px;margin-bottom: 20px;"
+    <div style="margin:0 50px;">
+      <p style="margin:10px;">
+        <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>基本信息
+      </p>
+      <ul :data="form">
+        <li>
+          <span>地区</span>
+          <span>{{form.subject_name}}</span>
+        </li>
+        <li>
+          <span>手机号</span>
+          <span>{{form.tel}}</span>
+        </li>
+        <li>
+          <span>学员等级</span>
+          <span>{{form.alevel}}</span>
+        </li>
+        <li>
+          <span>性别</span>
+          <span style=" border-top-style:hidden;">{{form.sex}}</span>
+        </li>
+        <li>
+          <span>年龄</span>
+          <span style=" border-top-style:hidden;">{{form.age}}</span>
+        </li>
+        <li>
+          <span>学校</span>
+          <span style=" border-top-style:hidden;">{{form.school}}</span>
+        </li>
+        <li>
+          <span>年级</span>
+          <span>{{form.grade}}</span>
+        </li>
+        <li>
+          <span>微信/QQ</span>
+          <span>{{form.weixin_qq}}</span>
+        </li>
+        <li>
+          <span>监护人</span>
+          <span>{{form.guardian}}</span>
+        </li>
+      </ul>
+      <ul :data="form">
+        <li>
+          <span>监护人联系方式</span>
+          <span>{{form.guardian_phone}}</span>
+        </li>
+        <li>
+          <span>通讯地址</span>
+          <span>{{form.always_address}}</span>
+        </li>
+        <li>
+          <span>进线编号</span>
+          <span>{{form.in_number}}</span>
+        </li>
+        <li>
+          <span>进线项目</span>
+          <span style=" border-top-style:hidden;">{{form.inproject}}</span>
+        </li>
+        <li>
+          <span>进线渠道</span>
+          <span style=" border-top-style:hidden;">{{form.end_time}}</span>
+        </li>
+        <li>
+          <span>接入人</span>
+          <span style=" border-top-style:hidden;">{{form.inchannel}}</span>
+        </li>
+        <li>
+          <span>班主任</span>
+          <span>{{form.banzhuren_id}}</span>
+        </li>
+        <li>
+          <span>顾问</span>
+          <span></span>
+        </li>
+        <li>
+          <span>升学指导</span>
+          <span></span>
+        </li>
+        <li>
+          <span>教学主管</span>
+          <span></span>
+        </li>
+      </ul>
+      <div style="clear:both;"></div>
+      <p style="margin:10px;">
+        <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>排课列表
+      </p>
+      <el-cascader
+        v-model="postFrom.value"
+        :options="options"
+        filterable
+        :props="{ expandTrigger: 'hover' }"
+        :show-all-levels="false"
+        @change="getData"
+        clearable
+      ></el-cascader>
+      <el-date-picker
+        style="margin-left:60px"
+        v-model="postFrom.start_time"
+        @change="getData"
+        type="datetime"
+        clearable
+        value-format="yyyy-MM-dd H:mm:ss"
+        placeholder="选择日期时间"
+      ></el-date-picker>至
+      <el-date-picker
+        @change="getData"
+        v-model="postFrom.end_time"
+        type="datetime"
+        clearable
+        value-format="yyyy-MM-dd H:mm:ss"
+        placeholder="选择日期时间"
+      ></el-date-picker>
+      <div style="margin:10px"></div>
+  <div style="width:100%;" >
+      <el-table border :data="tableData" >
+        <el-table-column prop="title" label="报名标题" align="center"></el-table-column>
+        <el-table-column prop="number" label="编号" align="center"></el-table-column>
+        <el-table-column prop="subject_name" label="科目" align="center"></el-table-column>
+        <el-table-column prop="course_type" label="类型" align="center"></el-table-column>
+        <el-table-column prop="app_status" label="状态" align="center"></el-table-column>
+        <el-table-column prop="address" label="操作" align="center">
+          <template slot-scope="scope">
+            <el-button type="primary" @click="toEditClass(scope.row.app_id)">编辑排课</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      </div>
+      <el-pagination
+        style="float:right;margin-top:10px;margin-bottom: 5px;"
         background
         layout="prev, pager, next"
-        @prev-click="prev"
-        @next-click="next"
-        @current-change="current"
+        @prev-click="prev_s"
+        @next-click="next_s"
+        @current-change="current_s"
         :page-size="5"
-        :total="tableData.length"
+        :total="class_length"
       ></el-pagination>
-    <div style="clear:both;"></div>
-    <p style="margin:10px;">
-      <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>学员课表
-    </p>
-      <div >
+      <div style="clear:both;"></div>
+      <p >
+        <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>学员课表
+      </p>
+      <div>
         <el-table
           class
           :data="classData"
@@ -200,41 +205,41 @@
             </template>
           </el-table-column>
         </el-table>
-                  <el-pagination
-        style="float:right;margin-top:20px;margin-bottom: 20px;"
-        background
-        layout="prev, pager, next"
-        @prev-click="prev"
-        @next-click="next"
-        @current-change="current"
-        :page-size="5"
-        :total="classData.length"
-      ></el-pagination>
-    <p style="margin:10px;">
-      <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>
-学员账号明细
-    </p>
-     <el-container>
-      <el-header>
-        <el-tabs v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane label="学习币明细" name="1"></el-tab-pane>
-          <el-tab-pane label="现金钱包明细" name="2"></el-tab-pane>
-          <el-tab-pane label="福利钱包明细" name="3"></el-tab-pane>
-        </el-tabs>
-      </el-header>
-      <el-container>
-        <el-main style="height:600px;padding:0;">
-          <router-view />
-          <!-- 主体部分在这里显示 -->
-        </el-main>
-      </el-container>
-    </el-container>
+        <el-pagination
+          style="float:right;margin-top:20px;margin-bottom: 20px;"
+          background
+          layout="prev, pager, next"
+          @prev-click="prev"
+          @next-click="next"
+          @current-change="current"
+          :page-size="5"
+          :total="classcount"
+        ></el-pagination>
+        <p style="margin:10px;">
+          <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>
+          学员账号明细
+        </p>
+        <el-container>
+          <el-header>
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+              <el-tab-pane label="学习币明细" name="1"></el-tab-pane>
+              <el-tab-pane label="现金钱包明细" name="2"></el-tab-pane>
+              <el-tab-pane label="福利钱包明细" name="3"></el-tab-pane>
+            </el-tabs>
+          </el-header>
+          <el-container>
+            <el-main style="height:600px;padding:0;">
+              <router-view />
+              <!-- 主体部分在这里显示 -->
+            </el-main>
+          </el-container>
+        </el-container>
         <!-- 填写课堂反馈 -->
-        <el-dialog 
-        :close-on-click-modal='false'
-         title="填写课堂反馈" :visible.sync="dialogFromVisible">
+        <el-dialog :close-on-click-modal="false" title="填写课堂反馈" :visible.sync="dialogFromVisible">
           <!-- <p style="font-size:18px;height:30px;margin:10px 0;">课程信息</p> -->
-          <p style="margin-bottom:10px;"><span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>课程信息</p>
+          <p style="margin-bottom:10px;">
+            <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>课程信息
+          </p>
 
           <ul :data="gridData">
             <li>
@@ -271,7 +276,9 @@
             </li>
           </ul>
           <div style="clear:both;"></div>
-          <p style="margin-bottom:10px;"><span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>反馈内容</p>
+          <p style="margin-bottom:10px;">
+            <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>反馈内容
+          </p>
           <el-form :model="form" label-width="200px">
             <el-form-item label="类型">
               <el-radio-group v-model="form.feedback_type">
@@ -322,10 +329,15 @@
           </el-form>
         </el-dialog>
         <!-- 查看课堂反馈 -->
-        <el-dialog  
-        :close-on-click-modal='false'
-        title="查看老师反馈" :visible.sync="dialogVisible" width="900px">
-          <p style="margin-bottom:10px;"><span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>课程信息</p>
+        <el-dialog
+          :close-on-click-modal="false"
+          title="查看老师反馈"
+          :visible.sync="dialogVisible"
+          width="900px"
+        >
+          <p style="margin-bottom:10px;">
+            <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>课程信息
+          </p>
 
           <ul :data="formLabelAlign">
             <li>
@@ -341,7 +353,7 @@
               <span>{{formLabelAlign.banzhuren_name}}</span>
             </li>
             <li>
-              <span >上课时间</span>
+              <span>上课时间</span>
               <span style=" border-top-style:hidden;">{{formLabelAlign.start_time}}</span>
             </li>
             <li>
@@ -360,20 +372,16 @@
               <span style="width:15%;">地点</span>
               <span style="width:84%;">{{formLabelAlign.course_address}}</span>
             </li>
-       
           </ul>
-          <div style="clear:both;">
-
-          </div>
-          <p style="margin-bottom:10px;"><span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>反馈内容</p>
+          <div style="clear:both;"></div>
+          <p style="margin-bottom:10px;">
+            <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>反馈内容
+          </p>
           <el-form label-width="200px" :model="formLabelAlign">
-            <el-form-item
-              label="反馈类型:"
-              
-            >
-              <p v-if='formLabelAlign.feedback_type==1'>试听/首次课程反馈</p>
-              <p v-if='formLabelAlign.feedback_type==2'>日常上课反馈</p>
-              <p v-if='formLabelAlign.feedback_type==3'>结课总结</p>
+            <el-form-item label="反馈类型:">
+              <p v-if="formLabelAlign.feedback_type==1">试听/首次课程反馈</p>
+              <p v-if="formLabelAlign.feedback_type==2">日常上课反馈</p>
+              <p v-if="formLabelAlign.feedback_type==3">结课总结</p>
             </el-form-item>
             <el-form-item
               label="本次授课内容:"
@@ -385,7 +393,7 @@
               label="课堂配合度和积极性:"
               v-if="formLabelAlign.feedback_type=='2'||formLabelAlign.feedback_type=='1'"
             >
-              <span >{{formLabelAlign.details_2}}</span>
+              <span>{{formLabelAlign.details_2}}</span>
             </el-form-item>
             <el-form-item label="学生的主要问题和建议:" v-if="formLabelAlign.feedback_type=='1'">
               <span>{{formLabelAlign.details_3}}</span>
@@ -416,18 +424,8 @@
         </el-dialog>
         <!-- 其他方式进入课表 other_enter -->
       </div>
-      <!-- <el-pagination
-        style="float:right;margin-top:20px;margin-bottom: 20px;"
-        background
-        layout="prev, pager, next"
-        @prev-click="prev"
-        @next-click="next"
-        @current-change="current"
-        :page-size="5"
-        :total="classData.length"
-      ></el-pagination> -->
-    <!-- <el-button type="primary" class="back" @click="goBack" >确定</el-button> -->
-  </div>
+   
+    </div>
   </div>
 </template>
 <script>
@@ -437,8 +435,9 @@ export default {
       activeNames: ["1"],
       tableData: [], //表格数据
       form: {},
-            currentPage: 1, //当前页
-
+      currentPage: 1, //当前页
+      class_length:null,//排课长度
+      classcount:null,//学生课表长度
       postFrom: {
         value: "",
         student_id: "",
@@ -456,91 +455,101 @@ export default {
       centerDialogVisible: false, //其他方式打开课表
       otherWey: {}, //从其他方法进入直播
       num: 0, //次数的变化
-            formLabelAlign: {}, //老师在这里疯狂反馈
+      formLabelAlign: {}, //老师在这里疯狂反馈
       activeName: "1",
       activeIndex: "1",
-      thisurl:'',
+      thisurl: "",
+      classparms : {   //学生课表数据
+        course_type: 1,
+        page: 1,
+        is_by_student: 1,
+        student_id:this.$route.query.id
+      },
+           getDataparams :{ //学生课表
+        is_by_student: 1,
+        page:1,
+        student_id: this.$route.query.id
+      }
     };
   },
-  watch:{
-    mouseDown:function(){
+  watch: {
+    mouseDown: function() {}
+  },
+  beforeMount(){
+        this.$nextTick(function() {
 
-    }
-
+    });
   },
   created() {
     this.getData();
     this.getClassList();
-        this.$nextTick(function() {
-         this.$router.push({path:"/StudentsList/StudentsInfo/VirtualMonney",
-          query:{id:this.$route.query.id}});
-    });
-      
-
-                  var scrollFunc = function(e) {
-    e = e || window.event;
-    if (e.wheelDelta) { //判断浏览器IE，谷歌滑轮事件               
-        if (e.wheelDelta > 0) { //当滑轮向上滚动时  
-
-        
-          //  $('.back').css("opacity","0"); 
-$('.back').fadeOut()
-        }
-        if (e.wheelDelta < 0) { //当滑轮向下滚动时
-$('.back').fadeIn()
-// $('.back').css("opacity","1"); 
-
-        } 
 
 
-        
-    } else if (e.detail) { //Firefox滑轮事件  
-        if (e.detail > 0) { //当滑轮向上滚动时  
-            console.log("滑轮向上滚动");
+    // var scrollFunc = function(e) {
+    //   e = e || window.event;
+    //   if (e.wheelDelta) {
+    //     //判断浏览器IE，谷歌滑轮事件
+    //     if (e.wheelDelta > 0) {
+    //       //当滑轮向上滚动时
 
-        }
-        if (e.detail < 0) { //当滑轮向下滚动时  
-            console.log("滑轮向下滚动");
-
-
-        }
-    }
-}
-//给页面绑定滑轮滚动事件  
-if (document.addEventListener) { //firefox  
-    document.addEventListener('DOMMouseScroll', scrollFunc, false);
-}
-//滚动滑轮触发scrollFunc方法  //ie 谷歌  
-window.onmousewheel = document.onmousewheel = scrollFunc;
+    //       //  $('.back').css("opacity","0");
+    //       $(".back").fadeOut();
+    //     }
+    //     if (e.wheelDelta < 0) {
+    //       //当滑轮向下滚动时
+    //       $(".back").fadeIn();
+    //       // $('.back').css("opacity","1");
+    //     }
+    //   } else if (e.detail) {
+    //     //Firefox滑轮事件
+    //     if (e.detail > 0) {
+    //       //当滑轮向上滚动时
+    //       console.log("滑轮向上滚动");
+    //     }
+    //     if (e.detail < 0) {
+    //       //当滑轮向下滚动时
+    //       console.log("滑轮向下滚动");
+    //     }
+    //   }
+    // };
+    //给页面绑定滑轮滚动事件
+    // if (document.addEventListener) {
+    //   //firefox
+    //   document.addEventListener("DOMMouseScroll", scrollFunc, false);
+    // }
+    // //滚动滑轮触发scrollFunc方法  //ie 谷歌
+    // window.onmousewheel = document.onmousewheel = scrollFunc;
   },
   methods: {
-
     handleChange(val) {},
     goBack() {
       // this.$router.go(-1);
-      this.$router.push({path:'/StudentsList'})
+      this.$router.push({ path: "/StudentsList" });
     },
-        handleClick(tab, event) {
+    handleClick(tab, event) {
       switch (tab.name) {
         case "1":
-          this.$router.push({path:"/StudentsList/StudentsInfo/VirtualMonney",
-          query:{id:this.$route.query.id}});
+          this.$router.push({
+            path: "/StudentsList/StudentsInfo/VirtualMonney",
+            query: { id: this.$route.query.id ,search:this.form.username}
+          });
           break;
         case "2":
-          this.$router.push({path:"/StudentsList/StudentsInfo/NewMoney",
-          query:{id:this.$route.query.id}});
+          this.$router.push({
+            path: "/StudentsList/StudentsInfo/NewMoney",
+            query: { id: this.$route.query.id ,search:this.form.username}
+          });
           break;
         case "3":
-          this.$router.push({path:"/StudentsList/StudentsInfo/LearningMoney",
-          query:{id:this.$route.query.id}});
+          this.$router.push({
+            path: "/StudentsList/StudentsInfo/LearningMoney",
+            query: { id: this.$route.query.id,search:this.form.username }
+          });
           break;
       }
     },
     getData() {
-      let params={
-        is_by_student:1,
-        student_id:this.$route.query.id
-      }
+
       this.$apis.students //获取学生信息
         .students_edit({ id: this.$route.query.id })
         .then(res => {
@@ -548,15 +557,16 @@ window.onmousewheel = document.onmousewheel = scrollFunc;
             this.form = res.data.data;
           }
         });
-      this.$apis.students //获取学生课表
-        .student_arranging_course(params)
+      this.$apis.students //获取排课列表
+        .student_arranging_course(this.getDataparams)
         .then(res => {
           if (res.data.code == 1) {
-
-            if (res.data.data.count.length==0 ) {
+            if (res.data.data.count.length == 0) {
               this.tableData = [];
             } else {
               this.tableData = res.data.data.list;
+              console.log(this.tableData)
+              this.class_length=res.data.data.count
             }
           }
         });
@@ -577,6 +587,12 @@ window.onmousewheel = document.onmousewheel = scrollFunc;
           this.options = this.options_;
         }
       });
+    },
+    toEditClass(b){
+                  this.$router.push({
+              path: "/StudentsList/application_edit_copy",
+              query: { id: b }
+            });
     },
     nowVideo(a) {
       //观看直播
@@ -619,20 +635,37 @@ window.onmousewheel = document.onmousewheel = scrollFunc;
         }
       });
     },
-        current(num) {
+    //classparms
+    current(num) {
       //当前页数
-      this.form.page = num;
+      this.classparms.page = num;
+     this.getClassList();
+    },
+        current_s(num) {
+      //当前页数
+      this.getDataparams.page = num;
       this.getadata();
     },
     next() {
-      this.form.page++;
+      this.classparms.page++;
+     this.getClassList();
+    },
+        next_s() {
+      this.getDataparams.page++;
       this.getadata();
     },
-    prev() {
+    prev_s() {
       //上一页
-      if (this.form.page > 1) {
-        this.form.page--;
-        this.getadata();
+      if (this.getDataparams.page > 1) {
+        this.getDataparams.page--;
+      this.getadata();
+      }
+    },
+        prev() {
+      //上一页
+      if (this.classparms.page > 1) {
+        this.classparms.page--;
+        this.getClassList();
       }
     },
     openVideo(a) {
@@ -668,7 +701,8 @@ window.onmousewheel = document.onmousewheel = scrollFunc;
         );
       }
     },
-        tableRowClassName({ row, rowIndex }) {//行变色的问题
+    tableRowClassName({ row, rowIndex }) {
+      //行变色的问题
       if (rowIndex === 1) {
         return "warning-row";
       } else if (rowIndex === 3) {
@@ -688,7 +722,7 @@ window.onmousewheel = document.onmousewheel = scrollFunc;
         }
       });
     },
-        onSubmit() {
+    onSubmit() {
       this.form.course_id = this.course;
       this.$apis.common.post_feedback_add(this.form).then(res => {
         if (res.data.code == 1) {
@@ -711,32 +745,30 @@ window.onmousewheel = document.onmousewheel = scrollFunc;
       this.$apis.common.course_feedback(parms).then(res => {
         if (res.data.code == 1) {
           this.formLabelAlign = res.data.data;
-          console.log(res.data.data);
         }
       });
     },
-    getClassList(a) {
-      let parms = {
-        course_type: 1,
-        page: a ? a : 1,
-        is_by_student: 1
-      };
-      this.$apis.common.student_course(parms).then(res => {
+    getClassList() {
+
+      this.$apis.common.student_course(this.classparms).then(res => {
         if (res.data.code == 1) {
           this.classData = res.data.data.list;
+          this.classcount = res.data.data.count;
         }
       });
     },
     handleSizeChange(val) {
       this.pagesize = val * 1;
-    },
-
+    }
   },
 
   mounted() {
- var name=this.$route.path.substring(this.$route.path.indexOf("/")+1);
- this.url=name.substr(0,12)
-    
+          this.$router.push({
+        path: "/StudentsList/StudentsInfo/VirtualMonney",
+        query: { id: this.$route.query.id ,search:this.form.username}
+      });
+    var name = this.$route.path.substring(this.$route.path.indexOf("/") + 1);
+    this.url = name.substr(0, 12);
   }
 };
 </script>
@@ -782,15 +814,13 @@ li :nth-child(2) {
   text-align: center;
   box-shadow: 0 0 0 1px #f5f5f5;
 }
-.back{
- 
-position:fixed;
-bottom:20px;
-margin:0 auto;
-left:50%;
-/* right:0; */
-z-index:1000;
-width:100px;
-
+.back {
+  position: fixed;
+  bottom: 20px;
+  margin: 0 auto;
+  left: 50%;
+  /* right:0; */
+  z-index: 1000;
+  width: 100px;
 }
 </style>

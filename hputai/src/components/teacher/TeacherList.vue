@@ -258,7 +258,7 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      value_suj: "", //选择科目
+      value_suj: [], //选择科目
       value_line: "", //选择线上线下
       options_line: [{ value: 1, label: "线上" }, { value: 2, label: "线下" }],
       tableData: [],
@@ -570,14 +570,14 @@ export default {
     },
     //选择报读科目的函数
     handleChange_1(targetName) {
-     let obj = {} 
-     //此处为借鉴源码里面的方法，执行清除
-obj.stopPropagation = () =>{}
-try{
-    this.$refs.cascader.clearValue(obj)//旧方法
-}catch(err){
-    this.$refs.cascader.handleClear(obj)//新版本
-}
+//      var obj = {} 
+//      //此处为借鉴源码里面的方法，执行清除
+// obj.stopPropagation = () =>{}
+// try{
+//     this.$refs.cascader.clearValue(obj)//旧方法
+// }catch(err){
+//     this.$refs.cascader.handleClear(obj)//新版本
+// }
 //this.$refs.cascader.clearValue(obj)
 
       var lastName =targetName.length==1?targetName[0]:(targetName.length==2?targetName[1]:targetName[2])
@@ -602,7 +602,8 @@ try{
                 small_class: 0, //课程类型
                 big_class: 0 //课程id
               });
-           this.value_suj=null
+                this.value_suj=[]
+
 
     },
     indexMethod(index) {

@@ -63,7 +63,7 @@
         </el-select>
       </el-form-item>
       <el-form-item :inline="true" label="课时">
-        <p>{{parseInt(this.apply_data.classhour)}}</p>
+        <p>{{this.apply_data.classhour}}</p>
       </el-form-item>
       <el-form-item label="上课地点" v-model="radio">
         <el-radio-group v-model="radio" @change="whereGo(radio)">
@@ -110,7 +110,7 @@
         <div class="add_ul_new" v-for="(item,i) in editableTabs_1" :key="i">
           <span style="display:none;" v-bind:id="'course_id'+ i">{{item.course_id}}</span>
           <p>
-            <el-input v-model.number="item.times" v-bind:id="'classhour' + i"></el-input>
+            <el-input v-model="item.times" v-bind:id="'classhour' + i"></el-input>
           </p>
           <p class="bigger">
             <!-- <el-input v-model.number="item.price" v-bind:id="'mach' + i" placeholder="单价(元)"></el-input> -->
@@ -643,7 +643,7 @@ export default {
       if (all_hour * 1 >= this.apply_data.classhour * 1) {
         this.$message({
           type: "warning",
-          message: "很抱歉，没有足够的课时"
+          message: "剩余课时不足"
         });
       } else {
         this.editableTabs_1.push({
@@ -713,7 +713,7 @@ export default {
       } else {
         this.$message({
           type: "warning",
-          message: "排课时间不足"
+          message: "剩余课时不足"
         });
       }
     },

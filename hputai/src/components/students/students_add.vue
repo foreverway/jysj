@@ -49,7 +49,7 @@
           </el-form-item>
         </div>
         <div class="input_1">
-          <el-form-item label="学校：" prop="school">
+          <el-form-item label="学校：" >
             <el-input v-model="form.school" style="width:150px" placeholder></el-input>
           </el-form-item>
         </div>
@@ -117,13 +117,13 @@
       <h4 style="clear: both;">市场信息：</h4>
       <div class="input_1_main">
         <div class="input_1">
-          <el-form-item label="进线编号：">
+          <el-form-item label="进线编号："  prop="line_number">
             <el-input v-model="form.in_number" style="width:150px" placeholder></el-input>
           </el-form-item>
         </div>
         <div class="input_1">
-          <el-form-item label="进线项目：" >
-            <el-select v-model="form.inproject" style="width:150px" filterable placeholder="请选择" v-if="msg.data">
+          <el-form-item label="进线项目：" prop="line_project">
+            <el-select v-model="form.inproject"  style="width:150px" filterable placeholder="请选择" v-if="msg.data">
               <el-option
                 v-for="item in msg.data.inproject_list"
                 :key="item.id"
@@ -134,7 +134,7 @@
           </el-form-item>
         </div>
         <div class="input_1">
-          <el-form-item label="进线渠道：">
+          <el-form-item label="进线渠道：" prop="line_channel">
             <el-select v-model="form.inchannel" style="width:150px" placeholder="请选择" v-if="msg.data">
               <el-option
                 v-for="item in msg.data.inchannel_list"
@@ -147,7 +147,7 @@
         </div>
         <div class="input_1">
           <el-form-item label="接入人：">
-            <el-select v-model="form.inpeople" style="width:200px" filterable placeholder="请选择" v-if="msg.data">
+            <el-select v-model="form.inpeople" style="width:150px" filterable placeholder="请选择" v-if="msg.data">
               <el-option
                 v-for="item in msg.data.inpeople_list"
                 :key="item.id"
@@ -173,7 +173,7 @@
 
       <h4 style="clear: both;">咨询信息：</h4>
       <div class="input_2_main">
-        <el-form-item label="咨询缘由:" style="width:550px" prop="reason">
+        <el-form-item label="咨询缘由:" style="width:550px" >
           <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="form.reason"></el-input>
         </el-form-item>
 
@@ -298,10 +298,10 @@ export default {
       },
       rules: {
         username: [{ required: true, validator: Yanuusername, trigger: "blur" }],
-         tel: [{ required: true, message: "请输入手机号", trigger: "blur" }],
+        tel: [{ required: true, message: "请输入手机号", trigger: "blur" }],
         sex: [{ required: true, message: "此项不能为空", trigger: "blur" }],
         age: [{ required: true, validator: Yanuage, trigger: "blur" }],
-        school: [{ required: true, message: "此项不能为空", trigger: "blur" }],
+        //school: [{ required: true, message: "此项不能为空", trigger: "blur" }],
         grade: [{ required: true, message: "此项不能为空", trigger: "blur" }],
         weixin_qq: [
           { required: true, message: "此项不能为空", trigger: "blur" }
@@ -322,7 +322,12 @@ export default {
           { required: true, message: "此项不能为空", trigger: "blur" }
         ],
         reason: [{ required: true, message: "此项不能为空", trigger: "blur" }],
-        grade: [{ required: true, message: "此项不能为空", trigger: "blur" }],
+           grade: [{ required: true, message: "此项不能为空", trigger: "blur" }],
+        // line_number: [
+        //   { required: true, message: "此项不能为空", trigger: "blur" }
+        // ],
+        //   line_project: [{ required: true, message: "此项不能为空", trigger: "blur" }],
+        //    line_channel: [{ required: true, message: "此项不能为空", trigger: "blur" }],
 
       }
     };

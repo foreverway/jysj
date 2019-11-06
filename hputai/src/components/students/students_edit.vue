@@ -360,11 +360,11 @@ export default {
         ],
         reason: [{ required: true, message: "此项不能为空", trigger: "blur" }],
            grade: [{ required: true, message: "此项不能为空", trigger: "blur" }],
-        line_number: [
-          { required: true, message: "此项不能为空", trigger: "blur" }
-        ],
-          line_project: [{ required: true, message: "此项不能为空", trigger: "blur" }],
-           line_channel: [{ required: true, message: "此项不能为空", trigger: "blur" }],
+        // line_number: [
+        //   { required: true, message: "此项不能为空", trigger: "blur" }
+        // ],
+        //   line_project: [{ required: true, message: "此项不能为空", trigger: "blur" }],
+        //    line_channel: [{ required: true, message: "此项不能为空", trigger: "blur" }],
 
       }
     };

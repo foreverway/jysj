@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-                <zx-head title="编辑报名需求" ></zx-head>
+                <zx-head title="编辑排课需求" ></zx-head>
 
     <el-steps :active="active" finish-status="success">
       <el-step title="填写报名情况"></el-step>
@@ -155,9 +155,7 @@
         <el-form-item label="需求4" prop="need_four">
           <el-input type="textarea" v-model="form2.need_four" placeholder="学生希望跟什么样的老师学习？"></el-input>
         </el-form-item>
-        <el-form-item label="需求5" prop="need_five">
-          <el-input type="textarea" v-model="form2.need_five" placeholder="学生上课时间期限，可排课时间？（北京时间）每次课上几小时？"></el-input>
-        </el-form-item>
+
       </el-form>
     </div>
     <!-- 步骤三 -->
@@ -232,7 +230,6 @@ import { mapState } from 'vuex'
         need_two: "",
         need_three: "",
         need_four: "",
-        need_five: "",
 
       },
         rules: {
@@ -264,9 +261,7 @@ import { mapState } from 'vuex'
           need_four: [
             { required: true, message: '请填写反馈', trigger: 'blur' }
           ],
-          need_five: [
-            { required: true, message: '请填写反馈', trigger: 'blur' }
-          ],
+
         },
       parms: {
         //提交的数据
@@ -298,7 +293,7 @@ getId(this.region_list);
     //生成学员编号
     deleteTest_1() {
       this.editableTabs_1.pop(this.editableTabs_1);
-      this.form.value=''
+      this.form.value=[]
     },
     deleteTest() {
       this.editableTabs.pop(this.tabIndex);
@@ -324,7 +319,6 @@ getId(this.region_list);
           this.form2.need_two = this.edit_data.needs_data.need_two;
           this.form2.need_three = this.edit_data.needs_data.need_three;
           this.form2.need_four = this.edit_data.needs_data.need_four;
-          this.form2.need_five = this.edit_data.needs_data.need_five;
           // this.radio=this.edit_data.needs_data.course_address  这里是用户在线上还是线下
           this.editableTabs_1 = this.edit_data.subjects_data; //学科数据
           this.editableTabs = this.edit_data.students_data; //学生数据
@@ -396,6 +390,8 @@ getId(this.region_list);
       var needArr = result.find((res, index, arr) => {
         return (res.label == lastName);
       });
+            if(this.editableTabs_1.length<1){
+
         this.pushArray1.push({
           subject_name: needArr.label,
           subject_id: needArr.value, //科目id
@@ -423,8 +419,14 @@ getId(this.region_list);
       } else {
         this.editableTabs_1 = this.pushArray2;
       } 
-            }else{
+      }else{
         this.$message({
+          type:'warning',
+          message:"你只能选择一种科目"
+        })
+      }
+            }else{
+                this.$message({
           type:'warning',
           message:"不可以重复选课"
         })
@@ -476,7 +478,6 @@ getId(this.region_list);
         need_two: this.form2.need_two,
         need_three: this.form2.need_three,
         need_four: this.form2.need_four,
-        need_five: this.form2.need_five,
         app_id: this.$route.query.id,
         students_data: [],
         subjects_data: [],
@@ -538,7 +539,6 @@ getId(this.region_list);
         need_two: this.form2.need_two,
         need_three: this.form2.need_three,
         need_four: this.form2.need_four,
-        need_five: this.form2.need_five,
             app_id: this.$route.query.id
           };
           this.parms.subjects_data = this.subjects_data;

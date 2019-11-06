@@ -414,7 +414,6 @@ export default {
     //用于分页的一些设置
     current(num) {
       //当前页数
-      console.log(num);
       this.parms.page = num;
       this.getdata();
     },
@@ -513,6 +512,7 @@ export default {
             ]);
             // this.form1.app_id= b.id
             this.seeclassneeds = this.needs;
+            console.log(this.seeclassneeds)
             this.app_id = b.id;
             this.seeapplytable = this.application;
             this.getbanzhurenName();
@@ -807,7 +807,6 @@ export default {
     },
     getdata() {
       this.parms.admin_id = this.getdataCookie("admin_id");
-      console.log(this.parms)
       this.$apis.common
         .application_list(this.parms)
         .then(res => {

@@ -130,7 +130,7 @@ export default {
         type: "" //入款还是扣款，1入款，2扣款
       },
                     formStudent:{ 
-         search:'',//搜索学员姓名条件
+         search:this.$route.query.search,//搜索学员姓名条件
          page:1,//页码
           start_time:'',//搜索开始时间
            end_time:'',//搜索结束时间

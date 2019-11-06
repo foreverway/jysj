@@ -71,9 +71,9 @@
         </el-select>
       </el-form-item>
       <el-form-item :inline="true" label="课时">
-        <p>{{parseInt(this.form.classhour)}}</p>
+        <p>{{this.form.classhour}}</p>
       </el-form-item>
-      <el-form-item label="上课地点">
+      <!-- <el-form-item label="上课地点">
         <el-radio-group v-model="form.course_address" @change="whereGo(form.course_address)">
           <el-radio :label="1">线上</el-radio>
           <el-radio :label="2">线下</el-radio>
@@ -81,7 +81,7 @@
       </el-form-item>
       <el-form-item label="上课地址" v-if="show==true">
         <el-cascader placeholder="支持到地级市" :options="address_check" filterable></el-cascader>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="学生姓名">
         <div class="add_ul">
           <p>学生姓名</p>
@@ -283,7 +283,7 @@
         <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label>
           <p>{{seeclassneeds.need_three}}</p>
         </el-form-item>
-        <el-form-item
+        <!-- <el-form-item
           style="border:1px solid silver;margin: 0; border-bottom:none;background-color:silver;"
           label="需求五:"
         >
@@ -300,7 +300,7 @@
         </el-form-item>
         <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label>
           <p>{{seeclassneeds.need_five}}</p>
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
     </el-dialog>
     <!-- 查看老师课表 -->

@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-                <zx-head title="添加报名需求" ></zx-head>
+                <zx-head title="添加排课需求" ></zx-head>
 
     <el-steps :active="active" finish-status="success">
       <el-step title="填写报名情况"></el-step>
@@ -393,7 +393,7 @@ export default {
        this.pushArray1.pop(this.pushArray1)
        this.pushArray2.pop(this.pushArray2)
 
-      this.form.value=''
+      this.form.value=[]
     },
     deleteTest() {
       this.editableTabs.pop(this.tabIndex);
@@ -437,7 +437,7 @@ export default {
           this.options_1 = res.data.data.list;
           for (let i = 0; i < this.options_1.length; i++) {
             var val = this.options_1[i];
-            this.options1.push({ value: val.username, label: val.username });
+            this.options1.push({id:val.id, value: val.username, label: val.username });
           }
             this.handleChange_start(this.$route.query.username, this.options1)
         }
@@ -473,7 +473,8 @@ export default {
       var needArr = result.find((res, index, arr) => {
         return res.label == lastName;
       });
-      this.pushArray1.push({
+      if(this.editableTabs_1.length<1){
+ this.pushArray1.push({
         title: needArr.label,
         subject_id: needArr.value, //科目id
         classhour: "",
@@ -502,6 +503,13 @@ export default {
       }
       }else{
         this.$message({
+          type:'warning',
+          message:"你只能选择一种科目"
+        })
+      }
+     
+      }else{
+                this.$message({
           type:'warning',
           message:"不可以重复选课"
         })

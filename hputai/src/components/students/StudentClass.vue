@@ -643,7 +643,7 @@ export default {
       let parms = {
         admin_id: this.getdataCookie("admin_id"),
         page: 1,
-        subject_id: lastName.toString(),
+        subject_id: lastName,
         course_type: this.change_value
       };
       this.$apis.common.student_course(parms).then(res => {
@@ -657,7 +657,7 @@ export default {
       let parms = {
         admin_id: this.getdataCookie("admin_id"),
         page: 1,
-        student_id: targetName.toString(),
+        student_id: targetName,
         course_type: this.change_value
       };
       this.$apis.common.student_course(parms).then(res => {
@@ -762,7 +762,7 @@ export default {
           this.options_ = res.data.data;
               let addWord=arr=>{
             arr.forEach(item=>{
-              item.value=item.subject_name,
+              item.value=item.id,
               item.label=item.subject_name
             if(item.children instanceof Array){
                 addWord(item.children)
