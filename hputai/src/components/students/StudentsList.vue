@@ -145,8 +145,8 @@ export default {
           break;
         case "see_info": //查看学生列表详情
           this.$router.push({
-            path: "/StudentsList/StudentsInfo",
-            query: { id: b.id }
+            path: "/StudentsList/StudentsInfo/",
+            query: { search:b.username,id: b.id }
           });
 
 

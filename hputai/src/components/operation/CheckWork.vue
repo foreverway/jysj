@@ -66,7 +66,7 @@
      <template slot-scope="scope">
             <el-button size="mini" style="background-color:#2adbcb;color:white;" v-show="scope.row.attendance_status!==0"  @click="seeMore(scope)">查看考勤详情</el-button>
 
-       <el-button  size="mini" style="background-color:#409EFF;color:white;" @click="fillFeedback_see(scope.row.course_id)" >查看反馈</el-button>
+       <el-button  size="mini" style="background-color:#409EFF;color:white;" v-if='checkTime(scope.row)' @click="fillFeedback_see(scope.row.course_id)" >查看反馈</el-button>
           <div v-show="scope.row.attendance_status==2&&scope.row.is_forward!==1" style="color:#169BD5">
             <el-button type="danger" size="mini"  @click="payMoney(scope.row)" >结转</el-button>
             </div>
@@ -362,6 +362,12 @@ export default {
     this.opration=this.rolemenu[1].children[4].children
   },
   methods: {
+    checkTime(a){
+       let thisTime=new Date()
+      let useThisTime=thisTime.getFullYear()+'-'+(thisTime.getMonth()+1)+'-'+thisTime.getDate()+' '+thisTime.getHours() + ':' + thisTime.getMinutes() + ':' + thisTime.getSeconds();
+      return useThisTime>a.end_time
+      
+    },
     normal(a){
       let thisTime=new Date()
       let useThisTime=thisTime.getFullYear()+'-'+(thisTime.getMonth()+1)+'-'+thisTime.getDate()+' '+thisTime.getHours() + ':' + thisTime.getMinutes() + ':' + thisTime.getSeconds();

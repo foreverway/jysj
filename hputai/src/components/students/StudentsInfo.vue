@@ -227,7 +227,7 @@
         <el-container>
           <el-header>
             <el-tabs v-model="activeName" @tab-click="handleClick">
-              <el-tab-pane label="学习币明细" name="1"></el-tab-pane>
+              <el-tab-pane class='ddd' label="学习币明细" name="1"></el-tab-pane>
               <el-tab-pane label="现金钱包明细" name="2"></el-tab-pane>
               <el-tab-pane label="福利钱包明细" name="3"></el-tab-pane>
             </el-tabs>
@@ -481,12 +481,27 @@ export default {
   watch: {
     mouseDown: function() {}
   },
+  mounted() {
+    this.$router.push({
+      path: "/StudentsList/StudentsInfo/VirtualMonney",
+      query: {id: this.$route.query.id, search: this.$route.query.search,  }
+    });
+    // console.log(this.$route.query.search,this.$route.query.id)
+    var name = this.$route.path.substring(this.$route.path.indexOf("/") + 1);
+    this.url = name.substr(0, 12);
+  },
   beforeMount() {
-    this.$nextTick(function() {});
   },
   created() {
-    this.getData();
+            this.getData();
+
     this.getClassList();
+    // this.$nextTick( function(){
+    //              this.$router.push({
+    //         path: "/StudentsList/StudentsInfo/VirtualMonney",
+    //         query: { id: this.$route.query.id, search:$route.query.username }
+    //       });
+    // })
 
     // var scrollFunc = function(e) {
     //   e = e || window.event;
@@ -530,26 +545,26 @@ export default {
       this.$router.push({ path: "/StudentsList" });
     },
     handleClick(tab, event) {
-      switch (tab.name) {
-        case "1":
-          this.$router.push({
-            path: "/StudentsList/StudentsInfo/VirtualMonney",
-            query: { id: this.$route.query.id, search: this.form.username }
-          });
-          break;
-        case "2":
-          this.$router.push({
-            path: "/StudentsList/StudentsInfo/NewMoney",
-            query: { id: this.$route.query.id, search: this.form.username }
-          });
-          break;
-        case "3":
-          this.$router.push({
-            path: "/StudentsList/StudentsInfo/LearningMoney",
-            query: { id: this.$route.query.id, search: this.form.username }
-          });
-          break;
-      }
+      // switch (tab.name) {
+      //   case "1":
+      //     this.$router.push({
+      //       path: "/StudentsList/StudentsInfo/VirtualMonney",
+      //       query: { id: this.$route.query.id, search: this.form.username }
+      //     });
+      //     break;
+      //   case "2":
+      //     this.$router.push({
+      //       path: "/StudentsList/StudentsInfo/NewMoney",
+      //       query: { id: this.$route.query.id, search: this.form.username }
+      //     });
+      //     break;
+      //   case "3":
+      //     this.$router.push({
+      //       path: "/StudentsList/StudentsInfo/LearningMoney",
+      //       query: { id: this.$route.query.id, search: this.form.username }
+      //     });
+      //     break;
+      // }
     },
     getData() {
       this.$apis.students //获取学生信息
@@ -557,8 +572,9 @@ export default {
         .then(res => {
           if (res.data.code == 1) {
             this.form = res.data.data;
+
           }
-        });
+        })
       this.$apis.students //获取排课列表
         .student_arranging_course(this.getDataparams)
         .then(res => {
@@ -567,7 +583,6 @@ export default {
               this.tableData = [];
             } else {
               this.tableData = res.data.data.list;
-              console.log(this.tableData);
               this.class_length = res.data.data.count;
             }
           }
@@ -763,14 +778,7 @@ export default {
     }
   },
 
-  mounted() {
-    this.$router.push({
-      path: "/StudentsList/StudentsInfo/VirtualMonney",
-      query: { id: this.$route.query.id, search: this.form.username }
-    });
-    var name = this.$route.path.substring(this.$route.path.indexOf("/") + 1);
-    this.url = name.substr(0, 12);
-  }
+
 };
 </script>
 <style scoped>
