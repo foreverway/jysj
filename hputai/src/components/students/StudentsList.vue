@@ -144,11 +144,21 @@ export default {
           });
           break;
         case "see_info": //查看学生列表详情
-        console.log(b.learnmoney)
-        if(b.learnmoney>0){
           this.$router.push({
             path: "/StudentsList/StudentsInfo",
             query: { id: b.id }
+          });
+
+
+          break;
+        case "copy_url": //复制链接
+          this.dialogFormVisible1 = true;
+          break;
+        case "plan_class": //跳转排课
+                if(b.learnmoney>0){
+          this.$router.push({
+            path: "/StudentsList/ApplicationAdd",
+            query: { username: b.username }
           });
         }else{
           this.$message({
@@ -157,15 +167,6 @@ export default {
           })
         }
 
-          break;
-        case "copy_url": //复制链接
-          this.dialogFormVisible1 = true;
-          break;
-        case "plan_class": //跳转排课
-          this.$router.push({
-            path: "/StudentsList/ApplicationAdd",
-            query: { username: b.username }
-          });
           break;
       }
     },
@@ -247,7 +248,6 @@ export default {
 }
 #plan_class{
       background-color: #7571fa !important;
-
   color: white;
 }
 </style>

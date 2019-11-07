@@ -86,6 +86,8 @@
 </template>
 
   <script>
+  import url from '../../config/config.js'
+
 export default {
   data() {
     return {
@@ -127,17 +129,17 @@ export default {
   // },
   methods: {
     //导出
-    recharge_export() {
+   recharge_export() {
       this.$message({
         type: "success",
         message: "正在导出,请稍等..."
       });
-      let urls = "http://personal.test.hqjystudio.com";
+      // let urls = "http://personal.test.hqjystudio.com";
       let params = "";
       for (var key in this.parms) {
         params += key + "=" + this.parms[key] + "&";
       }
-      window.location.href = urls + "/api_salepro_export" + "?" + params;
+       window.location.href = url.urls + "/api_salepro_export" + "?" + params;
     },
     //用于分页的一些设置
     current(num) {

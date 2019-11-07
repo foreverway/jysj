@@ -62,12 +62,24 @@
          <span v-show="scope.row.attendance_status==0" style="">待考勤</span>
       </template>
 </el-table-column>
-<el-table-column align="center" label="操作" width="200px" fixed="right">
+<el-table-column align="center" label="操作" width="250px" fixed="right">
      <template slot-scope="scope">
-          <div v-show="scope.row.attendance_status==2&&scope.row.is_forward!==1" style="color:#169BD5"><span style="cursor:pointer;" @click="seeMore(scope)">查看考勤详情</span><el-button type="danger" size="mini"  @click="payMoney(scope.row)" >结转</el-button></div>
-          <div v-show="scope.row.attendance_status==1" style="color:#169BD5"><span style="cursor:pointer;" @click="seeMore(scope)">查看考勤详情</span></div>
-         <div v-show="scope.row.attendance_status==0" ><el-button size="mini" @click="normal(scope.row)" type="success">正常</el-button><el-button size="mini" @click="unnormal(scope.row)" type="danger">异动</el-button></div>
-         <div v-show="scope.row.is_forward==1" style="color:#169BD5"><span style="cursor:pointer;" @click="seeMore(scope)">查看考勤详情</span><el-button  @click="payMoney(scope.row)" type="info" disabled size="mini">结转</el-button></div>
+            <el-button size="mini" style="background-color:#2adbcb;color:white;" v-show="scope.row.attendance_status!==0"  @click="seeMore(scope)">查看考勤详情</el-button>
+
+       <el-button  size="mini" style="background-color:#409EFF;color:white;" @click="fillFeedback_see(scope.row.course_id)" >查看反馈</el-button>
+          <div v-show="scope.row.attendance_status==2&&scope.row.is_forward!==1" style="color:#169BD5">
+            <el-button type="danger" size="mini"  @click="payMoney(scope.row)" >结转</el-button>
+            </div>
+          <div v-show="scope.row.attendance_status==1" style="color:#169BD5">
+          </div>
+         <div v-show="scope.row.attendance_status==0" >
+           <el-button v-if="scope.row.is_feedback==1" size="mini" @click="normal(scope.row)" type="success">正常</el-button>
+           <el-button size="mini" @click="unnormal(scope.row)" type="danger">异动</el-button>
+         </div>
+
+         <span v-show="scope.row.is_forward==1" style="color:#169BD5">
+           <el-button  @click="payMoney(scope.row)" type="info" disabled size="mini">结转</el-button>
+        </span>
 
       </template>
 </el-table-column>
@@ -190,6 +202,101 @@
     <el-button type="primary" @click="centerDialogVisible_seeMore = false">确 定</el-button>
   </span>
 </el-dialog>
+        <!-- 查看课堂反馈 -->
+        <el-dialog
+          :close-on-click-modal="false"
+          title="查看老师反馈"
+          :visible.sync="dialogVisible"
+          width="900px"
+        >
+          <p style="margin-bottom:10px;">
+            <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>课程信息
+          </p>
+
+          <ul :data="formLabelAlign">
+            <li>
+              <span>课程名称</span>
+              <span>{{formLabelAlign.subject_name}}</span>
+            </li>
+            <li>
+              <span>教师姓名</span>
+              <span>{{formLabelAlign.teacher_name}}</span>
+            </li>
+            <li>
+              <span>班主任</span>
+              <span>{{formLabelAlign.banzhuren_name}}</span>
+            </li>
+            <li>
+              <span>上课时间</span>
+              <span style=" border-top-style:hidden;">{{formLabelAlign.start_time}}</span>
+            </li>
+            <li>
+              <span>结束时间</span>
+              <span style=" border-top-style:hidden;">{{formLabelAlign.end_time}}</span>
+            </li>
+            <li>
+              <span>时长</span>
+              <span style=" border-top-style:hidden;">{{formLabelAlign.classhour}}</span>
+            </li>
+            <li>
+              <span>授课方式</span>
+              <span>{{formLabelAlign.course_address}}</span>
+            </li>
+            <li style="width:64%;">
+              <span style="width:15%;">地点</span>
+              <span style="width:84%;">{{formLabelAlign.course_address}}</span>
+            </li>
+          </ul>
+          <div style="clear:both;"></div>
+          <p style="margin-bottom:10px;">
+            <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>反馈内容
+          </p>
+          <el-form label-width="200px" :model="formLabelAlign">
+            <el-form-item label="反馈类型:">
+              <p v-if="formLabelAlign.feedback_type==1">试听/首次课程反馈</p>
+              <p v-if="formLabelAlign.feedback_type==2">日常上课反馈</p>
+              <p v-if="formLabelAlign.feedback_type==3">结课总结</p>
+              <p v-if="formLabelAlign.feedback_type==null">未知类型</p>
+            </el-form-item>
+            <el-form-item
+              label="本次授课内容:"
+              v-if="formLabelAlign.feedback_type=='2'||formLabelAlign.feedback_type=='1'"
+            >
+              <p>{{formLabelAlign.details_1}}</p>
+            </el-form-item>
+            <el-form-item
+              label="课堂配合度和积极性:"
+              v-if="formLabelAlign.feedback_type=='2'||formLabelAlign.feedback_type=='1'"
+            >
+              <span>{{formLabelAlign.details_2}}</span>
+            </el-form-item>
+            <el-form-item label="学生的主要问题和建议:" v-if="formLabelAlign.feedback_type=='1'">
+              <span>{{formLabelAlign.details_3}}</span>
+            </el-form-item>
+            <el-form-item label="课时建议:" v-if="formLabelAlign.feedback_type=='1'">
+              <span>{{formLabelAlign.details_4}}</span>
+            </el-form-item>
+            <el-form-item label="课程阶段安排及课时建议:" v-if="formLabelAlign.feedback_type=='1'">
+              <span>{{formLabelAlign.details_5}}</span>
+            </el-form-item>
+            <el-form-item label="上次课知识点掌握情况:" v-if="formLabelAlign.feedback_type=='2'">
+              <span>{{formLabelAlign.details_6}}</span>
+            </el-form-item>
+            <el-form-item label="作业:" v-if="formLabelAlign.feedback_type=='2'">
+              <span>{{formLabelAlign.details_7}}</span>
+            </el-form-item>
+            <el-form-item label="课程期间学生总体表现:" v-if="formLabelAlign.feedback_type=='3'">
+              <span>{{formLabelAlign.details_8}}</span>
+            </el-form-item>
+            <el-form-item label="下一步学习方案建议:" v-if="formLabelAlign.feedback_type=='3'">
+              <span>{{formLabelAlign.details_9}}</span>
+            </el-form-item>
+          </el-form>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+          </span>
+        </el-dialog>
 <span v-if="msg.data">
     <el-pagination
       style="float:right;margin-bottom:30px"
@@ -239,11 +346,13 @@ export default {
       }, //正常数据
       seeMoreData:{},
       msg: {},
+      dialogVisible:false, //查看课堂反馈
       centerDialogVisible_normal: false,  //正常
       centerDialogVisible_unnormal: false,  //异动
       centerDialogVisible_seeMore:false,
       opration:"",//操作选项
       labelPosition: 'left',
+      formLabelAlign:{},//查看反馈内容
     };
   },
        computed:mapState([ "rolemenu"]),
@@ -254,6 +363,9 @@ export default {
   },
   methods: {
     normal(a){
+      let thisTime=new Date()
+      let useThisTime=thisTime.getFullYear()+'-'+(thisTime.getMonth()+1)+'-'+thisTime.getDate()+' '+thisTime.getHours() + ':' + thisTime.getMinutes() + ':' + thisTime.getSeconds();
+      if(useThisTime>a.end_time){
       this.normalData.true_classhour=a.true_classhour
       this.normalData.classhour=a.classhour
       this.normalData.true_classhour=a.true_classhour
@@ -261,6 +373,13 @@ export default {
       this.normalData.student_classhour=a.student_classhour
       this.centerDialogVisible_normal = true
       this.normalData.course_id=a.course_id
+      }else{
+        this.$message({
+          type:'warning',
+          message:"请等待课时结束"
+        })
+      }
+
      
     },
     normal_post(){
@@ -271,7 +390,12 @@ export default {
           type:"success"
         })
         this.getadata();
-             this.centerDialogVisible_normal = false
+        this.centerDialogVisible_normal = false
+        }else{
+                         this.$message({
+          message:res.data.msg,
+          type:"warning"
+        })
         }
       })
     },
@@ -369,7 +493,22 @@ export default {
         this.getadata();
       }
     },
- 
+     fillFeedback_see(a) {
+      let parms = {
+        course_id: a
+      };
+      this.dialogVisible = true;
+      this.$apis.common.course_feedback(parms).then(res => {
+        if (res.data.code == 1) {
+          this.formLabelAlign = res.data.data;
+        }
+      });
+      //       this.$apis.common.course_feedback(parms).then(res => {
+      //   if (res.data.code == 1) {
+      //     this.formLabelAlign = res.data.data;
+      //   }
+      // });
+    },
     getadata() {
       this.$apis.students.attendance_list(this.form).then(res => {
         if (res.data.code == 1) {
@@ -382,9 +521,9 @@ export default {
 };
 </script>
 <style scoped>
-p{
+/* p{
   text-align: center;
-}
+} */
 .so_input {
   width: 300px;
   margin-bottom: 20px;
@@ -396,5 +535,45 @@ p{
 .so_main_right {
   float: right;
 }
-
+ul {
+  background-color: #fff;
+  height: 90px;
+  width: calc(100% - 3px);
+}
+li {
+  list-style: none;
+  float: left;
+  width: 33%;
+  height: 30px;
+  font-size: 14px;
+  padding: 0;
+  /* margin: 0 0 0 -1px; */
+}
+ul li:nth-child(3) {
+  width: 34%;
+}
+ul li:nth-child(6) {
+  width: 34%;
+}
+ul li:nth-child(9) {
+  width: 34%;
+}
+li span {
+  display: inline-block;
+  float: left;
+  width: 49%;
+  height: 30px;
+  line-height: 30px;
+}
+li :nth-child(1) {
+  width: 30%;
+  text-align: center;
+  background-color: #f5f5f5;
+  /* border:1px solid #F5F5F5; */
+}
+li :nth-child(2) {
+  width: 69%;
+  text-align: center;
+  box-shadow: 0 0 0 1px #f5f5f5;
+}
 </style>

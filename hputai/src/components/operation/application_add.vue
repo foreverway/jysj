@@ -11,9 +11,9 @@
       <el-form-item label="报名编号">
         <p>{{this.writeCurrentDate()}}</p>
       </el-form-item>
-      <el-form-item label="报名标题" prop="title">
+      <!-- <el-form-item label="报名标题" prop="title">
         <el-input v-model="form.title"></el-input>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="上课地点" prop="radio">
         <el-radio-group v-model="form.radio" @change="whereGo(form.radio)">
           <el-radio :label="1">线上</el-radio>
@@ -241,7 +241,7 @@ export default {
         need_four: "",
       },
       rules: {
-        title: [{ required: true, message: "请输入标题", trigger: "blur" }],
+        // title: [{ required: true, message: "请输入标题", trigger: "blur" }],
         value: [
           { required: true, message: "请选择报读科目", trigger: "change" }
         ],
@@ -309,7 +309,9 @@ export default {
       students_data: [], //用户id
       subjects_data: [], //学科数据
       feedback: "", //反馈
-      course_address: "" //上课线上或线下
+      course_address: "" ,//上课线上或线下
+       subject_name:'' , //选择的学科姓名
+
     };
   },
   created() {
@@ -437,7 +439,7 @@ export default {
           this.options_1 = res.data.data.list;
           for (let i = 0; i < this.options_1.length; i++) {
             var val = this.options_1[i];
-            this.options1.push({id:val.id, value: val.username, label: val.username });
+            this.options1.push({id:val.id,tel:val.tel, value: val.username, label: val.username });
           }
             this.handleChange_start(this.$route.query.username, this.options1)
         }
@@ -451,6 +453,7 @@ export default {
           : targetName.length == 2
           ? targetName[1]
           : targetName[2];
+          this.subject_name=lastName
       let ifCheck=this.editableTabs_1.filter(res=>{
        return res.title==lastName.toString()
       })
@@ -517,6 +520,7 @@ export default {
     },
     //学生姓名选择产生的变化
     handleChange(targetName) {
+      this.student_name=targetName
       //console.log(this.writeCurrentDate());
       var checkOne = this.options_1.filter(
         item => item.username == targetName[0]
@@ -549,7 +553,7 @@ export default {
       this.$refs[form2].validate(valid => {
         if (valid) {
           let parms = {
-            title: this.form.title,
+            title: this.form.value_1+'的科目'+this.subject_name,
             expiry_date: this.form.valueDate,
             remarks: this.form.feedback,
             course_address: this.form.radio,

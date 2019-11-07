@@ -41,13 +41,13 @@
       <el-table-column type="index" label="序号" width="50"></el-table-column>
       <!-- <el-table-column label="序号" prop="index" width="50"></el-table-column> -->
       <el-table-column prop="number" label="编号"></el-table-column>
-      <el-table-column prop="title" label="标题"></el-table-column>
+      <el-table-column prop="title" label="排课需求"></el-table-column>
       <el-table-column prop="amount" label="价格"></el-table-column>
       <el-table-column prop="expiry_date" label="课程有效期"></el-table-column>
       <el-table-column prop="student_name" label="报名学员" width="100"></el-table-column>
       <el-table-column prop="admin_name" label="添加者" width="100"></el-table-column>
       <el-table-column prop="addtime" label="添加时间"></el-table-column>
-      <el-table-column prop="app_status" class="status_color" label="状态" width="100">
+      <el-table-column prop="app_status" class="status_color" label="状态"  width="100">
         <template slot-scope="scope">
           <span v-if="scope.row.app_status== '待审核'" style="color:rgb(245, 108, 108)">待审核</span>
           <span v-else-if="scope.row.app_status== '待排课'" style="color:rgb(230, 162, 60)">待排课</span>
@@ -55,10 +55,12 @@
           <span v-else-if="scope.row.app_status== '已确认'" style="color:#303133">已确认</span>
           <span v-if="scope.row.app_status== '授课考勤中'" style="color:#409EFF">授课考勤中</span>
           <span v-else-if="scope.row.app_status== '已结课'" style="color:#67C23A">已结课</span>
+          <span v-if="scope.row.app_status== '审核不通过'" style="color:#f00">审核不通过</span>
+
         </template>
       </el-table-column>
 
-      <el-table-column fixed="right" prop label="操作" width="300">
+      <el-table-column fixed="right" prop label="操作"  width="300">
         <template slot-scope="scope">
           <span v-for="(item,index) in getRolenenu()" :key="index">
             <!-- <router-link :to="'/SalelistEdit/'+ scope.row.id"> -->
@@ -615,6 +617,21 @@ export default {
             });
           }
           break;
+         case "click_fail_test":
+          // 审核不通过
+          if (b.app_status == "审核不通过") {
+            this.$router.push({
+              path: "/StudentsList/application_edit_copy",
+              query: { id: b.id }
+            });
+          } else {
+            this.$message({
+              type: "warning",
+              message: "只有审核不通过时才可编辑"
+            });
+          }
+          break;
+          
         case "click_plan_edit": //编辑排课
           if (b.app_status == "已排课待确认") {
             this.$router.push({
@@ -875,4 +892,9 @@ export default {
   background-color: #7571fa !important;
   color: white;
 }
+ #click_fail_test {
+  /* //查看排课 */
+   background-color: #ecd81c !important;
+  color: white;
+} 
 </style>

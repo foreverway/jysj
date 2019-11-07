@@ -242,6 +242,8 @@
 
 <script>
 //import urls from '../common/const_config.js'
+  import url from '../../config/config.js'
+
 import { mapState } from "vuex";
 export default {
   data() {
@@ -281,12 +283,12 @@ export default {
         type: "success",
         message: "正在导出,请稍等..."
       });
-      let urls = "http://personal.test.hqjystudio.com";
+      //let urls = "http://personal.test.hqjystudio.com";
       let parms = "";
       for (var key in this.params) {
         parms += key + "=" + this.params[key] + "&";
       }
-      window.location.href = urls + "/api_dollars_export" + "?" + parms;
+      window.location.href = url.urls + "/api_dollars_export" + "?" + parms;
     },
     //序号排列
     indexMethod(index) {

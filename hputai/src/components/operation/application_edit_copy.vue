@@ -469,7 +469,7 @@ getId(this.region_list);
                  this.$refs[form2].validate((valid) => {
           if (valid) {
       this.parms = {
-        title: this.form.title,
+        title: this.student_name+this.subject_name,
         expiry_date: this.form.valueDate,
         remarks: this.form.feedback,
         course_address: this.form.radio,
@@ -482,6 +482,7 @@ getId(this.region_list);
         students_data: [],
         subjects_data: [],
       };
+      console.log(this.parms)
       this.parms.subjects_data = this.subjects_data;
       this.parms.students_data = this.students_data;
       this.$apis.common.application_edit_put(this.parms).then(res => {
@@ -530,7 +531,7 @@ getId(this.region_list);
    this.editableTabs_1.forEach((item,i) => {
         if (item.course_id==1) {
           this.parms = {
-         title: this.form.title,
+         title: this.student_name+this.subject_name,
         expiry_date: this.form.valueDate,
         remarks: this.form.feedback,
         course_address: this.form.radio,
@@ -571,7 +572,6 @@ getId(this.region_list);
     },
     pre() {
 
-      console.log(this.parms);
       this.parms.students_data = [];
       this.parms.subjects_data = [];
       this.students_data = [];

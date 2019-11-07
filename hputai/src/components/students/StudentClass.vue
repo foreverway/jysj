@@ -318,7 +318,7 @@
               <el-input type="textarea" v-model="form.details_9"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="onSubmit">查询</el-button>
+              <el-button type="primary" @click="onSubmit">确定</el-button>
               <el-button type="primary" @click="onSubmit_1">取消</el-button>
             </el-form-item>
           </el-form>

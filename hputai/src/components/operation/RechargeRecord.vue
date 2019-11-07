@@ -347,6 +347,8 @@
 </template>
 <script>
 //import glbol from '../../api/../config/prod.env.js/API_ROOT'
+  import url from '../../config/config.js'
+
 import { mapState } from "vuex";
 export default {
   data() {
@@ -467,17 +469,9 @@ export default {
       for (var key in this.form) {
         parms += key + "=" + this.form[key] + "&";
       }
-      window.location.href = urls + "/api_recharge_export" + "?" + parms;
+      window.location.href = url.urls + "/api_recharge_export" + "?" + parms;
     },
-    //序号排列
-    // indexMethod(index) {
-    //   if (this.form.page == 1) {
-    //     return index + 1;
-    //   } else {
-    //     let page = (this.form.page - 1) * 10 + 1;
-    //     return index + page;
-    //   }
-    // },
+
     getadata() {
       //总数据
       this.$apis.common.recharge_list(this.form).then(res => {

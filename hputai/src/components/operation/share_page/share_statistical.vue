@@ -110,6 +110,7 @@
 
 <script>
 //import glbol from '../common/const_config.js'
+  import url from '../../../config/config.js'
 
 export default {
   data() {
@@ -141,12 +142,11 @@ export default {
         type: "success",
         message: "正在导出,请稍等..."
       });
-      let urls = "http://personal.test.hqjystudio.com";
       let parms = "";
       for (var key in this.form) {
         parms += key + "=" + this.form[key] + "&";
       }
-      window.location.href = urls + "/api_share_export" + "?" + parms;
+      window.location.href = url.urls + "/api_share_export" + "?" + parms;
     },
     //序号排列
     indexMethod(index) {

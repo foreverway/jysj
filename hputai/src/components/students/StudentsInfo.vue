@@ -122,19 +122,24 @@
         placeholder="选择日期时间"
       ></el-date-picker>
       <div style="margin:10px"></div>
-  <div style="width:100%;" >
-      <el-table border :data="tableData" >
-        <el-table-column prop="title" label="报名标题" align="center"></el-table-column>
-        <el-table-column prop="number" label="编号" align="center"></el-table-column>
-        <el-table-column prop="subject_name" label="科目" align="center"></el-table-column>
-        <el-table-column prop="course_type" label="类型" align="center"></el-table-column>
-        <el-table-column prop="app_status" label="状态" align="center"></el-table-column>
-        <el-table-column prop="address" label="操作" align="center">
-          <template slot-scope="scope">
-            <el-button type="primary" @click="toEditClass(scope.row.app_id)">编辑排课</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+      <div style="width:100%;">
+        <el-table border :data="tableData">
+          <el-table-column prop="title" label="报名标题" align="center"></el-table-column>
+          <el-table-column prop="number" label="编号" align="center"></el-table-column>
+          <el-table-column prop="subject_name" label="科目" align="center"></el-table-column>
+          <el-table-column prop="course_type" label="类型" align="center"></el-table-column>
+          <el-table-column prop="app_status" label="状态" align="center"></el-table-column>
+          <el-table-column prop="address" label="操作" align="center">
+            <template slot-scope="scope">
+              <el-button v-if="scope.row.app_status!=='审核不通过'">暂无操作</el-button>
+              <el-button
+                type="primary"
+                v-if="scope.row.app_status=='审核不通过'"
+                @click="toEditClass(scope.row.app_id)"
+              >编辑排课</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
       </div>
       <el-pagination
         style="float:right;margin-top:10px;margin-bottom: 5px;"
@@ -147,7 +152,7 @@
         :total="class_length"
       ></el-pagination>
       <div style="clear:both;"></div>
-      <p >
+      <p>
         <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>学员课表
       </p>
       <div>
@@ -424,7 +429,6 @@
         </el-dialog>
         <!-- 其他方式进入课表 other_enter -->
       </div>
-   
     </div>
   </div>
 </template>
@@ -436,8 +440,8 @@ export default {
       tableData: [], //表格数据
       form: {},
       currentPage: 1, //当前页
-      class_length:null,//排课长度
-      classcount:null,//学生课表长度
+      class_length: null, //排课长度
+      classcount: null, //学生课表长度
       postFrom: {
         value: "",
         student_id: "",
@@ -459,15 +463,17 @@ export default {
       activeName: "1",
       activeIndex: "1",
       thisurl: "",
-      classparms : {   //学生课表数据
+      classparms: {
+        //学生课表数据
         course_type: 1,
         page: 1,
         is_by_student: 1,
-        student_id:this.$route.query.id
+        student_id: this.$route.query.id
       },
-           getDataparams :{ //学生课表
+      getDataparams: {
+        //学生课表
         is_by_student: 1,
-        page:1,
+        page: 1,
         student_id: this.$route.query.id
       }
     };
@@ -475,15 +481,12 @@ export default {
   watch: {
     mouseDown: function() {}
   },
-  beforeMount(){
-        this.$nextTick(function() {
-
-    });
+  beforeMount() {
+    this.$nextTick(function() {});
   },
   created() {
     this.getData();
     this.getClassList();
-
 
     // var scrollFunc = function(e) {
     //   e = e || window.event;
@@ -531,25 +534,24 @@ export default {
         case "1":
           this.$router.push({
             path: "/StudentsList/StudentsInfo/VirtualMonney",
-            query: { id: this.$route.query.id ,search:this.form.username}
+            query: { id: this.$route.query.id, search: this.form.username }
           });
           break;
         case "2":
           this.$router.push({
             path: "/StudentsList/StudentsInfo/NewMoney",
-            query: { id: this.$route.query.id ,search:this.form.username}
+            query: { id: this.$route.query.id, search: this.form.username }
           });
           break;
         case "3":
           this.$router.push({
             path: "/StudentsList/StudentsInfo/LearningMoney",
-            query: { id: this.$route.query.id,search:this.form.username }
+            query: { id: this.$route.query.id, search: this.form.username }
           });
           break;
       }
     },
     getData() {
-
       this.$apis.students //获取学生信息
         .students_edit({ id: this.$route.query.id })
         .then(res => {
@@ -565,8 +567,8 @@ export default {
               this.tableData = [];
             } else {
               this.tableData = res.data.data.list;
-              console.log(this.tableData)
-              this.class_length=res.data.data.count
+              console.log(this.tableData);
+              this.class_length = res.data.data.count;
             }
           }
         });
@@ -588,11 +590,11 @@ export default {
         }
       });
     },
-    toEditClass(b){
-                  this.$router.push({
-              path: "/StudentsList/application_edit_copy",
-              query: { id: b }
-            });
+    toEditClass(b) {
+      this.$router.push({
+        path: "/StudentsList/application_edit_copy",
+        query: { id: b }
+      });
     },
     nowVideo(a) {
       //观看直播
@@ -639,18 +641,18 @@ export default {
     current(num) {
       //当前页数
       this.classparms.page = num;
-     this.getClassList();
+      this.getClassList();
     },
-        current_s(num) {
+    current_s(num) {
       //当前页数
       this.getDataparams.page = num;
       this.getadata();
     },
     next() {
       this.classparms.page++;
-     this.getClassList();
+      this.getClassList();
     },
-        next_s() {
+    next_s() {
       this.getDataparams.page++;
       this.getadata();
     },
@@ -658,10 +660,10 @@ export default {
       //上一页
       if (this.getDataparams.page > 1) {
         this.getDataparams.page--;
-      this.getadata();
+        this.getadata();
       }
     },
-        prev() {
+    prev() {
       //上一页
       if (this.classparms.page > 1) {
         this.classparms.page--;
@@ -749,7 +751,6 @@ export default {
       });
     },
     getClassList() {
-
       this.$apis.common.student_course(this.classparms).then(res => {
         if (res.data.code == 1) {
           this.classData = res.data.data.list;
@@ -763,10 +764,10 @@ export default {
   },
 
   mounted() {
-          this.$router.push({
-        path: "/StudentsList/StudentsInfo/VirtualMonney",
-        query: { id: this.$route.query.id ,search:this.form.username}
-      });
+    this.$router.push({
+      path: "/StudentsList/StudentsInfo/VirtualMonney",
+      query: { id: this.$route.query.id, search: this.form.username }
+    });
     var name = this.$route.path.substring(this.$route.path.indexOf("/") + 1);
     this.url = name.substr(0, 12);
   }
