@@ -73,6 +73,19 @@
             >{{item.menu_name}}</el-button>
           </span>
         </template>
+                <!-- <span v-for="(item,index) in scope.row.btn" :key="index">
+            <!-- <router-link :to="'/SalelistEdit/'+ scope.row.id"> -->
+            <!-- <el-button
+              type="button"
+              size="mini"
+              index="item.id"
+              v-bind:id="item.menu_action"
+              @click="mommonAction(item.menu_action,scope.row)"
+            >{{item.menu_name}}</el-button> -->
+            <!-- {{scope.row.btn}} -->
+           <!-- <span v-html="item"  @click="mommonAction(item.id,scope.row)"></span>
+
+          </span> --> -->
       </el-table-column>
     </el-table>
     <!-- 分页 -->
@@ -337,6 +350,10 @@ export default {
         {
           value: 5,
           label: "已结课"
+        },
+                {
+          value: -1,
+          label: "审核不通过"
         }
       ]
     };

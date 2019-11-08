@@ -366,7 +366,6 @@ export default {
        let thisTime=new Date()
       let useThisTime=thisTime.getFullYear()+'-'+(thisTime.getMonth()+1)+'-'+thisTime.getDate()+' '+thisTime.getHours() + ':' + thisTime.getMinutes() + ':' + thisTime.getSeconds();
       return useThisTime>a.end_time
-      
     },
     normal(a){
       let thisTime=new Date()

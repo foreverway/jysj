@@ -54,7 +54,7 @@
           </el-form-item>
         </div>
         <div class="input_1">
-          <el-form-item label="年级：" prop="grade">
+          <el-form-item label="年级：" >
             <el-input v-model="form.grade" style="width:150px" placeholder="例：初一"></el-input>
           </el-form-item>
         </div>
@@ -200,8 +200,8 @@
       <h4>账户等级评定：</h4>
       <div class="input_1_main">
         <div class="input_1">
-          <el-form-item label="用户等级评定：">
-            <el-select v-model="form.alevel" prop='grade' placeholder="请选择" style="width:300px" v-if="msg.data">
+          <el-form-item label="用户等级评定：" prop="grade">
+            <el-select v-model="form.alevel"  placeholder="请选择" style="width:300px" v-if="msg.data">
               <el-option
                 v-for="item in msg.data.alevel_list"
                 :key="item.id"
@@ -302,7 +302,7 @@ export default {
         sex: [{ required: true, message: "此项不能为空", trigger: "blur" }],
         age: [{ required: true, validator: Yanuage, trigger: "blur" }],
         //school: [{ required: true, message: "此项不能为空", trigger: "blur" }],
-        grade: [{ required: true, message: "此项不能为空", trigger: "blur" }],
+        // grade: [{ required: true, message: "此项不能为空", trigger: "blur" }],
         weixin_qq: [
           { required: true, message: "此项不能为空", trigger: "blur" }
         ],
@@ -323,11 +323,11 @@ export default {
         ],
         reason: [{ required: true, message: "此项不能为空", trigger: "blur" }],
            grade: [{ required: true, message: "此项不能为空", trigger: "blur" }],
-        // line_number: [
-        //   { required: true, message: "此项不能为空", trigger: "blur" }
-        // ],
-        //   line_project: [{ required: true, message: "此项不能为空", trigger: "blur" }],
-        //    line_channel: [{ required: true, message: "此项不能为空", trigger: "blur" }],
+        line_number: [
+          { required: true, message: "此项不能为空", trigger: "blur" }
+        ],
+          line_project: [{ required: true, message: "此项不能为空", trigger: "blur" }],
+           line_channel: [{ required: true, message: "此项不能为空", trigger: "blur" }],
 
       }
     };

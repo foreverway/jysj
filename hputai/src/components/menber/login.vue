@@ -302,7 +302,7 @@ top:200px; */
   background: rgba(255, 74, 22, 1);
   position: fixed;
   top: 25%;
-  right: 42%;
+  right: 45%;
 
   /* margin:0 auto; */
   border-radius: 14px;

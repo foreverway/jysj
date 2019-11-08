@@ -58,7 +58,7 @@
           </el-form-item>
         </div>
         <div class="input_1">
-          <el-form-item label="年级：" prop="grade">
+          <el-form-item label="年级：" >
             <el-input v-model="form.grade"></el-input>
           </el-form-item>
         </div>
@@ -339,7 +339,7 @@ export default {
         sex: [{ required: true, message: "此项不能为空", trigger: "blur" }],
         age: [{ required: true, validator: Yanuage, trigger: "blur" }],
         //school: [{ required: true, message: "此项不能为空", trigger: "blur" }],
-        grade: [{ required: true, message: "此项不能为空", trigger: "blur" }],
+         grade: [{ required: true, message: "此项不能为空", trigger: "blur" }],
         weixin_qq: [
           { required: true, message: "此项不能为空", trigger: "blur" }
         ],
@@ -360,11 +360,11 @@ export default {
         ],
         reason: [{ required: true, message: "此项不能为空", trigger: "blur" }],
            grade: [{ required: true, message: "此项不能为空", trigger: "blur" }],
-        // line_number: [
-        //   { required: true, message: "此项不能为空", trigger: "blur" }
-        // ],
-        //   line_project: [{ required: true, message: "此项不能为空", trigger: "blur" }],
-        //    line_channel: [{ required: true, message: "此项不能为空", trigger: "blur" }],
+        line_number: [
+          { required: true, message: "此项不能为空", trigger: "blur" }
+        ],
+          line_project: [{ required: true, message: "此项不能为空", trigger: "blur" }],
+           line_channel: [{ required: true, message: "此项不能为空", trigger: "blur" }],
 
       }
     };

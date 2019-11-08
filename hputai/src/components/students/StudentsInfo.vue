@@ -96,17 +96,17 @@
         <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>排课列表
       </p>
       <el-cascader
-        v-model="postFrom.value"
+        v-model="class_value"
         :options="options"
         filterable
         :props="{ expandTrigger: 'hover' }"
         :show-all-levels="false"
-        @change="getData"
+        @change="handleChange_1"
         clearable
       ></el-cascader>
       <el-date-picker
         style="margin-left:60px"
-        v-model="postFrom.start_time"
+        v-model="getDataparams.start_time"
         @change="getData"
         type="datetime"
         clearable
@@ -115,7 +115,7 @@
       ></el-date-picker>至
       <el-date-picker
         @change="getData"
-        v-model="postFrom.end_time"
+        v-model="getDataparams.end_time"
         type="datetime"
         clearable
         value-format="yyyy-MM-dd H:mm:ss"
@@ -439,16 +439,17 @@ export default {
       activeNames: ["1"],
       tableData: [], //表格数据
       form: {},
+      class_value:[],
       currentPage: 1, //当前页
       class_length: null, //排课长度
       classcount: null, //学生课表长度
-      postFrom: {
-        value: "",
-        student_id: "",
-        subject_id: "",
-        start_time: "",
-        end_time: ""
-      },
+      // postFrom: {
+      //   value: "",
+      //   student_id: "",
+      //   subject_id: "",
+      //   start_time: "",
+      //   end_time: ""
+      // },
       classData: [], //学生课表数据
       options: [], //课程名称的数据
       options_: [], //总数据的数据
@@ -471,10 +472,13 @@ export default {
         student_id: this.$route.query.id
       },
       getDataparams: {
-        //学生课表
+        //排课列表参数
         is_by_student: 1,
+        subject_id: "",
         page: 1,
-        student_id: this.$route.query.id
+        student_id: this.$route.query.id,
+        start_time: "",
+        end_time: ""
       }
     };
   },
@@ -493,8 +497,7 @@ export default {
   beforeMount() {
   },
   created() {
-            this.getData();
-
+    this.getData();
     this.getClassList();
     // this.$nextTick( function(){
     //              this.$router.push({
@@ -539,32 +542,44 @@ export default {
     // window.onmousewheel = document.onmousewheel = scrollFunc;
   },
   methods: {
-    handleChange(val) {},
+        handleChange_1(targetName) {
+      //选择科目
+      var lastName = targetName.length == 1 ? targetName[0] :(targetName.length==2? targetName[1]: targetName[2]);
+        this.getDataparams.subject_id=lastName,
+
+      this.$apis.students.student_arranging_course(this.getDataparams).then(res => {
+        if (res.data.code == 1) {
+          this.tableData = res.data.data.list;
+                        this.class_length = res.data.data.count;
+
+        }
+      });
+    },
     goBack() {
       // this.$router.go(-1);
       this.$router.push({ path: "/StudentsList" });
     },
     handleClick(tab, event) {
-      // switch (tab.name) {
-      //   case "1":
-      //     this.$router.push({
-      //       path: "/StudentsList/StudentsInfo/VirtualMonney",
-      //       query: { id: this.$route.query.id, search: this.form.username }
-      //     });
-      //     break;
-      //   case "2":
-      //     this.$router.push({
-      //       path: "/StudentsList/StudentsInfo/NewMoney",
-      //       query: { id: this.$route.query.id, search: this.form.username }
-      //     });
-      //     break;
-      //   case "3":
-      //     this.$router.push({
-      //       path: "/StudentsList/StudentsInfo/LearningMoney",
-      //       query: { id: this.$route.query.id, search: this.form.username }
-      //     });
-      //     break;
-      // }
+      switch (tab.name) {
+        case "1":
+          this.$router.push({
+            path: "/StudentsList/StudentsInfo/VirtualMonney",
+            query: { id: this.$route.query.id, search: this.form.username }
+          });
+          break;
+        case "2":
+          this.$router.push({
+            path: "/StudentsList/StudentsInfo/NewMoney",
+            query: { id: this.$route.query.id, search: this.form.username }
+          });
+          break;
+        case "3":
+          this.$router.push({
+            path: "/StudentsList/StudentsInfo/LearningMoney",
+            query: { id: this.$route.query.id, search: this.form.username }
+          });
+          break;
+      }
     },
     getData() {
       this.$apis.students //获取学生信息
@@ -572,13 +587,13 @@ export default {
         .then(res => {
           if (res.data.code == 1) {
             this.form = res.data.data;
-
           }
         })
-      this.$apis.students //获取排课列表
+      this.$apis.students //排课列表
         .student_arranging_course(this.getDataparams)
         .then(res => {
           if (res.data.code == 1) {
+            console.log(this.getDataparams)
             if (res.data.data.count.length == 0) {
               this.tableData = [];
             } else {
@@ -765,7 +780,7 @@ export default {
         }
       });
     },
-    getClassList() {
+    getClassList() {  //获取学生课表
       this.$apis.common.student_course(this.classparms).then(res => {
         if (res.data.code == 1) {
           this.classData = res.data.data.list;

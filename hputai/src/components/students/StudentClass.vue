@@ -434,7 +434,7 @@ export default {
       labelPosition: "top", //其他方法进入直播排在顶部
       innerVisible: false, //内层弹框
       form: {
-        feedback_type: "1",
+        feedback_type: 1,
         details_1: "",
         details_2: "",
         details_3: "",
@@ -451,9 +451,9 @@ export default {
         // label:"username",
       ],
 
-      formLabelAlign: {}, //老师在这里疯狂反馈
+      formLabelAlign: {
+      }, //老师在这里疯狂反馈
       course: "", //课程ID
-      //  radio:'1',//反馈类型
       currentPage: 1, //当前页
       pagesize: 8,
       value_stu: "",
@@ -639,7 +639,7 @@ export default {
     },
     handleChange_1(targetName) {
       //选择科目
-      var lastName = targetName.length == 1 ? targetName[0] : targetName[1];
+      var lastName = targetName.length == 1 ? targetName[0] :(targetName.length==2? targetName[1]: targetName[2]);
       let parms = {
         admin_id: this.getdataCookie("admin_id"),
         page: 1,
