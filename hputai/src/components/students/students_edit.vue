@@ -120,12 +120,12 @@
       <h4>市场信息：</h4>
       <div class="input_1_main">
         <div class="input_1">
-          <el-form-item label="进线编号：" prop="line_number">
+          <el-form-item label="进线编号：" prop="in_number">
             <el-input v-model="form.in_number" style="width:150px" placeholder></el-input>
           </el-form-item>
         </div>
         <div class="input_1">
-          <el-form-item label="进线项目：" prop="line_project">
+          <el-form-item label="进线项目：" prop="inproject">
             <el-select v-model="form.inproject" filterable placeholder="请选择" v-if="msg.data">
               <el-option
                 v-for="item in msg.data.inproject_list"
@@ -137,7 +137,7 @@
           </el-form-item>
         </div>
         <div class="input_1">
-          <el-form-item label="进线渠道："  prop="line_channel">
+          <el-form-item label="进线渠道："  prop="inchannel">
             <el-select v-model="form.inchannel" placeholder="请选择" v-if="msg.data">
               <el-option
                 v-for="item in msg.data.inchannel_list"
@@ -231,7 +231,7 @@
       <h4>账户等级评定：</h4>
       <div class="input_1_main">
         <div class="input_1">
-          <el-form-item label="用户等级评定：" prop='grade'>
+          <el-form-item label="用户等级评定：" prop='alevel'>
             <el-select v-model="form.alevel" placeholder="请选择" style="width:300px" v-if="msg.data">
               <el-option
                 v-for="item in msg.data.alevel_list"
@@ -339,7 +339,7 @@ export default {
         sex: [{ required: true, message: "此项不能为空", trigger: "blur" }],
         age: [{ required: true, validator: Yanuage, trigger: "blur" }],
         //school: [{ required: true, message: "此项不能为空", trigger: "blur" }],
-         grade: [{ required: true, message: "此项不能为空", trigger: "blur" }],
+         alevel: [{ required: true, message: "此项不能为空", trigger: "blur" }],
         weixin_qq: [
           { required: true, message: "此项不能为空", trigger: "blur" }
         ],
@@ -360,11 +360,11 @@ export default {
         ],
         reason: [{ required: true, message: "此项不能为空", trigger: "blur" }],
            grade: [{ required: true, message: "此项不能为空", trigger: "blur" }],
-        line_number: [
+        in_number: [
           { required: true, message: "此项不能为空", trigger: "blur" }
         ],
-          line_project: [{ required: true, message: "此项不能为空", trigger: "blur" }],
-           line_channel: [{ required: true, message: "此项不能为空", trigger: "blur" }],
+          inproject: [{ required: true, message: "此项不能为空", trigger: "blur" }],
+           inchannel: [{ required: true, message: "此项不能为空", trigger: "blur" }],
 
       }
     };

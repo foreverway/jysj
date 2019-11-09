@@ -97,7 +97,7 @@
       </el-form>
     </div>
 
-    <el-button class="goBack" type="primary" @click="goBack" >确 定</el-button>
+    <p style="margin-left:120px;"><el-button type="primary" @click="goBack" >确 定</el-button></p>
     <!-- <el-button  v-if="active==1||active==2">取消</el-button> -->
 
     <!-- 设置充值链接 -->

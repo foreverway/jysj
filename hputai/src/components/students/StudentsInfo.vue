@@ -14,7 +14,9 @@
       <ul :data="form">
         <li>
           <span>地区</span>
-          <span>{{form.subject_name}}</span>
+          <span v-if="form.subject_name">{{form.subject_name}}</span>
+          <span v-if="!form.subject_name" style="color:silver;">暂无记录</span>
+
         </li>
         <li>
           <span>手机号</span>
@@ -68,7 +70,9 @@
         </li>
         <li>
           <span>进线渠道</span>
-          <span style=" border-top-style:hidden;">{{form.end_time}}</span>
+          <span style=" border-top-style:hidden;" v-if="form.subject_name">{{form.end_time}}</span>
+                    <span style=" border-top-style:hidden;color:silver;" v-if="!form.subject_name" >暂无记录</span>
+
         </li>
         <li>
           <span>接入人</span>
@@ -76,19 +80,23 @@
         </li>
         <li>
           <span>班主任</span>
-          <span>{{form.banzhuren_id}}</span>
+          <span>班主任ID{{form.banzhuren_id}}</span>
         </li>
         <li>
           <span>顾问</span>
-          <span></span>
+          <span v-if="form.add_admin_id">顾问ID{{form.add_admin_id}}</span>
+          <span v-if="!form.add_admin_id" style=" border-top-style:hidden;color:silver;" >暂无记录</span>
+
         </li>
         <li>
           <span>升学指导</span>
-          <span></span>
+          <span style=" border-top-style:hidden;color:silver;" >暂无记录</span>
+
         </li>
         <li>
           <span>教学主管</span>
-          <span></span>
+          <span style=" border-top-style:hidden;color:silver;background-color:#fff;">暂无记录</span>
+
         </li>
       </ul>
       <div style="clear:both;"></div>
@@ -131,7 +139,7 @@
           <el-table-column prop="app_status" label="状态" align="center"></el-table-column>
           <el-table-column prop="address" label="操作" align="center">
             <template slot-scope="scope">
-              <el-button v-if="scope.row.app_status!=='审核不通过'">暂无操作</el-button>
+              <el-button v-if="scope.row.app_status!=='审核不通过'" type="success">暂无操作</el-button>
               <el-button
                 type="primary"
                 v-if="scope.row.app_status=='审核不通过'"
@@ -593,7 +601,6 @@ export default {
         .student_arranging_course(this.getDataparams)
         .then(res => {
           if (res.data.code == 1) {
-            console.log(this.getDataparams)
             if (res.data.data.count.length == 0) {
               this.tableData = [];
             } else {
@@ -676,7 +683,7 @@ export default {
     current_s(num) {
       //当前页数
       this.getDataparams.page = num;
-      this.getadata();
+      this.getData();
     },
     next() {
       this.classparms.page++;
@@ -684,13 +691,13 @@ export default {
     },
     next_s() {
       this.getDataparams.page++;
-      this.getadata();
+      this.getData();
     },
     prev_s() {
       //上一页
       if (this.getDataparams.page > 1) {
         this.getDataparams.page--;
-        this.getadata();
+        this.getData();
       }
     },
     prev() {

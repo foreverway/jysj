@@ -62,8 +62,7 @@
 
       <el-table-column fixed="right" prop label="操作"  width="300">
         <template slot-scope="scope">
-          <span v-for="(item,index) in getRolenenu()" :key="index">
-            <!-- <router-link :to="'/SalelistEdit/'+ scope.row.id"> -->
+          <!-- <span v-for="(item,index) in getRolenenu()" :key="index">
             <el-button
               type="button"
               size="mini"
@@ -71,21 +70,24 @@
               v-bind:id="item.menu_action"
               @click="mommonAction(item.menu_action,scope.row)"
             >{{item.menu_name}}</el-button>
-          </span>
-        </template>
-                <!-- <span v-for="(item,index) in scope.row.btn" :key="index">
-            <!-- <router-link :to="'/SalelistEdit/'+ scope.row.id"> -->
-            <!-- <el-button
-              type="button"
-              size="mini"
-              index="item.id"
-              v-bind:id="item.menu_action"
-              @click="mommonAction(item.menu_action,scope.row)"
-            >{{item.menu_name}}</el-button> -->
-            <!-- {{scope.row.btn}} -->
-           <!-- <span v-html="item"  @click="mommonAction(item.id,scope.row)"></span>
+          </span> -->
+              <el-button id="click_edit"  size='mini'  @click="mommonAction('click_edit',scope.row)" >查看排课需求</el-button>
+              <el-button id="click_test" v-if="scope.row.app_status == '待审核' " size='mini'  @click="mommonAction('click_test',scope.row)" >审核</el-button>
+              <el-button id="click_sure" v-if="scope.row.app_status == '已排课待确认' &&scope.row.is_youConfirm==1" size='mini'  @click="mommonAction('click_sure',scope.row)" >确认</el-button>
+              <el-button id="click_delete" v-if="scope.row.app_status == '已排课待确认'||scope.row.app_status == '待排课'||scope.row.app_status == '待审核'||scope.row.app_status == '审核不通过'" size='mini'  @click="mommonAction('click_delete',scope.row)" >删除</el-button>
+              <el-button id="cilck_plan_class" v-if="scope.row.app_status == '待排课'" size='mini'  @click="mommonAction('cilck_plan_class',scope.row)" >排课</el-button>
+              <el-button id="click_fail_test" v-if="scope.row.app_status == '审核不通过'" size='mini'  @click="mommonAction('click_fail_test',scope.row)" >编辑排课需求</el-button>
+              <el-button id="click_plan_edit" v-if="scope.row.app_status == '已排课待确认'" size='mini'  @click="mommonAction('click_plan_edit',scope.row)" >编辑排课</el-button>
+              <el-button id="click_see_plan" v-if="scope.row.app_status == '已结课'||scope.row.app_status == '授课考勤中'||scope.row.app_status == '已确认'||scope.row.app_status == '已排课待确认'" size='mini'  @click="mommonAction('click_see_plan',scope.row)" >查看排课</el-button>
 
-          </span> --> -->
+        </template>
+                    <!-- <router-link :to="'/SalelistEdit/'+ scope.row.id"> -->
+<!-- <template slot-scope="scope">
+                <span  v-for="(item,index) in scope.row.btn" :key="index">
+            {{scope.row.btn}}  
+           <span  id="addBtn" v-html="item" ></span>
+          </span>
+          </template> -->
       </el-table-column>
     </el-table>
     <!-- 分页 -->
@@ -362,6 +364,7 @@ export default {
     this.getdata();
     this.getAdviser();
     this.getRolenenu();
+
     let params = {
       admin_id: this.getdataCookie("admin_id")
     }; //
@@ -377,7 +380,26 @@ export default {
     });
     //this.searchAdviser()
   },
-  computed: mapState([
+  // computed: mapState([
+  //   "live_list",
+  //   "banzhuren_list",
+  //   "teacher_data",
+  //   "zhujiao_data",
+  //   "jiaowu_data",
+  //   "rolemenu",
+  //   "application",
+  //   "needs"
+  // ]),
+  // ...mapState()
+  updated() {
+    mapState(["banzhuren_list"]);
+    // this.getbanzhurenName();
+  },
+  computed: {
+    html () {
+      return '<button></button >'
+    },
+    ...mapState([
     "live_list",
     "banzhuren_list",
     "teacher_data",
@@ -387,14 +409,11 @@ export default {
     "application",
     "needs"
   ]),
-  // ...mapState()
-  updated() {
-    mapState(["banzhuren_list"]);
-    // this.getbanzhurenName();
   },
   mounted() {
-    // this.getbanzhurenName();
-    // this.tip_banzhuren=JSON.stringfy(this.banzhuren_list)
+
+
+
   },
   watch: {},
   methods: {
@@ -488,23 +507,12 @@ export default {
     },
 
     mommonAction(a, b) {
-      switch (a) {
+      switch (a) {  //查看排课需求
         case "click_edit":
-          if (
-            b.app_status == "待审核" ||
-            b.app_status == "待排课" ||
-            b.app_status == "已排课待确认"
-          ) {
             this.$router.push({
               path: "ApplyNeedsList/ApplicationEdit",
               query: { id: b.id }
             });
-          } else {
-            this.$message({
-              message: "请按流程操作",
-              type: "warning"
-            });
-          }
           break;
         case "click_test": //审核
           if (b.app_status == "待审核") {
