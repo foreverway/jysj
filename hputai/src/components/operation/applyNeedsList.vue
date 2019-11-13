@@ -47,7 +47,7 @@
       <el-table-column prop="student_name" label="报名学员" width="100"></el-table-column>
       <el-table-column prop="admin_name" label="添加者" width="100"></el-table-column>
       <el-table-column prop="addtime" label="添加时间"></el-table-column>
-      <el-table-column prop="app_status" class="status_color" label="状态"  width="100">
+      <el-table-column prop="app_status" class="status_color" label="状态" width="100">
         <template slot-scope="scope">
           <span v-if="scope.row.app_status== '待审核'" style="color:rgb(245, 108, 108)">待审核</span>
           <span v-else-if="scope.row.app_status== '待排课'" style="color:rgb(230, 162, 60)">待排课</span>
@@ -55,12 +55,23 @@
           <span v-else-if="scope.row.app_status== '已确认'" style="color:#303133">已确认</span>
           <span v-if="scope.row.app_status== '授课考勤中'" style="color:#409EFF">授课考勤中</span>
           <span v-else-if="scope.row.app_status== '已结课'" style="color:#67C23A">已结课</span>
-          <span v-if="scope.row.app_status== '审核不通过'" style="color:#f00">审核不通过</span>
-
+          <el-popover
+            placement="top-start"
+            title="未通过原因:"
+            width="200"
+            trigger="hover"
+            :content="scope.row.nopass_reasons"
+          >
+            <span
+              v-if="scope.row.app_status== '审核不通过'"
+              slot="reference"
+              style="color:#f00;cursor:help;"
+            >审核不通过</span>
+          </el-popover>
         </template>
       </el-table-column>
 
-      <el-table-column fixed="right" prop label="操作"  width="300">
+      <el-table-column fixed="right" prop label="操作" width="300">
         <template slot-scope="scope">
           <!-- <span v-for="(item,index) in getRolenenu()" :key="index">
             <el-button
@@ -70,24 +81,70 @@
               v-bind:id="item.menu_action"
               @click="mommonAction(item.menu_action,scope.row)"
             >{{item.menu_name}}</el-button>
-          </span> -->
-              <el-button id="click_edit"  size='mini'  @click="mommonAction('click_edit',scope.row)" >查看排课需求</el-button>
-              <el-button id="click_test" v-if="scope.row.app_status == '待审核' " size='mini'  @click="mommonAction('click_test',scope.row)" >审核</el-button>
-              <el-button id="click_sure" v-if="scope.row.app_status == '已排课待确认' &&scope.row.is_youConfirm==1" size='mini'  @click="mommonAction('click_sure',scope.row)" >确认</el-button>
-              <el-button id="click_delete" v-if="scope.row.app_status == '已排课待确认'||scope.row.app_status == '待排课'||scope.row.app_status == '待审核'||scope.row.app_status == '审核不通过'" size='mini'  @click="mommonAction('click_delete',scope.row)" >删除</el-button>
-              <el-button id="cilck_plan_class" v-if="scope.row.app_status == '待排课'" size='mini'  @click="mommonAction('cilck_plan_class',scope.row)" >排课</el-button>
-              <el-button id="click_fail_test" v-if="scope.row.app_status == '审核不通过'" size='mini'  @click="mommonAction('click_fail_test',scope.row)" >编辑排课需求</el-button>
-              <el-button id="click_plan_edit" v-if="scope.row.app_status == '已排课待确认'" size='mini'  @click="mommonAction('click_plan_edit',scope.row)" >编辑排课</el-button>
-              <el-button id="click_see_plan" v-if="scope.row.app_status == '已结课'||scope.row.app_status == '授课考勤中'||scope.row.app_status == '已确认'||scope.row.app_status == '已排课待确认'" size='mini'  @click="mommonAction('click_see_plan',scope.row)" >查看排课</el-button>
-
+          </span>-->
+          <el-button
+            id="click_edit"
+            size="mini"
+            v-show="checkMenu('click_edit')"
+            @click="mommonAction('click_edit',scope.row)"
+          >查看排课需求</el-button>
+          <el-button
+            id="click_test"
+            v-show="checkMenu('click_test')"
+            v-if="scope.row.app_status == '待审核' "
+            size="mini"
+            @click="mommonAction('click_test',scope.row)"
+          >审核</el-button>
+          <el-button
+            id="click_sure"
+            v-show="checkMenu('click_sure')"
+            v-if="scope.row.app_status == '已排课待确认' &&scope.row.is_youConfirm==1"
+            size="mini"
+            @click="mommonAction('click_sure',scope.row)"
+          >确认</el-button>
+          <el-button
+            id="click_delete"
+            v-show="checkMenu('click_delete')"
+            v-if="scope.row.app_status == '已排课待确认'||scope.row.app_status == '待排课'||scope.row.app_status == '待审核'||scope.row.app_status == '审核不通过'"
+            size="mini"
+            @click="mommonAction('click_delete',scope.row)"
+          >删除</el-button>
+          <el-button
+            id="cilck_plan_class"
+            v-show="checkMenu('cilck_plan_class')"
+            v-if="scope.row.app_status == '待排课'"
+            size="mini"
+            @click="mommonAction('cilck_plan_class',scope.row)"
+          >排课</el-button>
+          <el-button
+            id="click_fail_test"
+            v-show="checkMenu('click_fail_test')"
+            v-if="scope.row.app_status == '审核不通过'"
+            size="mini"
+            @click="mommonAction('click_fail_test',scope.row)"
+          >编辑排课需求</el-button>
+          <el-button
+            id="click_plan_edit"
+            v-show="checkMenu('click_plan_edit')"
+            v-if="scope.row.app_status == '已排课待确认'"
+            size="mini"
+            @click="mommonAction('click_plan_edit',scope.row)"
+          >编辑排课</el-button>
+          <el-button
+            id="click_see_plan"
+            v-show="checkMenu('click_see_plan')"
+            v-if="scope.row.app_status == '已结课'||scope.row.app_status == '授课考勤中'||scope.row.app_status == '已确认'||scope.row.app_status == '已排课待确认'"
+            size="mini"
+            @click="mommonAction('click_see_plan',scope.row)"
+          >查看排课</el-button>
         </template>
-                    <!-- <router-link :to="'/SalelistEdit/'+ scope.row.id"> -->
-<!-- <template slot-scope="scope">
+        <!-- <router-link :to="'/SalelistEdit/'+ scope.row.id"> -->
+        <!-- <template slot-scope="scope">
                 <span  v-for="(item,index) in scope.row.btn" :key="index">
             {{scope.row.btn}}  
            <span  id="addBtn" v-html="item" ></span>
           </span>
-          </template> -->
+        </template>-->
       </el-table-column>
     </el-table>
     <!-- 分页 -->
@@ -244,9 +301,9 @@
         <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="班主任:">
           <p>{{gridData.banzhuren_name?gridData.banzhuren_name:"未安排"}}</p>
         </el-form-item>
-        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="助教老师:">
+        <!-- <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="助教老师:">
           <p>{{gridData.zhujiao_name?gridData.zhujiao_name:"未安排"}}</p>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="教务专员:">
           <p>{{gridData.jiaowu_name?gridData.jiaowu_name:"未安排"}}</p>
         </el-form-item>
@@ -257,7 +314,7 @@
           <p>{{gridData.course_address}}</p>
         </el-form-item>
         <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="上课地址:">
-          <p>无数据</p>
+          <p>{{gridData.address}}</p>
         </el-form-item>
         <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label="学生:">
           <el-table
@@ -299,7 +356,7 @@ export default {
       centerDialogVisible_shenghe: false,
       // textarea: "", //审核的输入框
       // msg: "",
-       is_pass: "", //审核意见
+      is_pass: "", //审核意见
       banzhuren_list_new: [], //班主任数据
       banzhuren_live: "",
       moneymen_list_new: [], //教务专员
@@ -353,7 +410,7 @@ export default {
           value: 5,
           label: "已结课"
         },
-                {
+        {
           value: -1,
           label: "审核不通过"
         }
@@ -396,25 +453,21 @@ export default {
     // this.getbanzhurenName();
   },
   computed: {
-    html () {
-      return '<button></button >'
+    html() {
+      return "<button></button >";
     },
     ...mapState([
-    "live_list",
-    "banzhuren_list",
-    "teacher_data",
-    "zhujiao_data",
-    "jiaowu_data",
-    "rolemenu",
-    "application",
-    "needs"
-  ]),
+      "live_list",
+      "banzhuren_list",
+      "teacher_data",
+      "zhujiao_data",
+      "jiaowu_data",
+      "rolemenu",
+      "application",
+      "needs"
+    ])
   },
-  mounted() {
-
-
-
-  },
+  mounted() {},
   watch: {},
   methods: {
     tongguo(num) {
@@ -440,7 +493,7 @@ export default {
               type: "warning",
               message: " 已审核为不通过"
             });
-              this.centerDialogVisible_shenghe = false;
+            this.centerDialogVisible_shenghe = false;
 
             this.getdata();
           }
@@ -507,12 +560,14 @@ export default {
     },
 
     mommonAction(a, b) {
-      switch (a) {  //查看排课需求
+      switch (
+        a //查看排课需求
+      ) {
         case "click_edit":
-            this.$router.push({
-              path: "ApplyNeedsList/ApplicationEdit",
-              query: { id: b.id }
-            });
+          this.$router.push({
+            path: "/ApplyNeedsList/ApplicationEdit",
+            query: { id: b.id }
+          });
           break;
         case "click_test": //审核
           if (b.app_status == "待审核") {
@@ -539,7 +594,7 @@ export default {
             ]);
             // this.form1.app_id= b.id
             this.seeclassneeds = this.needs;
-            console.log(this.seeclassneeds)
+            console.log(this.seeclassneeds);
             this.app_id = b.id;
             this.seeapplytable = this.application;
             this.getbanzhurenName();
@@ -642,7 +697,7 @@ export default {
             });
           }
           break;
-         case "click_fail_test":
+        case "click_fail_test":
           // 审核不通过
           if (b.app_status == "审核不通过") {
             this.$router.push({
@@ -656,7 +711,7 @@ export default {
             });
           }
           break;
-          
+
         case "click_plan_edit": //编辑排课
           if (b.app_status == "已排课待确认") {
             this.$router.push({
@@ -701,6 +756,17 @@ export default {
     getRolenenu() {
       return this.rolemenu[1].children[1].children;
       //  console.log()
+    },
+    checkMenu(a) {
+      let hereObj = this.getRolenenu().find(item => {
+        return item.menu_action == a;
+      });
+      // console.log(hereObj)
+      if (hereObj) {
+        return true;
+      } else {
+        return false;
+      }
     },
     // submit_think() {
     //   //提交审核意见
@@ -917,9 +983,9 @@ export default {
   background-color: #7571fa !important;
   color: white;
 }
- #click_fail_test {
+#click_fail_test {
   /* //查看排课 */
-   background-color: #ecd81c !important;
+  background-color: #ecd81c !important;
   color: white;
-} 
+}
 </style>

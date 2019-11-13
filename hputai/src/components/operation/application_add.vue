@@ -94,7 +94,7 @@
             </select>
           </p>
           <!-- <el-button @click="deleteTest_1" size='mini' style="color:white;background-color:#e6563a;">撤销</el-button> -->
-          <p  ><el-button @click="deleteTest_1" size='mini' style="color:white;background-color:#e6563a;">撤销</el-button></p>
+          <p  ><el-button @click="deleteTest_1(i)" size='mini' style="color:white;background-color:#e6563a;">撤销</el-button></p>
         </div>
       </el-form-item>
       <el-form-item label="学生姓名" prop="value_1">
@@ -115,7 +115,7 @@
           <span style="display:none;" v-bind:id="'students'+ i">{{item.id}}</span>
           <p>{{item.name}}</p>
           <p>{{item.tel?item.tel:'没有电话'}}</p>
-           <p  ><el-button @click="deleteTest" size='mini' style="color:white;background-color:#e6563a;">撤销</el-button></p>
+           <p  ><el-button @click="deleteTest(i)" size='mini' style="color:white;background-color:#e6563a;">撤销</el-button></p>
         </div>
       </el-form-item>
 
@@ -390,15 +390,15 @@ export default {
     addTest() {
       // alert()
     },
-    deleteTest_1() {
+    deleteTest_1(index) {
       //this.editableTabs_1.pop(this.editableTabs_1);
-       this.pushArray1.pop(this.pushArray1)
-       this.pushArray2.pop(this.pushArray2)
+       this.pushArray1.splice(index,1)
+       this.pushArray2.splice(index,1)
 
       this.form.value=[]
     },
-    deleteTest() {
-      this.editableTabs.pop(this.tabIndex);
+    deleteTest(index) {
+      this.editableTabs.splice(index,1);
     },
     result() {
       for (let i = 0; i < this.items_add.length; i++) {}

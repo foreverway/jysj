@@ -185,12 +185,12 @@ export default {
   },
   methods: {
     //生成学员编号
-    deleteTest_1() {
-      this.editableTabs_1.pop(this.editableTabs_1);
+    deleteTest_1(index) {
+      this.editableTabs_1.splice(index,1);
       this.form.value = "";
     },
-    deleteTest() {
-      this.editableTabs.pop(this.tabIndex);
+    deleteTest(index) {
+      this.editableTabs.splice(index,1);
     },
     getdata() {
       let parms = {

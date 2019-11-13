@@ -46,7 +46,7 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item :inline="true" label="助教">
+      <!-- <el-form-item :inline="true" label="助教">
         <el-select v-model="form.zhujiao_id" filterable clearable placeholder="请选择">
           <el-option
             v-for="item in this.zhujiao_data_new"
@@ -56,7 +56,7 @@
             @change="handleChange_help"
           ></el-option>
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item :inline="true" label="教务专员">
         <!-- <span class="demonstration">hover 触发子菜单</span> -->
         <!-- 用el-autocomplete -->
@@ -70,7 +70,7 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item :inline="true" label="课时">
+      <el-form-item :inline="true" label="可排课时">
         <p>{{this.form.classhour}}</p>
       </el-form-item>
       <!-- <el-form-item label="上课地点">
@@ -113,7 +113,7 @@
           <span style="display:none;" v-bind:id="''+ i">{{item.course_id}}</span>
           <p>
             <el-input
-              v-model.number="item.classhour"
+              v-model="item.classhour"
               v-bind:id="'classhour' + i"
               placeholder="排几节课?"
             ></el-input>
@@ -156,7 +156,7 @@
               <option label="客户端" value="1">是</option>
             </select>
           </p>
-          <p  ><el-button @click="deleteTest_1" size='mini' style="color:white;background-color:#e6563a;">撤销</el-button></p>
+          <p  ><el-button @click="deleteTest_1(i)" size='mini' style="color:white;background-color:#e6563a;">撤销</el-button></p>
         </div>
       </el-form-item>
     </el-form>
@@ -522,7 +522,8 @@ export default {
       if (!this.form.teacher_id * 1 == "") {
         this.$apis.operation.teacher_course(params).then(res=>{
           if(res&&res.data.code==1){
-             if(Object.prototype.toString.call(res.data.data).split(7,6)==Array){
+            // console.log(res.data.data.length)
+                         if(res.data.data.length){
               this.seeteacherclass_data=res.data.data
               this.dialogTableVisible_seeTeacherClass=true
             }else{
@@ -530,6 +531,14 @@ export default {
                            this.dialogTableVisible_seeTeacherClass=true
 
             }
+            //  if(Object.prototype.toString.call(res.data.data).split(7,6)==Array){
+            //   this.seeteacherclass_data=res.data.data
+            //   this.dialogTableVisible_seeTeacherClass=true
+            // }else{
+            //  this.seeteacherclass_data=[]
+            //                this.dialogTableVisible_seeTeacherClass=true
+
+            // }
           }else{
                     this.$message({
           type: "worning",
@@ -716,8 +725,8 @@ export default {
         type: "warning"
       });
     },
-    deleteTest_1() {
-      this.editableTabs_1.pop(this.editableTabs_1);
+    deleteTest_1(index) {
+      this.editableTabs_1.splice(index,1);
       if (this.editableTabs_1.length == 0) {
         this.open4();
       }

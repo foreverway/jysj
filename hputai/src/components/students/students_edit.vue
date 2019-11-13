@@ -162,7 +162,7 @@
         </div>
         <div class="input_1">
           <el-form-item label="班主任：">
-            <el-select v-model="form.banzhuren_id" style="width:200px" filterable placeholder="请选择">
+            <el-select v-model="form.banzhuren_id"  filterable placeholder="请选择">
               <el-option
                 v-for="item in teacher"
                 :key="item.id"
@@ -172,12 +172,11 @@
             </el-select>
           </el-form-item>
         </div>
-        <div class="input_1" style="margin-left:10px;">
+        <div class="input_1" >
           <el-form-item label="课程顾问：" v-if="form.isDisable==1">
             <el-select
               v-model="form.consultant1"
               disabled
-              style="width:200px"
               filterable
               placeholder="请选择"
             >
@@ -189,8 +188,8 @@
               ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="课程顾问：" style="margin-left:10px;" v-show="form.isDisable==0">
-            <el-select v-model="form.consultant1" style="width:200px" filterable placeholder="请选择">
+          <el-form-item label="课程顾问："  v-show="form.isDisable==0">
+            <el-select v-model="form.consultant1"  filterable placeholder="请选择">
               <el-option
                 v-for="item in adviser"
                 :key="item.id"

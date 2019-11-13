@@ -90,7 +90,7 @@
               <option label="是" value="1"></option>
             </select>
           </p>
-          <p  ><el-button @click="deleteTest_1" size='mini' style="color:white;background-color:#e6563a;">撤销</el-button></p>
+          <p  ><el-button @click="deleteTest_1(i)" size='mini' style="color:white;background-color:#e6563a;">撤销</el-button></p>
         </div>
       </el-form-item>
       <el-form-item label="学生姓名" prop="value_1">
@@ -111,7 +111,7 @@
           <span style="display:none;" v-bind:id="'students'+ i">{{item.id}}</span>
           <p>{{ item.student_name}}</p>
           <p>{{item.tel}}</p>
-           <p  ><el-button @click="deleteTest" size='mini' style="color:white;background-color:#e6563a;">撤销</el-button></p>
+           <p  ><el-button @click="deleteTest(i)" size='mini' style="color:white;background-color:#e6563a;">撤销</el-button></p>
 
           <!-- <p @click=" deleteTest" style="cursor:pointer;color:white;background-color:#e6563a;">撤销</p> -->
         </div>
@@ -291,12 +291,12 @@ getId(this.region_list);
   },
   methods: {
     //生成学员编号
-    deleteTest_1() {
-      this.editableTabs_1.pop(this.editableTabs_1);
+    deleteTest_1(index) {
+      this.editableTabs_1.splice(idnex,1);
       this.form.value=[]
     },
-    deleteTest() {
-      this.editableTabs.pop(this.tabIndex);
+    deleteTest(index) {
+      this.editableTabs.splice(index,1);
     },
     getdata() {
       let parms = {

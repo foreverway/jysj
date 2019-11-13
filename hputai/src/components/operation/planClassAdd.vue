@@ -62,15 +62,15 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item :inline="true" label="课时">
+      <el-form-item :inline="true" label="可排课时">
         <p>{{this.apply_data.classhour}}</p>
       </el-form-item>
-      <el-form-item label="上课地点" v-model="radio">
+      <!-- <el-form-item label="上课地点" v-model="radio">
         <el-radio-group v-model="radio" @change="whereGo(radio)">
           <el-radio v-model="radio" label="1">线上</el-radio>
           <el-radio v-model="radio" label="2">线下</el-radio>
         </el-radio-group>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="上课地址" v-if="show==true">
         <el-cascader placeholder="支持到地级市" :options="address_check" filterable></el-cascader>
       </el-form-item>
@@ -149,7 +149,7 @@
               <option label="客户端" value="1">是</option>
             </select>
           </p>
-          <p ><el-button @click="deleteTest_1" size='mini' style="color:white;background-color:#e6563a;">撤销</el-button></p>
+          <p ><el-button @click="deleteTest_1(i)" size='mini' style="color:white;background-color:#e6563a;">撤销</el-button></p>
         </div>
       </el-form-item>
     </el-form>
@@ -272,12 +272,12 @@
         <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label>
           <p>{{seeclassneeds.need_four}}</p>
         </el-form-item>
-        <el-form-item
+        <!-- <el-form-item
           style="border:1px solid silver;margin: 0; border-bottom:none;background-color:silver;"
           label="需求五:"
         >
           <p>学生上课时间期限，可排课时间？（北京时间）每次课上几小时？</p>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label>
           <p>{{seeclassneeds.need_five}}</p>
         </el-form-item>
@@ -725,8 +725,8 @@ export default {
         type: "warning"
       });
     },
-    deleteTest_1() {
-      this.editableTabs_1.pop(this.editableTabs_1);
+    deleteTest_1(index) {
+     this.editableTabs_1.splice(index,1);
       if (this.editableTabs_1.length == 0) {
         this.open4();
       }
