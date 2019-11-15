@@ -116,12 +116,9 @@
           </el-table-column>
         </el-table>
         <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
           :current-page.sync="currentPage"
-          :page-sizes="[6,8,10,12]"
-          :page-size="8"
-          layout="total, sizes, prev, pager, next"
+          :page-size="10"
+          layout="total,  prev, pager, next"
           :total="tableData.length"
         ></el-pagination>
         <el-dialog 
@@ -223,12 +220,10 @@
           </el-table-column>
         </el-table>
         <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
+   
           :current-page.sync="currentPage"
-          :page-sizes="[6,8,10,12]"
-          :page-size="8"
-          layout="total, sizes, prev, pager, next"
+          :page-size="10"
+          layout="total, prev, pager, next"
           :total="tableData.length"
         ></el-pagination>
         <!-- 填写课堂反馈 -->
@@ -455,7 +450,7 @@ export default {
       }, //老师在这里疯狂反馈
       course: "", //课程ID
       currentPage: 1, //当前页
-      pagesize: 8,
+      pagesize: 10,
       value_stu: "",
       value_sub: "",
       options_1: [], //学生数组总数据
@@ -550,7 +545,6 @@ export default {
       this.$apis.common.course_feedback(parms).then(res => {
         if (res.data.code == 1) {
           this.formLabelAlign = res.data.data;
-          console.log(res.data.data)
         }
       });
     },
@@ -565,6 +559,13 @@ export default {
           this.gridData = res.data.data;
         }
       });
+      // this.getdata()
+            this.$apis.common.student_course({course_type:2}).then(res => {
+        if (res.data.code == 1) {
+          this.tableData = res.data.data.list;
+        }
+      });
+       this.change_value='2'
     },
     handleSizeChange(val) {
       this.pagesize = val * 1;

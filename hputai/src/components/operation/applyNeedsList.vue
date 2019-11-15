@@ -575,28 +575,38 @@ export default {
             let params = {
               app_id: b.id
             };
-            this.get_application({
-              //查看报名表数据
-              params,
-              url: "/api/api_get_application"
-            });
-            this.get_needs({
-              //查看排课需求
-              params,
-              url: "/api/api_get_needs"
-            });
-            mapState([
-              "needs",
-              "banzhuren_list",
-              "zhujiao_data",
-              "jiaowu_data",
-              "application"
-            ]);
+            // this.get_application({
+            //   //查看报名表数据
+            //   params,
+            //   url: "/api/api_get_application"
+            // });
+            this.$apis.common.get_application(params).then(res=>{
+              if(res.data.code==1){
+this.seeapplytable =res.data.data
+              }
+            })
+                        this.$apis.common.get_needs(params).then(res=>{
+              if(res.data.code==1){
+  this.seeclassneeds =res.data.data
+              }
+            })
+            // this.get_needs({
+            //   //查看排课需求
+            //   params,
+            //   url: "/api/api_get_needs"
+            // });
+            // mapState([
+            //   "needs",
+            //   "banzhuren_list",
+            //   "zhujiao_data",
+            //   "jiaowu_data",
+            //   "application"
+            // ]);
             // this.form1.app_id= b.id
-            this.seeclassneeds = this.needs;
-            console.log(this.seeclassneeds);
+            // this.seeclassneeds = this.needs;
+            // console.log(this.seeclassneeds);
             this.app_id = b.id;
-            this.seeapplytable = this.application;
+            // this.seeapplytable = this.application;
             this.getbanzhurenName();
           } else {
             this.$message({

@@ -68,6 +68,11 @@ export default {
       let url = "/api/api_get_application"
       return shuju.getdata(url, params)
     },
+        //查看报名表接口
+        get_needs(params) {
+          let url = "/api/api_get_needs"
+          return shuju.getdata(url, params)
+        },
   ///api_adviser_list获取课程顾问列表
   adviser_list(params) {
     let url = "/api/api_adviser_list"
