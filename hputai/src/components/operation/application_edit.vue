@@ -42,14 +42,14 @@
           </p>
           <p v-if="item.price&&item.classhour">{{item.price*item.classhour}}</p>
           <p v-if="item.price==''||item.classhour==''">待填充</p>
-          <p>{{item.is_one=='1'?'正课':item.is_one=='2'?'试听':'辅导'}}
+          <p>{{item.course_type==1?'正课':item.course_type==2?'试听':'辅导'}}
 
           </p>
-          <p>{{item.is_one=='0'?'否':'是'}}</p>
-          <p>{{item.is_one=='0'?'否':'是'}}
+          <p>{{item.course_id==0?'否':'是'}}</p>
+          <p>{{item.is_one==0?'否':'是'}}
 
           </p>
-          <p>{{item.is_one=='0'?'否':'是'}}
+          <p>{{item.is_group==0?'否':'是'}}
           </p>
 
         </div>
@@ -364,7 +364,7 @@ export default {
             need_two: this.form2.need_two,
             need_three: this.form2.need_three,
             need_four: this.form2.need_four,
-            need_five: this.form2.need_five,
+            // need_five: this.form2.need_five,
             app_id: this.$route.query.id,
             students_data: [],
             subjects_data: []

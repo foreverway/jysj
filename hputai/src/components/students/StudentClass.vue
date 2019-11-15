@@ -207,7 +207,7 @@
               <el-button
                 size="mini"
                 v-if="scope.row.feedback_txt=='查看课堂反馈'"
-                @click="fillFeedback_see(scope.row.course_id)"
+                @click="fillFeedback_see(scope.row.course_id,scope.row)"
                 style="color:blue"
               >{{scope.row.feedback_txt}}</el-button>
               <el-button
@@ -451,6 +451,7 @@ export default {
       course: "", //课程ID
       currentPage: 1, //当前页
       pagesize: 10,
+      thisDay:'', //当天
       value_stu: "",
       value_sub: "",
       options_1: [], //学生数组总数据
@@ -526,7 +527,13 @@ export default {
       this.form.course_id = this.course;
       this.$apis.common.post_feedback_add(this.form).then(res => {
         if (res.data.code == 1) {
-          (this.dialogFromVisible = false),
+          this.dialogFromVisible = false
+      //        this.$apis.common.student_course({course_type:2}).then(res => {
+      //   if (res.data.code == 1) {
+      //     this.tableData = res.data.data.list;
+      //   }
+      // });
+          this.searchDay( this.thisDay) 
             this.$message({
               type: "success",
               message: "提交成功"
@@ -550,22 +557,21 @@ export default {
     },
     fillFeedback(a) {
       this.dialogFromVisible = true;
-      this.course = a;
-      let parms = {
-        course_id: a
-      };
-      this.$apis.common.feedback_add(parms).then(res => {
-        if (res.data.code == 1) {
-          this.gridData = res.data.data;
-        }
-      });
-      // this.getdata()
-            this.$apis.common.student_course({course_type:2}).then(res => {
-        if (res.data.code == 1) {
-          this.tableData = res.data.data.list;
-        }
-      });
-       this.change_value='2'
+      // this.course = a;
+      // let parms = {
+      //   course_id: a
+      // };
+      // this.$apis.common.feedback_add(parms).then(res => {
+      //   if (res.data.code == 1) {
+      //                this.$apis.common.student_course({course_type:2}).then(res => {
+      //   if (res.data.code == 1) {
+      //     this.tableData = res.data.data.list;
+      //   }
+      // });
+      //   }
+      // });
+
+      //  this.change_value='2'
     },
     handleSizeChange(val) {
       this.pagesize = val * 1;
@@ -668,12 +674,14 @@ export default {
       });
     },
     searchDay(a) {
+      this.thisDay=a
       let parms = {
         admin_id: this.getdataCookie("admin_id"),
         page: 1,
         course_type: this.change_value,
         start_time: a
       };
+      // this
       this.$apis.common.student_course(parms).then(res => {
         if (res.data.code == 1) {
           this.tableData = res.data.data.list;
