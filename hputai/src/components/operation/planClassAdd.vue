@@ -471,26 +471,29 @@ export default {
       let params = {
         app_id: this.apply_data.app_id
       };
-      this.get_application({
-        //查看报名表数据
-        params,
-        url: "/api/api_get_application"
-      });
-      this.seeapplytable = this.application;
-    },
 
+      this.$apis.common.get_application(params).then(res=>{
+        if(res.data.code==1){
+      this.seeapplytable = res.data.data;
+
+        }
+      })
+    
+
+    },
     seeClassNeeds(a) {
       //查看排课需求的弹框
       let params = {
         app_id: this.apply_data.app_id
       };
       this.dialogTableVisible_seeClassNeeds = true;
-      this.get_needs({
-        //查看排课需求
-        params,
-        url: "/api/api_get_needs"
-      });
-      this.seeclassneeds = this.needs;
+    
+      this.$apis.common.get_needs(params).then(res=>{
+        if(res.data.code==1){
+      this.seeclassneeds = res.data.data;
+
+        }
+      })
    // console.log(this.region_list)地址总列表
 
 

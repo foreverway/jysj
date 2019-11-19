@@ -508,12 +508,13 @@ export default {
         app_id: this.$route.query.id
       };
       this.dialogTableVisible_seeClassNeeds = true;
-      this.get_needs({
-        //查看排课需求
-        params,
-        url: "/api/api_get_needs"
-      });
-      this.seeclassneeds = this.needs;
+      this.$apis.common.get_needs(params).then(res=>{
+        if(res.data.code==1){
+          this.seeclassneeds=res.data.data
+      // this.seeclassneeds = this.needs;
+
+        }
+      })
     }, //查看老师课表的弹框
     seeTeacherClass() {
       let params = {

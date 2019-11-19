@@ -39,7 +39,7 @@
       <div class="table_div data_list posi_right" v-if="change_value=='1'">
         <el-table
           class
-          :data="tableData.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+          :data="tableData"
           :header-cell-style="{background:'#f4f4f4'}"
           :row-class-name="tableRowClassName"
           style="margin-top:20px ,"
@@ -115,12 +115,17 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-pagination
+        <span v-if="tableDataNum">
+        <el-pagination 
           :current-page.sync="currentPage"
           :page-size="10"
+        @prev-click="prev"
+        @next-click="next"
+        @current-change="current"
           layout="total,  prev, pager, next"
-          :total="tableData.length"
+          :total="tableDataNum.count"
         ></el-pagination>
+        </span>
         <el-dialog 
         :close-on-click-modal='false'
         title="其他方式进入教室" :visible.sync="centerDialogVisible" center>
@@ -167,7 +172,7 @@
       <div class="table_div data_list posi_right" v-if="change_value=='2'">
         <el-table
           class
-          :data="tableData.slice((currentPage-1)*pagesize,(currentPage)*pagesize)"
+          :data="tableData"
           :header-cell-style="{background:'#f4f4f4'}"
           :row-class-name="tableRowClassName"
           style="margin-top:20px,"
@@ -219,13 +224,18 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-pagination
-   
+        <span v-if="tableDataNum">
+        <el-pagination 
           :current-page.sync="currentPage"
           :page-size="10"
-          layout="total, prev, pager, next"
-          :total="tableData.length"
+        @prev-click="prev"
+        @next-click="next"
+        @current-change="current"
+          layout="total,  prev, pager, next"
+          :total="tableDataNum.count"
         ></el-pagination>
+        </span>
+
         <!-- 填写课堂反馈 -->
         <el-dialog 
         :close-on-click-modal='false'
@@ -430,6 +440,7 @@ export default {
       innerVisible: false, //内层弹框
       form: {
         feedback_type: 1,
+        course_id:'',
         details_1: "",
         details_2: "",
         details_3: "",
@@ -440,6 +451,14 @@ export default {
         details_8: "",
         details_9: ""
       }, //from提交的数据
+      student_form:{
+        course_type:'',
+        start_time:'',
+        search:'',
+        page:'',
+        student_id:'',
+        page:''
+      },
       msg: ["2019-06-13 ", "2019-06-18", "2019-06-16"],
       options1: [
         //学生姓名的数据
@@ -465,7 +484,8 @@ export default {
       gridData: {}, //弹出框的表格数据
       centerDialogVisible: false, //其他方式打开课表
       otherWey: {}, //从其他方法进入直播
-      num: 0 //次数的变化
+      num: 0, //次数的变化
+      tableDataNum:'', //总页数
     };
   },
   created() {
@@ -524,7 +544,9 @@ export default {
     },
 
     onSubmit() {
-      this.form.course_id = this.course;
+     
+    this.form.course_id = this.course;
+     console.log(this.form.course_id)
       this.$apis.common.post_feedback_add(this.form).then(res => {
         if (res.data.code == 1) {
           this.dialogFromVisible = false
@@ -555,9 +577,10 @@ export default {
         }
       });
     },
-    fillFeedback(a) {
+    fillFeedback(a,b) {
       this.dialogFromVisible = true;
-      // this.course = a;
+      // console.log(a,b)
+       this.course = a;
       // let parms = {
       //   course_id: a
       // };
@@ -580,16 +603,34 @@ export default {
       this.currentPage = val;
       this.getClassList(val);
     },
+        current(num) {
+      //当前页数
+      this.currentPage = num;
+      this.getClassList();
+    },
+    next() {
+      this.currentPage++;
+      this.getClassList();
+    },
+    prev() {
+      //上一页
+      if (this.currentPage > 1) {
+        this.currentPage--;
+        this.getClassList();
+      }},
     getClassList(a) {
       this.$emit("update:changeTab", this.change_value);
       //这里的this是父级的作用域  也就是执行父级的该函数
       let parms = {
         course_type: this.change_value,
-        page: a ? a : 1
+        page: this.currentPage
       };
       this.$apis.common.student_course(parms).then(res => {
         if (res.data.code == 1) {
           this.tableData = res.data.data.list;
+          this.tableDataNum=res.data.data
+          // console.log(this.tableData)
+
         }
       });
     },

@@ -50,8 +50,10 @@
     </div>
 
     <div class="so_main_right">
-      <!-- <el-button type="danger"  v-if="msg.data.isAdmin=='1'" @click="dialogVisible= true,form1.type=1">入款</el-button>
-      <el-button type="primary"  v-if="msg.data.isAdmin=='1'" @click="dialogVisible= true,form1.type=2">扣款</el-button>-->
+            <!-- <el-button type="danger"  v-if="msg.data.isAdmin=='1'" @click="dialogVisible= true,form1.type=1">入款</el-button> -->
+
+      <el-button type="danger"  @click="dialogVisible= true,form1.type=1">入款</el-button>
+      <el-button type="primary"  @click="dialogVisible= true,form1.type=2">扣款</el-button>
 
       <el-dialog
         :close-on-click-modal="false"
@@ -201,17 +203,21 @@ export default {
   methods: {
     //验证姓名和学币余额
     ifnamemoney() {
+      if (this.form1.uname != '') {
       let parms = { uname: this.form1.uname };
       let parms2 = { tel: this.form1 };
       this.$apis.students.ifusername(parms).then(res => {
-        if (res.data.code == -1) {
-          this.$apis.students.user_learnmoney(parms2).then(res => {
+        if (res&&res.data.code == 1) {
+          // this.$apis.students.user_learnmoney(parms2).then(res => {
             this.ifname = res.data.data.learnmoney;
-          });
-        } else {
-          this.ifname = "用户名不存在";
-        }
-      });
+          // });
+        }else {
+          this.ifname =  '用户不存在'; 
+
+          
+        } 
+      })
+      }
     },
     //序号排列
     indexMethod(index) {
