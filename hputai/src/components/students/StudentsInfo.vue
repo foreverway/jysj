@@ -14,8 +14,8 @@
       <ul :data="form">
         <li>
           <span>地区</span>
-          <span v-if="form.subject_name">{{form.subject_name}}</span>
-          <span v-if="!form.subject_name" style="color:silver;">暂无记录</span>
+          <span v-if="form.always_area">{{form.always_area}}</span>
+          <span v-if="!form.always_area" style="color:silver;">暂无记录</span>
 
         </li>
         <li>
@@ -70,21 +70,21 @@
         </li>
         <li>
           <span>进线渠道</span>
-          <span style=" border-top-style:hidden;" v-if="form.subject_name">{{form.end_time}}</span>
-                    <span style=" border-top-style:hidden;color:silver;" v-if="!form.subject_name" >暂无记录</span>
+          <span style=" border-top-style:hidden;" v-if="form.inchannel">{{form.end_time}}</span>
+                    <span style=" border-top-style:hidden;color:silver;" v-if="!form.inchannel" >暂无记录</span>
 
         </li>
         <li>
           <span>接入人</span>
-          <span style=" border-top-style:hidden;">{{form.inchannel}}</span>
+          <span style=" border-top-style:hidden;">{{form.inpeople}}</span>
         </li>
         <li>
           <span>班主任</span>
-          <span>班主任ID{{form.banzhuren_id}}</span>
+          <span>{{form.banzhuren_id}}</span>
         </li>
         <li>
           <span>顾问</span>
-          <span v-if="form.add_admin_id">顾问ID{{form.add_admin_id}}</span>
+          <span v-if="form.add_admin_id">{{form.add_admin_id}}</span>
           <span v-if="!form.add_admin_id" style=" border-top-style:hidden;color:silver;" >暂无记录</span>
 
         </li>

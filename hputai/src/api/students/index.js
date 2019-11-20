@@ -37,7 +37,7 @@ export default {
            },
            //编辑获取学员信息 
            students_edit (params) {
-            let url='/api/api_students_edit'
+            let url='/api/api_students_base'
             return shuju.getdata(url,params)
            },
            //提交编辑

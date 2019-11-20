@@ -20,6 +20,10 @@ Vue.component('zx-head', zxhead);
 //把组件放在第三方样式之后，在main.js中引入顺序决定了打包后css的顺序
 import router from './router'
 import store from './store'//引入store
+// const originalPush = Router.prototype.push
+// Router.prototype.push = function push(location) {
+//   return originalPush.call(this, location).catch(err => err)
+// }
 Vue.prototype.$apis = apis
 Vue.use(ElementUI);
 Vue.use(VCharts);
