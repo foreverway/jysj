@@ -591,7 +591,7 @@ export default {
     },
     getData() {
       this.$apis.students //获取学生信息
-        .students_edit({ id: this.$route.query.id })
+        .info_students_edit({ id: this.$route.query.id })
         .then(res => {
           if (res.data.code == 1) {
             this.form = res.data.data;

@@ -546,7 +546,6 @@ export default {
     onSubmit() {
      
     this.form.course_id = this.course;
-     console.log(this.form.course_id)
       this.$apis.common.post_feedback_add(this.form).then(res => {
         if (res.data.code == 1) {
           this.dialogFromVisible = false
@@ -574,13 +573,32 @@ export default {
       this.$apis.common.course_feedback(parms).then(res => {
         if (res.data.code == 1) {
           this.formLabelAlign = res.data.data;
+          this.gridData =this.formLabelAlign
         }
       });
     },
     fillFeedback(a,b) {
       this.dialogFromVisible = true;
-      // console.log(a,b)
+          let parms = {
+        course_id: a
+      };
+            this.$apis.common.course_feedback(parms).then(res => {
+        if (res.data.code == 1) {
+          this.formLabelAlign = res.data.data;
+          this.gridData =this.formLabelAlign
+        }
+      });
        this.course = a;
+          this.form.details_1=''
+           this.form.details_2=''
+            this.form.details_3=''
+             this.form.details_4=''
+              this.form.details_5=''
+               this.form.details_6=''
+                this.form.details_7=''
+this.form.details_8=''
+                 this.form.details_9='' 
+
       // let parms = {
       //   course_id: a
       // };
