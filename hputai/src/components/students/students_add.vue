@@ -23,7 +23,7 @@
         </div>
         <div class="input_1">
           <el-form-item label="手机号：" prop="tel">
-            <el-input v-model.number="form.tel" @blur="ifphone" style="width:150px"></el-input>
+            <el-input v-model="form.tel" @blur="ifphone" style="width:150px"></el-input>
           </el-form-item>
         </div>
         <div class="input_1">

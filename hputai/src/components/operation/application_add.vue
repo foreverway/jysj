@@ -72,7 +72,6 @@
             <select v-model="item.course_type" v-bind:id="'attr' + i" placeholder="课程性质">
               <option label="试听" value="2"></option>
               <option label="正课" value="1"></option>
-              <option label="辅导" value="3"></option>
             </select>
           </p>
           <p>
@@ -483,7 +482,7 @@ export default {
         classhour: "",
         price: needArr.online_price,
         amount:'',
-        course_type: 0, //课程类型
+        course_type: 1, //课程类型
         course_id: 0, //班课
         is_one: 1, //一对一？
         is_group: 0 //自主班课?
@@ -494,7 +493,7 @@ export default {
         classhour: "",
         price: needArr.offline_price,
         amount:'',
-        course_type: 0, //课程类型
+        course_type: 1, //课程类型
         course_id: 0, //班课
         is_one: 1, //一对一？
         is_group: 0 //自主班课?

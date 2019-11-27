@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <el-container>
-      <zx-head title="学生账户明细"></zx-head>
+      <zx-head title="账户明细"></zx-head>
       <el-header>
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <el-tab-pane label="学习币明细" name="1"></el-tab-pane>

@@ -2,7 +2,7 @@
   <div class="main">
     <el-page-header @back="goBack" content="编辑账户"></el-page-header>
 
-    <el-form ref="form" :model="form" :rules="rules" label-width="80px" style="margin-top:20px">
+    <el-form ref="form" :model="form" :rules="rules" label-width="100px" style="margin-top:20px">
       <el-form-item label="账户名">
         <el-input v-model="form.admin_name"></el-input>
       </el-form-item>
@@ -37,7 +37,12 @@
       <el-form-item label="QQ">
         <el-input v-model="form.admin_qq"></el-input>
       </el-form-item>
-
+      <el-form-item label="是否战队长">
+    <el-radio-group v-model="form.is_captain">
+      <el-radio label="0">否</el-radio>
+      <el-radio label="1">是</el-radio>
+    </el-radio-group>
+  </el-form-item>
       <el-form-item label="账户角色">
         <el-select v-model="form.role_id" placeholder="请选择">
           <el-option
@@ -73,6 +78,8 @@ export default {
       rolelist: "",
       id: this.$route.params.id*1, //用户id
       form: {
+                  is_captain:'',
+
         admin_id: "",
         admin_name: "",
         admin_tel: "",

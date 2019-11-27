@@ -34,7 +34,7 @@
           <p>自组班课</p>
         </div>
         <div class="add_ul_new" v-for="(item,i) in editableTabs_1" :key="i">
-          <p>{{item.subject_name}}</p>
+          <p>{{item.subject_name?item.subject_name:'没有填写科目'}}</p>
           <span style="display:none;" v-bind:id="'course_id'+ i">{{item.course_id}}</span>
           <p>{{item.classhour}}
           </p>
@@ -42,9 +42,7 @@
           </p>
           <p v-if="item.price&&item.classhour">{{item.price*item.classhour}}</p>
           <p v-if="item.price==''||item.classhour==''">待填充</p>
-          <p>{{item.course_type==1?'正课':item.course_type==2?'试听':'辅导'}}
-
-          </p>
+          <p>{{item.course_type==1?'正课':'试听'}}</p>
           <p>{{item.course_id==0?'否':'是'}}</p>
           <p>{{item.is_one==0?'否':'是'}}
 
@@ -77,18 +75,18 @@
       </el-form-item>
     </el-form>
     <!-- 步骤二 -->
-    <div>
-      <el-form ref="form2" :model="form2" label-width="120px">
-        <el-form-item label="需求1" >
+    <div class='need_div_p'>
+      <el-form ref="form2"  :label-position="labelPosition" :model="form2" label-width="120px">
+        <el-form-item label="学生学习需求是什么？（零基础先修、同步辅导、巩固复习、强化冲刺）" >
           <p>{{form2.need_one}}</p>
         </el-form-item>
-        <el-form-item label="需求2" >
+        <el-form-item label="学生之前的学习经历和学习基础（之前在那里上的学？学习基础怎么样？）" >
           <p>{{form2.need_two}}</p>
         </el-form-item>
-        <el-form-item label="需求3" >
+        <el-form-item label="学生希望和什么样的老师学习" >
           <p>{{form2.need_three}}</p>
         </el-form-item>
-        <el-form-item label="需求4">
+        <el-form-item label="学生上课时间期限，可排课时间？（北京时间）每次课上几小时？">
           <p>{{form2.need_four}}</p>
         </el-form-item>
         <!-- <el-form-item label="需求5">
@@ -111,6 +109,7 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
+       labelPosition: 'top',
       show: "false",
       input: "",
       input1: "",
@@ -504,6 +503,11 @@ export default {
   right:0;
   left:0;
   margin:0 auto;
+}
+.need_div_p p{
+  background-color: #fff;
+  border-radius:20px;
+  padding:0 1%;
 }
 /* *{
        padding:0;

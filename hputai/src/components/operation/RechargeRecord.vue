@@ -1,6 +1,6 @@
 <template>
-  <div class="main" title="充值记录单">
-                <zx-head title="充值记录单" ></zx-head>
+  <div class="main" >
+                <zx-head title="充值记录" ></zx-head>
 
     <div class="so_main_left">
       <el-form :inline="true" :model="form" label-width="90px" >
@@ -30,8 +30,9 @@
         <el-form-item label="顾问1：">
           <el-select
             clearable
+            multiple
             style="width:150px"
-            v-model="form.consultant1"
+            v-model="consultant1"
             filterable
             placeholder="搜索选择"
             @change="getadata"
@@ -39,7 +40,7 @@
             <el-option
               v-for="item in adviser"
               :key="item.id"
-              :label="item.adviser+item.id"
+              :label="item.adviser"
               :value="item.id"
             ></el-option>
           </el-select>
@@ -141,7 +142,7 @@
                 <el-form-item label="报课项目">
           <el-select
             clearable
-            style="width:140px"
+            style="width:150px"
             
             v-model="form.classproject"
             placeholder="请选择"
@@ -360,13 +361,15 @@ export default {
       classs: "", // 进项线目数据
       adviser: "", //顾问数据
       banzhuren: "", //班主任数据
+      consultant1: [], //顾问1
       form: {
         // search: "", //搜索学员姓名条件
          page: 1,
         // in_people: "", //实收人
         // inproject: "", //进线项目,课程id
         // inchannel: "", //进线渠道 ,进线渠道,1百度SEM,2转介绍
-        // consultant1: "", //顾问1
+               consultant1: '', //顾问1
+
         // teacher: "", //班主任
         // classproject:'',//报课项目
         // collection_class: "", //收款类别
@@ -398,7 +401,7 @@ export default {
    // this.$nextTick(function(){
     this.opration = this.rolemenu[1].children;
     this.menuArr_=this.opration.filter(item=>{
-     return item.menu_name=="充值记录单"
+     return item.menu_name=="充值记录"
     })
     this.menuArr=this.menuArr_[0].children
   },
@@ -474,6 +477,8 @@ export default {
 
     getadata() {
       //总数据
+      // this.form.consultant1=this.consultant1
+      this.form.consultant1=JSON.stringify(this.consultant1)
       this.$apis.common.recharge_list(this.form).then(res => {
         if (res.data.code == 1) {
           this.msg = res.data;

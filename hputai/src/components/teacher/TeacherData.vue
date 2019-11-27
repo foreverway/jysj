@@ -1,6 +1,6 @@
 <template>
   <div class="so_main">
-            <zx-head title="授课数据" ></zx-head>
+            <zx-head title="教师课表" ></zx-head>
 
     <div class="so_main_left">
       <el-input

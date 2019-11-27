@@ -1,6 +1,6 @@
 <template>
   <div class="so_main">
-    <zx-head title="考勤"></zx-head>
+    <zx-head title="上课考勤"></zx-head>
 
     <div class="so_main_left">
       <el-form :inline="true" :model="form" class="demo-form-inline">

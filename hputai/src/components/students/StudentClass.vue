@@ -45,6 +45,12 @@
           style="margin-top:20px ,"
         >
           <el-table-column prop="start_time" label="开始时间" width="140"></el-table-column>
+                       <el-table-column  label="星期">
+                                <template slot-scope="scope">
+                                  {{scope.row.week?scope.row.week:'未定义'}}
+                                </template>
+                              </el-table-column>
+
           <el-table-column prop="classhour" label="课时"></el-table-column>
           <el-table-column prop="student_name" label="学生姓名"></el-table-column>
           <el-table-column prop="teacher_name" label="讲师姓名"></el-table-column>
@@ -141,13 +147,13 @@
             :label-position="labelPosition"
           >
             <el-form-item label="方式一：参与码进入教室" style="font-weight:700;">
-              <p v-if="otherWey.code">
+              <p style="display:inline-block;margin:0 20px;">
                 你的参与码：
-                <span style="color:orange;">{{otherWey.code}}</span>
+                <span style="color:orange;">{{otherWey.student_code?otherWey.student_code:'暂未生成'}}</span>
               </p>
-              <p v-if="!otherWey.code">
-                你的参与码：
-                <span style="color:orange;">暂未生成</span>
+                <p style="display:inline-block;margin:0 20px;">
+                学生的参与码：
+                <span style="color:orange;">{{otherWey.code?otherWey.code:'暂未生成'}}</span>
               </p>
               <p>打开“云端课堂”的PC端或者APP端，输入参与码，即可进入教室。</p>
               <p>
@@ -178,6 +184,12 @@
           style="margin-top:20px,"
         >
           <el-table-column prop="start_time" label="开始时间" width="140"></el-table-column>
+                              <el-table-column  label="星期">
+                                <template slot-scope="scope">
+                                  {{scope.row.week?scope.row.week:'未定义'}}
+                                </template>
+                              </el-table-column>
+
           <el-table-column prop="classhour" label="课时" width="50"></el-table-column>
           <el-table-column prop="student_name" label="学生姓名"></el-table-column>
           <el-table-column prop="teacher_name" label="讲师姓名"></el-table-column>

@@ -110,7 +110,7 @@
         <div class="add_ul_new" v-for="(item,i) in editableTabs_1" :key="i">
           <span style="display:none;" v-bind:id="'course_id'+ i">{{item.course_id}}</span>
           <p>
-            <el-input v-model="item.times" v-bind:id="'classhour' + i"></el-input>
+            <el-input v-model="item.times" @input="allMoney" v-bind:id="'classhour' + i"></el-input>
           </p>
           <p class="bigger">
             <!-- <el-input v-model.number="item.price" v-bind:id="'mach' + i" placeholder="单价(元)"></el-input> -->
@@ -120,10 +120,10 @@
               value-format="timestamp"
               type="datetime"
               placeholder
-              @change="choose_time"
+              @change="choose_time(item.start_time,i)"
             ></el-date-picker>
           </p>
-          <p v-bind:id="'week'+ i">周次</p>
+          <p >{{item.week?item.week:'未定义'}}</p>
           <p>
             <select
               v-model="item.course_type"
@@ -151,6 +151,9 @@
           </p>
           <p ><el-button @click="deleteTest_1(i)" size='mini' style="color:white;background-color:#e6563a;">撤销</el-button></p>
         </div>
+      </el-form-item>
+            <el-form-item v-if="allMoney()>0" :inline="true" label="合计课时">
+        <p>{{allMoney()}}</p>
       </el-form-item>
     </el-form>
     <el-button type="primary" @click="onSubmit">确定</el-button>
@@ -491,7 +494,6 @@ export default {
       this.$apis.common.get_needs(params).then(res=>{
         if(res.data.code==1){
       this.seeclassneeds = res.data.data;
-
         }
       })
    // console.log(this.region_list)地址总列表
@@ -592,7 +594,7 @@ export default {
       this.$router.push({ path: "/login" });
     },
     //选择日期之后生成周几
-    choose_time(result) {
+    choose_time(result,i) {
       function msToDate(msec) {
         let datetime = new Date(msec);
         let year = datetime.getFullYear();
@@ -625,8 +627,40 @@ export default {
         };
         return result.withoutTime;
       }
-      var modeTime = msToDate(result);
-      //console.log(modeTime)
+      var arrs = msToDate(result);
+         var thisDay=''
+      function changeStoB(a){
+        switch(a){
+          case 1 :
+            thisDay='一'
+           break;
+                  case 2 :
+           thisDay= '二'
+           break;
+                  case 3 :
+           thisDay= '三'
+           break;
+                  case 4 :
+           thisDay= '四'
+           break;
+                  case 5 :
+           thisDay= '五'
+           break;
+                  case 6 :
+           thisDay= '六'
+           break;
+                  case 7 :
+           thisDay= '日'
+           break;
+        }
+      }
+      for(let j=0;j<this.editableTabs_1.length;j++){
+        if(j==i){
+          changeStoB(new Date(arrs).getDay())
+          this.editableTabs_1[j].week=`星期${thisDay}`
+        }
+      }
+      return `'星期'${new Date(arrs).getDay()}`
     },
     //获取报读科目列表
     addTest() {
@@ -652,7 +686,7 @@ export default {
         this.editableTabs_1.push({
           classhour: "",
           start_time: "", //选择开始日期
-          // input_week: "", //周几
+          week: "", //周几
           course_type: "1", //课程类型
           play_type: "1"
         });
@@ -696,7 +730,6 @@ export default {
       parms.students_id = studentStr.join();
       parms.course_data = this.subjects_data;
       //console.log(this.editableTabs_1.length,"提交的时候数组长度",this.editableTabs_1)
-      console.log(parms, "总数据");
       if (all_hour * 1 <= this.apply_data.classhour * 1) {
         //  console.log(parms)
         this.$apis.common.application_arrange_post(parms).then(res => {
@@ -737,7 +770,13 @@ export default {
     goBack() {
       history.back(-1);
     }, // 复制链接
-
+    allMoney(){
+      var Moner=0
+      for(let i=0;i<this.editableTabs_1.length;i++){
+         Moner+= this.editableTabs_1[i].times*1
+      }
+      return Moner
+    },
     get_apply_data() {
       //获取该报名表的信息s
       let parms = {

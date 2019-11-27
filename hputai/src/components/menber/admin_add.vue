@@ -4,7 +4,7 @@
 <el-page-header @back="goBack" content="新建账户" style="margin-bottom:20px" >
 </el-page-header>
 
-<el-form ref="form" :model="form" :rules="rules" label-width="80px">
+<el-form ref="form" :model="form" :rules="rules" label-width="100px">
   <el-form-item label="账户名">
     <el-input v-model="form.admin_name"></el-input>
   </el-form-item>
@@ -49,7 +49,12 @@
     </el-option>
     </el-select>
   </el-form-item>
- 
+      <el-form-item label="是否战队长">
+    <el-radio-group v-model="form.is_captain">
+      <el-radio label="0">否</el-radio>
+      <el-radio label="1">是</el-radio>
+    </el-radio-group>
+  </el-form-item>
   <el-form-item>
     <el-button type="primary" @click="onSubmit">确定</el-button>
     <el-button @click="goBack">取消</el-button>
@@ -68,6 +73,7 @@
       return {
         rolelist:'',
         form: {
+          is_captain:'0',
           admin_name: '',
           admin_tel: '',
           admin_pass: '',

@@ -93,6 +93,9 @@
       <span style="margin-left:30px">累计消耗：</span>
       <span style="color:red">{{msg.data.outamount}}</span>
       <span>元</span>
+            <span style="margin-left:30px">累计余额：</span>
+      <span style="color:red">{{msg.data.learnmoney}}</span>
+      <span>元</span>
     </p>
     <!-- <el-button type="primary" @click="ifinputselect" style="margin-top:20px">审核</el-button> -->
 <span v-if="msg.data">

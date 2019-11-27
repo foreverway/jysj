@@ -27,7 +27,7 @@
       <el-table-column prop="first_time" label="首次缴费时间"></el-table-column>
       <el-table-column fixed="right" prop label="操作" width="220px">
         <template slot-scope="scope">
-          <span v-for="(item,index) in getStuList()" :key="index">
+          <span v-for="(item,index) in thisMenu" :key="index">
             <el-button
               type="button"
               size="mini"
@@ -92,7 +92,8 @@ export default {
         search: "",
         page: 1
       },
-      tableData: []
+      tableData: [],
+      thisMenu:[]
     };
   },
   created() {
@@ -130,7 +131,23 @@ export default {
       }
     },
     getStuList() {
-      return this.rolemenu[0].children[0].children;
+      // return this.rolemenu[0].children[0].children;
+                 var menu= this.rolemenu.forEach((item, index, array) => {
+        //遍历菜单
+        if (item.menu_name=="学员管理") {
+          //有子集
+          for (let j = 0; j < item.children.length; j++) {
+            //遍历子集
+            var a = item.children.filter(function(item) {
+              return item.menu_url == "/StudentsList";
+            });
+          this.thisMenu=a[0].children   
+            
+          return a
+
+          }
+        } 
+      });
     },
     trueAction(a, b) {
       switch (a) {

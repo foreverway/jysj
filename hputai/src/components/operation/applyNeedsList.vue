@@ -236,7 +236,7 @@
           <p>学生之前的学习经历和学习基础（之前在那里上的学？学习基础怎么样？）</p>
         </el-form-item>
         <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label>
-          <p>{{seeclassneeds.need_three}}</p>
+          <p>{{seeclassneeds.need_one?seeclassneeds.need_one:'这里没有填写需求'}}</p>
         </el-form-item>
         <el-form-item
           style="border:1px solid silver;margin: 0; border-bottom:none;background-color:silver;"
@@ -245,7 +245,7 @@
           <p>学生希望跟什么样的老师学习？</p>
         </el-form-item>
         <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label>
-          <p>{{seeclassneeds.need_four}}</p>
+          <p>{{seeclassneeds.need_three}}</p>
         </el-form-item>
         <el-form-item
           style="border:1px solid silver;margin: 0; border-bottom:none;background-color:silver;"
@@ -253,11 +253,12 @@
         >
           <p>学生上课时间期限，可排课时间？（北京时间）每次课上几小时？</p>
         </el-form-item>
-        <el-form-item style="border:1px solid silver;margin: 0; border-bottom:none;" label>
-          <p>{{seeclassneeds.need_five}}</p>
+        <el-form-item style="border:1px solid silver;margin: 0; " label>
+          <p >{{seeclassneeds.need_four}}</p>
+
         </el-form-item>
       </el-form>
-      <div>
+      <div style="margin-top:10px;">
         <span style="display:inline-block;width:100px;">审核备注:</span>
         <el-input style="width:80%;" v-model="shenghe_value" placeholder="审核备注"></el-input>
       </div>
@@ -356,6 +357,7 @@ export default {
       centerDialogVisible_shenghe: false,
       // textarea: "", //审核的输入框
       // msg: "",
+      thisMenu:[],
       is_pass: "", //审核意见
       banzhuren_list_new: [], //班主任数据
       banzhuren_live: "",
@@ -764,11 +766,28 @@ this.seeapplytable =res.data.data
       }
     },
     getRolenenu() {
-      return this.rolemenu[1].children[1].children;
+           var menu= this.rolemenu.forEach((item, index, array) => {
+        //遍历菜单
+        if (item.menu_name=="操作管理") {
+          //有子集
+          for (let j = 0; j < item.children.length; j++) {
+            //遍历子集
+            var a = item.children.filter(function(item) {
+              return item.menu_url == "/ApplyNeedsList";
+            });
+                        console.log(a)   
+
+          this.thisMenu=a[0].children        
+          return a
+
+          }
+        } 
+      });
+
       //  console.log()
     },
     checkMenu(a) {
-      let hereObj = this.getRolenenu().find(item => {
+      let hereObj = this.thisMenu.find(item => {
         return item.menu_action == a;
       });
       // console.log(hereObj)

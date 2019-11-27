@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-                <zx-head title="分享" ></zx-head>
+                <zx-head title="运营分享" ></zx-head>
 
     <el-container style=" border: 1px solid #eee;height: 100vh;">
       <el-container>

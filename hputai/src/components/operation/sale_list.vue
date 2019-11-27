@@ -1,6 +1,6 @@
  <template>
   <div class="main">
-    <zx-head title="销售情况列表"></zx-head>
+    <zx-head title="销售跟进"></zx-head>
 
     <el-input
       placeholder="模糊搜索"

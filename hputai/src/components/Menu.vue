@@ -129,7 +129,8 @@
                   <!-- 刷新出次级菜单名字 -->
                   <el-menu-item :index="items.menu_url" route style="pointer-events:painted;">
                     <template slot="title">
-                      <span slot="title">{{items.menu_name}}</span>
+                      
+                      <span style="display:inline-block;margin-left:12px;" slot="title">{{items.menu_name}}</span>
                     </template>
                   </el-menu-item>
                 </span>
@@ -259,14 +260,7 @@ sessionStorage.setItem("url",twoUrl);
     $(bodyDiv)[0].style.height=$(window).height()*1-40+'px'
   },
   mounted() {
-//       var matchReg = /(?<=#\/).*?(?=\/)/;
-//     if (window.location.href.split("/#")[1] !== "login") {
-//       sessionStorage.setItem("url", window.location.href.split("/#")[1]);
-//     }
-//     if(window.location.href.match(matchReg)){
-//       let twoUrl='/'+window.location.href.match(matchReg)[0]
-// sessionStorage.setItem("url",twoUrl);
-//     }
+
  if (window.location.href.split("/#")[1] !== "login") {
       sessionStorage.setItem("url", window.location.href.split("/#")[1]);
     }
