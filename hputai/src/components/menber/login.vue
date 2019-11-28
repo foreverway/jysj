@@ -121,7 +121,14 @@ export default {
         admin_pass_sure: ""
       },
       msg: "",
-      peopleInfo: {}
+      peopleInfo: {},
+      helloWord:[
+  "今天也有好心情吗",
+  "浮云一别后，流水十年间",
+  "精英世家，育见未来",
+  "4周年是我们的起点",
+  "每一天都是新的一天，加油",
+      ]
     };
   },
   created() {
@@ -195,6 +202,9 @@ export default {
             ""
         )
       });
+      const sample=arr=>arr[Math.floor(Math.random()*arr.length)];
+      
+      $('.el-notification__title').text(sample(this.helloWord))
     },
     login() {
       this.$apis.menber

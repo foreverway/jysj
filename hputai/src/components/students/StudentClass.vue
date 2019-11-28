@@ -149,11 +149,13 @@
             <el-form-item label="方式一：参与码进入教室" style="font-weight:700;">
               <p style="display:inline-block;margin:0 20px;">
                 你的参与码：
-                <span style="color:orange;">{{otherWey.student_code?otherWey.student_code:'暂未生成'}}</span>
+                                <span style="color:orange;">{{otherWey.code?otherWey.code:'暂未生成'}}</span>
+
               </p>
                 <p style="display:inline-block;margin:0 20px;">
                 学生的参与码：
-                <span style="color:orange;">{{otherWey.code?otherWey.code:'暂未生成'}}</span>
+                                <span style="color:orange;">{{otherWey.student_code?otherWey.student_code:'暂未生成'}}</span>
+
               </p>
               <p>打开“云端课堂”的PC端或者APP端，输入参与码，即可进入教室。</p>
               <p>
