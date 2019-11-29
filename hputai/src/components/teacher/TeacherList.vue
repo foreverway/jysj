@@ -175,8 +175,8 @@
           ></el-cascader>
         </el-form-item>
         <el-form-item label="已选科目">
-          <p v-if="editTeacher.teach_subjects">{{editTeacher.teach_subjects.toString()}}</p>
-          <p v-if="!editTeacher.teach_subjects">待选择..</p>
+          <el-input  v-if="editTeacher.teach_subjects" v-model='editTeacher.teach_subjects'></el-input>
+          <p v-if="!editTeacher.teach_subjects">请选择科目</p>
         </el-form-item>
         <el-form-item label="城市">
           <el-cascader
@@ -365,7 +365,6 @@ export default {
                 }
 
                 this.editTeacher.teacher_id = b.teacher_id * 1;
-                console.log(this.editTeacher);
                 //  this.editTeacher.part_time=res.data.data.part_time
 
                 this.teacher_id = b.teacher_id;
@@ -555,8 +554,9 @@ export default {
     },
     choose_suj(targetName) {
       //科目赋值
-      var lastName = targetName.length == 1 ? targetName[0] : targetName[1];
-      this.arr.push(lastName.subject_name);
+      var lastName = targetName.length == 1 ? targetName[0] : targetName.length == 2?targetName[1] :targetName[2] ;
+   this.arr=this.editTeacher.teach_subjects.split(',')
+    this.arr.push(lastName);
       this.editTeacher.teach_subjects = this.arr.toString();
     },
     choose_city(targetName) {

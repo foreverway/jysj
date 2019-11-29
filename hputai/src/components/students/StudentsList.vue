@@ -175,7 +175,7 @@ export default {
                 if(b.learnmoney>0){
           this.$router.push({
             path: "/StudentsList/ApplicationAdd",
-            query: { username: b.username }
+            query: { username: b.username,allMoney:b.learnmoney }
           });
         }else{
           this.$message({

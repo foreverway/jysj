@@ -127,7 +127,6 @@ export default {
   "浮云一别后，流水十年间",
   "精英世家，育见未来",
   "4周年是我们的起点",
-  "每一天都是新的一天，加油",
       ]
     };
   },
@@ -212,7 +211,7 @@ export default {
         .then(res => {
           if (res.data.code == 1) {
             var d = new Date();
-            d.setTime(d.getTime() + 2 * 3600000);
+            d.setTime(d.getTime() + 7*24 * 3600000);
             //d.setTime(d.getTime()+(5000));
             var expires = "expires=" + d.toGMTString();
             document.cookie =

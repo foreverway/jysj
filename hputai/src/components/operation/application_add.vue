@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-                <zx-head title="添加排课需求" ></zx-head>
+    <zx-head title="添加排课需求"></zx-head>
 
     <el-steps :active="active" finish-status="success">
       <el-step title="填写报名情况"></el-step>
@@ -11,9 +11,6 @@
       <el-form-item label="报名编号">
         <p>{{this.writeCurrentDate()}}</p>
       </el-form-item>
-      <!-- <el-form-item label="报名标题" prop="title">
-        <el-input v-model="form.title"></el-input>
-      </el-form-item> -->
       <el-form-item label="上课地点" prop="radio">
         <el-radio-group v-model="form.radio" @change="whereGo(form.radio)">
           <el-radio :label="1">线上</el-radio>
@@ -45,7 +42,7 @@
           <p id="sss">科目</p>
           <p>课时</p>
           <p>单价(元)</p>
-          <p>总额</p>         
+          <p>总额</p>
           <p>课程性质</p>
           <p>班课</p>
           <p>一对一</p>
@@ -56,17 +53,13 @@
           <p>{{item.title}}</p>
           <span style="display:none;" v-bind:id="'course_id'+ i">{{item.subject_id}}</span>
           <p>
-            <el-input v-model="item.classhour" v-bind:id="'time' + i" placeholder="课时"></el-input>
+            <el-input v-model="item.classhour" @input="showAllMoney" v-bind:id="'time' + i" class="changeColor" placeholder="课时"></el-input>
           </p>
           <p>
             <el-input v-model.number="item.price" v-bind:id="'mach' + i" placeholder="单价(元)"></el-input>
           </p>
-          <p v-if="item.price&&item.classhour">
-            {{item.price*item.classhour}}
-          </p>
-           <p v-if="item.price==''||item.classhour==''">
-            待填充
-          </p>
+          <p v-if="item.price&&item.classhour">{{item.price*item.classhour}}</p>
+          <p v-if="item.price==''||item.classhour==''">待填充</p>
           <!-- <p  v-bind:id="'all_mach' + i"  v-model=item.price>0</p> -->
           <p>
             <select v-model="item.course_type" v-bind:id="'attr' + i" placeholder="课程性质">
@@ -93,9 +86,21 @@
             </select>
           </p>
           <!-- <el-button @click="deleteTest_1" size='mini' style="color:white;background-color:#e6563a;">撤销</el-button> -->
-          <p  ><el-button @click="deleteTest_1(i)" size='mini' style="color:white;background-color:#e6563a;">撤销</el-button></p>
+          <p>
+            <el-button
+              @click="deleteTest_1(i)"
+              size="mini"
+              style="color:white;background-color:#e6563a;"
+            >撤销</el-button>
+          </p>
         </div>
       </el-form-item>
+      <span v-if="this.editableTabs_1[0]">
+      <el-form-item label="账户余额" v-if="this.editableTabs_1[0].classhour">
+        <p>{{this.allMoney}}</p>
+      </el-form-item>
+      </span>
+
       <el-form-item label="学生姓名" prop="value_1">
         <el-cascader
           placeholder="输入学生姓名"
@@ -114,18 +119,19 @@
           <span style="display:none;" v-bind:id="'students'+ i">{{item.id}}</span>
           <p>{{item.name}}</p>
           <p>{{item.tel?item.tel:'没有电话'}}</p>
-           <p  ><el-button @click="deleteTest(i)" size='mini' style="color:white;background-color:#e6563a;">撤销</el-button></p>
+          <p>
+            <el-button
+              @click="deleteTest(i)"
+              size="mini"
+              style="color:white;background-color:#e6563a;"
+            >撤销</el-button>
+          </p>
         </div>
       </el-form-item>
 
       <el-form-item label="有效期限" prop="valueDate">
         <p>：{{ this.form.valueDate }}</p>
 
-        <!-- <el-date-picker
-      v-model="value1"
-      type="date"
-      placeholder="选择日期">
-        </el-date-picker>-->
         <el-date-picker v-model="form.valueDate" type="date" value-format="yyyy-MM-dd"></el-date-picker>
       </el-form-item>
       <el-form-item label="备注说明" prop="feedback">
@@ -135,16 +141,8 @@
 
     <!-- 步骤二 -->
     <div v-if="active==2">
-    <el-form ref="form2" :rules="rules" :model="form2">
-        <!-- <el-form-item label="" prop="need_one">
-          <el-input
-            type="textarea"
-            v-model="form2.need_one"
-            maxlength="100"
-            show-word-limit
-            placeholder="学生排课项目、科目、考局（A-level必写）及课时"
-          ></el-input> --> 
-        <!-- </el-form-item> -->
+      <el-form ref="form2" :rules="rules" :model="form2">
+
         <el-form-item label="需求1" prop="need_one">
           <el-input
             type="textarea"
@@ -200,11 +198,7 @@
       @click="next('form')"
       v-if="active==1"
     >下一步</el-button>
-    <el-button
-      type="success"
-      @click="onSubmit('form2')"
-      v-if="active==2"
-    >确 定</el-button>
+    <el-button type="success" @click="onSubmit('form2')" v-if="active==2">确 定</el-button>
     <el-button @click="goBack" v-if="active==1||active==2">取消</el-button>
 
     <!-- 设置充值链接 -->
@@ -223,6 +217,7 @@ export default {
       input: "",
       input1: "",
       input2: "",
+      allMoney:this.$route.query.allMoney,
       active: 1,
       form: {
         title: "", //标题
@@ -237,7 +232,7 @@ export default {
         need_one: "",
         need_two: "",
         need_three: "",
-        need_four: "",
+        need_four: ""
       },
       rules: {
         // title: [{ required: true, message: "请输入标题", trigger: "blur" }],
@@ -308,50 +303,55 @@ export default {
       students_data: [], //用户id
       subjects_data: [], //学科数据
       feedback: "", //反馈
-      course_address: "" ,//上课线上或线下
-       subject_name:'' , //选择的学科姓名
-
+      course_address: "", //上课线上或线下
+      subject_name: "" //选择的学科姓名
     };
   },
   created() {
     this.getdata();
   },
   computed: {
-    //     sum:function () {
-    //       for(let i=0 ; i<this.editableTabsValue_1.length; i++){
-    //           return $("#time"+i).val()*$("#mach"+i).val()
-    //               }
-    //  }
+
     ...mapState(["region_list"])
   },
   mounted() {
     this.getStudent();
-
   },
   methods: {
-    roundFun(value, n) {  //四舍五入算法
-  return Math.round(value*Math.pow(10,n))/Math.pow(10,n);
-},
+    showAllMoney(){
+     var moreClass=parseInt(this.$route.query.allMoney/this.editableTabs_1[0].price)
+            
+      if(this.editableTabs_1[0].price*this.editableTabs_1[0].classhour>this.$route.query.allMoney){
+        this.$message({
+          type:'warning',
+          message:`余额不足，你至多可排${moreClass}个整数课时`
+        })
+      }
+
+    },
+    roundFun(value, n) {
+      //四舍五入算法
+      return Math.round(value * Math.pow(10, n)) / Math.pow(10, n);
+    },
     whereGo(a) {
       if (a == "2") {
         this.show = true;
-        this.$apis.common.region_list().then(res=>{
-          if(res.data.code==1){
+        this.$apis.common.region_list().then(res => {
+          if (res.data.code == 1) {
             getId(res.data.options);
           }
-        })
-  let getId = arr => {
-    arr.forEach(v => {
-              v.value=v.label
-        if (v.children instanceof Array) {
-            getId(v.children)
-        }
-    });
-  this.address_check = arr;
-}
-// getId(this.region_list);
-       // this.address_check = this.region_list;
-
+        });
+        let getId = arr => {
+          arr.forEach(v => {
+            v.value = v.label;
+            if (v.children instanceof Array) {
+              getId(v.children);
+            }
+          });
+          this.address_check = arr;
+        };
+        // getId(this.region_list);
+        // this.address_check = this.region_list;
       } else {
         this.show = false;
       }
@@ -391,13 +391,13 @@ export default {
     },
     deleteTest_1(index) {
       //this.editableTabs_1.pop(this.editableTabs_1);
-       this.pushArray1.splice(index,1)
-       this.pushArray2.splice(index,1)
+      this.pushArray1.splice(index, 1);
+      this.pushArray2.splice(index, 1);
 
-      this.form.value=[]
+      this.form.value = [];
     },
     deleteTest(index) {
-      this.editableTabs.splice(index,1);
+      this.editableTabs.splice(index, 1);
     },
     result() {
       for (let i = 0; i < this.items_add.length; i++) {}
@@ -411,17 +411,17 @@ export default {
         if (res.data.code == 1) {
           this.msg = res.data;
           this.options_ = res.data.data;
-    let addWord=arr=>{
-            arr.forEach(item=>{
-              item.value=item.subject_name,
-              item.label=item.subject_name
-            if(item.children instanceof Array){
-                addWord(item.children)
-            }
-          })
-          }
-          addWord(this.options_)
-           this.options=this.options_  
+          let addWord = arr => {
+            arr.forEach(item => {
+              (item.value = item.subject_name),
+                (item.label = item.subject_name);
+              if (item.children instanceof Array) {
+                addWord(item.children);
+              }
+            });
+          };
+          addWord(this.options_);
+          this.options = this.options_;
         }
       });
     },
@@ -432,15 +432,19 @@ export default {
 
     //获取学生列表
     getStudent() {
-
       this.$apis.students.get_students_data().then(res => {
         if (res.data.code == 1) {
           this.options_1 = res.data.data.list;
           for (let i = 0; i < this.options_1.length; i++) {
             var val = this.options_1[i];
-            this.options1.push({id:val.id,tel:val.tel, value: val.username, label: val.username });
+            this.options1.push({
+              id: val.id,
+              tel: val.tel,
+              value: val.username,
+              label: val.username
+            });
           }
-            this.handleChange_start(this.$route.query.username, this.options1)
+          this.handleChange_start(this.$route.query.username, this.options1);
         }
       });
     },
@@ -452,93 +456,88 @@ export default {
           : targetName.length == 2
           ? targetName[1]
           : targetName[2];
-          this.subject_name=lastName
-      let ifCheck=this.editableTabs_1.filter(res=>{
-       return res.title==lastName.toString()
-      })
-      if(ifCheck.length==0){
-      const result = [];
-      let getNeed = arr => {
-        arr.forEach(v => {
-          result.push({
-            value: v.id,
-            label: v.subject_name,
-            offline_price: v.offline_price,
-            online_price: v.online_price
+      this.subject_name = lastName;
+      let ifCheck = this.editableTabs_1.filter(res => {
+        return res.title == lastName.toString();
+      });
+      if (ifCheck.length == 0) {
+        const result = [];
+        let getNeed = arr => {
+          arr.forEach(v => {
+            result.push({
+              value: v.id,
+              label: v.subject_name,
+              offline_price: v.offline_price,
+              online_price: v.online_price
+            });
+            if (v.children instanceof Array) {
+              getNeed(v.children);
+            }
           });
-          if (v.children instanceof Array) {
-            getNeed(v.children);
-          }
+        };
+        getNeed(this.options_); //多维数组简化为二维数组(可以使用find，indexOf。findIndex查找返回)
+        var needArr = result.find((res, index, arr) => {
+          return res.label == lastName;
         });
-      };
-      getNeed(this.options_); //多维数组简化为二维数组(可以使用find，indexOf。findIndex查找返回)
-      var needArr = result.find((res, index, arr) => {
-        return res.label == lastName;
-      });
-      if(this.editableTabs_1.length<1){
- this.pushArray1.push({
-        title: needArr.label,
-        subject_id: needArr.value, //科目id
-        classhour: "",
-        price: needArr.online_price,
-        amount:'',
-        course_type: 1, //课程类型
-        course_id: 0, //班课
-        is_one: 1, //一对一？
-        is_group: 0 //自主班课?
-      });
-      this.pushArray2.push({
-        title: needArr.label,
-        subject_id: needArr.value, //科目id
-        classhour: "",
-        price: needArr.offline_price,
-        amount:'',
-        course_type: 1, //课程类型
-        course_id: 0, //班课
-        is_one: 1, //一对一？
-        is_group: 0 //自主班课?
-      });
-      if (this.form.radio == 1) {
-        this.editableTabs_1 = this.pushArray1;
+        if (this.editableTabs_1.length < 1) {
+          this.pushArray1.push({
+            title: needArr.label,
+            subject_id: needArr.value, //科目id
+            classhour: "",
+            price: needArr.online_price,
+            amount: "",
+            course_type: 1, //课程类型
+            course_id: 0, //班课
+            is_one: 1, //一对一？
+            is_group: 0 //自主班课?
+          });
+          this.pushArray2.push({
+            title: needArr.label,
+            subject_id: needArr.value, //科目id
+            classhour: "",
+            price: needArr.offline_price,
+            amount: "",
+            course_type: 1, //课程类型
+            course_id: 0, //班课
+            is_one: 1, //一对一？
+            is_group: 0 //自主班课?
+          });
+          if (this.form.radio == 1) {
+            this.editableTabs_1 = this.pushArray1;
+          } else {
+            this.editableTabs_1 = this.pushArray2;
+          }
+        } else {
+          this.$message({
+            type: "warning",
+            message: "你只能选择一种科目"
+          });
+        }
       } else {
-        this.editableTabs_1 = this.pushArray2;
-      }
-      }else{
         this.$message({
-          type:'warning',
-          message:"你只能选择一种科目"
-        })
-      }
-     
-      }else{
-                this.$message({
-          type:'warning',
-          message:"不可以重复选课"
-        })
+          type: "warning",
+          message: "不可以重复选课"
+        });
       }
     },
     //学生姓名选择产生的变化
     handleChange(targetName) {
-      this.student_name=targetName
+      this.student_name = targetName;
       //console.log(this.writeCurrentDate());
       var checkOne = this.options_1.filter(
         item => item.username == targetName[0]
       );
       this.editableTabs.push({
         name: targetName[0],
-        tel: checkOne[0].tel?checkOne[0].tel:'没有电话',
+        tel: checkOne[0].tel ? checkOne[0].tel : "没有电话",
         id: checkOne[0].id
       });
-
     },
-        handleChange_start(targetName,a) {
-      let checkOne = a.filter(
-        item => 
-          item.label == targetName
-      );
+    handleChange_start(targetName, a) {
+      let checkOne = a.filter(item => item.label == targetName);
       this.editableTabs.push({
         name: targetName,
-        tel: checkOne[0].tel?checkOne[0].tel:'没有电话',
+        tel: checkOne[0].tel ? checkOne[0].tel : "没有电话",
         id: checkOne[0].id
       });
     },
@@ -552,15 +551,15 @@ export default {
       this.$refs[form2].validate(valid => {
         if (valid) {
           let parms = {
-            title: this.form.value_1+'的科目'+this.subject_name,
+            title: this.form.value_1 + "的科目" + this.subject_name,
             expiry_date: this.form.valueDate,
             remarks: this.form.feedback,
             course_address: this.form.radio,
             address: this.form.address.toString(),
             need_one: this.form2.need_one,
             need_two: this.form2.need_two,
-            need_three:this.form2.need_three ,
-            need_four:  this.form2.need_four,
+            need_three: this.form2.need_three,
+            need_four: this.form2.need_four
           };
 
           parms.subjects_data = this.subjects_data;
@@ -590,14 +589,17 @@ export default {
       });
     },
     next(form) {
+           var moreClass=parseInt(this.$route.query.allMoney/this.editableTabs_1[0].price)
+
+      if(this.editableTabs_1[0].price*this.editableTabs_1[0].classhour<=this.$route.query.allMoney){
       this.$refs[form].validate(valid => {
         if (valid) {
           this.editableTabs_1.forEach(item => {
             this.subjects_data.push({
               subject_id: item.subject_id,
-              classhour:  this.roundFun(item.classhour,2),
+              classhour: this.roundFun(item.classhour, 2),
               price: item.price,
-              amount: item.classhour*item.price,
+              amount: item.classhour * item.price,
               course_type: item.course_type,
               course_id: item.course_id,
               is_one: item.is_one,
@@ -605,7 +607,7 @@ export default {
             });
           });
           //console.log(this.subjects_data)
-          
+
           this.editableTabs.forEach(item => {
             this.students_data.push({
               student_id: item.id
@@ -654,6 +656,16 @@ export default {
           return false;
         }
       });
+      }else{
+        this.$message({
+          type:'warning',
+          message:`余额不足，你至多可排${moreClass}个整数课时`
+        })
+        $('.changeColor').css('color','red')
+        setTimeout(function(){
+        $('.changeColor').css('color','white')
+        },3000)
+      }
     },
     pre() {
       this.parms.students_data = [];
@@ -671,7 +683,7 @@ export default {
       oInput.value = url;
       document.body.appendChild(oInput);
       oInput.select(); // 选择对象;
-    //  console.log(oInput.value);
+      //  console.log(oInput.value);
       document.execCommand("Copy"); // 执行浏览器复制命令
       this.$message({
         message: url + "已成功复制到剪切板",
@@ -701,9 +713,7 @@ select {
   text-align: center;
 }
 
-
 option {
-
   border: none;
   font-size: 16px;
 }
@@ -742,7 +752,6 @@ option {
 }
 
 .add_ul_new p:nth-child(1) {
-
   width: 14%;
 }
 .stap_3 {
@@ -762,8 +771,8 @@ option {
   align-items: center;
   font-size: 25px;
 }
-p{
-  cursor:pointer;
+p {
+  cursor: pointer;
 }
 </style>
 

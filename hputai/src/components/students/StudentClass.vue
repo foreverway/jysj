@@ -6,7 +6,6 @@
         v-model="value_stu"
         :options="options1"
         clearable
-        
         @change="handleChange(value_stu)"
         filterable
       ></el-cascader>
@@ -20,21 +19,17 @@
         :show-all-levels="false"
         @change="handleChange_1"
       ></el-cascader>
+
       <div style="height:20px"></div>
-      <!-- <el-calendar v-model="value" style="height:500px;">
-        <template slot="dateCell" slot-scope="{date, data}">
-          <p @click="searchDay(data.day)">{{data.day.slice(8)}}</p>
-        </template>
-      </el-calendar> -->
+
       <el-calendar>
-  <template
-    slot="dateCell"
-    slot-scope="{date, data}">
-    <p :class="data.isSelected ? 'is-selected' : ''" @click="searchDay(data.day)">
-           {{data.day.slice(8)}}{{ data.isSelected ? '✔️' : ''}}
-    </p>
-  </template>
-</el-calendar>
+        <template slot="dateCell" slot-scope="{date, data}">
+          <p
+            :class="data.isSelected ? 'is-selected' : ''"
+            @click="searchDay(data.day)"
+          >{{data.day.slice(8)}}{{ data.isSelected ? '✔️' : ''}}</p>
+        </template>
+      </el-calendar>
       <!-- 待上课表 -->
       <div class="table_div data_list posi_right" v-if="change_value=='1'">
         <el-table
@@ -45,11 +40,9 @@
           style="margin-top:20px ,"
         >
           <el-table-column prop="start_time" label="开始时间" width="140"></el-table-column>
-                       <el-table-column  label="星期">
-                                <template slot-scope="scope">
-                                  {{scope.row.week?scope.row.week:'未定义'}}
-                                </template>
-                              </el-table-column>
+          <el-table-column label="星期">
+            <template slot-scope="scope">{{scope.row.week?scope.row.week:'未定义'}}</template>
+          </el-table-column>
 
           <el-table-column prop="classhour" label="课时"></el-table-column>
           <el-table-column prop="student_name" label="学生姓名"></el-table-column>
@@ -79,17 +72,7 @@
               >
                 <a @click="nowVideo(scope.row.course_id)">{{scope.row.ready_txt}}</a>
               </el-button>
-              <!-- 如果有人他进入不了直播他就只能来这 -->
-              <!-- <div style="width:120px; display:inline-block;">
-                <el-select v-model="value_other" :change="changeSele()" placeholder="请选择">
-                  <el-option
-                    v-for="item in options_other"
-                    :key="item.value_other"
-                    :label="item.label"
-                    :value="item.value_other"
-                  ></el-option>
-                </el-select>
-              </div>-->
+
               <el-dropdown
                 @command="changeSele(scope.row.course_id)"
                 style="border:1px orange solid;cursor:pointer;"
@@ -122,19 +105,22 @@
           </el-table-column>
         </el-table>
         <span v-if="tableDataNum">
-        <el-pagination 
-          :current-page.sync="currentPage"
-          :page-size="10"
-        @prev-click="prev"
-        @next-click="next"
-        @current-change="current"
-          layout="total,  prev, pager, next"
-          :total="tableDataNum.count"
-        ></el-pagination>
+          <el-pagination
+            :current-page.sync="currentPage"
+            :page-size="10"
+            @prev-click="prev"
+            @next-click="next"
+            @current-change="current"
+            layout="total,  prev, pager, next"
+            :total="tableDataNum.count"
+          ></el-pagination>
         </span>
-        <el-dialog 
-        :close-on-click-modal='false'
-        title="其他方式进入教室" :visible.sync="centerDialogVisible" center>
+        <el-dialog
+          :close-on-click-modal="false"
+          title="其他方式进入教室"
+          :visible.sync="centerDialogVisible"
+          center
+        >
           <el-dialog width="30%" title="使用手机扫码下载" :visible.sync="innerVisible" append-to-body>
             <div class="flex_div">
               <img :src="otherWey.mobileDownloadUrl" />
@@ -149,13 +135,13 @@
             <el-form-item label="方式一：参与码进入教室" style="font-weight:700;">
               <p style="display:inline-block;margin:0 20px;">
                 你的参与码：
-                                <span style="color:orange;">{{otherWey.code?otherWey.code:'暂未生成'}}</span>
-
+                <span style="color:orange;">{{otherWey.code?otherWey.code:'暂未生成'}}</span>
               </p>
-                <p style="display:inline-block;margin:0 20px;">
+              <p style="display:inline-block;margin:0 20px;">
                 学生的参与码：
-                                <span style="color:orange;">{{otherWey.student_code?otherWey.student_code:'暂未生成'}}</span>
-
+                <span
+                  style="color:orange;"
+                >{{otherWey.student_code?otherWey.student_code:'暂未生成'}}</span>
               </p>
               <p>打开“云端课堂”的PC端或者APP端，输入参与码，即可进入教室。</p>
               <p>
@@ -186,11 +172,9 @@
           style="margin-top:20px,"
         >
           <el-table-column prop="start_time" label="开始时间" width="140"></el-table-column>
-                              <el-table-column  label="星期">
-                                <template slot-scope="scope">
-                                  {{scope.row.week?scope.row.week:'未定义'}}
-                                </template>
-                              </el-table-column>
+          <el-table-column label="星期">
+            <template slot-scope="scope">{{scope.row.week?scope.row.week:'未定义'}}</template>
+          </el-table-column>
 
           <el-table-column prop="classhour" label="课时" width="50"></el-table-column>
           <el-table-column prop="student_name" label="学生姓名"></el-table-column>
@@ -239,25 +223,25 @@
           </el-table-column>
         </el-table>
         <span v-if="tableDataNum">
-        <el-pagination 
-          :current-page.sync="currentPage"
-          :page-size="10"
-        @prev-click="prev"
-        @next-click="next"
-        @current-change="current"
-          layout="total,  prev, pager, next"
-          :total="tableDataNum.count"
-        ></el-pagination>
+          <el-pagination
+            :current-page.sync="currentPage"
+            :page-size="10"
+            @prev-click="prev"
+            @next-click="next"
+            @current-change="current"
+            layout="total,  prev, pager, next"
+            :total="tableDataNum.count"
+          ></el-pagination>
         </span>
 
         <!-- 填写课堂反馈 -->
-        <el-dialog 
-        :close-on-click-modal='false'
-         title="填写课堂反馈" :visible.sync="dialogFromVisible">
+        <el-dialog :close-on-click-modal="false" title="填写课堂反馈" :visible.sync="dialogFromVisible">
           <!-- <p style="font-size:18px;height:30px;margin:10px 0;">课程信息</p> -->
-          <p style="margin-bottom:10px;"><span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>课程信息</p>
+          <p style="margin-bottom:10px;">
+            <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>课程信息
+          </p>
 
-          <ul :data="gridData">
+          <ul :data="gridData" class="ul_li">
             <li>
               <span>课程名称</span>
               <span>{{gridData.subject_name}}</span>
@@ -292,7 +276,9 @@
             </li>
           </ul>
           <div style="clear:both;"></div>
-          <p style="margin-bottom:10px;"><span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>反馈内容</p>
+          <p style="margin-bottom:10px;">
+            <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>反馈内容
+          </p>
           <el-form :model="form" label-width="200px">
             <el-form-item label="类型">
               <el-radio-group v-model="form.feedback_type">
@@ -343,12 +329,17 @@
           </el-form>
         </el-dialog>
         <!-- 查看课堂反馈 -->
-        <el-dialog  
-        :close-on-click-modal='false'
-        title="查看老师反馈" :visible.sync="dialogVisible" width="900px">
-          <p style="margin-bottom:10px;"><span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>课程信息</p>
+        <el-dialog
+          :close-on-click-modal="false"
+          title="查看老师反馈"
+          :visible.sync="dialogVisible"
+          width="900px"
+        >
+          <p style="margin-bottom:10px;">
+            <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>课程信息
+          </p>
 
-          <ul :data="formLabelAlign">
+          <ul :data="formLabelAlign" class="ul_li">
             <li>
               <span>课程名称</span>
               <span>{{formLabelAlign.subject_name}}</span>
@@ -362,7 +353,7 @@
               <span>{{formLabelAlign.banzhuren_name}}</span>
             </li>
             <li>
-              <span >上课时间</span>
+              <span>上课时间</span>
               <span style=" border-top-style:hidden;">{{formLabelAlign.start_time}}</span>
             </li>
             <li>
@@ -381,20 +372,16 @@
               <span style="width:15%;">地点</span>
               <span style="width:84%;">{{formLabelAlign.course_address}}</span>
             </li>
-       
           </ul>
-          <div style="clear:both;">
-
-          </div>
-          <p style="margin-bottom:10px;"><span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>反馈内容</p>
+          <div style="clear:both;"></div>
+          <p style="margin-bottom:10px;">
+            <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>反馈内容
+          </p>
           <el-form label-width="200px" :model="formLabelAlign">
-            <el-form-item
-              label="反馈类型:"
-              
-            >
-              <p v-if='formLabelAlign.feedback_type==1'>试听/首次课程反馈</p>
-              <p v-if='formLabelAlign.feedback_type==2'>日常上课反馈</p>
-              <p v-if='formLabelAlign.feedback_type==3'>结课总结</p>
+            <el-form-item label="反馈类型:">
+              <p v-if="formLabelAlign.feedback_type==1">试听/首次课程反馈</p>
+              <p v-if="formLabelAlign.feedback_type==2">日常上课反馈</p>
+              <p v-if="formLabelAlign.feedback_type==3">结课总结</p>
             </el-form-item>
             <el-form-item
               label="本次授课内容:"
@@ -406,7 +393,7 @@
               label="课堂配合度和积极性:"
               v-if="formLabelAlign.feedback_type=='2'||formLabelAlign.feedback_type=='1'"
             >
-              <span >{{formLabelAlign.details_2}}</span>
+              <span>{{formLabelAlign.details_2}}</span>
             </el-form-item>
             <el-form-item label="学生的主要问题和建议:" v-if="formLabelAlign.feedback_type=='1'">
               <span>{{formLabelAlign.details_3}}</span>
@@ -454,7 +441,7 @@ export default {
       innerVisible: false, //内层弹框
       form: {
         feedback_type: 1,
-        course_id:'',
+        course_id: "",
         details_1: "",
         details_2: "",
         details_3: "",
@@ -465,13 +452,13 @@ export default {
         details_8: "",
         details_9: ""
       }, //from提交的数据
-      student_form:{
-        course_type:'',
-        start_time:'',
-        search:'',
-        page:'',
-        student_id:'',
-        page:''
+      student_form: {
+        course_type: "",
+        start_time: "",
+        search: "",
+        page: "",
+        student_id: "",
+        page: ""
       },
       msg: ["2019-06-13 ", "2019-06-18", "2019-06-16"],
       options1: [
@@ -479,12 +466,11 @@ export default {
         // label:"username",
       ],
 
-      formLabelAlign: {
-      }, //老师在这里疯狂反馈
+      formLabelAlign: {}, //老师在这里疯狂反馈
       course: "", //课程ID
       currentPage: 1, //当前页
       pagesize: 10,
-      thisDay:'', //当天
+      thisDay: "", //当天
       value_stu: "",
       value_sub: "",
       options_1: [], //学生数组总数据
@@ -499,7 +485,7 @@ export default {
       centerDialogVisible: false, //其他方式打开课表
       otherWey: {}, //从其他方法进入直播
       num: 0, //次数的变化
-      tableDataNum:'', //总页数
+      tableDataNum: "" //总页数
     };
   },
   created() {
@@ -511,13 +497,11 @@ export default {
     this.getStudent();
     this.getClassList();
   },
-  updated(){
-  // var bodyDiv=$('.screen_he')
-  //   $(bodyDiv)[0].style.height=$(window).height()*1-210+'px'
+  updated() {
+    // var bodyDiv=$('.screen_he')
+    //   $(bodyDiv)[0].style.height=$(window).height()*1-210+'px'
   },
-  mounted(){
-
-  },
+  mounted() {},
   computed: {},
   watch: {
     changeTab: function(value) {
@@ -545,7 +529,6 @@ export default {
     },
     changeSele(a) {
       //这是根据选中的值变化的函数
-      console.log(a);
       this.centerDialogVisible = true;
       let prams = {
         course_id: a
@@ -558,21 +541,20 @@ export default {
     },
 
     onSubmit() {
-     
-    this.form.course_id = this.course;
+      this.form.course_id = this.course;
       this.$apis.common.post_feedback_add(this.form).then(res => {
         if (res.data.code == 1) {
-          this.dialogFromVisible = false
-      //        this.$apis.common.student_course({course_type:2}).then(res => {
-      //   if (res.data.code == 1) {
-      //     this.tableData = res.data.data.list;
-      //   }
-      // });
-          this.searchDay( this.thisDay) 
-            this.$message({
-              type: "success",
-              message: "提交成功"
-            });
+          this.dialogFromVisible = false;
+          //        this.$apis.common.student_course({course_type:2}).then(res => {
+          //   if (res.data.code == 1) {
+          //     this.tableData = res.data.data.list;
+          //   }
+          // });
+          this.searchDay(this.thisDay);
+          this.$message({
+            type: "success",
+            message: "提交成功"
+          });
         }
       });
     },
@@ -587,46 +569,32 @@ export default {
       this.$apis.common.course_feedback(parms).then(res => {
         if (res.data.code == 1) {
           this.formLabelAlign = res.data.data;
-          this.gridData =this.formLabelAlign
+          this.gridData = this.formLabelAlign;
         }
       });
     },
-    fillFeedback(a,b) {
+    fillFeedback(a, b) {
       this.dialogFromVisible = true;
-          let parms = {
+      let parms = {
         course_id: a
       };
-            this.$apis.common.course_feedback(parms).then(res => {
+      this.$apis.common.course_feedback(parms).then(res => {
         if (res.data.code == 1) {
           this.formLabelAlign = res.data.data;
-          this.gridData =this.formLabelAlign
+          this.gridData = this.formLabelAlign;
         }
       });
-       this.course = a;
-          this.form.details_1=''
-           this.form.details_2=''
-            this.form.details_3=''
-             this.form.details_4=''
-              this.form.details_5=''
-               this.form.details_6=''
-                this.form.details_7=''
-this.form.details_8=''
-                 this.form.details_9='' 
+      this.course = a;
+      this.form.details_1 = "";
+      this.form.details_2 = "";
+      this.form.details_3 = "";
+      this.form.details_4 = "";
+      this.form.details_5 = "";
+      this.form.details_6 = "";
+      this.form.details_7 = "";
+      this.form.details_8 = "";
+      this.form.details_9 = "";
 
-      // let parms = {
-      //   course_id: a
-      // };
-      // this.$apis.common.feedback_add(parms).then(res => {
-      //   if (res.data.code == 1) {
-      //                this.$apis.common.student_course({course_type:2}).then(res => {
-      //   if (res.data.code == 1) {
-      //     this.tableData = res.data.data.list;
-      //   }
-      // });
-      //   }
-      // });
-
-      //  this.change_value='2'
     },
     handleSizeChange(val) {
       this.pagesize = val * 1;
@@ -635,7 +603,7 @@ this.form.details_8=''
       this.currentPage = val;
       this.getClassList(val);
     },
-        current(num) {
+    current(num) {
       //当前页数
       this.currentPage = num;
       this.getClassList();
@@ -649,20 +617,23 @@ this.form.details_8=''
       if (this.currentPage > 1) {
         this.currentPage--;
         this.getClassList();
-      }},
+      }
+    },
     getClassList(a) {
       this.$emit("update:changeTab", this.change_value);
       //这里的this是父级的作用域  也就是执行父级的该函数
       let parms = {
         course_type: this.change_value,
-        page: this.currentPage
+        page: this.currentPage,
+               course_type: this.change_value,
+        start_time: this.thisDay
+        // attendance_status:null
       };
       this.$apis.common.student_course(parms).then(res => {
         if (res.data.code == 1) {
           this.tableData = res.data.data.list;
-          this.tableDataNum=res.data.data
+          this.tableDataNum = res.data.data;
           // console.log(this.tableData)
-
         }
       });
     },
@@ -719,7 +690,12 @@ this.form.details_8=''
     },
     handleChange_1(targetName) {
       //选择科目
-      var lastName = targetName.length == 1 ? targetName[0] :(targetName.length==2? targetName[1]: targetName[2]);
+      var lastName =
+        targetName.length == 1
+          ? targetName[0]
+          : targetName.length == 2
+          ? targetName[1]
+          : targetName[2];
       let parms = {
         admin_id: this.getdataCookie("admin_id"),
         page: 1,
@@ -737,7 +713,7 @@ this.form.details_8=''
       let parms = {
         admin_id: this.getdataCookie("admin_id"),
         page: 1,
-        student_id: targetName,
+        student_id: targetName[0],
         course_type: this.change_value
       };
       this.$apis.common.student_course(parms).then(res => {
@@ -747,17 +723,19 @@ this.form.details_8=''
       });
     },
     searchDay(a) {
-      this.thisDay=a
+      this.thisDay = a;
       let parms = {
         admin_id: this.getdataCookie("admin_id"),
         page: 1,
         course_type: this.change_value,
-        start_time: a
+        start_time: this.thisDay
       };
       // this
       this.$apis.common.student_course(parms).then(res => {
         if (res.data.code == 1) {
           this.tableData = res.data.data.list;
+                    this.tableDataNum = res.data.data;
+
         }
       });
     },
@@ -837,25 +815,22 @@ this.form.details_8=''
     },
     getdata() {
       //获取科目的数据
-            //获取科目的数据
-           this.$apis.common.subject_list().then(res => {
+      this.$apis.common.subject_list().then(res => {
         if (res.data.code == 1) {
           this.msg = res.data;
           this.options_ = res.data.data;
-              let addWord=arr=>{
-            arr.forEach(item=>{
-              item.value=item.id,
-              item.label=item.subject_name
-            if(item.children instanceof Array){
-                addWord(item.children)
-            }
-          })
-          }
-          addWord(this.options_)
-           this.options=this.options_  
+          let addWord = arr => {
+            arr.forEach(item => {
+              (item.value = item.id), (item.label = item.subject_name);
+              if (item.children instanceof Array) {
+                addWord(item.children);
+              }
+            });
+          };
+          addWord(this.options_);
+          this.options = this.options_;
         }
-      })
-
+      });
     },
     //获取学生列表
     getStudent() {
@@ -887,7 +862,7 @@ this.form.details_8=''
 </script>
 <style scoped>
 .data_main {
-  width: 600px;
+  width: 700px;
   float: left;
 }
 .data_list {
@@ -921,7 +896,7 @@ this.form.details_8=''
   height: 35px !important;
 }
 
-li {
+.ul_li li {
   list-style: none;
   display: inline-block;
   float: left;
@@ -930,25 +905,25 @@ li {
   padding: 0;
   margin: 0 0 0 -1px;
 }
-li span{
-    display: inline-block;
+.ul_li li span {
+  display: inline-block;
   float: left;
   width: 49%;
   height: 30px;
   line-height: 30px;
 }
-li :nth-child(1) {
-   width: 30%;
-   text-align: center;
-   background-color: #F5F5F5;
-    /* border:1px solid #F5F5F5; */
+.ul_li li :nth-child(1) {
+  width: 30%;
+  text-align: center;
+  background-color: #f5f5f5;
+  /* border:1px solid #F5F5F5; */
 }
-li :nth-child(2) {
-   width: 69%;
-   text-align: center;
-   border:1px solid #F5F5F5;
+.ul_li li :nth-child(2) {
+  width: 69%;
+  text-align: center;
+  border: 1px solid #f5f5f5;
 }
-.el-dialog__body{
+.el-dialog__body {
   padding: 0px 20px;
 }
 /* .el-form-item__label {

@@ -11,11 +11,20 @@
           @change="getadata"
           placeholder="搜索授课老师"
         ></el-input>
-        <el-button
+        <el-select    @change="getadata"
+  clearable v-model="form.attendance_status" placeholder="选择考勤状态">
+          <el-option
+            v-for="item in check_status"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+        <!-- <el-button
           type="primary"
           @click="getadata"
           style="margin-left:5px;background-color:#e6563a; border:none;"
-        >搜索</el-button>
+        >搜索</el-button> -->
 
         <el-date-picker
           style="margin-left:60px"
@@ -246,7 +255,7 @@
         <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>课程信息
       </p>
 
-      <ul :data="formLabelAlign">
+      <ul :data="formLabelAlign" class="ul_li">
         <li>
           <span>课程名称</span>
           <span>{{formLabelAlign.subject_name}}</span>
@@ -354,7 +363,7 @@ export default {
       form: {
         search: "", //搜索学员姓名条件
         page: 1, //页码
-        attendance_status: "" //考勤状态
+        attendance_status: null //考勤状态
       },
       unnormalData: {
         //异常数据
@@ -368,6 +377,11 @@ export default {
         student_classhour: "",
         remarks3: ""
       },
+      check_status: [
+        { value: 0, label: "未考勤" },
+        { value: 1, label: "已考勤-正常" },
+        { value: 2, label: "已考勤-异常" }
+      ],
       normalData: {
         attendance_type: 1,
         classhour: "",
@@ -458,7 +472,9 @@ export default {
       });
     },
     unnormal(a) {
-      this.unnormalData.course_id = a.course_id;
+      this.unnormalData = {};
+      (this.unnormalData.attendance_type = 2),
+        (this.unnormalData.course_id = a.course_id);
       this.unnormalData.classhour = a.classhour;
       this.centerDialogVisible_unnormal = true;
     },
@@ -487,7 +503,7 @@ export default {
         this.$message({
           message: "填写的课时有误，请核对",
           type: "warning"
-        })
+        });
       }
     },
     // 查看详情
@@ -599,12 +615,12 @@ export default {
 .so_main_right {
   float: right;
 }
-ul {
+.ul_li {
   background-color: #fff;
   height: 90px;
   width: calc(100% - 3px);
 }
-li {
+.ul_li li {
   list-style: none;
   float: left;
   width: 33%;
@@ -613,29 +629,29 @@ li {
   padding: 0;
   /* margin: 0 0 0 -1px; */
 }
-ul li:nth-child(3) {
+.ul_li li:nth-child(3) {
   width: 34%;
 }
-ul li:nth-child(6) {
+.ul_li li:nth-child(6) {
   width: 34%;
 }
-ul li:nth-child(9) {
+.ul_li li:nth-child(9) {
   width: 34%;
 }
-li span {
+.ul_li li span {
   display: inline-block;
   float: left;
   width: 49%;
   height: 30px;
   line-height: 30px;
 }
-li :nth-child(1) {
+.ul_li li :nth-child(1) {
   width: 30%;
   text-align: center;
   background-color: #f5f5f5;
   /* border:1px solid #F5F5F5; */
 }
-li :nth-child(2) {
+.ul_li li :nth-child(2) {
   width: 69%;
   text-align: center;
   box-shadow: 0 0 0 1px #f5f5f5;
