@@ -57,8 +57,8 @@
       value-format="yyyy-MM-dd H:mm:ss"
       placeholder="选择日期时间"
     ></el-date-picker>
-    <el-button type="primary" @click="getadata">搜索</el-button>
-        <!-- <el-button type="primary" @click="recharge_export">导出</el-button> -->
+    <!-- <el-button type="primary" @click="getadata">搜索</el-button> -->
+        <el-button type="primary" @click="recharge_export">导出</el-button>
 
     <!-- 表格数据 -->
     <el-table :data="tableData" border :header-cell-style="{background:'#f4f4f4'}">
@@ -283,12 +283,12 @@ export default {
         type: "success",
         message: "正在导出,请稍等..."
       });
-      //let urls = "http://personal.test.hqjystudio.com";
+      // let urls = "http://personal.test.hqjystudio.com";
       let parms = "";
       for (var key in this.params) {
         parms += key + "=" + this.params[key] + "&";
       }
-      window.location.href = url.urls + "/api_dollars_export" + "?" + parms;
+      window.location.href = url.urls + "/teaching_data_export" + "?" + parms;
     },
     //序号排列
     indexMethod(index) {
