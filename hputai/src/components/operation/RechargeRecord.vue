@@ -394,24 +394,45 @@ export default {
   computed: mapState(["rolemenu", "banzhuren_list"]),
   created() {
     //this.$apis.common.getuilcode()
-        mapState(["rolemenu"], "banzhuren_list")
+        mapState(["rolemenu", "banzhuren_list"])
 
     this.getadata();
+          this.getRolenenu()
+
     this.adminid = this.getdataCookie("admin_uid");
    // this.$nextTick(function(){
-    this.opration = this.rolemenu[1].children;
-    this.menuArr_=this.opration.filter(item=>{
-     return item.menu_name=="充值记录"
-    })
-    this.menuArr=this.menuArr_[0].children
+    // this.opration = this.rolemenu[1].children;
+    // this.menuArr_=this.opration.filter(item=>{
+    //  return item.menu_name=="充值记录"
+    // })
+    // this.menuArr=this.getRolenenu
   },
   methods: {
+        getRolenenu() {
+           var menu= this.rolemenu.forEach((item, index, array) => {
+        //遍历菜单
+        console.log(this.rolemenu)
+        if (item.menu_name=="操作管理") {
+          //有子集
+          for (let j = 0; j < item.children.length; j++) {
+            //遍历子集
+            var a = item.children.filter(function(item) {
+              return item.menu_url == "/RechargeRecord";
+            });
+          this.menuArr=a[0].children        
+          // return a
+          }
+        } 
+      });
+      
+    },
     ifHere(a){
       let nameArr=[]
       for(let i =0;i<this.menuArr.length;i++){
         nameArr.push(this.menuArr[i].id)
       }
      return nameArr.includes(a)
+        
     },
     toEdit(a) {
       this.$router.push({ path: "/RechargeRecord/EditRecharge", query: { id: a } });

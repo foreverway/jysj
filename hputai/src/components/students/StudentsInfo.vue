@@ -190,6 +190,11 @@
                 v-if="scope.row.ready_txt=='未知状态'"
                 style="color:silver;bcakground-color:rgb(255,208,75);"
               >{{scope.row.ready_txt}}</el-button>
+                              <el-button
+                size="mini"
+                v-if="scope.row.ready_status==5"
+                style="color:silver" disabled
+              >{{scope.row.ready_txt}}</el-button>
               <el-button
                 size="mini"
                 v-if="scope.row.ready_txt=='观看回放'"

@@ -9,7 +9,7 @@
           clearable
           v-model="form.search"
           @input="getadata"
-          placeholder="请输入用户名"
+          placeholder="请输入搜索内容"
         ></el-input>
         <!-- <el-button
           type="primary"

@@ -2,7 +2,7 @@
   <div class="so_main">
     <div class="so_main_left">
       <el-form :inline="true" :model="form" class="demo-form-inline">
-        <el-input v-if="this.url!=='StudentsList'" class="so_input" v-model="form.search" placeholder="请输入用户名"></el-input>
+        <el-input v-if="this.url!=='StudentsList'" class="so_input" v-model="form.search" placeholder="请输入搜索内容"></el-input>
         <el-button
           type="primary"
           @click="getadata"

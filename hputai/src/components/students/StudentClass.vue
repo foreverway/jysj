@@ -14,18 +14,29 @@
         placeholder="选择科目"
         v-model="value_sub"
         clearable
+                filterable
+
         :options="options"
         :props="{ expandTrigger: 'hover' }"
         :show-all-levels="false"
         @change="handleChange_1"
       ></el-cascader>
+          <el-select
+            clearable
+            v-model="is_parttime"
+            placeholder="请选择老师类型"
+            @change="Change_teacher"
+          >
+            <el-option label="兼职老师" value="2"></el-option>
+            <el-option label="全职老师" value="1"></el-option>
+          </el-select>
+       <el-button type="primary" @click="recharge_export">导出</el-button>
 
       <div style="height:20px"></div>
 
       <el-calendar>
         <template slot="dateCell" slot-scope="{date, data}">
-          <p
-            :class="data.isSelected ? 'is-selected' : ''"
+          <p :class="data.isSelected ? 'is-selected' : ''"
             @click="searchDay(data.day)"
           >{{data.day.slice(8)}}{{ data.isSelected ? '✔️' : ''}}</p>
         </template>
@@ -38,8 +49,9 @@
           :header-cell-style="{background:'#f4f4f4'}"
           :row-class-name="tableRowClassName"
           style="margin-top:20px ,"
+          
         >
-          <el-table-column prop="start_time" label="开始时间" width="140"></el-table-column>
+          <el-table-column prop="start_time" sortable label="开始时间" width="140"></el-table-column>
           <el-table-column label="星期">
             <template slot-scope="scope">{{scope.row.week?scope.row.week:'未定义'}}</template>
           </el-table-column>
@@ -50,7 +62,7 @@
           <el-table-column prop="course_address" label="地点"></el-table-column>
           <el-table-column prop="subject_name" label="科目"></el-table-column>
           <el-table-column prop="live_name" label="直播平台"></el-table-column>
-          <el-table-column label="操作" width="220" @click="dialogVisible_other = true" fixed="right">
+          <el-table-column label="操作" width="150" @click="dialogVisible_other = true" fixed="right">
             <template slot-scope="scope">
               <el-button size="mini" v-if="scope.row.ready_txt=='准备直播'" style="color:red">
                 <a @click="nowVideo(scope.row.course_id)">{{scope.row.ready_txt}}</a>
@@ -59,6 +71,11 @@
                 size="mini"
                 v-if="scope.row.ready_txt=='未知状态'"
                 style="color:silver"
+              >{{scope.row.ready_txt}}</el-button>
+                            <el-button
+                size="mini"
+                v-if="scope.row.ready_status==5"
+                style="color:silver" disabled
               >{{scope.row.ready_txt}}</el-button>
               <el-button
                 size="mini"
@@ -78,7 +95,7 @@
                 style="border:1px orange solid;cursor:pointer;"
               >
                 <span class="el-dropdown-link">
-                  直播备用方法
+                  备用直播
                   <i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
@@ -171,7 +188,7 @@
           :row-class-name="tableRowClassName"
           style="margin-top:20px,"
         >
-          <el-table-column prop="start_time" label="开始时间" width="140"></el-table-column>
+          <el-table-column prop="start_time" sortable label="开始时间" width="140"></el-table-column>
           <el-table-column label="星期">
             <template slot-scope="scope">{{scope.row.week?scope.row.week:'未定义'}}</template>
           </el-table-column>
@@ -182,12 +199,17 @@
           <el-table-column prop="course_address" label="地点"></el-table-column>
           <el-table-column prop="subject_name" label="科目"></el-table-column>
           <el-table-column prop="live_name" label="直播平台"></el-table-column>
-          <el-table-column label="操作" width="320" fixed="right">
+          <el-table-column label="操作" width="170" fixed="right">
             <template slot-scope="scope">
               <el-button
                 size="mini"
                 v-if="scope.row.ready_txt=='待直播'"
                 style="color:red"
+              >{{scope.row.ready_txt}}</el-button>
+                    <el-button
+                size="mini"
+                v-if="scope.row.ready_status==5"
+                style="color:silver" disabled
               >{{scope.row.ready_txt}}</el-button>
               <el-button
                 size="mini"
@@ -428,6 +450,9 @@
   </div>
 </template>
 <script>
+
+  import url from '../../config/config.js'
+
 export default {
   props: {
     changeTab: {
@@ -470,7 +495,7 @@ export default {
       course: "", //课程ID
       currentPage: 1, //当前页
       pagesize: 10,
-      thisDay: "", //当天
+      thisDay:this.msToDate(new Date()) , //当天
       value_stu: "",
       value_sub: "",
       options_1: [], //学生数组总数据
@@ -485,7 +510,13 @@ export default {
       centerDialogVisible: false, //其他方式打开课表
       otherWey: {}, //从其他方法进入直播
       num: 0, //次数的变化
-      tableDataNum: "" //总页数
+      tableDataNum: "" ,//总页数,
+      sub_secrch:'', //学科搜索
+      stu_secrch:'', //学生搜索
+      is_parttime:'', //选择老师类型
+      parms:{
+        start_time:this.thisDay,
+      },//总参数
     };
   },
   created() {
@@ -510,6 +541,19 @@ export default {
     }
   },
   methods: {
+       recharge_export() {
+      this.$message({
+        type: "success",
+        message: "正在导出,请稍等..."
+      });
+      // let urls = "http://personal.test.hqjystudio.com";
+      let params = "";
+      for (var key in this.parms) {
+        params += key + "=" + this.parms[key] + "&";
+      }
+      console.log(this.parms)
+        window.location.href = url.urls + "/api_course_export" + "?" + params;
+    },
     toPc() {
       window.open(this.otherWey.windowsDowloadUrl);
     },
@@ -598,14 +642,16 @@ export default {
     },
     handleSizeChange(val) {
       this.pagesize = val * 1;
+      this.getClassList();
     },
     handleCurrentChange(val) {
       this.currentPage = val;
-      this.getClassList(val);
+      this.getClassList();
     },
     current(num) {
       //当前页数
       this.currentPage = num;
+      console.log(this.currentPage)
       this.getClassList();
     },
     next() {
@@ -619,16 +665,19 @@ export default {
         this.getClassList();
       }
     },
-    getClassList(a) {
+    getClassList() {
       this.$emit("update:changeTab", this.change_value);
       //这里的this是父级的作用域  也就是执行父级的该函数
       let parms = {
         course_type: this.change_value,
         page: this.currentPage,
-               course_type: this.change_value,
-        start_time: this.thisDay
+        start_time: this.thisDay,
+        student_id:this.stu_secrch,
+        subject_id:this.sub_secrch,
+        is_parttime:this.is_parttime,
         // attendance_status:null
       };
+      this.parms=parms
       this.$apis.common.student_course(parms).then(res => {
         if (res.data.code == 1) {
           this.tableData = res.data.data.list;
@@ -681,10 +730,12 @@ export default {
         "-" +
         (date + 1 < 10 ? "0" + date : date);
 
-      let result = {
-        hasTime: result1,
-        withoutTime: result2
-      };
+      // let result = {
+      //   hasTime: result1,
+      //   withoutTime: result2
+      // };
+      let result = result2
+      
 
       return result;
     },
@@ -696,48 +747,21 @@ export default {
           : targetName.length == 2
           ? targetName[1]
           : targetName[2];
-      let parms = {
-        admin_id: this.getdataCookie("admin_id"),
-        page: 1,
-        subject_id: lastName,
-        course_type: this.change_value
-      };
-      this.$apis.common.student_course(parms).then(res => {
-        if (res.data.code == 1) {
-          this.tableData = res.data.data.list;
-        }
-      });
+          this.sub_secrch=lastName
+          this.getClassList()
     },
     handleChange(targetName) {
       //选择学生
-      let parms = {
-        admin_id: this.getdataCookie("admin_id"),
-        page: 1,
-        student_id: targetName[0],
-        course_type: this.change_value
-      };
-      this.$apis.common.student_course(parms).then(res => {
-        if (res.data.code == 1) {
-          this.tableData = res.data.data.list;
-        }
-      });
+      this.stu_secrch=targetName[0]
+          this.getClassList()
+    },
+    Change_teacher(value){
+ this.is_parttime=value
+          this.getClassList()
     },
     searchDay(a) {
       this.thisDay = a;
-      let parms = {
-        admin_id: this.getdataCookie("admin_id"),
-        page: 1,
-        course_type: this.change_value,
-        start_time: this.thisDay
-      };
-      // this
-      this.$apis.common.student_course(parms).then(res => {
-        if (res.data.code == 1) {
-          this.tableData = res.data.data.list;
-                    this.tableDataNum = res.data.data;
-
-        }
-      });
+      this.getClassList()
     },
     nowVideo(a) {
       //观看直播
@@ -862,7 +886,7 @@ export default {
 </script>
 <style scoped>
 .data_main {
-  width: 700px;
+  width: 80%;
   float: left;
 }
 .data_list {

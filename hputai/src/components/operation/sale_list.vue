@@ -3,7 +3,7 @@
     <zx-head title="销售跟进"></zx-head>
 
     <el-input
-      placeholder="模糊搜索"
+      placeholder="请输入搜索内容"
       v-model="parms.search"
       clearable
       @change="getdata"

@@ -3,7 +3,7 @@
     <zx-head title="排课需求"></zx-head>
 
     <el-input
-      placeholder="随便搜点什么,自动匹配结果"
+      placeholder="请输入搜索内容"
       v-model="parms.search"
       @input="getdata"
       clearable
@@ -775,7 +775,7 @@ this.seeapplytable =res.data.data
             var a = item.children.filter(function(item) {
               return item.menu_url == "/ApplyNeedsList";
             });
-                        console.log(a)   
+          console.log(a)   
 
           this.thisMenu=a[0].children        
           return a
@@ -784,7 +784,6 @@ this.seeapplytable =res.data.data
         } 
       });
 
-      //  console.log()
     },
     checkMenu(a) {
       let hereObj = this.thisMenu.find(item => {

@@ -661,10 +661,7 @@ export default {
           type:'warning',
           message:`余额不足，你至多可排${moreClass}个整数课时`
         })
-        $('.changeColor').css('color','red')
-        setTimeout(function(){
-        $('.changeColor').css('color','white')
-        },3000)
+ 
       }
     },
     pre() {

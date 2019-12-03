@@ -9,7 +9,7 @@
         @change="getadata"
         clearable
         style="width:200px;"
-        placeholder="搜索教师名称，授课科目"
+        placeholder="请输入搜索内容"
       ></el-input>
     </div>
     <span></span>

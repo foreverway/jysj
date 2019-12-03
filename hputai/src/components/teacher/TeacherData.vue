@@ -1,6 +1,6 @@
 <template>
   <div class="so_main">
-            <zx-head title="教师课表" ></zx-head>
+    <zx-head title="教师课表"></zx-head>
 
     <div class="so_main_left">
       <el-input
@@ -8,7 +8,7 @@
         v-model="params.search"
         @input="getadata"
         clearable
-        placeholder="搜索教师名称，授课科目"
+        placeholder="请输入搜索内容"
       ></el-input>
     </div>
     <el-select
@@ -28,7 +28,6 @@
     <el-cascader
       placeholder="选择科目"
       v-model="params.subject_id"
-      
       filterable
       :options="options"
       clearable
@@ -58,11 +57,11 @@
       placeholder="选择日期时间"
     ></el-date-picker>
     <!-- <el-button type="primary" @click="getadata">搜索</el-button> -->
-        <el-button type="primary" @click="recharge_export">导出</el-button>
+    <el-button type="primary" @click="recharge_export">导出</el-button>
 
     <!-- 表格数据 -->
     <el-table :data="tableData" border :header-cell-style="{background:'#f4f4f4'}">
-      <el-table-column label="序号" type="index" width="80" align="center" ></el-table-column>
+      <el-table-column label="序号" type="index" width="80" align="center"></el-table-column>
 
       <el-table-column :show-overflow-tooltip="true" align="center" label="科目" width="200">
         <template slot-scope="scope">
@@ -78,11 +77,11 @@
 
       <el-table-column label="讲师" width="100" prop="teacher_name"></el-table-column>
 
-      <el-table-column align="center" width="200" label="时间">
-        <template slot-scope="scope">
-          <p>{{scope.row.start_time}}</p>
-        </template>
-      </el-table-column>
+      <el-table-column align="center" width="200" prop="start_time" label="上课时间" sortable></el-table-column>
+      <el-table-column align="center" width="200" prop="end_time" label="下课时间" sortable></el-table-column>
+      <el-table-column align="center"  prop="classhour" label="课时" sortable></el-table-column>
+
+      
       <el-table-column label="授课类型" prop="course_type"></el-table-column>
       <el-table-column label="已上/待上" prop="course_status"></el-table-column>
       <el-table-column align="center" label="操作" width="280px" fixed="right">
@@ -90,7 +89,6 @@
           <el-button size="mini" type="primary" @click="openVideo(scope.row.playback_url)">录播</el-button>
           <el-button size="mini" type="primary" @click="checkWork(scope.row)">考勤数据</el-button>
           <el-button size="mini" type="primary" @click="feedback(scope.row)">查看反馈</el-button>
-          <!-- <el-button size="mini" type="success" @click="toAssess(scope.row.teacher_id)">进行评价</el-button> -->
         </template>
       </el-table-column>
     </el-table>
@@ -173,7 +171,7 @@
         </li>
         <li>
           <span>反馈类型</span>
-          <span>{{feed_data.feedback_type}}</span>
+          <span>{{feed_data.feedback_type==1?'试听/首次课程反馈':feed_data.feedback_type==2?'日常上课反馈':feed_data.feedback_type==3?'结课总结':'未定义'}}</span>
         </li>
         <li>
           <span>课程地址</span>
@@ -184,7 +182,7 @@
       <p style="margin-bottom:10px;">
         <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>反馈内容
       </p>
-      <el-form label-width="200px" :model="feed_data">
+      <el-form label-width="200px" :model="feed_data" id="beauty_p">
         <!-- <el-form-item
               label="反馈类型:"
             >
@@ -193,31 +191,31 @@
               <p v-if='feed_data.feedback_type==3'>结课总结</p>
         </el-form-item>-->
         <el-form-item label="本次授课内容:">
-          <p>{{feed_data.details_1}}</p>
+          <p>{{feed_data.details_1?feed_data.details_1:'此项没有填写反馈'}}</p>
         </el-form-item>
         <el-form-item label="课堂配合度和积极性:">
-          <span>{{feed_data.details_2}}</span>
+          <p>{{feed_data.details_2?feed_data.details_2:'此项没有填写反馈'}}</p>
         </el-form-item>
         <el-form-item label="学生的主要问题和建议:">
-          <span>{{feed_data.details_3}}</span>
+          <p>{{feed_data.details_3?feed_data.details_3:'此项没有填写反馈'}}</p>
         </el-form-item>
         <el-form-item label="课时建议:">
-          <span>{{feed_data.details_4}}</span>
+          <p>{{feed_data.details_4?feed_data.details_4:'此项没有填写反馈'}}</p>
         </el-form-item>
         <el-form-item label="课程阶段安排及课时建议:">
-          <span>{{feed_data.details_5}}</span>
+          <p>{{feed_data.details_5?feed_data.details_5:'此项没有填写反馈'}}</p>
         </el-form-item>
         <el-form-item label="上次课知识点掌握情况:">
-          <span>{{feed_data.details_6}}</span>
+          <p>{{feed_data.details_6?feed_data.details_6:'此项没有填写反馈'}}</p>
         </el-form-item>
         <el-form-item label="作业:">
-          <span>{{feed_data.details_7}}</span>
+          <p>{{feed_data.details_7?feed_data.details_7:'此项没有填写反馈'}}</p>
         </el-form-item>
         <el-form-item label="课程期间学生总体表现:">
-          <span>{{feed_data.details_8}}</span>
+          <p>{{feed_data.details_8?feed_data.details_8:'此项没有填写反馈'}}</p>
         </el-form-item>
         <el-form-item label="下一步学习方案建议:">
-          <span>{{feed_data.details_9}}</span>
+          <p>{{feed_data.details_9?feed_data.details_9:'此项没有填写反馈'}}</p>
         </el-form-item>
       </el-form>
 
@@ -242,7 +240,7 @@
 
 <script>
 //import urls from '../common/const_config.js'
-  import url from '../../config/config.js'
+import url from "../../config/config.js";
 
 import { mapState } from "vuex";
 export default {
@@ -256,7 +254,7 @@ export default {
       feed_data: {}, //反馈数据
       params: {
         // teacher_id: "",
-         //subject_id: "",
+        //subject_id: "",
         // search: "",
         // start_time: "",
         // end_time: "",
@@ -277,7 +275,7 @@ export default {
     ...mapState(["teacher_data"])
   },
   methods: {
-            //导出
+    //导出
     recharge_export() {
       this.$message({
         type: "success",
@@ -390,37 +388,39 @@ export default {
     },
     handleChange_1(targetName) {
       //选择科目
-      var lastName = targetName.length == 1 ? targetName[0] : (targetName.length == 2?targetName[1]:targetName[2]);
+      var lastName =
+        targetName.length == 1
+          ? targetName[0]
+          : targetName.length == 2
+          ? targetName[1]
+          : targetName[2];
       if (lastName !== undefined) {
         this.params.subject_id = lastName.toString();
-
       }
-              this.getadata()
-
+      this.getadata();
     },
     getadata() {
       this.$apis.teacher.teaching_data(this.params).then(res => {
-        this.msg = res.data;
         this.tableData = res.data.data.list;
+        this.msg = res.data;
       });
       //获取科目的数据
-           this.$apis.common.subject_list().then(res => {
+      this.$apis.common.subject_list().then(res => {
         if (res.data.code == 1) {
           this.options_ = res.data.data;
-              let addWord=arr=>{
-            arr.forEach(item=>{
-              item.value=item.subject_name,
-              item.label=item.subject_name
-            if(item.children instanceof Array){
-                addWord(item.children)
-            }
-          })
-          }
-          addWord(this.options_)
-           this.options=this.options_  
+          let addWord = arr => {
+            arr.forEach(item => {
+              (item.value = item.subject_name),
+                (item.label = item.subject_name);
+              if (item.children instanceof Array) {
+                addWord(item.children);
+              }
+            });
+          };
+          addWord(this.options_);
+          this.options = this.options_;
         }
       });
-  
     }
   }
 };
@@ -429,6 +429,9 @@ export default {
 /* .so_input {
   width: 300px;
 } */
+#beauty_p p {
+  margin-left: 20px;
+}
 .so_main_left {
   float: left;
   margin: 20px 5px;

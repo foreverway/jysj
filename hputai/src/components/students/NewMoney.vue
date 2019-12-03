@@ -2,7 +2,7 @@
 <div class="so_main">
 <div class="so_main_left">
  <el-form :inline="true" :model="form" class="demo-form-inline">
-<el-input v-if="this.url!=='StudentsList'" class="so_input" v-model="form.search" @input="getadata" placeholder="请输入用户名"></el-input>
+<el-input v-if="this.url!=='StudentsList'" class="so_input" v-model="form.search" @input="getadata" placeholder="请输入搜索内容"></el-input>
 <el-button v-if="this.url!=='StudentsList'" type="primary" @click="getadata" style="margin-left:5px;background-color:#e6563a; border:none;">搜索</el-button>
 
    <div   v-if="this.url=='StudentsList'"    style="float:right; margin:0 0 15px 17px;"

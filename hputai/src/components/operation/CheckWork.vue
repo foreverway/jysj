@@ -9,7 +9,7 @@
           clearable
           v-model="form.search"
           @change="getadata"
-          placeholder="搜索授课老师"
+          placeholder="请输入搜索内容"
         ></el-input>
         <el-select    @change="getadata"
   clearable v-model="form.attendance_status" placeholder="选择考勤状态">
