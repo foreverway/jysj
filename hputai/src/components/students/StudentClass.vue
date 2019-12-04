@@ -495,7 +495,7 @@ export default {
       course: "", //课程ID
       currentPage: 1, //当前页
       pagesize: 10,
-      thisDay:this.msToDate(new Date()) , //当天
+      thisDay:'' , //当天
       value_stu: "",
       value_sub: "",
       options_1: [], //学生数组总数据
@@ -515,7 +515,7 @@ export default {
       stu_secrch:'', //学生搜索
       is_parttime:'', //选择老师类型
       parms:{
-        start_time:this.thisDay,
+        // start_time:this.thisDay,
       },//总参数
     };
   },
