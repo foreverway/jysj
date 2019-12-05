@@ -16,7 +16,6 @@
           <span>地区</span>
           <span v-if="form.always_area">{{form.always_area}}</span>
           <span v-if="!form.always_area" style="color:silver;">暂无记录</span>
-
         </li>
         <li>
           <span>手机号</span>
@@ -71,8 +70,7 @@
         <li>
           <span>进线渠道</span>
           <span style=" border-top-style:hidden;" v-if="form.inchannel">{{form.end_time}}</span>
-                    <span style=" border-top-style:hidden;color:silver;" v-if="!form.inchannel" >暂无记录</span>
-
+          <span style=" border-top-style:hidden;color:silver;" v-if="!form.inchannel">暂无记录</span>
         </li>
         <li>
           <span>接入人</span>
@@ -85,18 +83,15 @@
         <li>
           <span>顾问</span>
           <span v-if="form.add_admin_id">{{form.add_admin_id}}</span>
-          <span v-if="!form.add_admin_id" style=" border-top-style:hidden;color:silver;" >暂无记录</span>
-
+          <span v-if="!form.add_admin_id" style=" border-top-style:hidden;color:silver;">暂无记录</span>
         </li>
         <li>
           <span>升学指导</span>
-          <span style=" border-top-style:hidden;color:silver;" >暂无记录</span>
-
+          <span style=" border-top-style:hidden;color:silver;">暂无记录</span>
         </li>
         <li>
           <span>教学主管</span>
           <span style=" border-top-style:hidden;color:silver;background-color:#fff;">暂无记录</span>
-
         </li>
       </ul>
       <div style="clear:both;"></div>
@@ -176,7 +171,7 @@
           <el-table-column prop="student_name" label="学生姓名"></el-table-column>
           <el-table-column prop="teacher_name" label="讲师姓名"></el-table-column>
           <el-table-column prop="course_address" label="地点"></el-table-column>
-          <el-table-column prop="subject_name" label="科目"></el-table-column>
+          <el-table-column prop="subject_name" sortable label="科目"></el-table-column>
           <el-table-column prop="live_name" label="直播平台"></el-table-column>
           <el-table-column label="操作" width="320" fixed="right">
             <template slot-scope="scope">
@@ -190,10 +185,11 @@
                 v-if="scope.row.ready_txt=='未知状态'"
                 style="color:silver;bcakground-color:rgb(255,208,75);"
               >{{scope.row.ready_txt}}</el-button>
-                              <el-button
+              <el-button
                 size="mini"
                 v-if="scope.row.ready_status==5"
-                style="color:silver" disabled
+                style="color:silver"
+                disabled
               >{{scope.row.ready_txt}}</el-button>
               <el-button
                 size="mini"
@@ -240,7 +236,7 @@
         <el-container>
           <el-header>
             <el-tabs v-model="activeName" @tab-click="handleClick">
-              <el-tab-pane class='ddd' label="学习币明细" name="1"></el-tab-pane>
+              <el-tab-pane class="ddd" label="学习币明细" name="1"></el-tab-pane>
               <el-tab-pane label="现金钱包明细" name="2"></el-tab-pane>
               <el-tab-pane label="福利钱包明细" name="3"></el-tab-pane>
             </el-tabs>
@@ -452,7 +448,7 @@ export default {
       activeNames: ["1"],
       tableData: [], //表格数据
       form: {},
-      class_value:[],
+      class_value: [],
       currentPage: 1, //当前页
       class_length: null, //排课长度
       classcount: null, //学生课表长度
@@ -501,14 +497,13 @@ export default {
   mounted() {
     this.$router.push({
       path: "/StudentsList/StudentsInfo/VirtualMonney",
-      query: {id: this.$route.query.id, search: this.$route.query.search,  }
+      query: { id: this.$route.query.id, search: this.$route.query.search }
     });
     // console.log(this.$route.query.search,this.$route.query.id)
     var name = this.$route.path.substring(this.$route.path.indexOf("/") + 1);
     this.url = name.substr(0, 12);
   },
-  beforeMount() {
-  },
+  beforeMount() {},
   created() {
     this.getData();
     this.getClassList();
@@ -555,18 +550,23 @@ export default {
     // window.onmousewheel = document.onmousewheel = scrollFunc;
   },
   methods: {
-        handleChange_1(targetName) {
+    handleChange_1(targetName) {
       //选择科目
-      var lastName = targetName.length == 1 ? targetName[0] :(targetName.length==2? targetName[1]: targetName[2]);
-        this.getDataparams.subject_id=lastName,
-
-      this.$apis.students.student_arranging_course(this.getDataparams).then(res => {
-        if (res.data.code == 1) {
-          this.tableData = res.data.data.list;
-                        this.class_length = res.data.data.count;
-
-        }
-      });
+      var lastName =
+        targetName.length == 1
+          ? targetName[0]
+          : targetName.length == 2
+          ? targetName[1]
+          : targetName[2];
+      (this.getDataparams.subject_id = lastName),
+        this.$apis.students
+          .student_arranging_course(this.getDataparams)
+          .then(res => {
+            if (res.data.code == 1) {
+              this.tableData = res.data.data.list;
+              this.class_length = res.data.data.count;
+            }
+          });
     },
     goBack() {
       // this.$router.go(-1);
@@ -601,7 +601,7 @@ export default {
           if (res.data.code == 1) {
             this.form = res.data.data;
           }
-        })
+        });
       this.$apis.students //排课列表
         .student_arranging_course(this.getDataparams)
         .then(res => {
@@ -792,7 +792,8 @@ export default {
         }
       });
     },
-    getClassList() {  //获取学生课表
+    getClassList() {
+      //获取学生课表
       this.$apis.common.student_course(this.classparms).then(res => {
         if (res.data.code == 1) {
           this.classData = res.data.data.list;
@@ -803,9 +804,7 @@ export default {
     handleSizeChange(val) {
       this.pagesize = val * 1;
     }
-  },
-
-
+  }
 };
 </script>
 <style scoped>

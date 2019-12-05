@@ -39,10 +39,15 @@
       </el-form-item>
       <el-form-item label="是否战队长">
     <el-radio-group v-model="form.is_captain">
-      <el-radio label="0">否</el-radio>
-      <el-radio label="1">是</el-radio>
+      <el-radio label='0'>否</el-radio>
+      <el-radio label='1'>是</el-radio>
     </el-radio-group>
   </el-form-item>
+         <el-form-item label="战队" >
+                   <el-input v-model="form.team" ></el-input>
+
+       <!-- <p>{{form.team?form.team:'此战队没有名称'}}</p> -->
+      </el-form-item>
       <el-form-item label="账户角色">
         <el-select v-model="form.role_id" placeholder="请选择">
           <el-option
@@ -78,8 +83,7 @@ export default {
       rolelist: "",
       id: this.$route.params.id*1, //用户id
       form: {
-                  is_captain:'',
-
+        is_captain:'',
         admin_id: "",
         admin_name: "",
         admin_tel: "",
@@ -129,6 +133,8 @@ export default {
         if (res.data.code == 1) {
           this.form = res.data.data;
           this.form.admin_sex = res.data.data.admin_sex.toString();
+          this.form.is_captain = res.data.data.is_captain.toString()
+          console.log( this.form)
         }
       });
 

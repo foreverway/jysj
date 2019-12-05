@@ -73,6 +73,11 @@ export default new Router({
 
         },
         {
+          path: '/ClassCensus',//业绩统计
+          component:resolve=>require(['@/components/Statistics/ClassCensus'],resolve),
+
+        },
+        {
           // path: '/ToAssessTeacher/:id',//ToAssessTeacher  [评价老师]
            path: '/TeacherAssess/ToAssessTeacher',
            name:"ToAssessTeacher",
