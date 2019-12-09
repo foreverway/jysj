@@ -147,6 +147,12 @@ export default {
     return shuju.postdata(url, params)
   },
 
+  //编辑提交考勤数据
+  attendance_edit(params) {
+    let url = "/api/api_attendance_edit"
+    return shuju.putdata(url, params)
+  },
+
   attendance_details(params) { //查看详情
     let url = "/api/api_attendance_details"
     return shuju.getdata(url, params)

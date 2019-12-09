@@ -20,11 +20,6 @@
             :value="item.value"
           ></el-option>
         </el-select>
-        <!-- <el-button
-          type="primary"
-          @click="getadata"
-          style="margin-left:5px;background-color:#e6563a; border:none;"
-        >搜索</el-button> -->
 
         <el-date-picker
           style="margin-left:60px"
@@ -88,7 +83,12 @@
             v-show="scope.row.attendance_status!==0"
             @click="seeMore(scope)"
           >查看考勤详情</el-button>
-
+            <el-button
+            size="mini"
+            style="background-color:#7571fa;color:white;"
+            v-show="scope.row.attendance_status==2&&scope.row.is_forward!==1"
+            @click="showEdit(scope)"
+          >编辑考勤</el-button>
           <el-button
             size="mini"
             style="background-color:#409EFF;color:white;"
@@ -197,7 +197,7 @@
       :close-on-click-modal="false"
       title="查看详情"
       :visible.sync="centerDialogVisible_seeMore"
-      width="50%"
+      width="800px"
     >
       <el-form
         :inline="true"
@@ -220,13 +220,13 @@
         </el-form-item>
 
         <el-form-item label="异动实上课时备注" v-show="seeMoreData.attendance_type==2">
-          <p style="width:100px">{{seeMoreData.remarks1}}</p>
+          <p style="width:150px">{{seeMoreData.remarks1}}</p>
         </el-form-item>
         <el-form-item label="老师核准">
           <p style="width:100px">{{seeMoreData.teacher_classhour }}</p>
         </el-form-item>
         <el-form-item label="异动老师核准备注" v-show="seeMoreData.attendance_type==2">
-          <p style="width:100px">{{seeMoreData.remarks2}}</p>
+          <p style="width:150px">{{seeMoreData.remarks2}}</p>
         </el-form-item>
         <el-form-item label="学生核准">
           <p style="width:100px">{{seeMoreData.student_classhour }}</p>
@@ -236,7 +236,7 @@
           <p style="width:100px" v-show="seeMoreData.remarks==''">没有备注</p>
         </el-form-item>
         <el-form-item label="异动学生核准的备注" v-show="seeMoreData.attendance_type==2">
-          <p style="width:100px">{{seeMoreData.remarks3}}</p>
+          <p style="width:150px">{{seeMoreData.remarks3}}</p>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -244,6 +244,76 @@
         <el-button type="primary" @click="centerDialogVisible_seeMore = false">确 定</el-button>
       </span>
     </el-dialog>
+
+    <!-- 编辑考勤数据的弹出页面 -->
+    <el-dialog
+      :close-on-click-modal="false"
+      title=" 编辑考勤"
+      :visible.sync="edit_check_dom"
+      width="800px"
+    >
+      <el-form
+        :inline="true"
+        :label-position="labelPosition"
+        class="demo-form-inline"
+        label-width="150px"
+        :model="seeMoreDataEdit"
+      >
+        <el-form-item label="已排课时" v-show="seeMoreDataEdit.attendance_type==1&&seeMoreDataEdit.attendance_type==2">
+          <el-input style="width:100px;" v-model="seeMoreDataEdit.classhour"></el-input>
+          <!-- <p style="width:100px;">{{seeMoreDataEdit.classhour}}</p> -->
+        </el-form-item>
+        <el-form-item label="已排课时" v-show="seeMoreDataEdit.attendance_type==2">
+          <!-- <p style="width:100px">{{seeMoreDataEdit.classhour}}</p> -->
+            <el-input style="width:100px;" v-model="seeMoreDataEdit.classhour"></el-input>
+        </el-form-item>
+        <el-form-item label=" " v-show="seeMoreDataEdit.attendance_type==2">
+          <p style="width:100px"></p>
+        </el-form-item>
+        <el-form-item label="实上课时">
+          <!-- <p style="width:100px">{{seeMoreDataEdit.true_classhour}}</p> -->
+          <el-input style="width:100px;" v-model="seeMoreDataEdit.true_classhour"></el-input>
+
+        </el-form-item>
+
+        <el-form-item label="异动实上课时备注" v-show="seeMoreDataEdit.attendance_type==2">
+          <!-- <p style="width:100px">{{seeMoreDataEdit.remarks1}}</p> -->
+<el-input style="width:150px;" v-model="seeMoreDataEdit.remarks1"></el-input>
+
+        </el-form-item>
+        <el-form-item label="老师核准">
+<el-input style="width:100px;" v-model="seeMoreDataEdit.teacher_classhour"></el-input>
+          
+          <!-- <p style="width:100px">{{seeMoreDataEdit.teacher_classhour }}</p> -->
+        </el-form-item>
+        <el-form-item label="异动老师核准备注" v-show="seeMoreDataEdit.attendance_type==2">
+          <!-- <p style="width:100px">{{seeMoreDataEdit.remarks2}}</p> -->
+<el-input style="width:150px;" v-model="seeMoreDataEdit.remarks2"></el-input>
+
+        </el-form-item>
+        <el-form-item label="学生核准">
+          <el-input style="width:100px;" v-model="seeMoreDataEdit.student_classhour"></el-input>
+
+          <!-- <p style="width:100px">{{seeMoreDataEdit.student_classhour }}</p> -->
+        </el-form-item>
+        <el-form-item label="备注" v-show="seeMoreDataEdit.attendance_type==1">
+          <el-input style="width:150px;" v-model="seeMoreDataEdit.remarks"></el-input>
+
+          <!-- <p style="width:100px" v-show="seeMoreDataEdit.remarks">{{seeMoreDataEdit.remarks }}</p> -->
+          <p style="width:100px" v-show="seeMoreDataEdit.remarks==''">没有备注</p>
+        </el-form-item>
+        <el-form-item label="异动学生核准的备注" v-show="seeMoreDataEdit.attendance_type==2">
+                    <el-input style="width:150px;" v-model="seeMoreDataEdit.remarks3"></el-input>
+
+          <!-- <p style="width:100px">{{seeMoreDataEdit.remarks3}}</p> -->
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="edit_check_dom = false">取 消</el-button>
+        <el-button type="primary" @click="edit_put">确 定</el-button>
+      </span>
+    </el-dialog>
+
     <!-- 查看课堂反馈 -->
     <el-dialog
       :close-on-click-modal="false"
@@ -399,7 +469,9 @@ export default {
       centerDialogVisible_seeMore: false,
       opration: "", //操作选项
       labelPosition: "left",
-      formLabelAlign: {} //查看反馈内容
+      formLabelAlign: {}, //查看反馈内容
+      seeMoreDataEdit:{} , //编辑考勤数据
+      edit_check_dom:false,
     };
   },
   computed: mapState(["rolemenu"]),
@@ -471,6 +543,25 @@ export default {
         }
       });
     },
+    edit_put(result){
+              this.$apis.common.attendance_edit(this.seeMoreDataEdit).then(res => {
+        if (res.data.code == 1) {
+          this.$message({
+            message: "成功",
+            type: "success"
+          });
+          this.getadata();
+         this.edit_check_dom = false
+
+        } else {
+          this.$message({
+            message: res.data.msg,
+            type: "warning"
+          });
+        }
+      });
+    },
+
     unnormal(a) {
       this.unnormalData = {};
       (this.unnormalData.attendance_type = 2),
@@ -516,11 +607,26 @@ export default {
       this.$apis.common.attendance_details(params).then(res => {
         if (res.data.code) {
           this.seeMoreData = res.data.data;
+          this.seeMoreDataEdit=res.data.data
+          this.seeMoreDataEdit.course_id=result.row.course_id
           this.seeMoreData.attendance_type = result.row.attendance_status;
         }
       });
     },
-
+    showEdit(result){
+            this.edit_check_dom = true;
+      let params = {
+        course_id: result.row.course_id
+      };
+      this.$apis.common.attendance_details(params).then(res => {
+        if (res.data.code) {
+          this.seeMoreData = res.data.data;
+          this.seeMoreDataEdit=res.data.data
+          this.seeMoreDataEdit.course_id=result.row.course_id
+          this.seeMoreData.attendance_type = result.row.attendance_status;
+        }
+      });
+    },
     payMoney(data) {
       let params = {
         course_id: data.course_id
@@ -538,6 +644,11 @@ export default {
                 message: "结转成功!"
               });
               this.getadata();
+            }else{
+                  this.$message({
+                type: "warning",
+                message: res.data.msg
+              }); 
             }
           });
         })

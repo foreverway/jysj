@@ -1,6 +1,7 @@
 <template>
-  <div class="echarts">
-    <div :style="{height:'420px',width:'100%'}" ref="myEchart"></div>
+  <div class="echarts" >
+      <div>未定义</div>
+    <div v-if="show==true" :style="{height:'420px',width:'100%'}" ref="myEchart"></div>
   </div>
 </template>
 <script>
@@ -10,7 +11,8 @@
     props: ["renderData"],
     data() {
       return {
-        chart: null
+        chart: null,
+        show:false
       };
     },
     mounted() {

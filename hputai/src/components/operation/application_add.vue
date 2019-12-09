@@ -298,13 +298,14 @@ export default {
       editableTabs: [
         //新增的内容的数据数组(学生)
       ],
+      student_list:[],
       tabIndex: 0,
       tabIndex_1: 0,
       students_data: [], //用户id
       subjects_data: [], //学科数据
       feedback: "", //反馈
       course_address: "", //上课线上或线下
-      subject_name: "" //选择的学科姓名
+      subject_name: "" //选择的学科姓名 
     };
   },
   created() {
@@ -427,7 +428,6 @@ export default {
     },
     createStudent() {
       // var checkVal=document.getElementsByClassName("checkVal")
-      // console.log(checkVal)  /api_students_data
     },
 
     //获取学生列表
@@ -523,7 +523,6 @@ export default {
     //学生姓名选择产生的变化
     handleChange(targetName) {
       this.student_name = targetName;
-      //console.log(this.writeCurrentDate());
       var checkOne = this.options_1.filter(
         item => item.username == targetName[0]
       );
@@ -550,8 +549,13 @@ export default {
     onSubmit(form2) {
       this.$refs[form2].validate(valid => {
         if (valid) {
+                this.editableTabs.forEach(item => {
+           this.student_list.push(
+               item.name
+            );
+          });
           let parms = {
-            title: this.form.value_1 + "的科目" + this.subject_name,
+            title: this.student_list.toString() + "的" + this.subject_name+'课程',
             expiry_date: this.form.valueDate,
             remarks: this.form.feedback,
             course_address: this.form.radio,
@@ -589,8 +593,8 @@ export default {
       });
     },
     next(form) {
-           var moreClass=parseInt(this.$route.query.allMoney/this.editableTabs_1[0].price)
 
+           var moreClass=parseInt(this.$route.query.allMoney/this.editableTabs_1[0].price)
       if(this.editableTabs_1[0].price*this.editableTabs_1[0].classhour<=this.$route.query.allMoney){
       this.$refs[form].validate(valid => {
         if (valid) {
@@ -606,7 +610,6 @@ export default {
               is_group: item.is_group
             });
           });
-          //console.log(this.subjects_data)
 
           this.editableTabs.forEach(item => {
             this.students_data.push({
@@ -614,7 +617,6 @@ export default {
             });
           });
           this.editableTabs_1.forEach((item, i) => {
-            //console.log(this.subjects_data)
             if (item.course_id == 1) {
               this.parms = {
                 title: this.form.title,
@@ -680,7 +682,6 @@ export default {
       oInput.value = url;
       document.body.appendChild(oInput);
       oInput.select(); // 选择对象;
-      //  console.log(oInput.value);
       document.execCommand("Copy"); // 执行浏览器复制命令
       this.$message({
         message: url + "已成功复制到剪切板",
