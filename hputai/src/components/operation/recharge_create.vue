@@ -89,7 +89,7 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="顾问1：">
+      <el-form-item label="第二收款人">
         <el-select clearable v-model="form.consultant1" filterable placeholder="搜索选择">
           <el-option
             v-for="item in adviser"
@@ -100,16 +100,6 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="顾问2：">
-        <el-select clearable v-model="form.consultant2" filterable placeholder="搜索选择">
-          <el-option
-            v-for="item in adviser"
-            :key="item.id"
-            :label="item.adviser"
-            :value="item.id"
-          ></el-option>
-        </el-select>
-      </el-form-item>
 
       <el-form-item label="报课项目：" prop="classproject">
         <el-select clearable v-model="form.classproject" placeholder="请选择" v-if="msg.data">
@@ -122,7 +112,7 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="班主任：">
+      <!-- <el-form-item label="班主任：">
         <el-select
           clearable
           style="width:200px"
@@ -134,7 +124,7 @@
         >
           <el-option v-for="item in teacher" :key="item.id" :label="item.teacher" :value="item.id"></el-option>
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item style="width:100%;margin-left:30px">
         <el-button type="primary" @click="add('form')">确定</el-button>
         <el-button @click="goback">取消</el-button>

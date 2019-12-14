@@ -27,7 +27,7 @@
             <el-option v-for="item in people" :key="item.id" :label="item.name" :value="item.name"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="顾问1：">
+        <el-form-item label="第二收款人">
           <el-select
             clearable
             multiple
@@ -250,7 +250,7 @@
           <span>{{ scope.row.given_type }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="赠送备注说明">
+      <el-table-column align="center" label="赠送备注说明" width="120">
         <template slot-scope="scope">
           <span>{{ scope.row.given_remarks }}</span>
         </template>
@@ -260,16 +260,16 @@
           <span>{{ scope.row.in_people }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="顾问1">
+      <el-table-column align="center" label="第二收款人">
         <template slot-scope="scope">
           <span>{{ scope.row.consultant1 }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="顾问2">
+      <!-- <el-table-column align="center" label="顾问2">
         <template slot-scope="scope">
           <span>{{ scope.row.consultant2 }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column align="center" label="报课项目">
         <template slot-scope="scope">
           <span>{{ scope.row.classproject }}</span>
@@ -294,6 +294,7 @@
       </el-table-column>
       <el-table-column align="center" label="操作" width="200" fixed="right">
         <template slot-scope="scope">
+          <!--  -->
          <el-button
             @click="toEdit(scope.row.id)"
             v-show="scope.row.status==0"
@@ -301,6 +302,10 @@
             size="mini"
             type="success"
           >编辑</el-button>
+           <span
+            v-show="scope.row.status==2"
+            style="color:red;"
+          >{{scope.row.audit_content}}</span>
           <el-button size="mini" type="info" disabled v-if="scope.row.status==1">已编辑</el-button>
           <el-button
             v-show="scope.row.status==0"

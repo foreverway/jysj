@@ -152,7 +152,11 @@ export default {
     let url = "/api/api_attendance_edit"
     return shuju.putdata(url, params)
   },
-
+  //编辑提交调课
+  course_transfer(params) {
+    let url = "/api/api_course_transfer"
+    return shuju.postdata(url, params)
+  },
   attendance_details(params) { //查看详情
     let url = "/api/api_attendance_details"
     return shuju.getdata(url, params)
