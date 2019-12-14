@@ -286,6 +286,12 @@
                 @click="fillFeedback_see(scope.row.course_id,scope.row)"
                 style="color:blue"
               >{{scope.row.feedback_txt}}</el-button>
+                           <el-button
+                size="mini"
+                v-if="scope.row.feedback_txt=='查看课堂反馈'"
+                @click="fillFeedback_edit(scope.row.course_id,scope.row)"
+                style="color:blue"
+              >编辑反馈</el-button>
               <el-button
                 size="mini"
                 v-if="scope.row.feedback_txt=='等待讲师填写'"
@@ -486,6 +492,185 @@
             </el-form-item>
           </el-form>
         </el-dialog>
+
+         <!-- 编辑课堂反馈 -->
+        <el-dialog :close-on-click-modal="false" title="编辑课堂反馈" :visible.sync="editOpen">
+          <p style="margin-bottom:10px;">
+            <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>课程信息
+          </p>
+
+          <ul :data="gridData" class="ul_li">
+            <li>
+              <span>课程名称</span>
+              <span>{{gridData.subject_name}}</span>
+            </li>
+            <li>
+              <span>教师姓名</span>
+              <span>{{gridData.teacher_name}}</span>
+            </li>
+            <li>
+              <span>班主任</span>
+              <span>{{gridData.banzhuren_name}}</span>
+            </li>
+            <li>
+              <span>上课时间</span>
+              <span style=" border-top-style:hidden;">{{gridData.start_time}}</span>
+            </li>
+            <li>
+              <span>结束时间</span>
+              <span style=" border-top-style:hidden;">{{gridData.end_time}}</span>
+            </li>
+            <li>
+              <span>时长</span>
+              <span style=" border-top-style:hidden;">{{gridData.classhour}}</span>
+            </li>
+            <li>
+              <span>授课方式</span>
+              <span>{{formLabelAlign.course_address}}</span>
+            </li>
+            <li style="width:64%;">
+              <span style="width:15%;">地点</span>
+              <span style="width:84%;">{{formLabelAlign.course_address}}</span>
+            </li>
+          </ul>
+          <div style="clear:both;"></div>
+          <p style="margin-bottom:10px;">
+            <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>反馈内容
+          </p>
+          <el-form :model="form" :rules="rules" ref="ruleForm" label-width="200px">
+            <el-form-item label="类型">
+
+                <p v-if="form.feedback_type==1">试听/首次课程反馈</p>
+                <p v-if="form.feedback_type==2">日常上课反馈</p>
+                <p v-if="form.feedback_type==3">阶段性上课反馈</p>
+                <p v-if="form.feedback_type==4">结课总结</p>
+            </el-form-item>
+            <el-form-item label="试听/首次课上课内容" prop="name" v-if="form.feedback_type=='1'">
+              <el-input
+                type="textarea"
+                v-model="form.feedback1[0].details_1"
+                placeholder="试听/首次课上课内容"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="学生的课堂表现" prop="name" v-if="form.feedback_type=='1'">
+              <el-input
+                type="textarea"
+                v-model="form.feedback1[0].details_2"
+                placeholder="学生的课堂表现及学生学习上存在的主要问题，学生课下复习的重点有哪些"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="学习水平评估" prop="name" v-if="form.feedback_type=='1'">
+              <el-input
+                type="textarea"
+                v-model="form.feedback1[0].details_3"
+                placeholder="老师对学生此科目学习水平的评估及接下来的学习建议
+"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="课程计划及课时安排" prop="name" v-if="form.feedback_type=='1'">
+              <el-input
+                type="textarea"
+                v-model="form.feedback1[0].details_4"
+                placeholder="针对此学生的课程计划及相应的课时安排"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="课后作业" prop="name" v-if="form.feedback_type=='1'">
+              <el-input
+                type="textarea"
+                v-model="form.feedback1[0].details_5"
+                placeholder="	本次课的课后作业"
+              ></el-input>
+            </el-form-item>
+
+            <el-form-item label="完成情况" prop="name" v-if="form.feedback_type=='2'">
+              <el-input
+                type="textarea"
+                v-model="form.feedback2[0].details_1"
+                placeholder="	上节课学生作业的完成情况及其知识点掌握情况，学生掌握不好的地方有哪些"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="本次上课内容" prop="name" v-if="form.feedback_type=='2'">
+              <el-input type="textarea" v-model="form.feedback2[0].details_2" placeholder="	本次上课内容"></el-input>
+            </el-form-item>
+            <el-form-item label="课堂表现" prop="name" v-if="form.feedback_type=='2'">
+              <el-input
+                type="textarea"
+                v-model="form.feedback2[0].details_3"
+                placeholder="	学生的课堂表现及学生本次课掌握不好的地方，学生课下复习的重点有哪些"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="课后作业" prop="name" v-if="form.feedback_type=='2'">
+              <el-input
+                type="textarea"
+                v-model="form.feedback2[0].details_4"
+                placeholder="	本次课的课后作业"
+              ></el-input>
+            </el-form-item>
+
+            <el-form-item label="学生总体表现" prop="name" v-if="form.feedback_type=='3'">
+              <el-input
+                type="textarea"
+                v-model="form.feedback3[0].details_1"
+                placeholder="课程期间学生总体表现"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="阶段总结" prop="name" v-if="form.feedback_type=='3'">
+              <el-input
+                type="textarea"
+                v-model="form.feedback3[0].details_2"
+                placeholder="	总结此阶段学生作业的完成情况及其知识点掌握情况"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="需要提升点" prop="name" v-if="form.feedback_type=='3'">
+              <el-input
+                type="textarea"
+                v-model="form.feedback3[0].details_3"
+                placeholder="	指出学生接下来需要提升的若干点"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="课程计划" prop="name" v-if="form.feedback_type=='3'">
+              <el-input
+                type="textarea"
+                v-model="form.feedback3[0].details_4"
+                placeholder="	授课老师接下来的课程计划"
+              ></el-input>
+            </el-form-item>
+
+            <el-form-item label="总结学习内容" prop="name" v-if="form.feedback_type=='4'">
+              <el-input
+                type="textarea"
+                v-model="form.feedback4[0].details_1"
+                placeholder="	总结此整个课程学习内容"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="总结课程教学过程" prop="name" v-if="form.feedback_type=='4'">
+              <el-input
+                type="textarea"
+                v-model="form.feedback4[0].details_2"
+                placeholder="	总结此课程教学过程中学生作业的完成情况及其知识点掌握情况
+"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="需要提升点" prop="name" v-if="form.feedback_type=='4'">
+              <el-input
+                type="textarea"
+                v-model="form.feedback4[0].details_3"
+                placeholder="	指出学生接下来需要提升的若干点"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="授课老师建议" prop="name" v-if="form.feedback_type=='4'">
+              <el-input
+                type="textarea"
+                v-model="form.feedback4[0].details_4"
+                placeholder="	授课老师接对学生后续学习此科目或课程的建议"
+              ></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="onSubmit_edit">确定</el-button>
+              <el-button type="primary" @click="onSubmit_def">取消</el-button>
+            </el-form-item>
+          </el-form>
+        </el-dialog>
         <!-- 查看课堂反馈 -->
         <el-dialog
           :close-on-click-modal="false"
@@ -647,10 +832,10 @@ export default {
         ruleForm: {
           name: ""
         },
-        name: [
-          { required: true, message: "请输入活动名称", trigger: "blur" },
-          { min: 20, message: "长度在 20个字符以上", trigger: "blur" }
-        ]
+        // name: [
+        //   { required: true, message: "请输入活动名称", trigger: "blur" },
+        //   { min: 20, message: "长度在 20个字符以上", trigger: "blur" }
+        // ]
       },
       value: "",
       labelPosition: "top", //其他方法进入直播排在顶部
@@ -730,7 +915,8 @@ export default {
         start_time: "",
         remarks: "",
         course_id: ""
-      }
+      },
+      editOpen:false,
       //调课之后的提交
     };
   },
@@ -860,11 +1046,46 @@ export default {
 
     onSubmit() {
       this.form.course_id = this.course;
-      //  this.form.feedback1.details_1 = this.course;
       console.log(this.form);
       this.$apis.common.post_feedback_add(this.form).then(res => {
         if (res.data.code == 1) {
           this.dialogFromVisible = false;
+          this.form.feedback1 = [
+            {
+              details_1: "",
+              details_2: "",
+              details_3: "",
+              details_4: "",
+              details_5: ""
+            }
+          ];
+          this.form.feedback2 = [
+            { details_1: "", details_2: "", details_3: "", details_4: "" }
+          ];
+          this.form.feedback3 = [
+            { details_1: "", details_2: "", details_3: "", details_4: "" }
+          ];
+          this.form.feedback4 = [
+            { details_1: "", details_2: "", details_3: "", details_4: "" }
+          ];
+
+          this.searchDay(this.thisDay);
+          this.$message({
+            type: "success",
+            message: "提交成功"
+          });
+        }
+      });
+    },
+    onSubmit_def(){
+                      this.editOpen = false;
+
+    },
+        onSubmit_edit() {
+      this.form.course_id = this.course;
+      this.$apis.common.edit_feedback_add(this.form).then(res => {
+        if (res.data.code == 1) {
+                this.editOpen = false;
           this.form.feedback1 = [
             {
               details_1: "",
@@ -912,10 +1133,7 @@ export default {
       this.form.feedback4 = [
         { details_1: "", details_2: "", details_3: "", details_4: "" }
       ];
-      // this.form.feedback1=[]
-      //   this.form.feedback2=[]
-      //     this.form.feedback3=[]
-      //       this.form.feedback4=[]
+
     },
     fillFeedback_see(a) {
       let parms = {
@@ -925,8 +1143,22 @@ export default {
       this.$apis.common.course_feedback(parms).then(res => {
         if (res.data.code == 1) {
           this.formLabelAlign = res.data.data;
-          console.log(this.formLabelAlign);
           this.gridData = this.formLabelAlign;
+          console.log( this.formLabelAlign)
+        }
+      });
+    },
+        fillFeedback_edit(a) {
+      let parms = {
+        course_id: a
+      };
+      this.editOpen = true;
+      this.$apis.common.course_feedback(parms).then(res => {
+        if (res.data.code == 1) {
+                    this.form=res.data.data
+
+          this.gridData = res.data.data;
+          console.log( this.form)
         }
       });
     },
@@ -938,6 +1170,7 @@ export default {
       this.$apis.common.course_feedback(parms).then(res => {
         if (res.data.code == 1) {
           this.formLabelAlign = res.data.data;
+          console.log( this.formLabelAlign)
           this.gridData = this.formLabelAlign;
         }
       });

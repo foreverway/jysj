@@ -131,6 +131,12 @@ export default {
     return shuju.postdata(url, params)
   },
 
+  edit_feedback_add(params) { //编辑课表反馈数据
+    let url = "/api/api_feedback_edit"
+    return shuju.putdata(url, params)
+  },
+
+
   course_feedback(params) { //查看课堂反馈
     let url = "/api/api_course_feedback"
     return shuju.getdata(url, params)
