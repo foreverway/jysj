@@ -127,6 +127,7 @@ export default {
       },
       form1: {
         // 入款和扣款
+        page: 1, //页码
         amount: "", //金额
         reason: "", //理由
         uname: "", //学生姓名

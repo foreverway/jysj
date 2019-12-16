@@ -242,7 +242,7 @@
             </el-tabs>
           </el-header>
           <el-container>
-            <el-main style="height:600px;padding:0;">
+            <el-main style="height:800px;width:100%;padding:0;">
               <router-view />
               <!-- 主体部分在这里显示 -->
             </el-main>
