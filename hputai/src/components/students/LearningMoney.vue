@@ -2,7 +2,12 @@
   <div class="so_main">
     <div class="so_main_left">
       <el-form :inline="true" :model="form" class="demo-form-inline">
-        <el-input v-if="this.url!=='StudentsList'" class="so_input" v-model="form.search" placeholder="请输入搜索内容"></el-input>
+        <el-input
+          v-if="this.url!=='StudentsList'"
+          class="so_input"
+          v-model="form.search"
+          placeholder="请输入搜索内容"
+        ></el-input>
         <el-button
           type="primary"
           @click="getadata"
@@ -10,50 +15,50 @@
           style="margin-left:5px;background-color:#e6563a; border:none;"
         >搜索</el-button>
 
-   <div   v-if="this.url=='StudentsList'"    style="float:right; margin:0 0 15px 17px;"
-
-><el-date-picker
-          @change="getadata"
-          v-model="form.start_time"
-          clearable
-          type="datetime"
-          value-format="yyyy-MM-dd H:mm:ss"
-          placeholder="选择日期时间"
-        ></el-date-picker>至
-        <el-date-picker
-          @change="getadata"
-          v-model="form.end_time"
-          clearable
-          type="datetime"
-          value-format="yyyy-MM-dd H:mm:ss"
-          placeholder="选择日期时间"
-        ></el-date-picker></div>
-          <div   v-if="this.url!=='StudentsList'"   
-
-><el-date-picker
-          @change="getadata"
-          v-model="form.start_time"
-          clearable
-          type="datetime"
-          value-format="yyyy-MM-dd H:mm:ss"
-          placeholder="选择日期时间"
-        ></el-date-picker>至
-        <el-date-picker
-          @change="getadata"
-          v-model="form.end_time"
-          clearable
-          type="datetime"
-          value-format="yyyy-MM-dd H:mm:ss"
-          placeholder="选择日期时间"
-        ></el-date-picker></div>
+        <div v-if="this.url=='StudentsList'" style="float:right; margin:0 0 15px 17px;">
+          <el-date-picker
+            @change="getadata"
+            v-model="formStudent.start_time"
+            clearable
+            type="datetime"
+            value-format="yyyy-MM-dd H:mm:ss"
+            placeholder="选择日期时间"
+          ></el-date-picker>至
+          <el-date-picker
+            @change="getadata"
+            v-model="formStudent.end_time"
+            clearable
+            type="datetime"
+            value-format="yyyy-MM-dd H:mm:ss"
+            placeholder="选择日期时间"
+          ></el-date-picker>
+        </div>
+        <div v-if="this.url!=='StudentsList'">
+          <el-date-picker
+            @change="getadata"
+            v-model="form.start_time"
+            clearable
+            type="datetime"
+            value-format="yyyy-MM-dd H:mm:ss"
+            placeholder="选择日期时间"
+          ></el-date-picker>至
+          <el-date-picker
+            @change="getadata"
+            v-model="form.end_time"
+            clearable
+            type="datetime"
+            value-format="yyyy-MM-dd H:mm:ss"
+            placeholder="选择日期时间"
+          ></el-date-picker>
+        </div>
       </el-form>
     </div>
 
     <div class="so_main_right">
-            <!-- <el-button type="danger"  v-if="msg.data.isAdmin=='1'" @click="dialogVisible= true,form1.type=1">入款</el-button> -->
+      <!-- <el-button type="danger"  v-if="msg.data.isAdmin=='1'" @click="dialogVisible= true,form1.type=1">入款</el-button> -->
 
-      <el-button type="danger"  @click="dialogVisible= true,form1.type=1">入款</el-button>
-      <el-button type="primary"  @click="dialogVisible= true,form1.type=2">扣款</el-button>
+      <el-button type="danger"  v-if="this.url!=='StudentsList'" @click="dialogVisible= true,form1.type=1">入款</el-button>
+      <el-button type="primary" v-if="this.url!=='StudentsList'"  @click="dialogVisible= true,form1.type=2">扣款</el-button>
 
       <el-dialog
         :close-on-click-modal="false"
@@ -98,14 +103,14 @@
     </div>
     <!-- 表格数据 -->
     <el-table
-    
       :header-cell-style="{background:'#f4f4f4'}"
       ref="multipleTable"
       border
       :data="tableData"
       style="width: 100%"
     >
-      <el-table-column label="序号" type="index" width="80" align="center" :index="indexMethod"></el-table-column>
+       <el-table-column label="序号" type="index" width="80" align="center" v-if="this.url!=='StudentsList'" :index="indexMethod"></el-table-column>
+      <el-table-column label="序号" type="index" width="80" align="center" v-if="this.url=='StudentsList'" :index="index_stu"></el-table-column>
 
       <el-table-column align="center" label="学员账号">
         <template slot-scope="scope">
@@ -134,19 +139,30 @@
     </el-table>
     <!-- <p style="margin-top:30px"><span>累计金额：</span><span style="color:red">{{msg.data.givenamount}}</span></p> -->
     <!-- <el-button type="primary" @click="ifinputselect" style="margin-top:20px">审核</el-button> -->
-<span v-if="msg.data">
-    <el-pagination
-      style="float:right;margin-bottom:30px"
-      background
-      layout="prev, pager, next"
-      @prev-click="prev"
-      @next-click="next"
-      @current-change="current"
-      :page-size="10"
-      :total="msg.data.count"
-    ></el-pagination>
-</span>
-
+   <span v-if="msg.data&&this.url!=='StudentsList'">
+      <el-pagination
+        style="float:right;"
+        background
+        layout="prev, pager, next,total"
+        @prev-click="prev"
+        @next-click="next"
+        @current-change="current"
+        :page-size="10"
+        :total="msg.data.count"
+      ></el-pagination>
+    </span>
+        <span v-if="msg.data&&this.url=='StudentsList'">
+      <el-pagination
+        style="float:right;"
+        background
+        layout="prev, pager, next,total"
+        @prev-click="prev_stu"
+        @next-click="next_stu"
+        @current-change="current_stu"
+        :page-size="10"
+        :total="msg.data.count"
+      ></el-pagination>
+    </span>
   </div>
 </template>
 
@@ -163,14 +179,14 @@ export default {
         end_time: "", //搜索结束时间
         uid: "" //如果有uid,查询该用户的记录
       },
-                    formStudent:{ 
-         search:this.$route.query.search,//搜索学员姓名条件
-         page:1,//页码
-          start_time:'',//搜索开始时间
-           end_time:'',//搜索结束时间
-            uid:'',//如果有uid,查询该用户的记录
-            is_by_student:1, //在详情页使用
-       },
+      formStudent: {
+        search: this.$route.query.search, //搜索学员姓名条件
+        page: 1, //页码
+        start_time: "", //搜索开始时间
+        end_time: "", //搜索结束时间
+        uid: "", //如果有uid,查询该用户的记录
+        is_by_student: 1 //在详情页使用
+      },
       form1: {
         // 入款和扣款
         amount: "", //金额
@@ -179,7 +195,7 @@ export default {
         type: "" //入款还是扣款，1入款，2扣款
       },
       msg: {},
-              url:'',//判别是否详情页
+      url: "", //判别是否详情页
 
       dialogVisible: false //入扣款弹窗
     };
@@ -187,47 +203,54 @@ export default {
   created() {
     this.$apis.students.getuilcode();
   },
-        mounted() {
- var name=this.$route.path.substring(this.$route.path.indexOf("/")+1);
- this.url=name.substr(0,12)
-          this.getadata()
-
+  mounted() {
+    var name = this.$route.path.substring(this.$route.path.indexOf("/") + 1);
+    this.url = name.substr(0, 12);
+    this.getadata();
   },
-//       watch: {
-// $route(to, from) {
-//  var name=this.$route.path.substring(this.$route.path.indexOf("/")+1);
-//  this.url=name.substr(0,12)
-//  console.log(this.url)
-// }
-// },
+  //       watch: {
+  // $route(to, from) {
+  //  var name=this.$route.path.substring(this.$route.path.indexOf("/")+1);
+  //  this.url=name.substr(0,12)
+  //  console.log(this.url)
+  // }
+  // },
   methods: {
     //验证姓名和学币余额
     ifnamemoney() {
-      if (this.form1.uname != '') {
-      let parms = { uname: this.form1.uname };
-      let parms2 = { tel: this.form1 };
-      this.$apis.students.ifusername(parms).then(res => {
-        if (res&&res.data.code == 1) {
-          // this.$apis.students.user_learnmoney(parms2).then(res => {
+      if (this.form1.uname != "") {
+        let parms = { uname: this.form1.uname };
+        let parms2 = { tel: this.form1 };
+        this.$apis.students.ifusername(parms).then(res => {
+          if (res && res.data.code == 1) {
+            // this.$apis.students.user_learnmoney(parms2).then(res => {
             this.ifname = res.data.data.learnmoney;
-          // });
-        }else {
-          this.ifname =  '用户不存在'; 
-
-          
-        } 
-      })
+            // });
+          } else {
+            this.ifname = "用户不存在";
+          }
+        });
       }
     },
     //序号排列
-    indexMethod(index) {
+   indexMethod(index) {
       if (this.form.page == 1) {
         return index + 1;
       } else {
         let page = (this.form.page - 1) * 10 + 1;
+
         return index + page;
       }
     },
+index_stu(index){
+       if (this.formStudent.page == 1) {
+        return index + 1;
+      } else {
+        let page = (this.formStudent.page - 1) * 10 + 1;
+
+        return index + page;
+      }
+},
 
     current(num) {
       //当前页数
@@ -242,6 +265,22 @@ export default {
       //上一页
       if (this.form.page > 1) {
         this.form.page--;
+        this.getadata();
+      }
+    },
+          current_stu(num) {
+      //当前页数
+      this.formStudent.page = num;
+      this.getadata();
+    },
+    next_stu() {
+      this.formStudent.page++;
+      this.getadata();
+    },
+    prev_stu() {
+      //上一页
+      if (this.formStudent.page > 1) {
+        this.formStudent.page--;
         this.getadata();
       }
     },
@@ -261,23 +300,21 @@ export default {
       });
     },
     getadata() {
-                if(this.url=='StudentsList'){
-                        this.$apis.students.wallet_list(this.formStudent).then(res => {
-        if (res.data.code == 1) {
-          this.msg = res.data;
-          this.tableData = res.data.data.list;
-        }
-      });
-                }else{
-                        this.$apis.students.wallet_list(this.form).then(res => {
-        if (res.data.code == 1) {
-          this.msg = res.data;
-          this.tableData = res.data.data.list;
-        }
-      });
-                }
-
-
+      if (this.url == "StudentsList") {
+        this.$apis.students.wallet_list(this.formStudent).then(res => {
+          if (res.data.code == 1) {
+            this.msg = res.data;
+            this.tableData = res.data.data.list;
+          }
+        });
+      } else {
+        this.$apis.students.wallet_list(this.form).then(res => {
+          if (res.data.code == 1) {
+            this.msg = res.data;
+            this.tableData = res.data.data.list;
+          }
+        });
+      }
     }
   }
 };

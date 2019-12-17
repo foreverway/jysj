@@ -2,7 +2,10 @@
   <div class="main">
     <el-container>
       <zx-head title="账户明细"></zx-head>
+      
+          
       <el-header>
+      
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <el-tab-pane label="学习币明细" name="1"></el-tab-pane>
           <el-tab-pane label="现金钱包明细" name="2"></el-tab-pane>
@@ -23,13 +26,18 @@ export default {
   data() {
     return {
       activeName: "1",
-      activeIndex: "1"
+      activeIndex: "1",
+      url:''
     };
   },
   created() {
     this.$nextTick(function() {
       this.$router.push("/StudentMoneyMain/VirtualMonney");
     });
+  },
+    mounted() {
+    var name = this.$route.path.substring(this.$route.path.indexOf("/") + 1);
+    this.url = name.substr(0, 12);
   },
   methods: {
     handleClick(tab, event) {

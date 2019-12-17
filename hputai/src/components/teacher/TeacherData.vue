@@ -182,42 +182,104 @@
       <p style="margin-bottom:10px;">
         <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>反馈内容
       </p>
-      <el-form label-width="200px" :model="feed_data" id="beauty_p">
-        <!-- <el-form-item
-              label="反馈类型:"
-            >
-              <p v-if='feed_data.feedback_type==1'>试听/首次课程反馈</p>
-              <p v-if='feed_data.feedback_type==2'>日常上课反馈</p>
-              <p v-if='feed_data.feedback_type==3'>结课总结</p>
-        </el-form-item>-->
-        <el-form-item label="本次授课内容:">
-          <p>{{feed_data.details_1?feed_data.details_1:'此项没有填写反馈'}}</p>
-        </el-form-item>
-        <el-form-item label="课堂配合度和积极性:">
-          <p>{{feed_data.details_2?feed_data.details_2:'此项没有填写反馈'}}</p>
-        </el-form-item>
-        <el-form-item label="学生的主要问题和建议:">
-          <p>{{feed_data.details_3?feed_data.details_3:'此项没有填写反馈'}}</p>
-        </el-form-item>
-        <el-form-item label="课时建议:">
-          <p>{{feed_data.details_4?feed_data.details_4:'此项没有填写反馈'}}</p>
-        </el-form-item>
-        <el-form-item label="课程阶段安排及课时建议:">
-          <p>{{feed_data.details_5?feed_data.details_5:'此项没有填写反馈'}}</p>
-        </el-form-item>
-        <el-form-item label="上次课知识点掌握情况:">
-          <p>{{feed_data.details_6?feed_data.details_6:'此项没有填写反馈'}}</p>
-        </el-form-item>
-        <el-form-item label="作业:">
-          <p>{{feed_data.details_7?feed_data.details_7:'此项没有填写反馈'}}</p>
-        </el-form-item>
-        <el-form-item label="课程期间学生总体表现:">
-          <p>{{feed_data.details_8?feed_data.details_8:'此项没有填写反馈'}}</p>
-        </el-form-item>
-        <el-form-item label="下一步学习方案建议:">
-          <p>{{feed_data.details_9?feed_data.details_9:'此项没有填写反馈'}}</p>
-        </el-form-item>
-      </el-form>
+              <el-form
+            label-width="200px"
+            :model="feed_data"
+            v-if="feed_data.feedback_type==1"
+          >
+            <el-form-item label="反馈类型:">
+              <p v-if="feed_data.feedback_type==1">试听/首次课程反馈</p>
+            </el-form-item>
+            <el-form-item label="试听/首次课上课内容">
+              <p>{{feed_data.feedback1.details_1}}</p>
+            </el-form-item>
+            <el-form-item label="学生的课堂表现:">
+              <span>{{feed_data.feedback1.details_2}}</span>
+            </el-form-item>
+            <el-form-item label="学习水平评估">
+              <p>{{feed_data.feedback1.details_3}}</p>
+            </el-form-item>
+            <el-form-item label="课程计划及课时安排:">
+              <span>{{feed_data.feedback1.details_4}}</span>
+            </el-form-item>
+            <el-form-item label="课后作业">
+              <p>{{feed_data.feedback1.details_5}}</p>
+            </el-form-item>
+          </el-form>
+
+          <el-form
+            label-width="200px"
+            :model="feed_data"
+            v-if="feed_data.feedback_type==2"
+          >
+            <el-form-item label="反馈类型:">
+              <p v-if="feed_data.feedback_type==2">日常上课反馈</p>
+            </el-form-item>
+            <el-form-item label="完成情况">
+              <p>{{feed_data.feedback2.details_1}}</p>
+            </el-form-item>
+            <el-form-item label="本次上课内容:">
+              <span>{{feed_data.feedback2.details_2}}</span>
+            </el-form-item>
+            <el-form-item label="课堂表现">
+              <p>{{feed_data.feedback2.details_3}}</p>
+            </el-form-item>
+            <el-form-item label="课后作业:">
+              <span>{{feed_data.feedback2.details_4}}</span>
+            </el-form-item>
+          </el-form>
+          <el-form
+            label-width="200px"
+            :model="feed_data"
+            v-if="feed_data.feedback_type==3"
+          >
+            <el-form-item label="反馈类型:">
+              <p v-if="feed_data.feedback_type==3">结课总结</p>
+            </el-form-item>
+            <el-form-item label="学生总体表现">
+              <p>{{feed_data.feedback3.details_1}}</p>
+            </el-form-item>
+            <el-form-item label="阶段总结:">
+              <span>{{feed_data.feedback3.details_2}}</span>
+            </el-form-item>
+            <el-form-item label="需要提升点">
+              <p>{{feed_data.feedback3.details_3}}</p>
+            </el-form-item>
+            <el-form-item label="课程计划:">
+              <span>{{feed_data.feedback3.details_4}}</span>
+            </el-form-item>
+          </el-form>
+          <el-form
+            label-width="200px"
+            :model="feed_data"
+            v-if="feed_data.feedback_type==4"
+          >
+            <el-form-item label="反馈类型:">
+              <p v-if="feed_data.feedback_type==4">结课总结</p>
+            </el-form-item>
+            <el-form-item label="总结学习内容">
+              <p>{{feed_data.feedback4.details_1}}</p>
+            </el-form-item>
+            <el-form-item label="总结课程教学过程:">
+              <span>{{feed_data.feedback4.details_2}}</span>
+            </el-form-item>
+            <el-form-item label="需要提升点">
+              <p>{{feed_data.feedback4.details_3}}</p>
+            </el-form-item>
+            <el-form-item label="授课老师建议:">
+              <span>{{feed_data.feedback4.details_4}}</span>
+            </el-form-item>
+          </el-form>
+               <el-form
+            label-width="200px"
+            :model="feed_data"
+            v-if="feed_data.feedback_type==null"
+          >
+            <el-form-item label="反馈类型:">
+              <p v-if="feed_data.feedback_type==null">参数丢失,此课程反馈无法查看</p>
+            </el-form-item>
+     
+          </el-form>
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="feedopen = false">取 消</el-button>
@@ -355,9 +417,14 @@ export default {
         this.$apis.common
           .course_feedback({ course_id: result.course_id })
           .then(res => {
-            if (res.data.code == 1) {
+            if (res.data.code == 1&&res.data.data.feedback_type) {
               this.feed_data = res.data.data;
-            }
+            }else {
+        this.$message({
+          type: "warning",
+          message:'无法读取的不标准反馈'
+        });
+      }
           });
         this.feedopen = true;
       } else {

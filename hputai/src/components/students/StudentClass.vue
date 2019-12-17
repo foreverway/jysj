@@ -359,7 +359,7 @@
           </p>
           <el-form :model="form" class="form_all" :rules="rules" ref="ruleForm" label-width="200px">
             <el-form-item label="类型">
-              <el-radio-group v-model="form.feedback_type" >
+              <el-radio-group v-model="form.feedback_type" @change='changeRadio'>
                 <el-radio :label="1" >试听/首次课程反馈</el-radio>
                 <el-radio :label="2" >日常上课反馈</el-radio>
                 <el-radio :label="3" >阶段性上课反馈</el-radio>
@@ -572,10 +572,10 @@
           <p style="margin-bottom:10px;">
             <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>反馈内容
           </p>
-          <el-form :model="form" :rules="rules" ref="ruleForm" label-width="200px">
+          <el-form :model="form" class="form_all" :rules="rules" ref="ruleForm" label-width="200px">
       
-                       <el-form-item label="类型">
-              <el-radio-group v-model="form.feedback_type">
+                       <el-form-item label="类型" >
+              <el-radio-group v-model="form.feedback_type" @change='changeRadio'>
                 <el-radio :label="1">试听/首次课程反馈</el-radio>
                 <el-radio :label="2">日常上课反馈</el-radio>
                 <el-radio :label="3">阶段性上课反馈</el-radio>
@@ -747,7 +747,7 @@
         <!-- 查看课堂反馈 -->
         <el-dialog
           :close-on-click-modal="false"
-          title="查看老师反馈"
+          title="查看课堂反馈"
           :visible.sync="dialogVisible"
           width="900px"
         >
@@ -916,14 +916,10 @@ export default {
       form: {
         feedback_type: 1,
         course_id: "",
-        feedback1: [ 
-        ],
-        feedback2: [
-        ],
-        feedback3: [
-        ],
-        feedback4: [
-        ]
+        feedback1: {},
+        feedback2:{},
+        feedback3:{},
+        feedback4: {}
         // details_1: "",details_2: "",details_3: "",details_4: ""
         // details_6: "",
         // details_7: "",
@@ -1112,7 +1108,7 @@ export default {
 
     onSubmit() {
       this.form.course_id = this.course;
-    
+    console.log(this.course)
     var fields = $(".form_all").serializeArray();
     switch (this.form.feedback_type) {
     case 1:
@@ -1129,7 +1125,6 @@ export default {
          break;
 
 } 
-    console.log(this.form)
       this.$apis.common.post_feedback_add(this.form).then(res => {
         if (res.data.code == 1) {
           this.dialogFromVisible = false;
@@ -1145,9 +1140,15 @@ export default {
     onSubmit_def(){
        this.editOpen = false;
     },
+    changeRadio(){  //清除前一项的残留，避免提交多余数据
+ this.form.feedback1 = {};
+          this.form.feedback2 = {};
+          this.form.feedback3 = {};
+          this.form.feedback4 = {};
+    },
         onSubmit_edit() {
-      this.form.course_id = this.course;
           var fields = $(".form_all").serializeArray();
+          console.log(this.course)
     switch (this.form.feedback_type) {
     case 1:
         this.form.feedback1=fields
@@ -1161,48 +1162,33 @@ export default {
     case 4:
         this.form.feedback4=fields
          break;
-
 } 
       this.$apis.common.edit_feedback_add(this.form).then(res => {
         if (res.data.code == 1) {
                 this.editOpen = false;
-          this.form.feedback1 = [
-         
-          ];
-          this.form.feedback2 = [
-          ];
-          this.form.feedback3 = [
-          ];
-          this.form.feedback4 = [
-          ];
+          this.form.feedback1 = {};
+          this.form.feedback2 = {};
+          this.form.feedback3 = {};
+          this.form.feedback4 = {};
           this.searchDay(this.thisDay);
           this.$message({
             type: "success",
             message: "提交成功"
+          });
+        }else{
+            this.$message({
+            type: "warning",
+            message: res.data.msg
           });
         }
       });
     },
     onSubmit_1() {
       this.dialogFromVisible = false;
-      this.form.feedback1 = [
-        {
-          details_1: "",
-          details_2: "",
-          details_3: "",
-          details_4: "",
-          details_5: ""
-        }
-      ];
-      this.form.feedback2 = [
-        { details_1: "", details_2: "", details_3: "", details_4: "" }
-      ];
-      this.form.feedback3 = [
-        { details_1: "", details_2: "", details_3: "", details_4: "" }
-      ];
-      this.form.feedback4 = [
-        { details_1: "", details_2: "", details_3: "", details_4: "" }
-      ];
+      this.form.feedback1 = {};
+      this.form.feedback2 = {};
+      this.form.feedback3 = {};
+      this.form.feedback4 = {};
     },
     fillFeedback_see(a) {
       let parms = {
@@ -1213,7 +1199,6 @@ export default {
         if (res.data.code == 1) {
           this.formLabelAlign = res.data.data;
           this.gridData = this.formLabelAlign;
-          console.log( this.formLabelAlign)
         }
       });
     },
@@ -1224,10 +1209,10 @@ export default {
       this.editOpen = true;
       this.$apis.common.course_feedback(parms).then(res => {
         if (res.data.code == 1) {
-                    this.form=res.data.data
-
+           this.form=res.data.data
+           this.form.course_id=res.data.data.course_id
+           console.log(this.form)
           this.gridData = res.data.data;
-          console.log( this.form)
         }
       });
     },

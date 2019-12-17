@@ -229,19 +229,22 @@
           :page-size="5"
           :total="classcount"
         ></el-pagination>
-        <p style="margin:10px;">
+    
+        <el-container>
+
+            <p style="margin:10px;" class=nav_top>
           <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>
           学员账号明细
         </p>
-        <el-container>
-          <el-header>
+          <el-header class="nav">
+              
             <el-tabs v-model="activeName" @tab-click="handleClick">
               <el-tab-pane class="ddd" label="学习币明细" name="1"></el-tab-pane>
               <el-tab-pane label="现金钱包明细" name="2"></el-tab-pane>
               <el-tab-pane label="福利钱包明细" name="3"></el-tab-pane>
             </el-tabs>
           </el-header>
-          <el-container>
+          <el-container direction="horizontal">
             <el-main style="height:800px;width:100%;padding:0;">
               <router-view />
               <!-- 主体部分在这里显示 -->
@@ -345,7 +348,7 @@
         <!-- 查看课堂反馈 -->
         <el-dialog
           :close-on-click-modal="false"
-          title="查看老师反馈"
+          title="查看课堂反馈"
           :visible.sync="dialogVisible"
           width="900px"
         >
@@ -391,45 +394,103 @@
           <p style="margin-bottom:10px;">
             <span style="font-weight:900;color:orange;font-size:25px;">&nbsp;|&nbsp;</span>反馈内容
           </p>
-          <el-form label-width="200px" :model="formLabelAlign">
+              <el-form
+            label-width="200px"
+            :model="formLabelAlign"
+            v-if="formLabelAlign.feedback_type==1"
+          >
             <el-form-item label="反馈类型:">
               <p v-if="formLabelAlign.feedback_type==1">试听/首次课程反馈</p>
+            </el-form-item>
+            <el-form-item label="试听/首次课上课内容">
+              <p>{{formLabelAlign.feedback1.details_1}}</p>
+            </el-form-item>
+            <el-form-item label="学生的课堂表现:">
+              <span>{{formLabelAlign.feedback1.details_2}}</span>
+            </el-form-item>
+            <el-form-item label="学习水平评估">
+              <p>{{formLabelAlign.feedback1.details_3}}</p>
+            </el-form-item>
+            <el-form-item label="课程计划及课时安排:">
+              <span>{{formLabelAlign.feedback1.details_4}}</span>
+            </el-form-item>
+            <el-form-item label="课后作业">
+              <p>{{formLabelAlign.feedback1.details_5}}</p>
+            </el-form-item>
+          </el-form>
+
+          <el-form
+            label-width="200px"
+            :model="formLabelAlign"
+            v-if="formLabelAlign.feedback_type==2"
+          >
+            <el-form-item label="反馈类型:">
               <p v-if="formLabelAlign.feedback_type==2">日常上课反馈</p>
+            </el-form-item>
+            <el-form-item label="完成情况">
+              <p>{{formLabelAlign.feedback2.details_1}}</p>
+            </el-form-item>
+            <el-form-item label="本次上课内容:">
+              <span>{{formLabelAlign.feedback2.details_2}}</span>
+            </el-form-item>
+            <el-form-item label="课堂表现">
+              <p>{{formLabelAlign.feedback2.details_3}}</p>
+            </el-form-item>
+            <el-form-item label="课后作业:">
+              <span>{{formLabelAlign.feedback2.details_4}}</span>
+            </el-form-item>
+          </el-form>
+          <el-form
+            label-width="200px"
+            :model="formLabelAlign"
+            v-if="formLabelAlign.feedback_type==3"
+          >
+            <el-form-item label="反馈类型:">
               <p v-if="formLabelAlign.feedback_type==3">结课总结</p>
             </el-form-item>
-            <el-form-item
-              label="本次授课内容:"
-              v-if="formLabelAlign.feedback_type=='2'||formLabelAlign.feedback_type=='1'"
-            >
-              <p>{{formLabelAlign.details_1}}</p>
+            <el-form-item label="学生总体表现">
+              <p>{{formLabelAlign.feedback3.details_1}}</p>
             </el-form-item>
-            <el-form-item
-              label="课堂配合度和积极性:"
-              v-if="formLabelAlign.feedback_type=='2'||formLabelAlign.feedback_type=='1'"
-            >
-              <span>{{formLabelAlign.details_2}}</span>
+            <el-form-item label="阶段总结:">
+              <span>{{formLabelAlign.feedback3.details_2}}</span>
             </el-form-item>
-            <el-form-item label="学生的主要问题和建议:" v-if="formLabelAlign.feedback_type=='1'">
-              <span>{{formLabelAlign.details_3}}</span>
+            <el-form-item label="需要提升点">
+              <p>{{formLabelAlign.feedback3.details_3}}</p>
             </el-form-item>
-            <el-form-item label="课时建议:" v-if="formLabelAlign.feedback_type=='1'">
-              <span>{{formLabelAlign.details_4}}</span>
+            <el-form-item label="课程计划:">
+              <span>{{formLabelAlign.feedback3.details_4}}</span>
             </el-form-item>
-            <el-form-item label="课程阶段安排及课时建议:" v-if="formLabelAlign.feedback_type=='1'">
-              <span>{{formLabelAlign.details_5}}</span>
+          </el-form>
+          <el-form
+            label-width="200px"
+            :model="formLabelAlign"
+            v-if="formLabelAlign.feedback_type==4"
+          >
+            <el-form-item label="反馈类型:">
+              <p v-if="formLabelAlign.feedback_type==4">结课总结</p>
             </el-form-item>
-            <el-form-item label="上次课知识点掌握情况:" v-if="formLabelAlign.feedback_type=='2'">
-              <span>{{formLabelAlign.details_6}}</span>
+            <el-form-item label="总结学习内容">
+              <p>{{formLabelAlign.feedback4.details_1}}</p>
             </el-form-item>
-            <el-form-item label="作业:" v-if="formLabelAlign.feedback_type=='2'">
-              <span>{{formLabelAlign.details_7}}</span>
+            <el-form-item label="总结课程教学过程:">
+              <span>{{formLabelAlign.feedback4.details_2}}</span>
             </el-form-item>
-            <el-form-item label="课程期间学生总体表现:" v-if="formLabelAlign.feedback_type=='3'">
-              <span>{{formLabelAlign.details_8}}</span>
+            <el-form-item label="需要提升点">
+              <p>{{formLabelAlign.feedback4.details_3}}</p>
             </el-form-item>
-            <el-form-item label="下一步学习方案建议:" v-if="formLabelAlign.feedback_type=='3'">
-              <span>{{formLabelAlign.details_9}}</span>
+            <el-form-item label="授课老师建议:">
+              <span>{{formLabelAlign.feedback4.details_4}}</span>
             </el-form-item>
+          </el-form>
+            <el-form
+            label-width="200px"
+            :model="formLabelAlign"
+            v-if="formLabelAlign.feedback_type==null"
+          >
+            <el-form-item label="反馈类型:">
+              <p v-if="formLabelAlign.feedback_type==null">参数丢失，暂时无法查看</p>
+            </el-form-item>
+       
           </el-form>
           <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取 消</el-button>
@@ -789,6 +850,7 @@ export default {
       this.$apis.common.course_feedback(parms).then(res => {
         if (res.data.code == 1) {
           this.formLabelAlign = res.data.data;
+          console.log(this.formLabelAlign)
         }
       });
     },
@@ -858,4 +920,10 @@ li :nth-child(2) {
   z-index: 1000;
   width: 100px;
 }
+.nav {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+}
+
 </style>
