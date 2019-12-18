@@ -480,7 +480,7 @@ font-size:  15px;
   overflow-y: auto;
   width: calc(100% - 200px);
   margin-left: 200px;
-  margin-top: 50px;
+  /* margin-top: 50px; */
   height: 100%;
 }
 .left[data-v-98c1a456],

@@ -282,8 +282,8 @@
           </el-form>
 
       <span slot="footer" class="dialog-footer">
-        <el-button @click="feedopen = false">取 消</el-button>
-        <el-button type="primary" @click="feedopen = false">确 定</el-button>
+        <el-button @click="close_feed">取 消</el-button>
+        <el-button type="primary" @click="close_feed">确 定</el-button>
       </span>
     </el-dialog>
     <span v-if="msg.data">
@@ -358,6 +358,10 @@ export default {
         let page = (this.params.page - 1) * 10 + 1;
         return index + page;
       }
+    },
+    close_feed(){
+      this.feedopen = false
+      this.feed_data={}
     },
     openVideo(a) {
       //观看录播

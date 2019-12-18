@@ -284,18 +284,19 @@
                 size="mini"
                 v-if="scope.row.feedback_txt=='查看课堂反馈'"
                 @click="fillFeedback_see(scope.row.course_id,scope.row)"
-                style="color:blue"
+                style="color:white;background-color:#5CB87A"
               >{{scope.row.feedback_txt}}</el-button>
                            <el-button
                 size="mini"
-                v-if="scope.row.feedback_txt=='查看课堂反馈'"
+                v-if="scope.row.feedback_txt=='查看课堂反馈'&&scope.row.is_teacher==1"
                 @click="fillFeedback_edit(scope.row.course_id,scope.row)"
-                style="color:blue"
+                style="color:white;background-color:#F56C6C"
               >编辑反馈</el-button>
               <el-button
                 size="mini"
                 v-if="scope.row.feedback_txt=='等待讲师填写'"
-                style="color:silver"
+                style="color:white;background-color:#8896B3"
+
               >{{scope.row.feedback_txt}}</el-button>
               <!-- <el-button size="mini"  >观看录播</el-button > -->
             </template>
@@ -368,11 +369,13 @@
             </el-form-item>
             <el-form-item label="试听/首次课上课内容" prop="name" v-if="form.feedback_type=='1'">
               <el-input
+              minlength="20"
                 type="textarea"
                 value=''
                 name='details_1'
                 v-model="form.feedback1.details_1"
                 placeholder="试听/首次课上课内容"
+                @input="minLen"
               ></el-input>
             </el-form-item>
             <el-form-item label="学生的课堂表现" prop="name" v-if="form.feedback_type=='1'">
@@ -380,6 +383,8 @@
                 type="textarea"
                 value=''
                 name='details_2'
+                minlength="5"
+                maxlength="30"
                 v-model="form.feedback1.details_2"
                 placeholder="学生的课堂表现及学生学习上存在的主要问题，学生课下复习的重点有哪些"
               ></el-input>
@@ -902,9 +907,9 @@ export default {
   data() {
     return {
       rules: {
-        ruleForm: {
-          name: ""
-        },
+        // ruleForm: {
+        //   name: ""
+        // },
         // name: [
         //   { required: true, message: "请输入活动名称", trigger: "blur" },
         //   { min: 20, message: "长度在 20个字符以上", trigger: "blur" }
@@ -916,15 +921,12 @@ export default {
       form: {
         feedback_type: 1,
         course_id: "",
-        feedback1: {},
+        feedback1: {
+          details_1:'',
+        },
         feedback2:{},
         feedback3:{},
         feedback4: {}
-        // details_1: "",details_2: "",details_3: "",details_4: ""
-        // details_6: "",
-        // details_7: "",
-        // details_8: "",
-        // details_9: ""
       }, //from提交的数据
       form_2:{
 
@@ -1141,7 +1143,7 @@ export default {
        this.editOpen = false;
     },
     changeRadio(){  //清除前一项的残留，避免提交多余数据
- this.form.feedback1 = {};
+          this.form.feedback1 = {};
           this.form.feedback2 = {};
           this.form.feedback3 = {};
           this.form.feedback4 = {};
@@ -1249,7 +1251,6 @@ export default {
     current(num) {
       //当前页数
       this.currentPage = num;
-      console.log(this.currentPage);
       this.getClassList();
     },
     next() {
@@ -1270,7 +1271,7 @@ export default {
         course_type: this.change_value,
         page: this.currentPage,
         start_time: this.thisDay,
-        student_id: this.stu_secrch,
+        student_id: this.stu_secrch.toString(),
         subject_id: this.sub_secrch,
         is_parttime: this.is_parttime
         // attendance_status:null
@@ -1342,6 +1343,15 @@ export default {
       this.sub_secrch = lastName;
       this.getClassList();
     },
+minLen(value){
+  if(value.split('').length*1<20){
+       this.$message({
+            type: "warnning",
+            message: "数据获取出错"
+          });
+  }
+ 
+},
     handleChange(targetName) {
       //选择学生
       this.stu_secrch = targetName;

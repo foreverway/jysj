@@ -11,12 +11,7 @@
           @input="getadata"
           placeholder="请输入搜索内容"
         ></el-input>
-        <!-- <el-button
-          type="primary"
-          @click="getadata"
-          style="margin-left:5px;background-color:#e6563a; border:none;"
-        >搜索</el-button>-->
-
+     
         <el-date-picker
           style="margin-left:60px"
           v-model="form.start_time"
@@ -57,12 +52,11 @@
         <template slot-scope="scope">
           <span
             v-for="(item,index) in rolemenu[2].children[0].children"
+            style="margin:0 5px;"
             :key="index"
-            style="display:inline-block;border:1px orange solid;margin:0 8px;border-radius:5px;padding:0 5px;"
           >
             <el-button
-              type="text"
-              size="medium"
+              size="mini"
               index="item.id"
               @click="teacherAction(item.menu_action,scope.row,scope.$index,tableData)"
             >{{item.menu_name}}</el-button>
@@ -355,6 +349,7 @@ export default {
       switch (a) {
         case "teacher_edit":
           this.editDialog = true;
+          this.this_subject=''
           this.$apis.common
             .teacher_edit_get({ teacher_id: b.teacher_id })
             .then(res => {
@@ -555,7 +550,8 @@ export default {
     choose_suj(targetName) {
       //科目赋值
       var lastName = targetName.length == 1 ? targetName[0] : targetName.length == 2?targetName[1] :targetName[2] ;
-   this.arr=this.editTeacher.teach_subjects.split(',')
+   
+   this.arr=this.editTeacher.teach_subjects?this.editTeacher.teach_subjects.split(','):[]
     this.arr.push(lastName);
       this.editTeacher.teach_subjects = this.arr.toString();
     },
