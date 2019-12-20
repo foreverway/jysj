@@ -50,22 +50,25 @@
 
     <!-- 表格数据 -->
     <el-table :data="tableData" border :header-cell-style="{background:'#f4f4f4'}">
-      <el-table-column label="序号" type="index"   width="80" align="center" ></el-table-column>
+      <el-table-column label="序号" type="index"  align="center" :index="indexMethod"></el-table-column>
+      <el-table-column label="月份"  sortable prop="month"></el-table-column>
 
-      <el-table-column :show-overflow-tooltip="true" align="center" label="教师名称" width="200">
+      <el-table-column :show-overflow-tooltip="true" align="center" label="教师名称" >
         <template slot-scope="scope">
           <span>{{ scope.row.teacher_name }}</span>
         </template>
       </el-table-column>
-
-      <el-table-column label="科目" width="180" align="center">
+ <el-table-column label="一级科目" prop="first_subject"></el-table-column>
+      <el-table-column label="二级科目" prop="second_subject"></el-table-column>
+      <el-table-column label="科目"  align="center">
         <template slot-scope="scope">
           <p>{{ scope.row.subject_name }}</p>
         </template>
       </el-table-column>
-      <el-table-column label="上课时间" width="180" sortable prop="start_time"></el-table-column>
+      <el-table-column label="上课时间" e prop="start_time"></el-table-column>
       <el-table-column label="线上/线下" prop="course_address"></el-table-column>
       <el-table-column label="授课类型" prop="teaching_type"></el-table-column>
+      <el-table-column label="课程属性" prop="course_attribute"></el-table-column>
       <el-table-column label="课酬标准" prop="dollars_standar"></el-table-column>
       <el-table-column label="应上课时" prop="classhour"></el-table-column>
       <el-table-column label="已上课时" prop="haved_hour"></el-table-column>
@@ -100,7 +103,7 @@ export default {
         // search: "",
         // start_time: "",
         // end_time: "",
-       // page: "1"
+        page: "1"
       }
     };
   },
@@ -110,6 +113,14 @@ export default {
   },
   computed: mapState(["teacher_data"]),
   methods: {
+    indexMethod(index){
+           if (this.params.page == 1) {
+        return index + 1;
+      } else {
+        let page = (this.params.page - 1) * 10 + 1;
+        return index + page;
+      }
+    },
         //导出
     recharge_export() {
       this.$message({

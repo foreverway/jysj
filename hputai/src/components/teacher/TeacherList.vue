@@ -1,6 +1,6 @@
 ` <template>
   <div class="so_main">
-                <zx-head title="教师列表" ></zx-head>
+    <zx-head title="教师列表"></zx-head>
 
     <div class="so_main_left">
       <el-form :inline="true" :model="form" class="demo-form-inline">
@@ -11,7 +11,7 @@
           @input="getadata"
           placeholder="请输入搜索内容"
         ></el-input>
-     
+
         <el-date-picker
           style="margin-left:60px"
           v-model="form.start_time"
@@ -44,6 +44,17 @@
       <el-table-column align="center" width="120" prop="teacher_name" label="教师姓名"></el-table-column>
       <el-table-column align="center" width="150" prop="tel" label="联系电话"></el-table-column>
       <el-table-column align="center" prop="part_time" label="类型"></el-table-column>
+
+      <el-table-column align="center" label="推荐等级" prop="teacher_rate" width="180px" sortable>
+        <template slot-scope="scope" >
+          <el-rate v-model="scope.row.teacher_rate*1" disabled text-color="#ff9900"></el-rate>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" prop="eval_average" label="综合评分"  width="180px" sortable>
+        <template slot-scope="scope">
+          <el-rate v-model="scope.row.eval_average*1"  disabled text-color="#ff9900"></el-rate>
+        </template>
+      </el-table-column>
       <el-table-column align="center" prop="teach_subjects" label="科目"></el-table-column>
       <el-table-column align="center" prop="studying" label="在读学员"></el-table-column>
       <el-table-column align="center" prop="haved_hour" label="已上课时"></el-table-column>
@@ -65,9 +76,7 @@
       </el-table-column>
     </el-table>
     <!-- 老师信息的详情 -->
-    <el-dialog title="老师详情" 
-    :close-on-click-modal='false'
-     :visible.sync="teacher_info" width="50%">
+    <el-dialog title="老师详情" :close-on-click-modal="false" :visible.sync="teacher_info" width="50%">
       <el-form label-width="100px" :model="editTeacher">
         <el-form-item label="讲师姓名">
           <p>{{editTeacher.id?editTeacher.id:'暂无记录'}}</p>
@@ -90,16 +99,19 @@
     <!-- <p style="margin-top:30px"><span>累计金额：</span><span style="color:red">{{msg.data.givenamount}}</span></p> -->
     <!-- <el-button type="primary" @click="ifinputselect" style="margin-top:20px">审核</el-button> -->
     <!-- 教师课酬设置 -->
-    <el-dialog 
-    :close-on-click-modal='false'
-     title="教师课酬设置" :visible.sync="centerDialogVisible_salary" width="70%">
+    <el-dialog
+      :close-on-click-modal="false"
+      title="教师课酬设置"
+      :visible.sync="centerDialogVisible_salary"
+      width="70%"
+    >
       <el-form label-width="100px" :model="teacher_salary_data">
         <el-form-item label="讲师姓名">
           <p>{{teacher_name}}</p>
         </el-form-item>
         <el-form-item label="选择科目">
           <el-cascader
-          ref='cascader'
+            ref="cascader"
             v-model="value_suj"
             :options="options"
             :props="{ expandTrigger: 'hover' }"
@@ -151,9 +163,7 @@
       </span>
     </el-dialog>
     <!-- 编辑弹窗 -->
-    <el-dialog 
-    :close-on-click-modal='false'
-     title="编辑教师" :visible.sync="editDialog" width="50%">
+    <el-dialog :close-on-click-modal="false" title="编辑教师" :visible.sync="editDialog" width="50%">
       <el-form label-width="100px" :model="editTeacher">
         <el-form-item label="讲师姓名">
           <p v-if="teacher_name">{{teacher_name}}</p>
@@ -169,7 +179,7 @@
           ></el-cascader>
         </el-form-item>
         <el-form-item label="已选科目">
-          <el-input  v-if="editTeacher.teach_subjects" v-model='editTeacher.teach_subjects'></el-input>
+          <el-input v-if="editTeacher.teach_subjects" v-model="editTeacher.teach_subjects"></el-input>
           <p v-if="!editTeacher.teach_subjects">请选择科目</p>
         </el-form-item>
         <el-form-item label="城市">
@@ -225,6 +235,9 @@
             <img :src="form.src_img" alt />
             <div slot="tip" class="el-upload__tip">用户素材列表显示,只能上传jpg/png文件</div>
           </el-upload>
+        </el-form-item>
+        <el-form-item label="推荐等级">
+          <el-rate v-model="editTeacher.teacher_rate" show-text></el-rate>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -285,7 +298,8 @@ export default {
         bank_name: "",
         bank_open: "",
         files: [],
-        teacher_id: ""
+        teacher_id: "",
+        teacher_rate: 5
       },
       // ],//根据科目生成的教师数据
       table: {
@@ -349,7 +363,7 @@ export default {
       switch (a) {
         case "teacher_edit":
           this.editDialog = true;
-          this.this_subject=''
+          this.this_subject = "";
           this.$apis.common
             .teacher_edit_get({ teacher_id: b.teacher_id })
             .then(res => {
@@ -406,8 +420,7 @@ export default {
           this.centerDialogVisible_salary = true;
           this.$apis.common.teacher_dollars_get(params).then(res => {
             if (res.data.code == 1) {
-              //this.table.tableData = res.data.data;
-              //console.log(Object.prototype.toString.call(res.data.data).substr(8,5))
+  
               this.teacher_name = b.teacher_name;
               if (
                 Object.prototype.toString.call(res.data.data).substr(8, 5) ==
@@ -529,30 +542,37 @@ export default {
         admin_id: this.getdataCookie("admin_id")
       };
       //获取科目的数据
-           this.$apis.common.subject_list().then(res => {
+      this.$apis.common.subject_list().then(res => {
         if (res.data.code == 1) {
           this.msg = res.data;
           this.options_ = res.data.data;
-              let addWord=arr=>{
-            arr.forEach(item=>{
-              item.value=item.subject_name,
-              item.label=item.subject_name
-            if(item.children instanceof Array){
-                addWord(item.children)
-            }
-          })
-          }
-          addWord(this.options_)
-           this.options=this.options_  
+          let addWord = arr => {
+            arr.forEach(item => {
+              (item.value = item.subject_name),
+                (item.label = item.subject_name);
+              if (item.children instanceof Array) {
+                addWord(item.children);
+              }
+            });
+          };
+          addWord(this.options_);
+          this.options = this.options_;
         }
       });
     },
     choose_suj(targetName) {
       //科目赋值
-      var lastName = targetName.length == 1 ? targetName[0] : targetName.length == 2?targetName[1] :targetName[2] ;
-   
-   this.arr=this.editTeacher.teach_subjects?this.editTeacher.teach_subjects.split(','):[]
-    this.arr.push(lastName);
+      var lastName =
+        targetName.length == 1
+          ? targetName[0]
+          : targetName.length == 2
+          ? targetName[1]
+          : targetName[2];
+
+      this.arr = this.editTeacher.teach_subjects
+        ? this.editTeacher.teach_subjects.split(",")
+        : [];
+      this.arr.push(lastName);
       this.editTeacher.teach_subjects = this.arr.toString();
     },
     choose_city(targetName) {
@@ -566,41 +586,45 @@ export default {
     },
     //选择报读科目的函数
     handleChange_1(targetName) {
-//      var obj = {} 
-//      //此处为借鉴源码里面的方法，执行清除
-// obj.stopPropagation = () =>{}
-// try{
-//     this.$refs.cascader.clearValue(obj)//旧方法
-// }catch(err){
-//     this.$refs.cascader.handleClear(obj)//新版本
-// }
-//this.$refs.cascader.clearValue(obj)
+      //      var obj = {}
+      //      //此处为借鉴源码里面的方法，执行清除
+      // obj.stopPropagation = () =>{}
+      // try{
+      //     this.$refs.cascader.clearValue(obj)//旧方法
+      // }catch(err){
+      //     this.$refs.cascader.handleClear(obj)//新版本
+      // }
+      //this.$refs.cascader.clearValue(obj)
 
-      var lastName =targetName.length==1?targetName[0]:(targetName.length==2?targetName[1]:targetName[2])
+      var lastName =
+        targetName.length == 1
+          ? targetName[0]
+          : targetName.length == 2
+          ? targetName[1]
+          : targetName[2];
       //判断标题
-      let result=[]
-      let oneArr=arr=>{ arr.forEach((item)=>{
-            result.push({value:item.id,label:item.subject_name});
-        if(item.children instanceof Array){
-          oneArr(item.children)
-        }
+      let result = [];
+      let oneArr = arr => {
+        arr.forEach(item => {
+          result.push({ value: item.id, label: item.subject_name });
+          if (item.children instanceof Array) {
+            oneArr(item.children);
+          }
+        });
+      };
+      oneArr(this.options_);
+      var needArr = result.find((item, index, arr) => {
+        return item.label == lastName;
       });
-      }
-      oneArr(this.options_)
-      var needArr=result.find((item,index,arr)=>{
-       return item.label==lastName
-      })
-              this.table.tableData.push({
-                subject_id: needArr.value,
-                subject_name: needArr.label,
-                online_type: 1,
-                one_to_one: 0,
-                small_class: 0, //课程类型
-                big_class: 0 //课程id
-              });
-                this.value_suj=[]
-
-
+      this.table.tableData.push({
+        subject_id: needArr.value,
+        subject_name: needArr.label,
+        online_type: 1,
+        one_to_one: 0,
+        small_class: 0, //课程类型
+        big_class: 0 //课程id
+      });
+      this.value_suj = [];
     },
     indexMethod(index) {
       if (this.form.page == 1) {
@@ -646,7 +670,7 @@ export default {
         if (res.data.code == 1) {
           this.msg = res.data;
           this.tableData = res.data.data.list;
-          console.log(this.tableData )
+          console.log(this.tableData);
         }
       });
     },

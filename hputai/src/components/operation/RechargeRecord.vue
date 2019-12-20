@@ -204,7 +204,7 @@
     </div>
     <!-- 表格开始 -->
     <el-table :data="tableData" :header-cell-style="{background:'#f4f4f4'}" >
-      <el-table-column label="序号" type="index" ></el-table-column>
+      <el-table-column label="序号" type="index" :index="indexMethod"></el-table-column>
       <el-table-column :show-overflow-tooltip="true" align="center" label="学生姓名">
         <template slot-scope="scope">
           <span>{{ scope.row.uname }}</span>
@@ -416,7 +416,6 @@ export default {
         getRolenenu() {
            var menu= this.rolemenu.forEach((item, index, array) => {
         //遍历菜单
-        console.log(this.rolemenu)
         if (item.menu_name=="操作管理") {
           //有子集
           for (let j = 0; j < item.children.length; j++) {
@@ -430,6 +429,15 @@ export default {
         } 
       });
       
+    },
+        //序号排列
+    indexMethod(index) {
+      if (this.form.page == 1) {
+        return index + 1;
+      } else {
+        let page = (this.form.page - 1) * 10 + 1;
+        return index + page;
+      }
     },
     ifHere(a){
       let nameArr=[]

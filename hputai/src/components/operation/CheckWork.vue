@@ -48,6 +48,8 @@
       :data="tableData"
       style="width: 100%"
     >
+          <el-table-column label="序号" type="index" :index="indexMethod" width="80" align="center"></el-table-column>
+
       <el-table-column align="subject_name" label="授课项目" prop="course_program"></el-table-column>
       <el-table-column align="center" label="授课科目">
         <template slot-scope="scope">
@@ -617,7 +619,14 @@ export default {
         }
       });
     },
-
+    indexMethod(index) {
+      if (this.form.page == 1) {
+        return index + 1;
+      } else {
+        let page = (this.form.page - 1) * 10 + 1;
+        return index + page;
+      }
+    },
     unnormal(a) {
       this.unnormalData = {};
       (this.unnormalData.attendance_type = 2),

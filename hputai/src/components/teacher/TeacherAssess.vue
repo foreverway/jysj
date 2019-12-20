@@ -37,7 +37,7 @@
 
       <el-table-column align="center" label="综合评分">
         <template slot-scope="scope">
-          <el-rate v-model="scope.row.eval_average" disabled text-color="#ff9900"></el-rate>
+          <el-rate v-model="scope.row.eval_average*1" disabled text-color="#ff9900"></el-rate>
         </template>
       </el-table-column>
       <el-table-column label="状态" prop="eval_status"></el-table-column>

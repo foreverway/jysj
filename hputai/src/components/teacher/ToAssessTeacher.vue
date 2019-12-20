@@ -6,7 +6,7 @@
     <el-input class="aa" type="textarea" width="200px" placeholder="内容可为：备课情况、教学态度、课堂互动、授课风格、教学设计、课后反馈及作业" v-model="form.contents"></el-input>
   </el-form-item>
     <el-form-item label="综合打分" prop="rate">
-  <el-rate v-model="form.rate"  show-text></el-rate>
+  <el-rate v-model="form.rate*1"  show-text></el-rate>
   
   </el-form-item>
   <el-button type="primary" class='assess' @click="goBack">返回</el-button>

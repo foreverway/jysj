@@ -38,7 +38,7 @@
       :header-cell-style="{background:'#f4f4f4'}"
       style="width: 100%;margin:20px auto"
     >
-      <el-table-column type="index" label="序号" width="50"></el-table-column>
+      <el-table-column type="index" label="序号" width="50" :index="indexMethod"></el-table-column>
       <!-- <el-table-column label="序号" prop="index" width="50"></el-table-column> -->
       <el-table-column prop="number" label="编号"></el-table-column>
       <el-table-column prop="title" label="排课需求"></el-table-column>
@@ -474,6 +474,15 @@ export default {
   mounted() {},
   watch: {},
   methods: {
+       //序号排列
+    indexMethod(index) {
+      if (this.parms.page == 1) {
+        return index + 1;
+      } else {
+        let page = (this.parms.page - 1) * 10 + 1;
+        return index + page;
+      }
+    },
     tongguo(num) {
       let shenghe = {
         app_id: this.app_id,
