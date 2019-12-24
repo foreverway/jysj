@@ -12,23 +12,10 @@
           placeholder="请输入搜索内容"
         ></el-input>
 
-        <el-date-picker
-          style="margin-left:60px"
-          v-model="form.start_time"
-          @change="getadata"
-          type="datetime"
-          clearable
-          value-format="yyyy-MM-dd H:mm:ss"
-          placeholder="选择日期时间"
-        ></el-date-picker>至
-        <el-date-picker
-          @change="getadata"
-          v-model="form.end_time"
-          type="datetime"
-          clearable
-          value-format="yyyy-MM-dd H:mm:ss"
-          placeholder="选择日期时间"
-        ></el-date-picker>
+            <el-select clearable v-model="form.is_parttime" placeholder="请选择老师类型" @change="Change_teacher">
+        <el-option label="兼职老师" value="2"></el-option>
+        <el-option label="全职老师" value="1"></el-option>
+      </el-select>
       </el-form>
     </div>
 
@@ -36,38 +23,46 @@
     <el-table
       :header-cell-style="{background:'#f4f4f4'}"
       ref="multipleTable"
-      border
       :data="tableData"
       style="width: 100%"
+      border
+      class="changeT"
     >
-      <el-table-column label="序号" type="index" width="80" align="center" :index="indexMethod"></el-table-column>
+      <el-table-column align="center" label="序号" type="index" width="80"  :index="indexMethod"></el-table-column>
       <el-table-column align="center" width="120" prop="teacher_name" label="教师姓名"></el-table-column>
       <el-table-column align="center" width="150" prop="tel" label="联系电话"></el-table-column>
       <el-table-column align="center" prop="part_time" label="类型"></el-table-column>
 
-      <el-table-column align="center" label="推荐等级" prop="teacher_rate" width="180px" sortable>
+      <el-table-column align="center" label="推荐等级" prop="teacher_rate"  sortable>
         <template slot-scope="scope" >
-          <el-rate v-model="scope.row.teacher_rate*1" disabled text-color="#ff9900"></el-rate>
+          <span :class="[scope.row.teacher_rate*1>=4?'prefectC':scope.row.teacher_rate*1>=3&&scope.row.teacher_rate*1<4?'goodC':'bedC']">{{scope.row.teacher_rate?scope.row.teacher_rate+"分":'待评价'}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="eval_average" label="综合评分"  width="180px" sortable>
+      <el-table-column align="center" prop="eval_average" label="综合评分"  sortable>
         <template slot-scope="scope">
-          <el-rate v-model="scope.row.eval_average*1"  disabled text-color="#ff9900"></el-rate>
+        <span :class="[scope.row.eval_average*1>=4?'prefectC':scope.row.eval_average*1>=3&&scope.row.eval_average*1<4?'goodC':'bedC']">{{scope.row.eval_average?scope.row.eval_average+"分":'待评价'}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="teach_subjects" label="科目"></el-table-column>
+      <el-table-column align="center" prop="teach_subjects" width="150px" label="科目"></el-table-column>
       <el-table-column align="center" prop="studying" label="在读学员"></el-table-column>
       <el-table-column align="center" prop="haved_hour" label="已上课时"></el-table-column>
       <el-table-column align="center" prop="waiting_hour" label="待上课时"></el-table-column>
-      <el-table-column align="center" label="操作" fixed="right" width="350px">
-        <template slot-scope="scope">
+      <el-table-column align="center" prop="teacher_location" width="150px" :show-overflow-tooltip="true" label="功能定位"></el-table-column>
+                <el-table-column align="center" prop="teaching_style" width="150px" :show-overflow-tooltip="true"  label="教学风格"></el-table-column>
+      <el-table-column align="center" prop="fit_student" width="150px" :show-overflow-tooltip="true" label="适合学生"></el-table-column>
+
+      <el-table-column align="center" prop="remarks" width="150px" :show-overflow-tooltip="true" label="备注"></el-table-column>
+      <el-table-column  label="操作" fixed="right"    align="left" width="220px">
+        <template slot-scope="scope" id="changeDract">
           <span
             v-for="(item,index) in rolemenu[2].children[0].children"
             style="margin:0 5px;"
             :key="index"
           >
             <el-button
+            type="primary"
               size="mini"
+              style="margin:3px 0;"
               index="item.id"
               @click="teacherAction(item.menu_action,scope.row,scope.$index,tableData)"
             >{{item.menu_name}}</el-button>
@@ -220,6 +215,19 @@
         <el-form-item label="开户行">
           <el-input v-model="editTeacher.bank_open"></el-input>
         </el-form-item>
+         <el-form-item label="功能定位">
+          <el-input v-model="editTeacher.teacher_location"></el-input>
+        </el-form-item>
+   
+         <el-form-item label="教学风格">
+          <el-input v-model="editTeacher.teaching_style"></el-input>
+        </el-form-item>
+         <el-form-item label="适合学生">
+          <el-input v-model="editTeacher.fit_student"></el-input>
+        </el-form-item>
+              <el-form-item label="备注">
+          <el-input v-model="editTeacher.remarks"></el-input>
+        </el-form-item>
         <el-form-item label="讲师简历">
           <el-upload
             class="upload-demo"
@@ -273,9 +281,9 @@ export default {
       form: {
         search: "", //搜索老师条件
         page: 1, //页码
-        teacher_id: "", //教师id,
-        start_time: "",
-        end_time: ""
+        // teacher_id: "", //教师id,
+    
+        is_parttime:'',
       },
       options: [], //课程名称的数据
       options_: [], //总数据的数据
@@ -285,7 +293,6 @@ export default {
       centerDialogVisible_salary: false, //入扣款弹窗
       editDialog: false, //编辑教师弹窗
       teacher_info: false,
-      // teacher: [
       editTeacher: {
         //编辑老师的信息
         part_time: "", //类型,
@@ -358,6 +365,10 @@ export default {
   },
   computed: mapState(["rolemenu", "region_list"]),
   methods: {
+        Change_teacher(value) {
+      this.form.is_parttime = value;
+      this.getadata();
+    },
     //序号排列
     teacherAction(a, b, c, d) {
       switch (a) {
@@ -382,7 +393,6 @@ export default {
               }
             });
           this.teacher_name = b.teacher_name;
-          //console.log(b)
           //改造城市列表
           for (let i = 0; i < this.region_list.length; i++) {
             var val = this.region_list[i];
@@ -509,6 +519,7 @@ export default {
             type: "success",
             duration: 1500
           });
+          this.getadata()
           this.editDialog = false;
         } else {
           this.$message.error(data.msg);
@@ -670,7 +681,6 @@ export default {
         if (res.data.code == 1) {
           this.msg = res.data;
           this.tableData = res.data.data.list;
-          console.log(this.tableData);
         }
       });
     },
@@ -718,5 +728,24 @@ export default {
 }
 p {
   padding: 0 10px;
+}
+.prefectC{
+  color:red;
+}
+.goodC{
+  color:orange;
+}
+.bedC{
+  color:green;
+}
+ .changeT /deep/  td.el-tooltip__popper{
+   color:red;
+
+  text-align: left;
+}
+.el-tooltip__popper {
+color:red;
+  max-width: 800px;
+
 }
 </style>

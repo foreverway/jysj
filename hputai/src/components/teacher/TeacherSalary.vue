@@ -58,6 +58,8 @@
           <span>{{ scope.row.teacher_name }}</span>
         </template>
       </el-table-column>
+            <el-table-column label="兼职/全职" e prop="teacher_type_name"></el-table-column>
+
  <el-table-column label="一级科目" prop="first_subject"></el-table-column>
       <el-table-column label="二级科目" prop="second_subject"></el-table-column>
       <el-table-column label="科目"  align="center">
@@ -68,6 +70,8 @@
       <el-table-column label="上课时间" e prop="start_time"></el-table-column>
       <el-table-column label="线上/线下" prop="course_address"></el-table-column>
       <el-table-column label="授课类型" prop="teaching_type"></el-table-column>
+       <el-table-column label="班主任" prop="banzhuren"></el-table-column>
+      <el-table-column label="学生" prop="student_name"></el-table-column>
       <el-table-column label="课程属性" prop="course_attribute"></el-table-column>
       <el-table-column label="课酬标准" prop="dollars_standar"></el-table-column>
       <el-table-column label="应上课时" prop="classhour"></el-table-column>
@@ -166,6 +170,7 @@ export default {
         if (res.data.code == 1) {
           this.msg = res.data;
           this.tableData = res.data.data.list;
+          console.log(this.tableData)
         }
       });
     }

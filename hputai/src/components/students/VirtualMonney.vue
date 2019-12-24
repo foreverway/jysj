@@ -1,7 +1,7 @@
 <template>
   <div class="so_main">
     <div class="so_main_left">
-      <el-form :inline="true" :model="form" class="demo-form-inline">
+      <el-form  :model="form" width=:100%; class="demo-form-inline">
         <el-input
           v-if="this.url!=='StudentsList'"
           class="so_input"
@@ -16,7 +16,7 @@
           style="margin-left:5px;"
         >搜索</el-button>
 
-        <div v-if="this.url=='StudentsList'" style="float:right; margin:0 0 15px 17px;">
+        <div v-if="this.url=='StudentsList'"  style="float:right; margin:0 0 15px 17px;">
           <el-date-picker
             @change="getadata"
             v-model="formStudent.start_time"
@@ -35,7 +35,7 @@
           ></el-date-picker>
         </div>
 
-        <div v-if="this.url!=='StudentsList'">
+        <div v-if="this.url!=='StudentsList' " style="float:right; margin:0 0 15px 17px;">
           <el-date-picker
             @change="getadata"
             v-model="form.start_time"
@@ -85,7 +85,7 @@
           <span>{{ scope.row.balance }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="事由">
+      <el-table-column :show-overflow-tooltip="true" align="center" label="事由">
         <template slot-scope="scope">
           <span>{{ scope.row.remarks }}</span>
         </template>

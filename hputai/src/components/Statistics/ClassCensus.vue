@@ -1,8 +1,15 @@
 <template>
-  <div class="echarts" >
-      <div>未定义</div>
-    <div v-if="show==true" :style="{height:'420px',width:'100%'}" ref="myEchart"></div>
+<div>
+<div class="echarts" >
+    <div v-show="show==1" :style="{height:'420px',width:'100vw'}" ref="myEchart"></div>
   </div>
+  <div style="width:100px;">
+    <el-input v-model="show"></el-input>
+
+  </div>
+
+</div>
+  
 </template>
 <script>
   import echarts from "echarts";
@@ -12,7 +19,8 @@
     data() {
       return {
         chart: null,
-        show:false
+        show:'',
+
       };
     },
     mounted() {

@@ -33,7 +33,7 @@
             placeholder="选择日期时间"
           ></el-date-picker>
         </div>
-        <div v-if="this.url!=='StudentsList'">
+        <div v-if="this.url!=='StudentsList'" style="float:right; margin:0 0 15px 17px;">
           <el-date-picker
             @change="getadata"
             v-model="form.start_time"

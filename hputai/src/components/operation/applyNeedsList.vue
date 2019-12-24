@@ -11,7 +11,7 @@
     ></el-input>
 
     <el-cascader
-      placeholder="输入顾问姓名"
+      placeholder="输入添加人姓名"
       v-model="value"
       :options="options"
       clearable
@@ -854,20 +854,21 @@ this.seeapplytable =res.data.data
       //当前多少页
       console.log(`当前页: ${val}`, this.tableData.length);
     },
-    //获取顾问列表adviser_list
+    //获取实收人adviser_list
     getAdviser() {
       let parms = {
         admin_id: this.getdataCookie("admin_id")
       };
       this.$apis.common
-        .adviser_list(parms)
+        .inpeople_list(parms)
         .then(res => {
           if (res.data.code == 1) {
             //this.msg = res.data;
             this.options_all = res.data.data.list;
+            console.log(this.options_all)
             for (let i = 0; i < this.options_all.length; i++) {
               var val = this.options_all[i];
-              this.options.push({ value: val.adviser, label: val.adviser });
+              this.options.push({ value: val.name, label: val.name });
             }
           }
         })
@@ -881,7 +882,7 @@ this.seeapplytable =res.data.data
     //根据顾问老师生成列表
     showAdviser(targetName) {
       this.adviserList = this.options_all.filter(
-        item => item.adviser == targetName
+        item => item.name == targetName
       );
       if (targetName.length == 0) {
         var parms = {

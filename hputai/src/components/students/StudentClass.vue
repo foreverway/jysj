@@ -599,7 +599,7 @@
                 v-model="form.feedback1.details_1"
                 placeholder="(1).科目，课程名称，章节名称
 (2).简述首次课讲授的具体内容"
-                @input="minLen($event.target.value,c1)"
+                @input="item=>{handleSelect(item, index)}"
               ></el-input>
             </el-form-item>
             <el-form-item label="学生的课堂表现及学生学习上存在的主要问题" prop="name" v-if="form.feedback_type=='1'">
@@ -609,7 +609,7 @@
                 name='details_2'
              
                 v-model="form.feedback1.details_2"
-                 @input="minLen($event.target.value,c2)"
+                 @input="((item)=>{howLength(item,index)})"
                 placeholder="学生的课堂表现及学生学习上存在的主要问题"
               ></el-input>
             </el-form-item>
@@ -1099,7 +1099,6 @@ export default {
       for (var key in this.parms) {
         params += key + "=" + this.parms[key] + "&";
       }
-      console.log(this.parms);
       window.location.href = url.urls + "/api_course_export" + "?" + params;
     },
     toPc() {
@@ -1182,7 +1181,6 @@ export default {
     },
         onSubmit_edit() {
           var fields = $(".form_all").serializeArray();
-          console.log(this.course)
     switch (this.form.feedback_type) {
     case 1:
         this.form.feedback1=fields
@@ -1317,6 +1315,7 @@ export default {
       }
       return "";
     },
+
     artdata() {
       // alert(this.value);
     },
@@ -1372,6 +1371,9 @@ minLen(value,a){
   console.log(value.split('').length)
   }
  
+},
+handleSelect(item,index){
+    console.log(item,index)
 },
     handleChange(targetName) {
       //选择学生

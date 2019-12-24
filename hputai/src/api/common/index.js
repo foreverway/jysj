@@ -18,6 +18,11 @@ export default {
     let url = '/api/api_adviser_list'
     return shuju.getdata(url, params)
   },
+    // 添加人数据 /api_adviser_list
+    inpeople_list(params) {
+      let url = '/api/api_inpeople_list'
+      return shuju.getdata(url, params)
+    },
   // 班主任数据 
   banzhuren_list(params) {
     let url = '/api/api_banzhuren_list'
@@ -198,10 +203,10 @@ export default {
     return shuju.getdata(url, params)
   },
 
-  inpeople_list(params) { //实收人数据接口
-    let url = "/api/api_inpeople_list"
-    return shuju.getdata(url, params)
-  },
+  // inpeople_list(params) { //实收人数据接口
+  //   let url = "/api/api_inpeople_list"
+  //   return shuju.getdata(url, params)
+  // },
 
   basedata_list(params) { //基础数据配置
     let url = "/api/api_basedata_list"
