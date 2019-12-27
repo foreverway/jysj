@@ -207,7 +207,7 @@
             </el-form>
           </div>
           <div>
-            <el-form label-width="120px" :model="newClass">
+            <el-form label-width="120px" :rules="rules" :model="newClass">
               <el-form-item label="新的上课时间" style="font-weight:700;">
                 <div class="block">
                   <span class="demonstration"></span>
@@ -219,7 +219,26 @@
                   ></el-date-picker>
                 </div>
               </el-form-item>
-              <el-form-item label="调课原因" style="font-weight:700;height:290px;">
+                    <el-form-item :inline="true" label="直播平台">
+        <el-select v-model="newClass.live_id" filterable clearable placeholder="请选择">
+          <el-option
+            v-for="item in this.live_list_new"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+                    <el-form-item label="上课地点" prop="radio">
+          <el-radio-group v-model="newClass.course_address" @change="whereGo(newClass.course_address)">
+            <el-radio  :label="1">线上</el-radio>
+            <el-radio  :label="2">线下</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="上课地址" width="200px" v-if="newClass.course_address==2" required prop="address">
+      <el-input v-model="newClass.address"></el-input>
+        </el-form-item>
+              <el-form-item label="调课原因" style="font-weight:700;height:290px;" required>
                 <el-input type="textarea" v-model="newClass.remarks" style></el-input>
               </el-form-item>
             </el-form>
@@ -918,6 +937,7 @@
 </template>
 <script>
 import url from "../../config/config.js";
+import { mapState, mapActions, mapGetters } from "vuex";
 
 export default {
   props: {
@@ -928,6 +948,9 @@ export default {
   data() {
     return {
       rules: {
+          address: [
+            { required: true, message: '请输入上课地址', trigger: 'blur' },
+          ],
       },
       value: "",
       labelPosition: "top", //其他方法进入直播排在顶部
@@ -1002,13 +1025,19 @@ export default {
       newClass: {
         start_time: "",
         remarks: "",
-        course_id: ""
+        course_id: "",
+        course_address:'1',
+        address:'',
+        live_id:''
+
       },
-      editOpen:false,
-      //调课之后的提交
+      live_list_new:[],//直播平台的数组
+      editOpen:false,  //调课之后的提交
+      resData:{},//以前的课程和现在的区别
     };
   },
   created() {
+  
     this.$watch("value", function() {
       //this.artdata()
       let myTime = this.dateToMs(this.value);
@@ -1016,13 +1045,14 @@ export default {
     this.getdata();
     this.getStudent();
     this.getClassList();
+ 
   },
   updated() {
     // var bodyDiv=$('.screen_he')
     //   $(bodyDiv).style.height=$(window).height()*1-210+'px'
   },
   mounted() {},
-  computed: {},
+
   watch: {
     changeTab: function(value) {
       this.change_value = value;
@@ -1030,10 +1060,59 @@ export default {
     }
   },
   methods: {
+
+        whereGo(a) {
+      if (a == "2") {
+        this.show = true;
+        this.$apis.common.region_list().then(res => {
+          if (res.data.code == 1) {
+            getId(res.data.options);
+          }
+        });
+        let getId = arr => {
+          arr.forEach(v => {
+            v.value = v.label;
+            if (v.children instanceof Array) {
+              getId(v.children);
+            }
+          });
+          this.address_check = arr;
+        };
+        // getId(this.region_list);
+        // this.address_check = this.region_list;
+      } else {
+        this.show = false;
+      }
+
+    },
+    //     getLiveName() {
+    //   //筛选直播列表
+   
+    // },
     changeClass(result) {
       this.showclass = true;
+        this.live_list_new=[]
       this.thisClass = result;
-
+   
+        this.$apis.common.get_live_list().then(res => {
+          if (res.data.code == 1) {
+               for (let i = 0; i < res.data.data.length; i++) {
+        var val = res.data.data[i];
+        this.live_list_new.push({ value: val.id, label: val.live_name });
+      }
+          }
+        });
+                this.$apis.common.class_transfer_info({course_id:result.course_id}).then(res => {
+          if (res.data.code == 1) {
+              this.resData=res.data.data
+                // this.choose_start_time=Number(this.resData.start_time+'000')
+                this.newClass.address=this.resData.address
+                this.newClass.live_id=this.resData.live_id
+                this.newClass.course_address=this.resData.course_address
+                console.log(this.newClass)
+          }
+        });
+        
       this.newClass.course_id = result.course_id;
     },
     notClass() {
@@ -1043,12 +1122,17 @@ export default {
       this.choose_start_time = "";
     },
     handleClose() {
-      if (this.newClass.remarks == "" || this.choose_start_time == "") {
+      if (this.newClass.remarks == "" ||this.newClass.course_address==2&&this.newClass.address=='') {
         this.$message({
           type: "warning",
-          message: "请填写完整"
+          message: "请将标注*处填写完整"
         });
       } else {
+        if(this.choose_start_time!==Number(this.resData.start_time+'000')||
+           this.newClass.address!==this.resData.address||
+          this.newClass.live_id!==this.resData.live_id||
+          this.newClass.course_address!==this.resData.course_address
+        ){
         this.$confirm("此操作将修改课程, 是否继续?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
@@ -1087,6 +1171,13 @@ export default {
               });
             });
         });
+        }else{
+                 this.$message({
+                  type: "warning",
+                  message: '你还没有改变任何一项，不能提交'
+                });
+        }
+
       }
     },
     recharge_export() {
@@ -1592,10 +1683,11 @@ background-color: silver;
 }
 .changeC {
   display: flex;
-  align-items: center;
+  align-items:flex-start;
   justify-content: space-around;
+  height: 420px;
 }
 .changeC /deep/ textarea {
-  height: 290px;
+  height: 170px;
 }
 </style>

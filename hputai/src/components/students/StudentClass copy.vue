@@ -219,6 +219,14 @@
                   ></el-date-picker>
                 </div>
               </el-form-item>
+          <el-form-item label="上课地点" prop="radio">
+          <el-radio-group v-model="form.radio" @change="whereGo(form.radio)">
+            <el-radio  :label="1">线上</el-radio>
+            <el-radio  :label="2">线下</el-radio>
+          </el-radio-group>
+        </el-form-item> 
+        <el-form-item label="上课地址" width="200px" v-if="form.radio==2" prop="address">
+            
               <el-form-item label="调课原因" style="font-weight:700;height:290px;">
                 <el-input type="textarea" v-model="newClass.remarks" style></el-input>
               </el-form-item>

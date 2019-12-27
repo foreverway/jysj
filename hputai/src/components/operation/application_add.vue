@@ -235,7 +235,8 @@ export default {
         need_four: ""
       },
       rules: {
-        // title: [{ required: true, message: "请输入标题", trigger: "blur" }],
+         address: [{ required: true, message: "请输入标题", trigger: "blur" }],
+          // title: [{ required: true, message: "请输入标题", trigger: "blur" }],
         value: [
           { required: true, message: "请选择报读科目", trigger: "change" }
         ],
@@ -351,15 +352,10 @@ export default {
           });
           this.address_check = arr;
         };
-        // getId(this.region_list);
-        // this.address_check = this.region_list;
+        getId(this.region_list);
+        this.address_check = this.region_list;
       } else {
         this.show = false;
-      }
-      if (this.form.radio == 1) {
-        this.editableTabs_1 = this.pushArray1;
-      } else {
-        this.editableTabs_1 = this.pushArray2;
       }
     },
     //生成学员编号

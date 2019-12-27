@@ -25,6 +25,7 @@ import store from './store'//引入store
 //   return originalPush.call(this, location).catch(err => err)
 // }
 Vue.prototype.$apis = apis
+// Vue.prototype.$echarts = echarts;  全局使用echarts
 Vue.use(ElementUI);
 Vue.use(VCharts);
 Vue.config.productionTip = false  // 设置为 false 以阻止 vue 在启动时生成生产提示。

@@ -107,7 +107,11 @@ export default {
     let url = "/api/api_application_edit"
     return shuju.putdata(url, params)
   },
-
+//获取课表详情信息接口
+class_transfer_info(params) {
+  let url = "/api/api_class_transfer_info"
+  return shuju.getdata(url, params)
+},
   application_audit(params) { //排课审核
     let url = "/api/api_application_audit"
     return shuju.postdata(url, params)
@@ -326,6 +330,10 @@ export default {
   teacher_evaluation_get(params){ //获取教师的评价数据
     let url ="/api/api_teacher_evaluation"
     return shuju.getdata(url,params)
-  }
-
+  },
+   // 获取直播平台数据 /api_live_list
+   get_live_list (params) {
+    let url='/api/api_live_list'
+    return shuju.getdata(url,params)
+   },
 }
