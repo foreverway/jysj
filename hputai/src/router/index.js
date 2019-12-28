@@ -70,12 +70,22 @@ export default new Router({
         {
           path: '/AchievementCensus',//业绩统计
           component:resolve=>require(['@/components/Statistics/AchievementCensus'],resolve),
-
         },
         {
           path: '/ClassCensus',//业绩统计
           component:resolve=>require(['@/components/Statistics/ClassCensus'],resolve),
-
+        },
+        {
+          path: '/StudentHourCensus',//学生课时统计
+          component:resolve=>require(['@/components/Statistics/StudentHourCensus'],resolve),
+        },
+        {
+          path: '/TeacherHourCensus',//老师课时统计
+          component:resolve=>require(['@/components/Statistics/TeacherHourCensus'],resolve),
+        },
+        {
+          path: '/SubjectCensus',//业绩统计
+          component:resolve=>require(['@/components/Statistics/SubjectCensus'],resolve),
         },
         {
           // path: '/ToAssessTeacher/:id',//ToAssessTeacher  [评价老师]
