@@ -236,12 +236,12 @@
             multiple
             accept=".pdf, .PDF, .doc, .dot, .docx, .dotx, .xls, .ppt, .png, .jpg"
             :on-change="handlePreview"
-            :file-list="editTeacher.files"
+            :file-list="editTeacher.resume"
             :auto-upload="false"
           >
             <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-            <img :src="form.src_img" alt />
-            <div slot="tip" class="el-upload__tip">用户素材列表显示,只能上传jpg/png文件</div>
+            <img :src="editTeacher.resume" style="height:100px;width:150px;" alt />
+            <div slot="tip" class="el-upload__tip">用户素材列表显示,只能显示jpg/png文件</div>
           </el-upload>
         </el-form-item>
         <el-form-item label="推荐等级">
@@ -380,6 +380,7 @@ export default {
             .then(res => {
               if (res.data.code == 1) {
                 this.editTeacher = res.data.data;
+                console.log(this.editTeacher )
                 if (this.editTeacher.address) {
                   this.editTeacher.address = res.data.data.address.split(",");
                 }
@@ -507,7 +508,20 @@ export default {
         let _base64 = reader.result;
         let ba = _base64.split(",");
         //  this.form.src_img=_base64
-        this.editTeacher.files.push(_base64);
+        this.editTeacher.files.unshift(_base64);
+        this.editTeacher.resume=_base64
+        console.log(this.editTeacher)
+      };
+    },
+    handlePreview_1(file){
+            //选择提交文件的函数
+      let reader = new FileReader();
+      reader.readAsDataURL(file.raw);
+      reader.onload = () => {
+        let _base64 = reader.result;
+        let ba = _base64.split(",");
+        //  this.form.src_img=_base64
+        this.editTeacher.resume.unshift(_base64)
       };
     },
     submitUpload() {

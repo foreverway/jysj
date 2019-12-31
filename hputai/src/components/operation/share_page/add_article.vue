@@ -58,7 +58,6 @@ handlePreview (file) {
        let reader = new FileReader()
            reader.readAsDataURL(file.raw)
             reader.onload = () => {
-
                 let _base64 = reader.result
                 let  ba=_base64.split(",")
        this.form.src_img=_base64
