@@ -336,4 +336,9 @@ class_transfer_info(params) {
     let url='/api/api_live_list'
     return shuju.getdata(url,params)
    },
+   subject_classhour(params) {
+    //此处的params是用户的账户id，用于获取用户的信息
+    let url = '/api/api_subject_classhour'
+    return shuju.getdata(url, params)
+  },
 }
