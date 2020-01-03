@@ -64,7 +64,7 @@
              <div id="main2" style="width:40%;height:400px;"></div>
 
     </div>
-        <div id="main1" style="width:40%;height:400px; " ></div>
+        <div id="main1" style="width:80%;height:400px; " ></div>
 
 
   </div>
@@ -128,13 +128,8 @@ export default {
     lineChart() {
       let myLine = echarts.init(document.getElementById("main1"));
       
-      var option = {
-       
-            
-
- 
-
-      };
+      // var option = {
+      // };
        myLine.setOption({
          title: {
               text: '',
@@ -155,11 +150,41 @@ export default {
             color: ["#D7DA8B", "#E15457"]
           }
         },
+            dataset: {
+        source: [
+            // ['amount', 'product'],
+            [ 58212, 'Matcha Latte'],
+            [ 78254, 'Milk Tea'],
+            [ 41032, 'Cheese Cocoa'],
+            [ 12755, 'Cheese Brownie'],
+            [ 20145, 'Matcha Cocoa'],
+            [ 79146, 'Tea'],
+            [ 91852, 'Orange Juice'],
+            [ 101852, 'Lemon Juice'],
+            [ 20112, 'Walnut Brownie']
+        ]
+    },
+       series: [
+        {
+            type: 'bar',
+            encode: {
+                // Map the "amount" column to X axis.
+                x: 'amount',
+                // Map the "product" column to Y axis
+                y: 'product'
+            }
+        }
+    ]
        });
       this.$apis.census.one_subjects_ranking().then(res=>{
+        console.log(res.data.data.list)
         if(res.data.code==1){
         dataset: {
-          source: res.data.data
+          source: [['product', '2015', '2016', '2017'],
+            ['Matcha Latte', 43.3, 85.8, 93.7],
+            ['Milk Tea', 83.1, 73.4, 55.1],
+            ['Cheese Cocoa', 86.4, 65.2, 82.5],
+            ['Walnut Brownie', 72.4, 53.9, 39.1]]
         }
         series: [
           {
@@ -304,8 +329,7 @@ export default {
 
           this.$apis.census.subject_classhour().then(res=>{
         if(res.data.code==1){
-          this.tableData=res.data.data.list
-          console.log(res.data.data.list)
+          // this.tableData=res.data.data.list
         }
       })
 
