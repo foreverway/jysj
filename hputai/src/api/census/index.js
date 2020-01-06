@@ -17,7 +17,6 @@ export default {
         return shuju.getdata(url, params)
       },
       student_classhour(params) { //学生课时统计
-        //此处的params是用户的账户id，用于获取用户的信息
         let url = '/api/api_student_classhour'
         return shuju.getdata(url, params)
       },
