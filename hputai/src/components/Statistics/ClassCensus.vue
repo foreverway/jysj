@@ -36,7 +36,7 @@
     ></el-cascader>
     <el-button type="primary" @click="recharge_export">导出</el-button>
 
-    <el-table :data="tableData" border :header-cell-style="{background:'#f4f4f4'}">
+    <el-table :data="tableData" border class="table_set" :header-cell-style="{background:'#f4f4f4'}" >
       <el-table-column label="序号" type="index" :index="indexMethod" width="80" align="center"></el-table-column>
       <el-table-column :show-overflow-tooltip="true" align="center" label="科目名称" width="200">
         <template slot-scope="scope">
@@ -57,14 +57,10 @@
       <el-table-column align="center" label="试听" width="280px" prop="audition"></el-table-column>
       <el-table-column align="center" label="正课" width="280px" prop="just_courses"></el-table-column>
     </el-table>
-     <span v-if="tableData">
+    <span v-if="tableData">
       <el-pagination
         style="float:right;margin-top:20px;margin-bottom: 20px;"
         background
-        layout="prev, pager, next"
-        @prev-click="prev"
-        @next-click="next"
-        @current-change="current"
         :page-size="10"
         :total="tableData.length"
       ></el-pagination>
@@ -73,8 +69,10 @@
       <div id="main" style="width:40%;height:400px;"></div>
       <div id="main2" style="width:40%;height:400px;"></div>
     </div>
-    <div id="main1" style="width:50%;height:400px; "></div>
-
+    <div class="echarts_1">
+      <div id="main1" style="width:48%;height:400px; "></div>
+      <div id="main3" style="width:48%;height:400px; "></div>
+    </div>
   </div>
 </template>
 <script>
@@ -88,57 +86,167 @@ export default {
       },
       tableData: [],
       options: [],
-      top15_1: []
+      top15_1: [],
+      top15_3: [],
+      mouthData: [], //获取上一个月和前一年上一个月的数据
+      alreadyData:[],
+      willData:[],
+      yearData:[],
+
+      classMouth:[],
+      yipai_classhour:[],
+      yishang_classhour:[],
+      daishang_classhour:[]
     };
   },
-  // created(){
-  //    this.$api.common.subject_classhour().then(res=>{
-  //      if(res.data.code==1){
-  //     }
-  //     })
-  // },
-
   methods: {
     getadata() {},
     handleChange_1() {},
     Change_sbuject() {},
     recharge_export() {},
     indexMethod() {},
+    //普通学员
     drawStudent() {
       let myDraw = echarts.init(document.getElementById("main2"));
-      var option = {
-        title: {
-          text: "",
-          subtext: "普通学员"
-        },
-        legend: {},
-        tooltip: {},
-        dataset: {
-          source: [
-            ["product", "已排", "已上", "待上"],
-            ["11月", 43.3, 85.8, 93.7],
-            ["12月", 83.1, 73.4, 55.1],
-            ["1月", 86.4, 65.2, 82.5]
-          ]
-        },
-        xAxis: { type: "category" },
-        yAxis: {},
-        // Declare several bar series, each will be mapped
-        // to a column of dataset.source by default.
-        series: [{ type: "bar" }, { type: "bar" }]
-      };
-      myDraw.setOption(option);
-    },
+  
 
-    lineChart() {
-      let myLine = echarts.init(document.getElementById("main1"));
-      myLine.setOption({
+app.config = {
+ rotate: 90,
+ align: 'left',
+};
+var labelOption = {
+     show: true,
+    position: app.config.position,
+    distance: app.config.distance,
+    align: app.config.align,
+    verticalAlign: app.config.verticalAlign,
+    rotate: app.config.rotate,
+    formatter: '{c}  {name|{a}}',
+    fontSize: 16,
+    rich: {
+        name: {
+            textBorderColor: '#fff'
+        }
+    }
+};
+      myDraw.setOption({
+         color: ['#5CBB7A', '#409EFF', '#F56C6C', '#e5323e'],
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'shadow'
+        }
+    },
+    legend: {
+        data: ['请等待', '请等待', '请等待']
+    },
+    // toolbox: {
+    //     show: true,
+    //     orient: 'vertical',
+    //     left: 'right',
+    //     top: 'center',
+    //     feature: {
+    //         mark: {show: true},
+    //         dataView: {show: true, readOnly: false},
+    //         magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+    //         restore: {show: true},
+    //         saveAsImage: {show: true}
+    //     }
+    // },
+    xAxis: [
+        {
+            type: 'category',
+            axisTick: {show: false},
+            data: ['2012', '2013', '2014']
+        }
+    ],
+    yAxis: [
+        {
+            type: 'value'
+        }
+    ],
+    series: [
+        {
+            name: '已排',
+            type: 'bar',
+            barGap: 0,
+            label: labelOption,
+            data: [320, 332, 301]
+        },
+        {
+            name: '已上',
+            type: 'bar',
+            label: labelOption,
+            data: [220, 182, 191]
+        },
+        {
+            name: '待上',
+            type: 'bar',
+            label: labelOption,
+            data: [150, 232, 201]
+        },
+    ]
+})
+        this.$apis.census.chainratio_classhour().then(res => {
+          if(res.data.code==1){
+            this.classMouth=[]
+            this.yipai_classhour=[]
+            this.yishang_classhour=[],
+            this.daishang_classhour=[]
+            for(let i=0;i<res.data.data.length;i++){
+            this.classMouth[i]=res.data.data[i].month+'月份'
+            this.yipai_classhour[i]=res.data.data[i].yipai_classhour
+            this.yishang_classhour[i]=res.data.data[i].yishang_classhour
+            this.daishang_classhour[i]=res.data.data[i].daishang_classhour
+            }
+myDraw.setOption({
+ legend: {
+        data: ['已排','已上','待上']
+    },
+        xAxis: [
+        {
+            type: 'category',
+            axisTick: {show: false},
+            data: this.classMouth
+        }
+    ],
+     series: [
+        {
+            name: '已排',
+            type: 'bar',
+            barGap: 0,
+            label: labelOption,
+            data: this.yipai_classhour
+        },
+        {
+            name: '已上',
+            type: 'bar',
+            label: labelOption,
+            data: this.yishang_classhour
+        },
+        {
+            name: '待上',
+            type: 'bar',
+            label: labelOption,
+            data:  this.daishang_classhour
+        },
+    ]
+})
+          }
+    });
+    
+    },
+    lineChart2() {
+      let myLine2 = echarts.init(document.getElementById("main3"));
+      myLine2.setOption({
+       color: ['#5CBB7A'],
+
         title: {
           text: "",
-          subtext: "一级科目Top15"
+          subtext: "三级科目Top15"
         },
         dataset: {
-          source:[]
+          source: []
         },
         series: [
           {
@@ -149,50 +257,99 @@ export default {
               // Map the "product" column to Y axis
               y: "product"
             },
-              label: {
-                show: true,
-                position: 'right'
-            },
+            label: {
+              show: true,
+              position: "right"
+            }
           }
         ],
         grid: { containLabel: true },
         xAxis: { name: "课时" },
         yAxis: { type: "category" }
       });
-    this.$apis.census.one_subjects_ranking().then(res => {
-      if (res.data.code == 1) {
-        for (let i = 0; i < res.data.data.list.length; i++) {
-          this.top15_1[14-i] = [];
-           this.top15_1[14-i].unshift(res.data.data.list[i].subject_name);
-           this.top15_1[14-i].unshift(res.data.data.list[i].classhour);
+      this.$apis.census.subjects_ranking().then(res => {
+        if (res.data.code == 1) {
+          for (let i = 0; i < res.data.data.length; i++) {
+            this.top15_3[14 - i] = [];
+            this.top15_3[14 - i].unshift(res.data.data[i].subject_name);
+            this.top15_3[14 - i].unshift(res.data.data[i].classhour);
+          }
+          myLine2.setOption({
+            dataset: {
+              source: this.top15_3
+            }
+          });
         }
-           myLine.setOption({
-       dataset: {
-          source:this.top15_1
-        },
-
-    });
-      }
-    });
+      });
     },
+    lineChart() {
+      let myLine = echarts.init(document.getElementById("main1"));
+      myLine.setOption({
+        title: {
+          text: "",
+          subtext: "一级科目Top15"
+        },
+        dataset: {
+          source: []
+        },
+        series: [
+          {
+            type: "bar",
+            encode: {
+              x: "课时",
+              y: "product"
+            },
+            label: {
+              show: true,
+              position: "right"
+            }
+          }
+        ],
+        grid: { containLabel: true },
+        xAxis: { name: "课时" },
+        yAxis: { type: "category" }
+      });
+      this.$apis.census.one_subjects_ranking().then(res => {
+        if (res.data.code == 1) {
+          for (let i = 0; i < res.data.data.length; i++) {
+            this.top15_1[14 - i] = [];
+            this.top15_1[14 - i].unshift(res.data.data[i].subject_name);
+            this.top15_1[14 - i].unshift(res.data.data[i].classhour);
+          }
+          myLine.setOption({
+            dataset: {
+              source: this.top15_1
+            }
+          });
+        }
+      });
+    },
+
     drawChart() {
       // 基于准备好的dom，初始化echarts实例
       //   let myChart = this.$echarts.init(document.getElementById("main"));全局引用的用法
       let myChart = echarts.init(document.getElementById("main"));
       var colors = ["#5793f3", "#d14a61", "#675bba"];
       // 指定图表的配置项和数据
-      let option = {
-        color: colors,
-
-        tooltip: {
-          trigger: "axis",
-          axisPointer: {
-            type: "cross"
-          }
-        },
-        grid: {
-          right: "20%"
-        },
+      myChart.setOption ({
+        legend: {},
+    tooltip: {},
+    dataset: {
+        source: [
+            ['product', '2015', '2016'],
+            ['模拟数据', 43.3, 85.8],
+            ['模拟数据', 83.1, 73.4],
+  
+        ]
+    },
+    xAxis: {type: 'category'},
+    yAxis: {},
+    // Declare several bar series, each will be mapped
+    // to a column of dataset.source by default.
+    series: [
+        {type: 'bar'},
+        {type: 'bar'},
+    ],
         toolbox: {
           feature: {
             myTool1: {
@@ -217,65 +374,59 @@ export default {
             // restore: { show: true }
           }
         },
-        legend: {
-          data: ["去年", "今年", "去年课时", "今年课时"]
-        },
-        xAxis: [
-          //x轴
-          {
-            type: "category",
-            axisTick: {
-              alignWithLabel: true
-            },
-            data: [
-              "5月",
-              "6月",
-              "7月",
-              "8月",
-              "9月",
-              "10月",
-              "11月",
-              "12月",
-              "1月",
-              "2月",
-              "3月",
-              "4月"
-            ]
-          }
-        ],
-        yAxis: [
-          //y轴
-          {
-            type: "value",
-            name: "已排课时",
-            min: 0,
-            max: 100,
-            axisLine: {
-              lineStyle: {
-                color: colors[0]
-              }
-            },
-            axisLabel: {
-              formatter: "{value} "
-            }
-          }
-        ],
-        series: [
-          {
-            name: "去年",
-            type: "bar",
-            data: [2, 4, 7, 23, 25, 76, 35, 62, 32, 20, 6, 3]
-          },
-          {
-            name: "今年",
-            type: "bar",
-            yAxisIndex: 0,
-            data: [2, 5, 9, 26, 28, 70, 75, 82, 48, 18, 6, 2]
-          }
-        ]
-      };
+      });
       // 使用刚指定的配置项和数据显示图表。
-      myChart.setOption(option);
+      //  myChart.setOption(option);
+      this.$apis.census.yearonyear_classhour().then(res => {
+        if (res.data.code == 1) {
+          this.alreadyData=[]
+          this.willData=[]
+          this.yearData=[]
+             this.alreadyData[0]=res.data.data[0].yipai_classhour
+             this.alreadyData[1]=res.data.data[1].yipai_classhour
+             this.willData[0]=res.data.data[0].yishang_classhour,
+             this.willData[1]=res.data.data[1].yishang_classhour
+            
+          for (let i = 0; i < res.data.data.length; i++) {
+          if(i==0){
+          this.yearData[i]='去年'+res.data.data[i].month+"月份"
+          }else{
+          this.yearData[i]='今年'+res.data.data[i].month+"月份"
+          }
+          }
+          myChart.setOption({
+            
+            xAxis: [
+              {
+                type: "category",
+                axisTick: {
+                  alignWithLabel: true
+                },
+                data: this.yearData
+              }
+            ],
+              yAxis: [
+              {
+                   name: '课时',
+               
+              }
+            ],
+            series: [
+              {
+                name: "已排",
+                type: "bar",
+                data: this.alreadyData
+              },
+              {
+                name: "已上",
+                type: "bar",
+                yAxisIndex: 0,
+                data:  this.willData
+              }
+            ]
+          });
+        }
+      });
     }
   },
   created() {
@@ -287,6 +438,7 @@ export default {
       this.drawChart();
       this.lineChart();
       this.drawStudent();
+      this.lineChart2();
       this.$apis.census.subject_classhour().then(res => {
         if (res.data.code == 200) {
         }
@@ -297,7 +449,7 @@ export default {
   mounted() {
     this.$apis.census.subject_classhour().then(res => {
       if (res.data.code == 1) {
-           this.tableData=res.data.data.list
+        this.tableData = res.data.data;
       }
     });
 
@@ -315,5 +467,10 @@ export default {
   justify-content: center;
   height: 500px;
   width: 100%;
+}
+.table_set{
+height:500px;
+overflow-y: scroll;
+overflow-x: scroll;
 }
 </style>

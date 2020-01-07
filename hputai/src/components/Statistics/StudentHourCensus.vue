@@ -299,6 +299,7 @@ export default {
     this.$apis.census.student_classhour().then(res => {
       if (res.data.code == 1) {
            this.tableData=res.data.data.list
+           console.log(this.tableData)
       }
     });
 

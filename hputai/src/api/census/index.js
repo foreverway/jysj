@@ -20,4 +20,12 @@ export default {
         let url = '/api/api_student_classhour'
         return shuju.getdata(url, params)
       },
+      yearonyear_classhour(params) { //获取上一个月和前一年上一个月
+        let url = '/api/api_yearonyear_classhour'
+        return shuju.getdata(url, params)
+      },
+      chainratio_classhour(params) { //获取去年这个月，当前这个月和下课月排课数据，
+        let url = '/api/api_chainratio_classhour'
+        return shuju.getdata(url, params)
+      },
 }

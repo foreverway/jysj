@@ -47,11 +47,15 @@
       <el-table-column align="center" prop="studying" label="在读学员"></el-table-column>
       <el-table-column align="center" prop="haved_hour" label="已上课时"></el-table-column>
       <el-table-column align="center" prop="waiting_hour" label="待上课时"></el-table-column>
+            <el-table-column align="center" prop="target_classhour" label="目标课时"></el-table-column>
+
       <el-table-column align="center" prop="teacher_location" width="150px" :show-overflow-tooltip="true" label="功能定位"></el-table-column>
                 <el-table-column align="center" prop="teaching_style" width="150px" :show-overflow-tooltip="true"  label="教学风格"></el-table-column>
       <el-table-column align="center" prop="fit_student" width="150px" :show-overflow-tooltip="true" label="适合学生"></el-table-column>
 
       <el-table-column align="center" prop="remarks" width="150px" :show-overflow-tooltip="true" label="备注"></el-table-column>
+     <el-table-column align="center" prop="recruiter" width="150px" :show-overflow-tooltip="true" label="招聘人"></el-table-column>
+
       <el-table-column  label="操作" fixed="right"    align="left" width="220px">
         <template slot-scope="scope" id="changeDract">
           <span
@@ -215,8 +219,11 @@
         <el-form-item label="开户行">
           <el-input v-model="editTeacher.bank_open"></el-input>
         </el-form-item>
-         <el-form-item label="功能定位">
+        <el-form-item label="目标课时">
           <el-input v-model="editTeacher.teacher_location"></el-input>
+        </el-form-item>
+         <el-form-item label="功能定位">
+          <el-input v-model="editTeacher.target_classhour"></el-input>
         </el-form-item>
    
          <el-form-item label="教学风格">
@@ -225,7 +232,10 @@
          <el-form-item label="适合学生">
           <el-input v-model="editTeacher.fit_student"></el-input>
         </el-form-item>
-              <el-form-item label="备注">
+                <el-form-item label="招聘人">
+          <el-input v-model="editTeacher.recruiter"></el-input>
+        </el-form-item>
+        <el-form-item label="备注">
           <el-input v-model="editTeacher.remarks"></el-input>
         </el-form-item>
         <el-form-item label="讲师简历">
@@ -306,7 +316,9 @@ export default {
         bank_open: "",
         files: [],
         teacher_id: "",
-        teacher_rate: 5
+        teacher_rate: 5,
+        recruiter:'',
+        target_classhour:''
       },
       // ],//根据科目生成的教师数据
       table: {

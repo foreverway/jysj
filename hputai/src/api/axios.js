@@ -44,6 +44,25 @@ export default {
       })
     return shuj
   },
+  getdataNew(url, params) {
+    axios.defaults.headers.common['token'] = this.getdataCookie('usertoken');
+    let shuj = axios.get(url, {
+        params
+      }).then(function (response) {
+        if (response.data.code == 1) {
+          return response
+        }
+        if (response.data.code == -1) {
+          Router.push({
+            path: '/login'
+          })
+        }
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+    return shuj
+  },
   // post请求方法
   postdata(url, params) {
 
