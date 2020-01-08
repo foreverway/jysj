@@ -50,7 +50,7 @@
     >
           <el-table-column label="序号" type="index" :index="indexMethod" width="80" align="center"></el-table-column>
 
-      <el-table-column align="subject_name" label="授课项目" prop="course_program"></el-table-column>
+      <!-- <el-table-column align="subject_name" label="授课项目" prop="course_program"></el-table-column> -->
       <el-table-column align="center" label="授课科目">
         <template slot-scope="scope">
           <span>{{ scope.row.subject_name}}</span>
