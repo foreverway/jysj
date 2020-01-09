@@ -47,9 +47,9 @@
       <el-table-column align="center" prop="studying" label="在读学员"></el-table-column>
       <el-table-column align="center" prop="haved_hour" label="已上课时"></el-table-column>
       <el-table-column align="center" prop="waiting_hour" label="待上课时"></el-table-column>
-            <el-table-column align="center" prop="target_classhour" label="目标课时"></el-table-column>
+            <el-table-column align="center" prop=" teacher_location" label="目标课时"></el-table-column>
 
-      <el-table-column align="center" prop="teacher_location" width="150px" :show-overflow-tooltip="true" label="功能定位"></el-table-column>
+      <el-table-column align="center" prop="target_classhour" width="150px" :show-overflow-tooltip="true" label="功能定位"></el-table-column>
                 <el-table-column align="center" prop="teaching_style" width="150px" :show-overflow-tooltip="true"  label="教学风格"></el-table-column>
       <el-table-column align="center" prop="fit_student" width="150px" :show-overflow-tooltip="true" label="适合学生"></el-table-column>
 

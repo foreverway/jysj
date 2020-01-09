@@ -26,6 +26,14 @@
         :value="item.value"
       ></el-option>
     </el-select>
+    <el-select v-model="parms.curriculum_type" clearable @change="getdata" placeholder="课程性质">
+      <el-option
+        v-for="item in options_type"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      ></el-option>
+    </el-select>
     <el-button type="primary" style="background-color:#e6563a; border:none;" @click="getdata">搜索</el-button>
     <router-link to="/StudentsList/ApplicationAdd">
       <!-- <el-button type="primary" style="float:right;background-color:#e6563a; border:none;">新建报名需求</el-button> -->
@@ -373,7 +381,8 @@ export default {
         search: "",
         page: 1,
         app_status: "",
-        add_admin_id: "" //选择的
+        add_admin_id: "" ,//选择的
+        curriculum_type:'全部',//课程性质
       },
       tableData: [],
       options: [],
@@ -391,6 +400,18 @@ export default {
       dialogTableVisible_table: false,
       shenghe_value: "", //审核的输入框
       msg: "",
+      options_type:[
+             {
+          value: 0,
+          label: "全部"
+        },     {
+          value: 1,
+          label: "正课"
+        },     {
+          value: 2,
+          label: "试听"
+        },
+      ],
       options_status: [
         {
           value: 0,

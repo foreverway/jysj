@@ -157,6 +157,24 @@
             ></el-option>
           </el-select>
         </el-form-item>
+             <el-form-item label="赠送类别">
+          <el-select
+            clearable
+            style="width:150px"
+            
+            v-model="form.giventype_name"
+            placeholder="请选择"
+            @change="getadata"
+            v-if="base_selct"
+          >
+            <el-option
+              v-for="item in base_selct.data.giventype_list"
+              :key="item.id"
+              :label="item.name"
+              :value="item.name"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="审核状态：">
           <el-select
             clearable
