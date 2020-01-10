@@ -4,7 +4,11 @@
       <el-header>
         <div class="header">
           <img href="#top" src="../assets/logo.png" height="50" alt style="padding:5px;float:left;" />
+         <div style="display:inline-block;height:100%;width:100px;" @click="showCli"></div>
           <div class="users" >
+               
+            
+          
             <img :src='form.admin_head' alt class="touxiang" />
             <el-dropdown trigger="click" >
               <span class="el-dropdown-link">
@@ -26,6 +30,7 @@
         <el-dialog title="我的基本信息"     :close-on-click-modal='false'
  :visible.sync="dialogVisible" center width="600px">
           <el-form ref="form" :model="form" status-icon :rules="rules" label-width="80px">
+         
             <el-form-item label="我的角色">
               <!-- // <el-input v-model="form.role_name" style="width:200px;margin:0 15px;"></el-input> -->
               <span class="selfSet">{{form.role_name}}</span>
@@ -145,12 +150,38 @@
         </el-main>
       </div>
     </el-container>
+    <el-dialog
+    ref="mybox"
+  title=''
+  class="changeT"
+  :visible.sync="cli"
+  width="500px"
+  >
+  <div id="calculator">
+    <!-- <header class="cal"> -->
+      <!-- <h1>Calculator</h1> -->
+      <!-- <span class="author">BY </span> -->
+    <!-- </header> -->
+    <section class="calculator" id="calculator">
+      <calculator-content></calculator-content>
+    </section>
+  </div>
+
+</el-dialog>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
+import CalculatorContent from '../templates/CalculatorContent.vue'
+// export default {
+
+//  }
 export default {
+    name: 'calculator',
+  components: {
+    CalculatorContent
+  },
      inject:['reload'],//在export default下面加上这一段
   data() {
     var validatePass = (rule, value, callback) => {
@@ -177,6 +208,16 @@ export default {
       admin_name: "",
       defaultUrl: "/",
       peopleInfo: {},
+      aa1:'',
+      aa:[
+  "既见君子 云胡不喜",
+  "浮云一别后，流水十年间",
+  "一片两片三四片，五六七八九十片。 千片万片无数片，飞入梅花总不见",
+  "山不过来 我就过去",
+  "叶里藏花一度，梦里踏雪几回",
+  "吹灭读书灯，一身都是月",
+  "迷津欲有问，平海夕漫漫","器有大小，唯心难量","相识起，到永远"
+      ],
       seeHeight: document.body.scrollHeight,
       dialogVisible: false,
       openeds: ["0", "1", "2", "3", "4", "5"],
@@ -185,6 +226,7 @@ export default {
         admin_head: "",
         admin_email: ""
       }, //个人信息
+      cli:false,
       rules: {
         admin_pass: [{ validator: validatePass, trigger: "blur" }],
         admin_pass_sure: [{ validator: validatePass2, trigger: "blur" }]
@@ -281,6 +323,12 @@ sessionStorage.setItem("url",twoUrl);
   },
 
   methods: {
+    showCli(){
+      console.log($('.changeT .el-dialog__title').html())
+      $('.changeT .el-dialog__title').html('')
+      this.cli=true
+      this.open1()
+    },
             //调用App.vue下的this.reload()方法，来改变v-if的状态
         clickDiv(){//刷新按钮调用的方法
           this.reload()
@@ -315,6 +363,25 @@ sessionStorage.setItem("url",twoUrl);
           return false;
         }
       });
+    },
+     open1() {
+  
+ $('.changeT .el-dialog__title').innerHTML=''
+      const sample=arr=>arr[Math.floor(Math.random()*arr.length)];
+      
+      this.aa1=sample(this.aa)
+     const dom = document.querySelector('.changeT .el-dialog__title')
+     $('.changeT .el-dialog__title').attr('id','showClick')
+const data = this.aa1.split('')
+    let index = 0
+    writing(index)
+    function writing(index) {
+        if (index < data.length) {
+            dom.innerHTML += data[index]
+            setTimeout(writing.bind(this), 200, ++index)
+        }
+    }
+
     },
     selectMenu(index, indexPath) {
       //console.log(document.body.scrollHeight);
@@ -398,23 +465,23 @@ sessionStorage.setItem("url",twoUrl);
           });
         });
     },
-    open1() {
-      const h = this.$createElement;
-      this.$notify({
-        title: "今天也有好心情吗?",
-        duration: 6000,
-        message: h(
-          "i",
-          { style: "color: teal" },
-          "欢迎回来," +
-            this.peopleInfo.admin_name +
-            " 这是我们的第 " +
-            this.peopleInfo.admin_login +
-            " 次见面" +
-            ""
-        )
-      });
-    },
+    // open1() {
+    //   const h = this.$createElement;
+    //   this.$notify({
+    //     title: "今天也有好心情吗?",
+    //     duration: 6000,
+    //     message: h(
+    //       "i",
+    //       { style: "color: teal" },
+    //       "欢迎回来," +
+    //         this.peopleInfo.admin_name +
+    //         " 这是我们的第 " +
+    //         this.peopleInfo.admin_login +
+    //         " 次见面" +
+    //         ""
+    //     )
+    //   });
+    // },
     getMen() {
       let params = {
         search: this.getdataCookie("admin_name")
@@ -435,6 +502,7 @@ sessionStorage.setItem("url",twoUrl);
 </script>
   
 <style scoped>
+@import url('https://fonts.googleapis.com/css?family=Pacifico');
 .data_color{
 
   margin-top:3px;
@@ -584,5 +652,64 @@ font-size:  15px;
   color: #e6563a !important;
   background: none !important;
 }
+
+
+
+
+
+.cal{
+  font-size: 1.8rem;
+  font-family: 'Pacifico', cursive;
+}
+
+.author{
+  font-size: 1.5rem;
+  width: 300px;
+  display: inline-block;
+  text-align: left;
+  color:#fff;
+}
+
+.cal .author a{
+  text-decoration: none;
+}
+
+.cal , .calculator {
+  margin: auto;
+  text-align: center;
+}
+html{
+   font-size:62.5%;  /* =10px */
+}
+.calculator{
+  border: 0.8rem solid #f67373;
+  width: 405px;
+  height:27rem;
+  background-color: #f28080;
+  font-size: 1.6rem;
+  -webkit-border-radius: 1rem;
+  -moz-border-radius: 1rem;
+  -ms-border-radius: 1rem;
+  -o-border-radius: 1rem;
+  border-radius: 1rem;
+  -webkit-box-shadow: 1rem 1rem 0.5rem #ccc;
+  box-shadow: 1rem 1rem 0.5rem #ccc;
+  
+}
+.main /deep/ .el-dialog{
+  background: rgba(0, 0, 0, 0);
+  -webkit-box-shadow:rgba(0, 0, 0, 0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0)
+}
+.main /deep/ .el-dialog__body{
+  padding:0;
+}
+ .main /deep/ .el-dialog__title {
+   margin-left:10px;
+    font-size: 16px;
+    color: #fff;
+}
+
+
 </style>
 

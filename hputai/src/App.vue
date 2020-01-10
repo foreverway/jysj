@@ -54,7 +54,19 @@ export default {
   margin: 0px;
   padding: 0px;
 }
+#showClick::after{
+  content: ' |';
+    animation: blink 1s infinite
+}
 
+@keyframes blink{
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
 /*谷歌、safari、qq浏览器、360浏览器滚动条样式*/
 /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
 ::-webkit-scrollbar {
