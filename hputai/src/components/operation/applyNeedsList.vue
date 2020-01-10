@@ -382,7 +382,7 @@ export default {
         page: 1,
         app_status: "",
         add_admin_id: "" ,//选择的
-        curriculum_type:'全部',//课程性质
+        curriculum_type:'',//课程性质
       },
       tableData: [],
       options: [],

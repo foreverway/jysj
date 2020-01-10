@@ -33,7 +33,7 @@
           :props="{ expandTrigger: 'hover' }"
           :show-all-levels="false"
           @change="handleChange_1"
-          clearable
+          
           filterable
         ></el-cascader>
       </el-form-item>
@@ -292,7 +292,7 @@ getId(this.region_list);
   methods: {
     //生成学员编号
     deleteTest_1(index) {
-      this.editableTabs_1.splice(idnex,1);
+      this.editableTabs_1.splice(index,1);
       this.form.value=[]
     },
     deleteTest(index) {

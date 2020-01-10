@@ -593,7 +593,7 @@ export default {
       let myDraw = echarts.init(document.getElementById("main2"));
 
       app.config = {
-        rotate: 90,
+        rotate: 45,
         align: "left"
       };
       var labelOption = {
@@ -603,7 +603,8 @@ export default {
         align: app.config.align,
         verticalAlign: app.config.verticalAlign,
         rotate: app.config.rotate,
-        formatter: "{c}  {name|{a}}",
+        // formatter: "{c}  {name|{a}}",
+        formatter: "",
         fontSize: 16,
         rich: {
           name: {

@@ -314,6 +314,7 @@ export default {
       //teacher_data:[],  //老师列表数据
       check_data: {}, //考勤数据
       feed_data: {}, //反馈数据
+      value_sub: "",
       params: {
         // teacher_id: "",
         //subject_id: "",
@@ -473,9 +474,13 @@ export default {
           : targetName.length == 2
           ? targetName[1]
           : targetName[2];
+          console.log(lastName)
       if (lastName !== undefined) {
-        this.params.subject_id = lastName.toString();
+        this.params.subject_id = lastName;
+          // this.value_sub=lastName
       }
+      // this.params.subject_id=this.value_sub
+      // console.log(this.params)
       this.getadata();
     },
     getadata() {
@@ -487,17 +492,18 @@ export default {
       this.$apis.common.subject_list().then(res => {
         if (res.data.code == 1) {
           this.options_ = res.data.data;
+           this.options=[]
           let addWord = arr => {
             arr.forEach(item => {
-              (item.value = item.subject_name),
-                (item.label = item.subject_name);
+    (item.value = item.id), (item.label = item.subject_name);
+              // this.options.push({value:item.id,label:item.subject_name})
               if (item.children instanceof Array) {
                 addWord(item.children);
               }
             });
           };
           addWord(this.options_);
-          this.options = this.options_;
+           this.options = this.options_;
         }
       });
     }

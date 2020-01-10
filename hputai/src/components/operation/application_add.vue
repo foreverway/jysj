@@ -32,8 +32,7 @@
           filterable
           :props="{ expandTrigger: 'hover' }"
           :show-all-levels="false"
-          @change="handleChange_1"
-          clearable
+          @change="handleChange_1($event)"
         ></el-cascader>
       </el-form-item>
 
@@ -53,7 +52,13 @@
           <p>{{item.title}}</p>
           <span style="display:none;" v-bind:id="'course_id'+ i">{{item.subject_id}}</span>
           <p>
-            <el-input v-model="item.classhour" @input="showAllMoney" v-bind:id="'time' + i" class="changeColor" placeholder="课时"></el-input>
+            <el-input
+              v-model="item.classhour"
+              @input="showAllMoney"
+              v-bind:id="'time' + i"
+              class="changeColor"
+              placeholder="课时"
+            ></el-input>
           </p>
           <p>
             <el-input v-model.number="item.price" v-bind:id="'mach' + i" placeholder="单价(元)"></el-input>
@@ -96,9 +101,9 @@
         </div>
       </el-form-item>
       <span v-if="this.editableTabs_1[0]">
-      <el-form-item label="账户余额" v-if="this.editableTabs_1[0].classhour">
-        <p>{{this.allMoney}}</p>
-      </el-form-item>
+        <el-form-item label="账户余额" v-if="this.editableTabs_1[0].classhour">
+          <p>{{this.allMoney}}</p>
+        </el-form-item>
       </span>
 
       <el-form-item label="学生姓名" prop="value_1">
@@ -142,7 +147,6 @@
     <!-- 步骤二 -->
     <div v-if="active==2">
       <el-form ref="form2" :rules="rules" :model="form2">
-
         <el-form-item label="需求1" prop="need_one">
           <el-input
             type="textarea"
@@ -217,7 +221,7 @@ export default {
       input: "",
       input1: "",
       input2: "",
-      allMoney:this.$route.query.allMoney,
+      allMoney: this.$route.query.allMoney,
       active: 1,
       form: {
         title: "", //标题
@@ -235,8 +239,8 @@ export default {
         need_four: ""
       },
       rules: {
-         address: [{ required: true, message: "请输入标题", trigger: "blur" }],
-          // title: [{ required: true, message: "请输入标题", trigger: "blur" }],
+        address: [{ required: true, message: "请输入标题", trigger: "blur" }],
+        // title: [{ required: true, message: "请输入标题", trigger: "blur" }],
         value: [
           { required: true, message: "请选择报读科目", trigger: "change" }
         ],
@@ -299,37 +303,40 @@ export default {
       editableTabs: [
         //新增的内容的数据数组(学生)
       ],
-      student_list:[],
+      student_list: [],
       tabIndex: 0,
       tabIndex_1: 0,
       students_data: [], //用户id
       subjects_data: [], //学科数据
       feedback: "", //反馈
       course_address: "", //上课线上或线下
-      subject_name: "" //选择的学科姓名 
+      subject_name: "" //选择的学科姓名
     };
   },
   created() {
     this.getdata();
   },
   computed: {
-
     ...mapState(["region_list"])
   },
   mounted() {
     this.getStudent();
   },
   methods: {
-    showAllMoney(){
-     var moreClass=parseInt(this.$route.query.allMoney/this.editableTabs_1[0].price)
-            
-      if(this.editableTabs_1[0].price*this.editableTabs_1[0].classhour>this.$route.query.allMoney){
-        this.$message({
-          type:'warning',
-          message:`余额不足，你至多可排${moreClass}个整数课时`
-        })
-      }
+    showAllMoney() {
+      var moreClass = parseInt(
+        this.$route.query.allMoney / this.editableTabs_1[0].price
+      );
 
+      if (
+        this.editableTabs_1[0].price * this.editableTabs_1[0].classhour >
+        this.$route.query.allMoney
+      ) {
+        this.$message({
+          type: "warning",
+          message: `余额不足，你至多可排${moreClass}个整数课时`
+        });
+      }
     },
     roundFun(value, n) {
       //四舍五入算法
@@ -410,8 +417,7 @@ export default {
           this.options_ = res.data.data;
           let addWord = arr => {
             arr.forEach(item => {
-              (item.value = item.subject_name),
-                (item.label = item.subject_name);
+              (item.value = item.subject_name), (item.label = item.subject_name);
               if (item.children instanceof Array) {
                 addWord(item.children);
               }
@@ -475,6 +481,7 @@ export default {
         var needArr = result.find((res, index, arr) => {
           return res.label == lastName;
         });
+        
         if (this.editableTabs_1.length < 1) {
           this.pushArray1.push({
             title: needArr.label,
@@ -545,13 +552,12 @@ export default {
     onSubmit(form2) {
       this.$refs[form2].validate(valid => {
         if (valid) {
-                this.editableTabs.forEach(item => {
-           this.student_list.push(
-               item.name
-            );
+          this.editableTabs.forEach(item => {
+            this.student_list.push(item.name);
           });
           let parms = {
-            title: this.student_list.toString() + "的" + this.subject_name+'课程',
+            title:
+              this.student_list.toString() + "的" + this.subject_name + "课程",
             expiry_date: this.form.valueDate,
             remarks: this.form.feedback,
             course_address: this.form.radio,
@@ -589,77 +595,80 @@ export default {
       });
     },
     next(form) {
-
-           var moreClass=parseInt(this.$route.query.allMoney/this.editableTabs_1[0].price)
-      if(this.editableTabs_1[0].price*this.editableTabs_1[0].classhour<=this.$route.query.allMoney){
-      this.$refs[form].validate(valid => {
-        if (valid) {
-          this.editableTabs_1.forEach(item => {
-            this.subjects_data.push({
-              subject_id: item.subject_id,
-              classhour: this.roundFun(item.classhour, 2),
-              price: item.price,
-              amount: item.classhour * item.price,
-              course_type: item.course_type,
-              course_id: item.course_id,
-              is_one: item.is_one,
-              is_group: item.is_group
-            });
-          });
-
-          this.editableTabs.forEach(item => {
-            this.students_data.push({
-              student_id: item.id
-            });
-          });
-          this.editableTabs_1.forEach((item, i) => {
-            if (item.course_id == 1) {
-              this.parms = {
-                title: this.form.title,
-                expiry_date: this.form.valueDate,
-                remarks: this.form.feedback,
-                course_address: this.form.radio,
-                address: this.form.address.toString(),
-                need_one: this.form2.need_one,
-                need_two: this.form2.need_two,
-                need_three: this.form2.need_three,
-                need_four: this.form2.need_four,
-                app_id: this.$route.query.id
-              };
-
-              this.parms.subjects_data = this.subjects_data;
-              this.parms.students_data = this.students_data;
-              this.$apis.common.application_edit_put(this.parms).then(res => {
-                if (res.data.code == 1) {
-                  this.$message({
-                    message: "修改成功",
-                    type: "success"
-                  });
-                  this.active = 3;
-                } else {
-                  this.$message({
-                    message: res.data.msg,
-                    type: "warning"
-                  });
-                }
+      var moreClass = parseInt(
+        this.$route.query.allMoney / this.editableTabs_1[0].price
+      );
+      if (
+        this.editableTabs_1[0].price * this.editableTabs_1[0].classhour <=
+        this.$route.query.allMoney
+      ) {
+        this.$refs[form].validate(valid => {
+          if (valid) {
+            this.editableTabs_1.forEach(item => {
+              this.subjects_data.push({
+                subject_id: item.subject_id,
+                classhour: this.roundFun(item.classhour, 2),
+                price: item.price,
+                amount: item.classhour * item.price,
+                course_type: item.course_type,
+                course_id: item.course_id,
+                is_one: item.is_one,
+                is_group: item.is_group
               });
-            }
-          });
-          this.active++;
-        } else {
-          this.$message({
-            type: "warning",
-            message: "请按照提示进行完善"
-          });
-          return false;
-        }
-      });
-      }else{
+            });
+
+            this.editableTabs.forEach(item => {
+              this.students_data.push({
+                student_id: item.id
+              });
+            });
+            this.editableTabs_1.forEach((item, i) => {
+              if (item.course_id == 1) {
+                this.parms = {
+                  title: this.form.title,
+                  expiry_date: this.form.valueDate,
+                  remarks: this.form.feedback,
+                  course_address: this.form.radio,
+                  address: this.form.address.toString(),
+                  need_one: this.form2.need_one,
+                  need_two: this.form2.need_two,
+                  need_three: this.form2.need_three,
+                  need_four: this.form2.need_four,
+                  app_id: this.$route.query.id
+                };
+
+                this.parms.subjects_data = this.subjects_data;
+                this.parms.students_data = this.students_data;
+                this.$apis.common.application_edit_put(this.parms).then(res => {
+                  if (res.data.code == 1) {
+                    this.$message({
+                      message: "修改成功",
+                      type: "success"
+                    });
+                    this.active = 3;
+                  } else {
+                    this.$message({
+                      message: res.data.msg,
+                      type: "warning"
+                    });
+                  }
+                });
+              }
+            });
+            this.active++;
+          } else {
+            this.$message({
+              type: "warning",
+              message: "请按照提示进行完善"
+            });
+            return false;
+          }
+        });
+      } else {
         this.$message({
-          type:'warning',
-          message:`余额不足，你至多可排${moreClass}个整数课时`
-        })
- 
+          type: "warning",
+          message: `余额不足，你至多可排${moreClass}个整数课时`
+        });
       }
     },
     pre() {
