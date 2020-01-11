@@ -78,7 +78,7 @@ export default {
     },
 
     handleSelect(key, keyPath) {
-      console.log(key, keyPath);
+    
     },
     //变换颜色
     showcolor(name) {

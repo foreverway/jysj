@@ -43,32 +43,21 @@
           <span>{{ scope.row.subject_name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="已排课时" width="80">
+      <el-table-column label="已排课时" >
         <template slot-scope="scope">
           <p>{{ scope.row.yipai_classhour }}</p>
         </template>
       </el-table-column>
-      <el-table-column label="已上课时" width="100" prop="yishang_classhour"></el-table-column>
-      <el-table-column align="center" width="200" prop="daishang_classhour" label="待上课时" sortable></el-table-column>
-      <el-table-column align="center" width="200" prop="online_cource" label="线上" sortable></el-table-column>
-      <el-table-column align="center" prop="offline_cource" label="线下" sortable></el-table-column>
-      <el-table-column label="班课" prop="class_number"></el-table-column>
-      <el-table-column label="一对一" prop="yiduiyi_number"></el-table-column>
-      <el-table-column align="center" label="试听" width="280px" prop="audition"></el-table-column>
-      <el-table-column align="center" label="正课" width="280px" prop="just_courses"></el-table-column>
+      <el-table-column label="已上课时"  prop="yishang_classhour"></el-table-column>
+      <el-table-column align="center"  prop="daishang_classhour" label="待上课时" sortable></el-table-column>
+      <el-table-column align="center"  prop="online_cource" label="线上已上" sortable></el-table-column>
+      <el-table-column align="center" prop="offline_cource" label="线下已上" sortable></el-table-column>
+      <el-table-column label="已上班课" prop="class_number"></el-table-column>
+      <el-table-column label="一对一已上" prop="yiduiyi_number"></el-table-column>
+      <el-table-column align="center" label="试听已上"  prop="audition"></el-table-column>
+      <el-table-column align="center" label="正课已上"  prop="just_courses"></el-table-column>
     </el-table>
-     <span v-if="tableData">
-      <el-pagination
-        style="float:right;margin-top:20px;margin-bottom: 20px;"
-        background
-        layout="prev, pager, next"
-        @prev-click="prev"
-        @next-click="next"
-        @current-change="current"
-        :page-size="10"
-        :total="tableData.length"
-      ></el-pagination>
-    </span>
+
     <div class="echarts_1">
       <div id="main" style="width:40%;height:400px;"></div>
       <div id="main2" style="width:40%;height:400px;"></div>

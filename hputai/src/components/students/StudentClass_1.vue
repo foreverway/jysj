@@ -1021,7 +1021,6 @@ export default {
       for (var key in this.parms) {
         params += key + "=" + this.parms[key] + "&";
       }
-      console.log(this.parms);
       window.location.href = url.urls + "/api_course_export" + "?" + params;
     },
     toPc() {
@@ -1056,7 +1055,6 @@ export default {
 
     onSubmit() {
       this.form.course_id = this.course;
-      console.log(this.form);
       this.$apis.common.post_feedback_add(this.form).then(res => {
         if (res.data.code == 1) {
           this.dialogFromVisible = false;
@@ -1154,7 +1152,6 @@ export default {
         if (res.data.code == 1) {
           this.formLabelAlign = res.data.data;
           this.gridData = this.formLabelAlign;
-          console.log( this.formLabelAlign)
         }
       });
     },
@@ -1168,7 +1165,6 @@ export default {
                     this.form=res.data.data
 
           this.gridData = res.data.data;
-          console.log( this.form)
         }
       });
     },
@@ -1180,7 +1176,6 @@ export default {
       this.$apis.common.course_feedback(parms).then(res => {
         if (res.data.code == 1) {
           this.formLabelAlign = res.data.data;
-          console.log( this.formLabelAlign)
           this.gridData = this.formLabelAlign;
         }
       });
@@ -1206,7 +1201,6 @@ export default {
     current(num) {
       //当前页数
       this.currentPage = num;
-      console.log(this.currentPage);
       this.getClassList();
     },
     next() {
@@ -1237,7 +1231,6 @@ export default {
         if (res.data.code == 1) {
           this.tableData = res.data.data.list;
           this.tableDataNum = res.data.data;
-          // console.log(this.tableData)
         }
       });
     },

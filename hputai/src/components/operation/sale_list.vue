@@ -144,7 +144,6 @@ export default {
     //用于分页的一些设置
     current(num) {
       //当前页数
-      console.log(num);
       this.parms.page = num;
       this.getdata();
     },
@@ -179,7 +178,6 @@ export default {
       oInput.value = url;
       document.body.appendChild(oInput);
       oInput.select(); // 选择对象;
-      console.log(oInput.value);
       document.execCommand("Copy"); // 执行浏览器复制命令
       this.$message({
         message: url + "已成功复制到剪切板",

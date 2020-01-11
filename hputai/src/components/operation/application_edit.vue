@@ -216,7 +216,6 @@ export default {
           // this.radio=this.edit_data.needs_data.course_address  这里是用户在线上还是线下
           this.editableTabs_1 = this.edit_data.subjects_data; //学科数据
           this.editableTabs = this.edit_data.students_data; //学生数据
-          console.log(this.edit_data.students_data);
           let subArr = this.edit_data.subjects_data; //原学科数据的数组
           // console.log(subArr)   //需要用户科目  手机号  学生姓名的id
           // console.log(this.editableTabs)//在这里循环得到想要的数据
@@ -335,7 +334,6 @@ export default {
       var checkOne = this.options_1.filter(
         item => item.username == targetName[0]
       );
-      console.log(checkOne);
       checkOne[0] &&
         this.editableTabs.push({
           student_name: checkOne[0].username,
@@ -457,7 +455,6 @@ export default {
       });
     },
     pre() {
-      console.log(this.parms);
       this.parms.students_data = [];
       this.parms.subjects_data = [];
       this.students_data = [];
@@ -474,7 +471,6 @@ export default {
       oInput.value = url;
       document.body.appendChild(oInput);
       oInput.select(); // 选择对象;
-      console.log(oInput.value);
       document.execCommand("Copy"); // 执行浏览器复制命令
       this.$message({
         message: url + "已成功复制到剪切板",

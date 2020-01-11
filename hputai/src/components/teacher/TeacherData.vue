@@ -10,21 +10,9 @@
         clearable
         placeholder="请输入搜索内容"
       ></el-input>
+      
     </div>
-    <el-select
-      clearable
-      filterable
-      v-model="params.teacher_id"
-      @change="getadata"
-      placeholder="选择讲师"
-    >
-      <el-option
-        v-for="item in teacher_data"
-        :key="item.id"
-        :label="item.teacher_name"
-        :value="item.id"
-      ></el-option>
-    </el-select>
+   
     <el-cascader
       placeholder="选择科目"
       v-model="params.subject_id"
@@ -57,10 +45,10 @@
       placeholder="选择日期时间"
     ></el-date-picker>
     <!-- <el-button type="primary" @click="getadata">搜索</el-button> -->
-    <el-button type="primary" @click="recharge_export">导出</el-button>
+    <el-button type="primary" v-if='ifTeacher()' @click="recharge_export">导出</el-button>
 
     <!-- 表格数据 -->
-    <el-table :data="tableData" border :header-cell-style="{background:'#f4f4f4'}">
+    <el-table :data="tableData" style="margin-top:10px;" border :header-cell-style="{background:'#f4f4f4'}">
       <el-table-column label="序号" type="index" :index="indexMethod" width="80" align="center"></el-table-column>
 
       <el-table-column :show-overflow-tooltip="true" align="center" label="科目" width="200">
@@ -107,27 +95,31 @@
         <el-form-item label="课时">
           <p>{{check_data.classhour}}</p>
         </el-form-item>
-        <el-form-item label="反馈一">
-          <p>{{check_data.remarks}}</p>
+         <el-form-item label="备注">
+          <p>{{check_data.remarks?check_data.remarks:'没有填写'}}</p>
         </el-form-item>
-        <el-form-item label="反馈二">
-          <p>{{check_data.remarks1}}</p>
-        </el-form-item>
-        <el-form-item label="反馈三">
-          <p>{{check_data.remarks2}}</p>
-        </el-form-item>
-        <el-form-item label="反馈四">
-          <p>{{check_data.remarks3}}</p>
-        </el-form-item>
-        <el-form-item label="学生课时">
-          <p>{{check_data.student_classhour}}</p>
-        </el-form-item>
-        <el-form-item label="老师课时">
-          <p>{{check_data.teacher_classhour}}</p>
-        </el-form-item>
-        <el-form-item label="实上课时">
+             <el-form-item label="实上课时" v-if='ifTeacher()'>
           <p>{{check_data.true_classhour}}</p>
         </el-form-item>
+     
+            <el-form-item label="备注" v-if='ifTeacher()'>
+          <p>{{check_data.remarks1}}</p>
+        </el-form-item>
+               <el-form-item label="学生课时" v-if='ifTeacher()'>
+          <p>{{check_data.student_classhour}}</p>
+        </el-form-item> 
+            <el-form-item label="备注" v-if='ifTeacher()'>
+          <p>{{check_data.remarks2}}</p>
+        </el-form-item>
+         <el-form-item label="教师课时" >
+          <p>{{check_data.teacher_classhour}}</p>
+        </el-form-item>
+        <el-form-item label="备注">
+          <p>{{check_data.remarks3}}</p>
+        </el-form-item>
+
+      
+       
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="checkopen = false">取 消</el-button>
@@ -338,6 +330,10 @@ export default {
     ...mapState(["teacher_data"])
   },
   methods: {
+        ifTeacher(){
+
+     return  localStorage.getItem("ifTeacher")==0
+    },
         indexMethod(index){
            if (this.params.page == 1) {
         return index + 1;
@@ -464,7 +460,6 @@ export default {
       }
     },
     toAssess(a) {
-      console.log(a);
     },
     handleChange_1(targetName) {
       //选择科目
@@ -474,7 +469,6 @@ export default {
           : targetName.length == 2
           ? targetName[1]
           : targetName[2];
-          console.log(lastName)
       if (lastName !== undefined) {
         this.params.subject_id = lastName;
           // this.value_sub=lastName
@@ -519,7 +513,7 @@ export default {
 }
 .so_main_left {
   float: left;
-  margin: 20px 5px;
+  margin: 0 10px;
 }
 .el-select {
   margin: 20px 5px;

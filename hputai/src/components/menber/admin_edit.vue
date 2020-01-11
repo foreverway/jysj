@@ -134,7 +134,6 @@ export default {
           this.form = res.data.data;
           this.form.admin_sex = res.data.data.admin_sex.toString();
           this.form.is_captain = res.data.data.is_captain.toString()
-          console.log( this.form)
         }
       });
 

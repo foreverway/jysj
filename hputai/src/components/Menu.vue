@@ -165,6 +165,7 @@
     <section class="calculator" id="calculator">
       <calculator-content></calculator-content>
     </section>
+    <div style="height:15px;"></div>
   </div>
 
 </el-dialog>
@@ -212,11 +213,13 @@ export default {
       aa:[
   "既见君子 云胡不喜",
   "浮云一别后，流水十年间",
-  "一片两片三四片，五六七八九十片。 千片万片无数片，飞入梅花总不见",
+  "一片两片三四片，飞入梅花总不见",
   "山不过来 我就过去",
   "叶里藏花一度，梦里踏雪几回",
   "吹灭读书灯，一身都是月",
-  "迷津欲有问，平海夕漫漫","器有大小，唯心难量","相识起，到永远"
+  "迷津欲有问，平海夕漫漫",
+  "器有大小，唯心难量",
+  "相识起，到永远"
       ],
       seeHeight: document.body.scrollHeight,
       dialogVisible: false,
@@ -311,7 +314,6 @@ sessionStorage.setItem("url",twoUrl);
 sessionStorage.setItem("url",twoUrl);
     }
     this.defaultUrl = sessionStorage.getItem("url");
-    //console.log(this.defaultUrl)
     //在login页就报错  说明在那时就执行
     // var iconI = $(".el-icon-arrow-down");
     // var menuC = $(".el-submenu__title");
@@ -324,7 +326,6 @@ sessionStorage.setItem("url",twoUrl);
 
   methods: {
     showCli(){
-      console.log($('.changeT .el-dialog__title').html())
       $('.changeT .el-dialog__title').html('')
       this.cli=true
       this.open1()
@@ -359,7 +360,6 @@ sessionStorage.setItem("url",twoUrl);
             }
           });
         } else {
-          console.log("error submit!!");
           return false;
         }
       });
@@ -697,17 +697,17 @@ html{
   
 }
 .main /deep/ .el-dialog{
-  background: rgba(0, 0, 0, 0);
-  -webkit-box-shadow:rgba(0, 0, 0, 0);
+  /* background: rgba(0, 0, 0, 0); */
+  -webkit-box-shadow:rgba(12, 4, 4, 0);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0)
 }
 .main /deep/ .el-dialog__body{
-  padding:0;
+  /* padding:0; */
 }
  .main /deep/ .el-dialog__title {
    margin-left:10px;
     font-size: 16px;
-    color: #fff;
+    /* color: #fff; */
 }
 
 

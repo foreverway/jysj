@@ -109,10 +109,8 @@ if(this.page>1){
 }        
       },
       handleEdit(index, row) {
-        console.log(index, row);
       },
       handleDelete(index, row) {
-        console.log(index, row);
       },
         getadata(){
             this.$apis.common.share_config_list(this.page).then(res => {

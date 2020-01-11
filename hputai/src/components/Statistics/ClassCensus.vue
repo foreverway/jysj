@@ -56,12 +56,12 @@
       </el-table-column>
       <el-table-column label="已上课时" width="100" prop="yishang_classhour"></el-table-column>
       <el-table-column align="center" prop="daishang_classhour" label="待上课时" sortable></el-table-column>
-      <el-table-column align="center" prop="online_cource" label="线上" sortable></el-table-column>
-      <el-table-column align="center" prop="offline_cource" label="线下" sortable></el-table-column>
-      <el-table-column label="班课" prop="class_number"></el-table-column>
-      <el-table-column label="一对一" prop="yiduiyi_number"></el-table-column>
-      <el-table-column align="center" label="试听" prop="audition"></el-table-column>
-      <el-table-column align="center" label="正课" prop="just_courses"></el-table-column>
+      <el-table-column align="center" prop="online_cource" label="线上已上" sortable></el-table-column>
+      <el-table-column align="center" prop="offline_cource" label="线下已上" sortable></el-table-column>
+      <el-table-column label="已上班课" prop="class_number"></el-table-column>
+      <el-table-column label="一对一已上" prop="yiduiyi_number"></el-table-column>
+      <el-table-column align="center" label="试听已上" prop="audition"></el-table-column>
+      <el-table-column align="center" label="正课已上" prop="just_courses"></el-table-column>
     </el-table>
 
     <div class="echarts_1">
@@ -502,7 +502,7 @@ export default {
             this.getadata();
     },
         changeEnd_3(event) {
-          console.log(event)
+     
             this.params.end_time = event?event.toString().substr(0, 10):'';
             this.getadata();
     },
@@ -554,7 +554,7 @@ export default {
           : targetName.length == 2
           ? targetName[1]
           :targetName[2];
-      this.params.subject_id = lastName;
+      this.params.subject_id = lastName.toString();
       this.getadata();
     },
     changeEnd_2(event) {
@@ -573,18 +573,27 @@ export default {
       //获取科目的数据
       this.$apis.common.subject_list().then(res => {
         if (res.data.code == 1) {
-          this.msg = res.data;
-          this.options_ = res.data.data;
-          let addWord = arr => {
-            arr.forEach(item => {
-              (item.value = item.id), (item.label = item.subject_name);
-              if (item.children instanceof Array) {
-                addWord(item.children);
-              }
-            });
-          };
-          addWord(this.options_);
-          this.options = this.options_;
+          // this.msg = res.data;
+          if(this.params.subject_level==2){
+
+          }else{
+     res.data.data.reduce((previousValue,currentValue)=>{
+             this.options_ .push({value:currentValue.id,label:currentValue.subject_name})
+           });
+        this.options = this.options_;
+
+          }
+      
+          console.log(  this.options_ )
+          // let addWord = arr => {
+          //   arr.forEach(item => {
+          //     (item.value = item.id), (item.label = item.subject_name);
+          //     if (item.children instanceof Array) {
+          //       addWord(item.children);
+          //     }
+          //   });
+          // };
+          // addWord(this.options_);
         }
       });
     },
@@ -679,7 +688,7 @@ export default {
             this.yipai_classhour = [];
             (this.yishang_classhour = []), (this.daishang_classhour = []);
             for (let i = 0; i < res.data.data.length; i++) {
-              this.classMouth[i] = res.data.data[i].month + "月份";
+              this.classMouth[i] = res.data.data[i].month;
               this.yipai_classhour[i] = res.data.data[i].yipai_classhour;
               this.yishang_classhour[i] = res.data.data[i].yishang_classhour;
               this.daishang_classhour[i] = res.data.data[i].daishang_classhour;
@@ -726,8 +735,14 @@ export default {
         color: ["#5CBB7A"],
 
         title: {
-          text: "",
-          subtext: "三级科目Top15"
+          text: "三级科目Top15",
+          lineHeight: 40,
+          // left: 'center',
+          //  subtext: "三级科目Top15",
+          textStyle:{
+fontsize:'16px',
+ fontWeight : 'bolder'
+          }
         },
         dataset: {
           source: []
@@ -769,9 +784,15 @@ export default {
     lineChart() {
       let myLine = echarts.init(document.getElementById("main1"));
       myLine.setOption({
-        title: {
-          text: "",
-          subtext: "一级科目Top15"
+           title: {
+          text: "一级科目Top15",
+          lineHeight: 40,
+          // left: 'center',
+          //  subtext: "三级科目Top15",
+          textStyle:{
+fontsize:'16px',
+ fontWeight : 'bolder'
+          }
         },
         dataset: {
           source: []
@@ -839,7 +860,7 @@ export default {
               icon:
                 "path://M432.45,595.444c0,2.177-4.661,6.82-11.305,6.82c-6.475,0-11.306-4.567-11.306-6.82s4.852-6.812,11.306-6.812C427.841,588.632,432.452,593.191,432.45,595.444L432.45,595.444z M421.155,589.876c-3.009,0-5.448,2.495-5.448,5.572s2.439,5.572,5.448,5.572c3.01,0,5.449-2.495,5.449-5.572C426.604,592.371,424.165,589.876,421.155,589.876L421.155,589.876z M421.146,591.891c-1.916,0-3.47,1.589-3.47,3.549c0,1.959,1.554,3.548,3.47,3.548s3.469-1.589,3.469-3.548C424.614,593.479,423.062,591.891,421.146,591.891L421.146,591.891zM421.146,591.891",
               onclick: function() {
-                console.log(this);
+         
                 this.showMouth1 = true;
               }
             },
@@ -873,9 +894,9 @@ export default {
 
             for (let i = 0; i < res.data.data.length; i++) {
               if (i == 0) {
-                this.yearData[i] = "去年" + res.data.data[i].month + "月份";
+                this.yearData[i] =  res.data.data[i].month ;
               } else {
-                this.yearData[i] = "今年" + res.data.data[i].month + "月份";
+                this.yearData[i] = res.data.data[i].month;
               }
             }
             myChart.setOption({
@@ -888,6 +909,15 @@ export default {
                   data: this.yearData
                 }
               ],
+//                       title: {
+//           text: "三级科目Top15",
+//           lineHeight: 30,
+      
+//           t0extStyle:{
+// fontsize:'16px',
+//  fontWeight : 'bolder'
+//           }
+//         },
               yAxis: [
                 {
                   name: "课时"
@@ -965,6 +995,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-around;
+  margin-bottom: 10px;
 }
 .bgc {
   background-color: #fff;

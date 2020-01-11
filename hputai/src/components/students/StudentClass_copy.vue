@@ -1289,7 +1289,6 @@ export default {
         if (res.data.code == 1) {
            this.form=res.data.data
            this.form.course_id=res.data.data.course_id
-           console.log(this.form)
           this.gridData = res.data.data;
         }
       });
@@ -1349,7 +1348,6 @@ export default {
         if (res.data.code == 1) {
           this.tableData = res.data.data.list;
           this.tableDataNum = res.data.data;
-          // console.log(this.tableData)
         }
       });
     },
@@ -1414,12 +1412,10 @@ export default {
     },
 minLen(value,a){
   if(value.split('').length*1<20){
-  console.log(value.split('').length)
   }
  
 },
 handleSelect(item,index){
-    console.log(item,index)
 },
     handleChange(targetName) {
       //选择学生

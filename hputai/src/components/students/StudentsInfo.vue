@@ -855,7 +855,6 @@ export default {
       this.$apis.common.course_feedback(parms).then(res => {
         if (res.data.code == 1) {
           this.formLabelAlign = res.data.data;
-          console.log(this.formLabelAlign)
         }
       });
     },

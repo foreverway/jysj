@@ -13,6 +13,7 @@
       <el-cascader
         placeholder="选择科目"
         v-model="value_sub"
+        v-if='ifTeacher()'
         clearable
         filterable
         :options="options"
@@ -20,11 +21,11 @@
         :show-all-levels="false"
         @change="handleChange_1"
       ></el-cascader>
-      <el-select clearable v-model="is_parttime" placeholder="请选择老师类型" @change="Change_teacher">
+      <el-select clearable v-model="is_parttime"  v-if='ifTeacher()' placeholder="请选择老师类型" @change="Change_teacher">
         <el-option label="兼职老师" value="2"></el-option>
         <el-option label="全职老师" value="1"></el-option>
       </el-select>
-      <el-button type="primary" @click="recharge_export">导出</el-button>
+      <el-button type="primary"  v-if='ifTeacher()' @click="recharge_export">导出</el-button>
 
       <div style="height:20px"></div>
 
@@ -77,12 +78,18 @@
                 v-if="scope.row.ready_txt=='待直播'"
                 style="color:white;background-color:#409eff;"
               >{{scope.row.ready_txt}}</el-button>
-              <el-button
-                size="mini"
-                v-if="scope.row.ready_txt=='待直播'"
-                style="color:white;background-color:#2adbcb;"
-                @click="changeClass(scope.row)"
-              >调课</el-button>
+         
+            <span v-for="(item,index) in thisMenu" :key="index">
+            <el-button
+              type="button"
+              size="mini"
+              index="item.id"
+              v-if="scope.row.ready_status==0"
+               style="color:white;background-color:#2adbcb;"
+              v-bind:id="item.menu_action"
+              @click="changeClass(scope.row)"
+            >{{item.menu_name}}</el-button>
+          </span>
               <el-button
                 size="mini"
                 v-if="scope.row.ready_txt=='直播中'"
@@ -318,6 +325,8 @@
                 style="color:white;background-color:#8896B3"
 
               >{{scope.row.feedback_txt}}</el-button>
+
+ 
               <!-- <el-button size="mini"  >观看录播</el-button > -->
             </template>
           </el-table-column>
@@ -953,6 +962,7 @@ export default {
             { required: true, message: '请输入上课地址', trigger: 'blur' },
           ],
       },
+      thisMenu:[],//菜单的内容
       value: "",
       labelPosition: "top", //其他方法进入直播排在顶部
       innerVisible: false, //内层弹框
@@ -1046,8 +1056,10 @@ export default {
     this.getdata();
     this.getStudent();
     this.getClassList();
- 
+ this.getClass()
+ this.ifTeacher()
   },
+   computed: mapState(["rolemenu"]),
   updated() {
     // var bodyDiv=$('.screen_he')
     //   $(bodyDiv).style.height=$(window).height()*1-210+'px'
@@ -1061,7 +1073,26 @@ export default {
     }
   },
   methods: {
+    ifTeacher(){
 
+     return  localStorage.getItem("ifTeacher")==0
+    },
+        getClass() {
+                 var menu= this.rolemenu.forEach((item, index, array) => {
+        //遍历菜单
+        if (item.menu_name=="学员管理") {
+          //有子集
+          for (let j = 0; j < item.children.length; j++) {
+            //遍历子集
+            var a = item.children.filter(function(item) {
+              return item.menu_url == "/ClassMain";
+            });
+          this.thisMenu=a[0].children   
+          return a
+          }
+        } 
+      });
+    },
         whereGo(a) {
       if (a == "2") {
         this.show = true;
@@ -1088,7 +1119,6 @@ export default {
     },
     //     getLiveName() {
     //   //筛选直播列表
-   
     // },
     changeClass(result) {
       this.showclass = true;
@@ -1110,7 +1140,6 @@ export default {
                 this.newClass.address=this.resData.address
                 this.newClass.live_id=this.resData.live_id
                 this.newClass.course_address=this.resData.course_address
-                console.log(this.newClass)
           }
         });
         
@@ -1335,7 +1364,6 @@ export default {
         if (res.data.code == 1) {
            this.form=res.data.data
            this.form.course_id=res.data.data.course_id
-           console.log(this.form)
           this.gridData = res.data.data;
         }
       });
@@ -1395,7 +1423,6 @@ export default {
         if (res.data.code == 1) {
           this.tableData = res.data.data.list;
           this.tableDataNum = res.data.data;
-          // console.log(this.tableData)
         }
       });
     },
@@ -1460,12 +1487,10 @@ export default {
     },
 minLen(value,a){
   if(value.split('').length*1<20){
-  console.log(value.split('').length)
   }
  
 },
 handleSelect(item,index){
-    console.log(item,index)
 },
     handleChange(targetName) {
       //选择学生

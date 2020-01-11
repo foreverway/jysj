@@ -65,7 +65,6 @@
           this.form.account_times,this.form.days_times
           ).then(res => {
                this.msg= res.data
-               console.log(this.msg)
               if(this.msg.code==1){
               this.$message({
             type: 'success',

@@ -47,9 +47,8 @@
       <el-table-column align="center" prop="studying" label="在读学员"></el-table-column>
       <el-table-column align="center" prop="haved_hour" label="已上课时"></el-table-column>
       <el-table-column align="center" prop="waiting_hour" label="待上课时"></el-table-column>
-            <el-table-column align="center" prop="teacher_location" label="目标课时"></el-table-column>
-
-      <el-table-column align="center" prop="target_classhour" width="150px" :show-overflow-tooltip="true" label="功能定位"></el-table-column>
+            <el-table-column align="center" prop="target_classhour" label="目标课时"></el-table-column>
+      <el-table-column align="center" prop="teacher_location" width="150px" :show-overflow-tooltip="true" label="功能定位"></el-table-column>
                 <el-table-column align="center" prop="teaching_style" width="150px" :show-overflow-tooltip="true"  label="教学风格"></el-table-column>
       <el-table-column align="center" prop="fit_student" width="150px" :show-overflow-tooltip="true" label="适合学生"></el-table-column>
 
@@ -220,10 +219,10 @@
           <el-input v-model="editTeacher.bank_open"></el-input>
         </el-form-item>
         <el-form-item label="目标课时">
-          <el-input v-model="editTeacher.teacher_location"></el-input>
+          <el-input v-model="editTeacher.target_classhour"></el-input>
         </el-form-item>
          <el-form-item label="功能定位">
-          <el-input v-model="editTeacher.target_classhour"></el-input>
+          <el-input v-model="editTeacher.teacher_location"></el-input>
         </el-form-item>
    
          <el-form-item label="教学风格">
@@ -392,7 +391,6 @@ export default {
             .then(res => {
               if (res.data.code == 1) {
                 this.editTeacher = res.data.data;
-                console.log(this.editTeacher )
                 if (this.editTeacher.address) {
                   this.editTeacher.address = res.data.data.address.split(",");
                 }
@@ -522,7 +520,6 @@ export default {
         //  this.form.src_img=_base64
         this.editTeacher.files.unshift(_base64);
         this.editTeacher.resume=_base64
-        console.log(this.editTeacher)
       };
     },
     handlePreview_1(file){
@@ -553,7 +550,6 @@ export default {
       });
     },
     // submitEdit() {  //提交编辑
-    //   console.log(this.editTeacher);
     //   this.$apis.common.teacher_edit_put(this.editTeacher).then(res => {
     //     if (res.data.code == 1) {
     //       this.editDialog = false;
@@ -619,7 +615,6 @@ export default {
       }
     },
     getMore(result) {
-      console.log(result);
     },
     //选择报读科目的函数
     handleChange_1(targetName) {

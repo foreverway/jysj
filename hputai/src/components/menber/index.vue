@@ -2,7 +2,7 @@
   <div class="main">
     <marquee class="marquee_top">在使用新系统的过程中，如果遇到问题或者不懂的地方请向研发部反馈</marquee>
 
-    <div class="header-num">
+    <div class="header-num" v-if="ifTeacher()">
       <div class="num" style="background:#5ab1ef" @click='pushWey'>
         <div>
           <h1>{{this.data.my_counts}}</h1>
@@ -145,6 +145,9 @@ export default {
 // }
   },
   methods: {
+          ifTeacher(){
+     return  localStorage.getItem("ifTeacher")==0
+    },
  pushWey(){  
 this.$router.push({path:'/StudentsList'})
 }  , 

@@ -338,7 +338,6 @@ export default {
   methods: {
     //地区选择
     handleChange(value) {
-      console.log(value);
     },
     //获取基础选择数据
     getdata() {
@@ -417,7 +416,6 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.$apis.students.students_add(this.form).then(res => {
-            console.log(res)
             if (res.data.code == 1) {
               this.loading = false;
               this.$message({
@@ -434,7 +432,6 @@ export default {
             }
           });
         } else {
-          console.log("error submit!!");
           return false;
         }
       });

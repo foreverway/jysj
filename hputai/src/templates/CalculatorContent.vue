@@ -59,48 +59,47 @@ export default {
 
   methods:{
     operate(element){
-      console.log("operate..");
       this.formula +=element;
       // console.log("this.formula:");
       // console.log(this.formula);
     },
 
     equal(){
-      console.log("equal..");
+      // console.log("equal..");
       this.result = eval(this.formula);
       // console.log("this.formula:");
       // console.log(this.formula);
     },
 
     cleanResult(){
-      console.log("cleanResult..");
+      // console.log("cleanResult..");
       this.result = 0;
     },
 
     cleanAll(){
-      console.log("cleanAll..");
+      // console.log("cleanAll..");
       this.formula = "";
       this.result = 0;
     },
 
     drop(){
-        console.log("drop..");
+        // console.log("drop..");
         this.formula = this.formula.slice(0, -1);
     },
 
     square(){
-        console.log("square..");
-        console.log(eval(this.formula));
+        // console.log("square..");
+        // console.log(eval(this.formula));
         eval(this.formula)<0? this.formula = "Can not suqre the negative value" : this.result=Math.sqrt(eval(this.formula));
    },
 
    devided(){
-        console.log("devided.."); 
+        // console.log("devided.."); 
         this.formula===""||this.formula.endsWith("+"||"-"||"*"||"/"||"%")? {} :  this.formula="1/("+this.formula+")";this.equal();
    },
 
    toggle(){
-        console.log("toggle.."); 
+        // console.log("toggle.."); 
 
 
         this.formula===""||this.formula.endsWith("+"||"-"||"*"||"/"||"%")? {} :  this.formula.startsWith("-")?this.formula = Math.abs(eval(this.formula)).toString(): this.formula="-("+this.formula+")";

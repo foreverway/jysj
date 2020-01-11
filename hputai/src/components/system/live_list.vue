@@ -132,7 +132,6 @@ let params={
       },
           // 获取数据
           getdata(){
-            console.log(this.live_list)
               // this.$apis.sys.live_list().then(res=>{
               //       if(res.data.code==1){
                         this.tableData=this.live_list

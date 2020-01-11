@@ -112,8 +112,7 @@ if(this.page>1){
 }        
       },
       handleDelete(index, row) {//拉入黑名单
-        console.log(index, row);
-        console.log(row.id)
+       
     this.$prompt('请输入理由', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消'
@@ -121,7 +120,7 @@ if(this.page>1){
         }).then(({ value }) => {
 
    this.$common.pc_black_name(row.id,value).then(res => {  
-                 console.log(res.data)
+       
 if(res.data.code==1){
     this.$message({
             type: 'success',
@@ -149,7 +148,7 @@ if(res.data.code==1){
             this.$common.share_users_list(this.search,this.page).then(res => {
                this.msg= res.data
                this.tableData = res.data.data.list
-                 console.log(this.msg)
+          
 
                 })
         }

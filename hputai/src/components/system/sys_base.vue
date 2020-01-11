@@ -68,7 +68,6 @@
     methods: {
 
       handlePreview(file) {
-          console.log(file)
            let reader = new FileReader()
            reader.readAsDataURL(file.raw)
             reader.onload = () => {

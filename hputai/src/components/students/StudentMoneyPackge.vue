@@ -93,7 +93,6 @@ export default {
   },
   created() {
     this.getmoneydata();
-    // console.log( this.getdata())
   },
   mounted(){
 
@@ -116,7 +115,6 @@ export default {
                 item =>
                   item.create_time > this.value2[0] && item.create_time < this.value2[1]
               );
-              console.log(new_arr)
               this.tableData = new_arr;
             }
           }
@@ -142,7 +140,6 @@ export default {
                 item =>
                   item.addtime > this.value2[0] && item.addtime < this.value2[1]
               );
-              console.log(new_arr)
               this.tableData_2 = new_arr;
             }
           }
@@ -167,7 +164,6 @@ export default {
                 item =>
                   item.create_time > this.value2[0] && item.create_time < this.value2[1]
               );
-              console.log(new_arr)
               this.tableData_3 = new_arr;
             }
           }
@@ -206,7 +202,6 @@ export default {
         .learnmoney_list(parms)
         .then(res => {
           if (res.data.code == 1) {
-            // console.log(res.data.data);
             this.msg = res.data;
             this.tableData = res.data.data.list;
               this.tableData.map((a)=>{

@@ -674,7 +674,6 @@ export default {
           play_type: $("#play_type" + i).val()
         });
       }
-      console.log(this.form);
       let parms = {
         app_id: this.$route.query.id * 1, //报名表id
         live_id: this.form.live_id, //直播平台id

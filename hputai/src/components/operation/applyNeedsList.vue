@@ -640,7 +640,6 @@ this.seeapplytable =res.data.data
             // ]);
             // this.form1.app_id= b.id
             // this.seeclassneeds = this.needs;
-            // console.log(this.seeclassneeds);
             this.app_id = b.id;
             // this.seeapplytable = this.application;
             this.getbanzhurenName();
@@ -809,8 +808,6 @@ this.seeapplytable =res.data.data
             var a = item.children.filter(function(item) {
               return item.menu_url == "/ApplyNeedsList";
             });
-          console.log(a)   
-
           this.thisMenu=a[0].children        
           return a
 
@@ -823,7 +820,6 @@ this.seeapplytable =res.data.data
       let hereObj = this.thisMenu.find(item => {
         return item.menu_action == a;
       });
-      // console.log(hereObj)
       if (hereObj) {
         return true;
       } else {
@@ -861,7 +857,6 @@ this.seeapplytable =res.data.data
         .application_list(parms)
         .then(res => {
           if (res.data.code == 1) {
-            console.log(res.data);
             this.msg = res.data;
             this.tableData = res.data.data.list;
           }
@@ -886,9 +881,7 @@ this.seeapplytable =res.data.data
         .inpeople_list(parms)
         .then(res => {
           if (res.data.code == 1) {
-            //this.msg = res.data;
             this.options_all = res.data.data.list;
-            console.log(this.options_all)
             for (let i = 0; i < this.options_all.length; i++) {
               var val = this.options_all[i];
               this.options.push({ value: val.name, label: val.name });

@@ -174,7 +174,6 @@ export default {
         let params ={
           id:this.$route.query.id
         }
-        console.log(this.$route.query.id)
         this.$apis.common.salepro_edit(params).then(res=>{
             if(res.data.code==1){
                 this.form =res.data.data

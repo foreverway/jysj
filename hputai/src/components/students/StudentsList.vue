@@ -99,18 +99,15 @@ export default {
   created() {
     this.getdata();
     this.getStuList();
-    // console.log( this.getdata())
   },
 
   computed: mapState(["rolemenu"]),
   methods: {
     current(num) {
-      console.log(num);
       this.parms.page = num;
       this.getdata();
     },
     next() {
-      console.log(this.parms.page);
       this.parms.page++;
       this.getadata();
     },
