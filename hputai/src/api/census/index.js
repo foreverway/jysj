@@ -28,4 +28,8 @@ export default {
         let url = '/api/api_chainratio_classhour'
         return shuju.getdata(url, params)
       },
+      get_parent_info(params) { //切换数据级数
+        let url = '/api/api_get_parent_info'
+        return shuju.getdata(url, params)
+      },
 }

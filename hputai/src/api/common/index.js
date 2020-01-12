@@ -1,6 +1,10 @@
 import shuju from '../axios'
 
 export default {
+  export_subject_classhour(parms) {
+    let url = '/api/api_export_subject_classhour'
+    return shuju.postdata1(url, parms)
+  },
   //获取菜单 /api_menu_list
   menu_list(params) {
     //此处的params是用户的账户id，用于获取用户的信息

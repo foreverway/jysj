@@ -40,10 +40,16 @@
       style="margin:15px 0;"
       border
       class="table_set"
-      show-summary
+      @selection-change="handleSelectionChange"
       :header-cell-style="{background:'#f4f4f4'}"
     >
-      <el-table-column label="序号" type="index" width="80" align="center"></el-table-column>
+   
+     <el-table-column
+      type="selection"
+      fixed="left"
+      @click="handleClick(scope.row)"
+      width="55">
+    </el-table-column>
       <el-table-column :show-overflow-tooltip="true" align="center" label="科目名称" width="150">
         <template slot-scope="scope">
           <span>{{ scope.row.subject_name }}</span>
@@ -180,6 +186,7 @@
 import echarts from "echarts";
 import vue from "vue";
 import url from "../../config/config.js";
+import shuju from '../../api/axios'
 
 export default {
   data() {
@@ -195,11 +202,13 @@ export default {
       alreadyData: [],
       willData: [],
       yearData: [],
+      idArr:[],
       params:{
         // begin_time:'',
         // end_time:'',
         // subject_level:'',
-        // subject_id:''
+        // subject_id:'',
+        //subject_ids:[]
       },
       options_:[],//科目的原来数据
       options:[],//我们需要的科目数据
@@ -248,10 +257,18 @@ export default {
     }
   },
   methods: {
-    getadata() {},
-    handleChange_1() {},
-    Change_sbuject() {},
-    recharge_export() {},
+    handleSelectionChange(result){
+      this.idArr=[]
+      for(let i=0;i<result.length;i++){
+        this.idArr.push(result[i].id)
+      }
+      // "ids[0]=1,ids[1]=2"
+//       result.filter(item=>{
+// this.idArr.push(item.id)
+//         return item.id}
+//       )
+        this.params.subject_ids=this.idArr.toString()
+    },
     indexMethod(index) {},
     changeMouth(value) {
       this.changeMouth1 = value;
@@ -500,11 +517,13 @@ export default {
         changeStart_3(event) {
             this.params.begin_time = event?event.toString().substr(0, 10):'';
             this.getadata();
+            this.params.subject_ids=[]
     },
         changeEnd_3(event) {
      
             this.params.end_time = event?event.toString().substr(0, 10):'';
             this.getadata();
+           this.params.subject_ids=[]
     },
         changeStart_2(event) {
       if( this.hadClick_2==true){
@@ -517,19 +536,27 @@ export default {
       this.lineChart2();
       }
     },
+
         //导出
     recharge_export() {
       this.$message({
         type: "success",
         message: "正在导出,请稍等..."
       });
-      let urls = "http://personal.test.hqjystudio.com";
-      let parms = "";
-      // this.form.teacher='杨懿俊'
+      // let urls = "http://personal.test.hqjystudio.com";
+       let parms = "";
+      // // this.form.teacher='杨懿俊'
       for (var key in this.params) {
-        parms += key + "=" + this.params[key] + "&";
-      }
-      window.location.href = url.urls + "/api_export_subject_classhour" + "?" + parms;
+        if(key=='subject_ids'){
+    parms += key + "=" + this.params[key]
+        }else{
+       parms += key + "=" + this.params[key] + "&";   
+        }
+    
+      };
+
+ 
+        window.location.href = url.urls + "/api_export_subject_classhour" + "?" + parms;
     },
     changeEnd(event) {
       if( this.hadClick==true){
@@ -545,6 +572,7 @@ export default {
     },
     Change_sbuject(){
       this.getadata();
+     this.params.subject_ids=[]
     },
        handleChange_1(targetName) {
       //选择科目
@@ -556,6 +584,7 @@ export default {
           :targetName[2];
       this.params.subject_id = lastName.toString();
       this.getadata();
+     this.params.subject_ids=[]
     },
     changeEnd_2(event) {
       if( this.hadClick_2==true){
@@ -571,31 +600,39 @@ export default {
     },
         getdata() {
       //获取科目的数据
-      this.$apis.common.subject_list().then(res => {
-        if (res.data.code == 1) {
-          // this.msg = res.data;
-          if(this.params.subject_level==2){
+      console.log(this.params.subject_level)
+        this.$apis.census.get_parent_info({subject_level:this.params.subject_level?this.params.subject_level:1}).then(res => {if(res.data.code==1){
 
-          }else{
-     res.data.data.reduce((previousValue,currentValue)=>{
-             this.options_ .push({value:currentValue.id,label:currentValue.subject_name})
-           });
-        this.options = this.options_;
+         this.options ==res.data.data
+       }})
+//       this.$apis.common.subject_list().then(res => {
+//         if (res.data.code == 1) {
+//           this.msg = res.data;
+//           if(this.params.subject_level==2){
+//    res.data.data.reduce((previousValue,currentValue)=>{
+//              this.options_ .push({value:currentValue.id,label:currentValue.subject_name})
+//            });
+//           }else{
+//      res.data.data.reduce((previousValue,currentValue)=>{
+//              this.options_ .push({value:currentValue.id,label:currentValue.subject_name})
+//            });
+//         this.options = this.options_;
 
-          }
+//           }
       
-          console.log(  this.options_ )
-          // let addWord = arr => {
-          //   arr.forEach(item => {
-          //     (item.value = item.id), (item.label = item.subject_name);
-          //     if (item.children instanceof Array) {
-          //       addWord(item.children);
-          //     }
-          //   });
-          // };
-          // addWord(this.options_);
-        }
-      });
+// //  this.options_=res.data.data
+// //           let addWord = arr => {
+// //             arr.forEach(item => {
+// //               (item.value = item.id), (item.label = item.subject_name);
+// //               if (item.children instanceof Array) {
+// //                 addWord(item.children);
+// //               }
+// //             });
+// //           };
+// //           addWord(this.options_);
+// //           this.options = this.options_;
+//         }
+//       });
     },
     //普通学员
     drawStudent() {

@@ -77,6 +77,18 @@ export default {
 
     return shuj
   },
+  postdata1(url, params) {
+
+    let shuj = axios.post(url, params)
+      .then(function (response) {
+        return response
+      })
+      .catch(function (error) {
+        return console.log(error)
+      })
+
+    return shuj
+  },
   // delete请求方法
   deletedata(url, params) {
     axios.defaults.headers.common['token'] = this.getdataCookie('usertoken');
