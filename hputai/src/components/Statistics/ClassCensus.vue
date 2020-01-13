@@ -571,7 +571,9 @@ export default {
       }
     },
     Change_sbuject(){
+      this.getdata();
       this.getadata();
+
      this.params.subject_ids=[]
     },
        handleChange_1(targetName) {
@@ -600,26 +602,28 @@ export default {
     },
         getdata() {
       //获取科目的数据
-      console.log(this.params.subject_level)
-        this.$apis.census.get_parent_info({subject_level:this.params.subject_level?this.params.subject_level:1}).then(res => {if(res.data.code==1){
-
-         this.options ==res.data.data
-       }})
-//       this.$apis.common.subject_list().then(res => {
-//         if (res.data.code == 1) {
-//           this.msg = res.data;
-//           if(this.params.subject_level==2){
-//    res.data.data.reduce((previousValue,currentValue)=>{
-//              this.options_ .push({value:currentValue.id,label:currentValue.subject_name})
-//            });
-//           }else{
-//      res.data.data.reduce((previousValue,currentValue)=>{
-//              this.options_ .push({value:currentValue.id,label:currentValue.subject_name})
-//            });
-//         this.options = this.options_;
-
-//           }
-      
+      this.$apis.common.subject_list({subject_level:this.params.subject_level?this.params.subject_level:1}).then(res => {
+        if (res.data.code == 1) {
+          this.options_=[]
+          if(this.params.subject_level==2){
+              for(let i=0;i<res.data.data.length;i++){
+                if(res.data.data[i].children){
+                   let children=[]
+                    for(let j=0;j<res.data.data[i].children.length;j++){
+           children.push({value:res.data.data[i].children[j].id,label:res.data.data[i].children[j].subject_name})
+                    }
+this.options_.push({value:res.data.data[i].id,label:res.data.data[i].subject_name,children:children})
+                }else{
+                this.options_ .push({value:res.data.data[i].id,label:res.data.data[i].subject_name})
+                }
+              }
+              this.options =  this.options_
+          }else{
+     res.data.data.reduce((previousValue,currentValue)=>{
+             this.options_ .push({value:currentValue.id,label:currentValue.subject_name})
+           });
+        this.options =  this.options_
+          }
 // //  this.options_=res.data.data
 // //           let addWord = arr => {
 // //             arr.forEach(item => {
@@ -631,8 +635,8 @@ export default {
 // //           };
 // //           addWord(this.options_);
 // //           this.options = this.options_;
-//         }
-//       });
+        }
+    });
     },
     //普通学员
     drawStudent() {

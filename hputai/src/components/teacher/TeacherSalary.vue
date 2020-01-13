@@ -75,7 +75,7 @@
       <el-table-column label="课程属性" prop="course_attribute"></el-table-column>
       <el-table-column label="课酬标准" prop="dollars_standar"></el-table-column>
       <el-table-column label="应上课时" prop="classhour"></el-table-column>
-      <el-table-column label="已上课时" prop="haved_hour"></el-table-column>
+      <el-table-column label="教师核准课时" prop="haved_hour"></el-table-column>
       <el-table-column align="center" label="应得课酬" prop="due_to_dollars" fixed="right"></el-table-column>
     </el-table>
     <span v-if="msg.data">

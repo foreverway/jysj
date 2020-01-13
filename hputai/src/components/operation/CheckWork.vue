@@ -70,6 +70,7 @@
       <el-table-column align="center" label="结束时间" prop="end_time"></el-table-column>
       <el-table-column align="center" label="已排课时" prop="classhour"></el-table-column>
       <el-table-column align="center" label="实上课时" prop="true_classhour"></el-table-column>
+           <el-table-column align="center" label="学生核准课时" prop="true_classhour"></el-table-column>
       <el-table-column align="center" label="状态" prop="attendance_status">
         <template slot-scope="scope">
           <span v-show="scope.row.attendance_status==2" style="color:red">已考勤-异常</span>
