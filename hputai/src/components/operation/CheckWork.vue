@@ -39,6 +39,8 @@
           placeholder="选择日期时间"
         ></el-date-picker>
       </el-form>
+          <el-button type="primary" @click="recharge_export">导出</el-button>
+
     </div>
     <!-- 表格数据 -->
     <el-table
@@ -70,7 +72,7 @@
       <el-table-column align="center" label="结束时间" prop="end_time"></el-table-column>
       <el-table-column align="center" label="已排课时" prop="classhour"></el-table-column>
       <el-table-column align="center" label="实上课时" prop="true_classhour"></el-table-column>
-           <el-table-column align="center" label="学生核准课时" prop="true_classhour"></el-table-column>
+           <el-table-column align="center" label="学生核准课时" prop="student_classhour"></el-table-column>
       <el-table-column align="center" label="状态" prop="attendance_status">
         <template slot-scope="scope">
           <span v-show="scope.row.attendance_status==2" style="color:red">已考勤-异常</span>
@@ -484,15 +486,18 @@
 </template>
 <script>
 import { mapState } from "vuex";
+import url from "../../config/config.js";
+
 export default {
   data() {
     return {
       ifname: "",
+
       tableData: [],
       form: {
-        search: "", //搜索学员姓名条件
-        page: 1, //页码
-        attendance_status: null //考勤状态
+        // search: "", //搜索学员姓名条件
+        // page: 1, //页码
+        // attendance_status: null //考勤状态
       },
       unnormalData: {
         //异常数据
@@ -540,6 +545,18 @@ export default {
     this.opration = this.rolemenu[1].children[4].children;
   },
   methods: {
+    recharge_export(){
+            this.$message({
+        type: "success",
+        message: "正在导出,请稍等..."
+      });
+       let parms = "";
+      for (var key in this.form) {
+       parms += key + "=" + this.form[key] + "&";       
+      };
+        window.location.href = url.urls + "/api_export_attendance" + "?" + parms;
+    
+    },
     checkTime(a) {
       let thisTime = new Date();
       let useThisTime =
