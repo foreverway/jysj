@@ -38,8 +38,9 @@
           value-format="yyyy-MM-dd H:mm:ss"
           placeholder="选择日期时间"
         ></el-date-picker>
+                  <el-button type="primary" @click="recharge_export">导出</el-button>
+
       </el-form>
-          <el-button type="primary" @click="recharge_export">导出</el-button>
 
     </div>
     <!-- 表格数据 -->
@@ -72,7 +73,7 @@
       <el-table-column align="center" label="结束时间" prop="end_time"></el-table-column>
       <el-table-column align="center" label="已排课时" prop="classhour"></el-table-column>
       <el-table-column align="center" label="实上课时" prop="true_classhour"></el-table-column>
-           <el-table-column align="center" label="学生核准课时" prop="student_classhour"></el-table-column>
+           <el-table-column align="center" label="学生核准课时" width="120" prop="student_classhour"></el-table-column>
       <el-table-column align="center" label="状态" prop="attendance_status">
         <template slot-scope="scope">
           <span v-show="scope.row.attendance_status==2" style="color:red">已考勤-异常</span>
@@ -496,7 +497,7 @@ export default {
       tableData: [],
       form: {
         // search: "", //搜索学员姓名条件
-        // page: 1, //页码
+         page: 1, //页码
         // attendance_status: null //考勤状态
       },
       unnormalData: {
@@ -637,14 +638,7 @@ export default {
         }
       });
     },
-    indexMethod(index) {
-      if (this.form.page == 1) {
-        return index + 1;
-      } else {
-        let page = (this.form.page - 1) * 10 + 1;
-        return index + page;
-      }
-    },
+
     unnormal(a) {
       this.unnormalData = {};
       (this.unnormalData.attendance_type = 2),
