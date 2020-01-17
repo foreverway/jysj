@@ -11,9 +11,17 @@ export default {
         let url = '/api/api_subjects_ranking'
         return shuju.getdata(url, params)
       },
+      student_classhour_ranking(params) { //学生课时T15排行
+        let url = '/api/api_student_classhour_ranking'
+        return shuju.getdata(url, params)
+      },
       one_subjects_ranking(params) { //一级科目TOP15排行，如果是选择天，周，月时间都传入开始和结束时间戳过来
         //此处的params是用户的账户id，用于获取用户的信息
         let url = '/api/api_one_subjects_ranking'
+        return shuju.getdata(url, params)
+      },
+      classteacher_classhour_ranking(params) { //班主任课时T15排行
+        let url = '/api/api_classteacher_classhour_ranking'
         return shuju.getdata(url, params)
       },
       student_classhour(params) { //学生课时统计
@@ -32,4 +40,5 @@ export default {
         let url = '/api/api_get_parent_info'
         return shuju.getdata(url, params)
       },
+
 }
