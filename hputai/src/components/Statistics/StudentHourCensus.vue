@@ -26,7 +26,26 @@
       <el-option label="一级科目" value="1"></el-option>
       <el-option label="二级科目" value="2"></el-option>
     </el-select>
-
+    <el-select
+      clearable
+      v-model="params.student_type"
+      placeholder="选择学生类型"
+      @change="Change_sbuject"
+    >
+      <el-option label="VIP学生" value="1"></el-option>
+      <el-option label="保读" value="2"></el-option>
+        <el-option label="普通" value="3"></el-option>
+    </el-select>
+        <el-cascader
+      placeholder="选择学生"
+      v-model="params.student_id"
+      filterable
+      :options="options"
+      clearable
+      :props="{ expandTrigger: 'hover' }"
+      :show-all-levels="false"
+      @change="handleChange_1"
+    ></el-cascader>
     <el-cascader
       placeholder="选择科目"
       v-model="params.subject_id"
@@ -37,6 +56,7 @@
       :show-all-levels="false"
       @change="handleChange_1"
     ></el-cascader>
+
     <el-button type="primary" @click="recharge_export">导出</el-button>
 
     <el-table
@@ -221,7 +241,9 @@ export default {
         // end_time:'',
         // subject_level:'',
         // subject_id:'',
-        // subject_ids:[]
+        // student_id,学生id
+        //student_type 学生类型
+        //index_ids 选择导出数据后的下标数组
       },
       options_: [], //科目的原来数据
       options: [], //我们需要的科目数据
@@ -565,7 +587,7 @@ export default {
       }
 
       window.location.href =
-        url.urls + "/api_export_subject_classhour" + "?" + parms;
+        url.urls + "/api_export_student_classhour" + "?" + parms;
     },
     changeEnd(event) {
       if (this.hadClick == true) {
@@ -749,7 +771,7 @@ export default {
         color: ["#5CBB7A"],
 
         title: {
-          text: "班主任课时T15排行",
+          text: "学生课时T15排行",
           lineHeight: 40,
           // left: 'center',
           //  subtext: "三级科目Top15",
@@ -799,7 +821,7 @@ export default {
       let myLine = echarts.init(document.getElementById("main1"));
       myLine.setOption({
         title: {
-          text: "学生课时T15排行",
+          text: "班主任课时T15排行",
           lineHeight: 40,
           // left: 'center',
           //  subtext: "三级科目Top15",
