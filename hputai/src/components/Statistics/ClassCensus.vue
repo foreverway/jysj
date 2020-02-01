@@ -208,7 +208,7 @@ export default {
         // end_time:'',
         // subject_level:'',
         // subject_id:'',
-        //subject_ids:[]
+        // subject_ids:[]
       },
       options_:[],//科目的原来数据
       options:[],//我们需要的科目数据
@@ -262,11 +262,6 @@ export default {
       for(let i=0;i<result.length;i++){
         this.idArr.push(result[i].id)
       }
-      // "ids[0]=1,ids[1]=2"
-//       result.filter(item=>{
-// this.idArr.push(item.id)
-//         return item.id}
-//       )
         this.params.subject_ids=this.idArr.toString()
     },
     indexMethod(index) {},
@@ -517,13 +512,14 @@ export default {
         changeStart_3(event) {
             this.params.begin_time = event?event.toString().substr(0, 10):'';
             this.getadata();
-            this.params.subject_ids=[]
+          delete  this.params.subject_ids
     },
         changeEnd_3(event) {
      
             this.params.end_time = event?event.toString().substr(0, 10):'';
             this.getadata();
-           this.params.subject_ids=[]
+          //  this.params.subject_ids=[]
+           delete  this.params.subject_ids
     },
         changeStart_2(event) {
       if( this.hadClick_2==true){
@@ -546,8 +542,9 @@ export default {
       // let urls = "http://personal.test.hqjystudio.com";
        let parms = "";
       // // this.form.teacher='杨懿俊'
+      console.log(this.params)
       for (var key in this.params) {
-        if(key=='subject_ids'){
+        if(key=='subject_ids'&&this.params.subject_ids){
     parms += key + "=" + this.params[key]
         }else{
        parms += key + "=" + this.params[key] + "&";   
@@ -556,7 +553,7 @@ export default {
       };
 
  
-        window.location.href = url.urls + "/api_export_subject_classhour" + "?" + parms;
+         window.location.href = url.urls + "/api_export_subject_classhour" + "?" + parms;
     },
     changeEnd(event) {
       if( this.hadClick==true){
@@ -573,20 +570,14 @@ export default {
     Change_sbuject(){
       this.getdata();
       this.getadata();
-
-     this.params.subject_ids=[]
+    delete  this.params.subject_ids
     },
        handleChange_1(targetName) {
       //选择科目
-      var lastName =
-        targetName.length == 1
-          ? targetName
-          : targetName.length == 2
-          ? targetName[1]
-          :targetName[2];
-      this.params.subject_id = lastName.toString();
+      var lastName=targetName[0]?targetName[0]:''
+      this.params.subject_id = lastName;
       this.getadata();
-     this.params.subject_ids=[]
+      delete  this.params.subject_ids
     },
     changeEnd_2(event) {
       if( this.hadClick_2==true){
@@ -602,39 +593,14 @@ export default {
     },
         getdata() {
       //获取科目的数据
-      this.$apis.common.subject_list({subject_level:this.params.subject_level?this.params.subject_level:1}).then(res => {
+      this.$apis.census.get_parent_info({subject_level:this.params.subject_level?this.params.subject_level:1}).then(res => {
         if (res.data.code == 1) {
           this.options_=[]
-          if(this.params.subject_level==2){
-              for(let i=0;i<res.data.data.length;i++){
-                if(res.data.data[i].children){
-                   let children=[]
-                    for(let j=0;j<res.data.data[i].children.length;j++){
-           children.push({value:res.data.data[i].children[j].id,label:res.data.data[i].children[j].subject_name})
-                    }
-this.options_.push({value:res.data.data[i].id,label:res.data.data[i].subject_name,children:children})
-                }else{
-                this.options_ .push({value:res.data.data[i].id,label:res.data.data[i].subject_name})
-                }
-              }
-              this.options =  this.options_
-          }else{
-     res.data.data.reduce((previousValue,currentValue)=>{
-             this.options_ .push({value:currentValue.id,label:currentValue.subject_name})
-           });
+
+            for(let i=0;i<res.data.data.length;i++){
+               this.options_.push({value:res.data.data[i].id,label:res.data.data[i].subject_name})
+            }
         this.options =  this.options_
-          }
-// //  this.options_=res.data.data
-// //           let addWord = arr => {
-// //             arr.forEach(item => {
-// //               (item.value = item.id), (item.label = item.subject_name);
-// //               if (item.children instanceof Array) {
-// //                 addWord(item.children);
-// //               }
-// //             });
-// //           };
-// //           addWord(this.options_);
-// //           this.options = this.options_;
         }
     });
     },
@@ -983,21 +949,19 @@ fontsize:'16px',
     },
     getadata(){
           this.$apis.census.subject_classhour(this.params).then(res => {
-      if (res.data.code == 1) {
-        this.tableData = res.data.data;
-      }
+            this.tableData=[]
+        if(Object.prototype.toString.call(res.data.data).substr(8,5)==Array){
+          this.tableData = res.data.data;
+        }else{
+                this.tableData=[...res.data.data]
+        }
     });
 
     }
 
   },
   created() {
-    this.$apis.census.subject_classhour().then(res => {
-      if (res) {
-      }
-    });
         this.getdata();
-
     this.$nextTick(function() {
       this.drawChart();
       this.lineChart();

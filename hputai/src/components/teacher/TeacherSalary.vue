@@ -51,7 +51,7 @@
     <!-- 表格数据 -->
     <el-table :data="tableData" border :header-cell-style="{background:'#f4f4f4'}">
       <el-table-column label="序号" type="index"  align="center" :index="indexMethod"></el-table-column>
-      <el-table-column label="月份"  sortable prop="month"></el-table-column>
+      <el-table-column label="月份" width="40" sortable prop="month"></el-table-column>
 
       <el-table-column :show-overflow-tooltip="true" align="center" label="教师名称" >
         <template slot-scope="scope">
@@ -75,7 +75,7 @@
       <el-table-column label="课程属性" prop="course_attribute"></el-table-column>
       <el-table-column label="课酬标准" prop="dollars_standar"></el-table-column>
       <el-table-column label="应上课时" prop="classhour"></el-table-column>
-      <el-table-column label="教师核准课时" prop="haved_hour"></el-table-column>
+      <el-table-column label="教师核准课时" prop="haved_hour" width="120"></el-table-column>
       <el-table-column align="center" label="应得课酬" prop="due_to_dollars" fixed="right"></el-table-column>
     </el-table>
     <span v-if="msg.data">

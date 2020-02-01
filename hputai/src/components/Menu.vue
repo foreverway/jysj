@@ -347,6 +347,7 @@ sessionStorage.setItem("url",twoUrl);
       //没有头像时候的回调
       return true;
     },
+    
     submitForm(form) {
       this.$refs[form].validate(valid => {
         if (valid) {
@@ -496,6 +497,9 @@ const data = this.aa1.split('')
           this.form = res.data.data; //获取编辑使用用户信息
         }
       });
+//       if(typeof chrome.app.isInstalled!=='undefined'){
+// chrome.runtime.sendMessage()
+// }
     }
   }
 };
