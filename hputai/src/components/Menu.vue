@@ -4,7 +4,7 @@
       <el-header>
         <div class="header">
           <img href="#top" src="../assets/logo.png" height="50" alt style="padding:5px;float:left;" />
-         <div style="display:inline-block;height:100%;width:100px;" @click="showCli"></div>
+         <!-- <div style="display:inline-block;height:100%;width:100px;" @click="showCli"></div> -->
           <div class="users" >
                
             
