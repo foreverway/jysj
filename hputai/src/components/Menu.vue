@@ -4,33 +4,33 @@
       <el-header>
         <div class="header">
           <img href="#top" src="../assets/logo.png" height="50" alt style="padding:5px;float:left;" />
-         <!-- <div style="display:inline-block;height:100%;width:100px;" @click="showCli"></div> -->
-          <div class="users" >
-               
-            
-          
-            <img :src='form.admin_head' alt class="touxiang" />
-            <el-dropdown trigger="click" >
+          <div style="display:inline-block;height:100%;width:100px;" @click="showCli"></div>
+          <div class="users">
+            <img :src="form.admin_head" alt class="touxiang" />
+            <el-dropdown trigger="click">
               <span class="el-dropdown-link">
-                <span class="youName" >{{form.admin_name}}</span>
+                <span class="youName">{{form.admin_name}}</span>
                 <i class="el-icon-caret-bottom el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown" class="forChoose">
-                <el-dropdown-item >
+                <el-dropdown-item>
                   <div class="clearfix" @click="dialogVisible = true">设置</div>
                 </el-dropdown-item>
-                <el-dropdown-item >
+                <el-dropdown-item>
                   <p class="clearfix" @click="delCookie('usertoken')">退出</p>
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-          <span style="width:15px;height:5px;"></span>
+            <span style="width:15px;height:5px;"></span>
           </div>
         </div>
-        <el-dialog title="我的基本信息"     :close-on-click-modal='false'
- :visible.sync="dialogVisible" center width="600px">
+        <el-dialog
+          title="我的基本信息"
+          :close-on-click-modal="false"
+          :visible.sync="dialogVisible"
+          center
+          width="600px">
           <el-form ref="form" :model="form" status-icon :rules="rules" label-width="80px">
-         
             <el-form-item label="我的角色">
               <!-- // <el-input v-model="form.role_name" style="width:200px;margin:0 15px;"></el-input> -->
               <span class="selfSet">{{form.role_name}}</span>
@@ -99,6 +99,7 @@
             <el-button type="primary" @click="submitForm('form')">确 定</el-button>
           </span>
         </el-dialog>
+        <div style="clear:both;"></div>
       </el-header>
       <div class="left">
         <el-aside width="195px" style="   overflow-x:hidden; background-color: rgb(238, 241, 246)">
@@ -127,15 +128,19 @@
                 style="pointer-events: none;"
               >
                 <template slot="title">
-                  <span class="data_color" id="" ><i  :class="item.menu_icon" ></i></span>
+                  <span class="data_color" id>
+                    <i :class="item.menu_icon"></i>
+                  </span>
                   <span slot="title" class="changeC">{{item.menu_name}}</span>
                 </template>
                 <span v-for="(items,index1) in item.children" :key="index1">
                   <!-- 刷新出次级菜单名字 -->
                   <el-menu-item :index="items.menu_url" route style="pointer-events:painted;">
                     <template slot="title">
-                      
-                      <span style="display:inline-block;margin-left:12px;" slot="title">{{items.menu_name}}</span>
+                      <span
+                        style="display:inline-block;margin-left:12px;"
+                        slot="title"
+                      >{{items.menu_name}}</span>
                     </template>
                   </el-menu-item>
                 </span>
@@ -150,40 +155,33 @@
         </el-main>
       </div>
     </el-container>
-    <el-dialog
-    ref="mybox"
-  title=''
-  class="changeT"
-  :visible.sync="cli"
-  width="500px"
-  >
-  <div id="calculator">
-    <!-- <header class="cal"> -->
-      <!-- <h1>Calculator</h1> -->
-      <!-- <span class="author">BY </span> -->
-    <!-- </header> -->
-    <section class="calculator" id="calculator">
-      <calculator-content></calculator-content>
-    </section>
-    <div style="height:15px;"></div>
-  </div>
-
-</el-dialog>
+    <el-dialog ref="mybox" title class="changeT" :visible.sync="cli" width="500px">
+      <div id="calculator">
+        <!-- <header class="cal"> -->
+        <!-- <h1>Calculator</h1> -->
+        <!-- <span class="author">BY </span> -->
+        <!-- </header> -->
+        <section class="calculator" id="calculator">
+          <calculator-content></calculator-content>
+        </section>
+        <div style="height:15px;"></div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
-import CalculatorContent from '../templates/CalculatorContent.vue'
+import CalculatorContent from "../templates/CalculatorContent.vue";
 // export default {
 
 //  }
 export default {
-    name: 'calculator',
+  name: "calculator",
   components: {
     CalculatorContent
   },
-     inject:['reload'],//在export default下面加上这一段
+  inject: ["reload"], //在export default下面加上这一段
   data() {
     var validatePass = (rule, value, callback) => {
       if (value === "") {
@@ -209,17 +207,17 @@ export default {
       admin_name: "",
       defaultUrl: "/",
       peopleInfo: {},
-      aa1:'',
-      aa:[
-  "既见君子 云胡不喜",
-  "浮云一别后，流水十年间",
-  "一片两片三四片，飞入梅花总不见",
-  "山不过来 我就过去",
-  "叶里藏花一度，梦里踏雪几回",
-  "吹灭读书灯，一身都是月",
-  "迷津欲有问，平海夕漫漫",
-  "器有大小，唯心难量",
-  "相识起，到永远"
+      aa1: "",
+      aa: [
+        "既见君子 云胡不喜",
+        "浮云一别后，流水十年间",
+        "一片两片三四片，飞入梅花总不见",
+        "山不过来 我就过去",
+        "叶里藏花一度，梦里踏雪几回",
+        "吹灭读书灯，一身都是月",
+        "迷津欲有问，平海夕漫漫",
+        "器有大小，唯心难量",
+        "相识起，到永远"
       ],
       seeHeight: document.body.scrollHeight,
       dialogVisible: false,
@@ -229,7 +227,7 @@ export default {
         admin_head: "",
         admin_email: ""
       }, //个人信息
-      cli:false,
+      cli: false,
       rules: {
         admin_pass: [{ validator: validatePass, trigger: "blur" }],
         admin_pass_sure: [{ validator: validatePass2, trigger: "blur" }]
@@ -268,14 +266,12 @@ export default {
       this.getMen(); //
       //实现菜单的展开 图标消失
     });
- 
   },
   watch: {
-
-$route(to, from) {
- var name=this.$route.path.substring(this.$route.path.indexOf("/")+1);
-}
-},
+    $route(to, from) {
+      var name = this.$route.path.substring(this.$route.path.indexOf("/") + 1);
+    }
+  },
   beforeMount() {},
   computed: mapState([
     "banzhuren_list",
@@ -286,32 +282,32 @@ $route(to, from) {
     "jiaowu_data",
     "region_list"
   ]),
-  updated() {  //获取地址栏地址，如果#后面不是login就存入sessionStorage
-        //var matchReg = /(?<=#\/).*?(?=\/)/;
+  updated() {
+    //获取地址栏地址，如果#后面不是login就存入sessionStorage
+    //var matchReg = /(?<=#\/).*?(?=\/)/;
 
-  //console.log(this.$route.path)//使用route方法获取路径  在使用split对/进行切割
-  // var matchReg = /(?<=#\/).*?(?=\/)/;//使用正则零宽断言来取出第一位地址
+    //console.log(this.$route.path)//使用route方法获取路径  在使用split对/进行切割
+    // var matchReg = /(?<=#\/).*?(?=\/)/;//使用正则零宽断言来取出第一位地址
     if (window.location.href.split("/#")[1] !== "login") {
       sessionStorage.setItem("url", window.location.href.split("/#")[1]);
     }
-    if(this.$route.path.split('/')[1]){
-      let twoUrl='/'+this.$route.path.split('/')[1]
-sessionStorage.setItem("url",twoUrl);
+    if (this.$route.path.split("/")[1]) {
+      let twoUrl = "/" + this.$route.path.split("/")[1];
+      sessionStorage.setItem("url", twoUrl);
     }
     this.defaultUrl = sessionStorage.getItem("url");
-      var bodyDiv=$('.right')
-    $(bodyDiv)[0].style.height=$(window).height()*1-50+'px'
-              var bodyDiv=$('.this_height')
-    $(bodyDiv)[0].style.height=$(window).height()*1-40+'px'
+    var bodyDiv = $(".right");
+    $(bodyDiv)[0].style.height = $(window).height() * 1 - 50 + "px";
+    var bodyDiv = $(".this_height");
+    $(bodyDiv)[0].style.height = $(window).height() * 1 - 40 + "px";
   },
   mounted() {
-
- if (window.location.href.split("/#")[1] !== "login") {
+    if (window.location.href.split("/#")[1] !== "login") {
       sessionStorage.setItem("url", window.location.href.split("/#")[1]);
     }
-    if(this.$route.path.split('/')[1]){
-      let twoUrl='/'+this.$route.path.split('/')[1]
-sessionStorage.setItem("url",twoUrl);
+    if (this.$route.path.split("/")[1]) {
+      let twoUrl = "/" + this.$route.path.split("/")[1];
+      sessionStorage.setItem("url", twoUrl);
     }
     this.defaultUrl = sessionStorage.getItem("url");
     //在login页就报错  说明在那时就执行
@@ -325,15 +321,16 @@ sessionStorage.setItem("url",twoUrl);
   },
 
   methods: {
-    showCli(){
-      $('.changeT .el-dialog__title').html('')
-      this.cli=true
-      this.open1()
+    showCli() {
+      $(".changeT .el-dialog__title").html("");
+      this.cli = true;
+      this.open1();
     },
-            //调用App.vue下的this.reload()方法，来改变v-if的状态
-        clickDiv(){//刷新按钮调用的方法
-          this.reload()
-        },
+    //调用App.vue下的this.reload()方法，来改变v-if的状态
+    clickDiv() {
+      //刷新按钮调用的方法
+      this.reload();
+    },
     handlePreview(file) {
       let reader = new FileReader();
       reader.readAsDataURL(file.raw);
@@ -347,7 +344,7 @@ sessionStorage.setItem("url",twoUrl);
       //没有头像时候的回调
       return true;
     },
-    
+
     submitForm(form) {
       this.$refs[form].validate(valid => {
         if (valid) {
@@ -365,31 +362,29 @@ sessionStorage.setItem("url",twoUrl);
         }
       });
     },
-     open1() {
-  
- $('.changeT .el-dialog__title').innerHTML=''
-      const sample=arr=>arr[Math.floor(Math.random()*arr.length)];
-      
-      this.aa1=sample(this.aa)
-     const dom = document.querySelector('.changeT .el-dialog__title')
-     $('.changeT .el-dialog__title').attr('id','showClick')
-const data = this.aa1.split('')
-    let index = 0
-    writing(index)
-    function writing(index) {
-        if (index < data.length) {
-            dom.innerHTML += data[index]
-            setTimeout(writing.bind(this), 200, ++index)
-        }
-    }
+    open1() {
+      $(".changeT .el-dialog__title").innerHTML = "";
+      const sample = arr => arr[Math.floor(Math.random() * arr.length)];
 
+      this.aa1 = sample(this.aa);
+      const dom = document.querySelector(".changeT .el-dialog__title");
+      $(".changeT .el-dialog__title").attr("id", "showClick");
+      const data = this.aa1.split("");
+      let index = 0;
+      writing(index);
+      function writing(index) {
+        if (index < data.length) {
+          dom.innerHTML += data[index];
+          setTimeout(writing.bind(this), 200, ++index);
+        }
+      }
     },
     selectMenu(index, indexPath) {
       //console.log(document.body.scrollHeight);
       //实现点击子菜单父菜单变化
       var menuList = $(".changeC");
       var spanList = $(".data_color");
-      
+
       for (let y = 0; y < menuList.length; y++) {
         $(menuList[y]).attr("id", "");
         $(spanList[y]).attr("id", "");
@@ -497,37 +492,37 @@ const data = this.aa1.split('')
           this.form = res.data.data; //获取编辑使用用户信息
         }
       });
-//       if(typeof chrome.app.isInstalled!=='undefined'){
-// chrome.runtime.sendMessage()
-// }
+      //       if(typeof chrome.app.isInstalled!=='undefined'){
+      // chrome.runtime.sendMessage()
+      // }
     }
   }
 };
 </script>
   
 <style scoped>
-@import url('https://fonts.googleapis.com/css?family=Pacifico');
-.data_color{
-
-  margin-top:3px;
+@import url("https://fonts.googleapis.com/css?family=Pacifico");
+.data_color {
+  margin-top: 3px;
 }
-.clearfix{
-  padding:0 20px;
+.clearfix {
+  padding: 0 20px;
 }
-.forChoose{
+.forChoose {
   /* float:right; */
 }
-.forChoose /deep/ .el-dropdown-menu__item{
+.forChoose /deep/ .el-dropdown-menu__item {
   /* //width: 80px; */
-  padding:0px;
-    text-align: center;
+  padding: 0px;
+  text-align: center;
 }
-.youName{
-display:inline-block;
-margin:0 5px;
-font-weight:700;color:#FF8500;
-text-align: center;
-font-size:  15px;
+.youName {
+  display: inline-block;
+  margin: 0 5px;
+  font-weight: 700;
+  color: #ff8500;
+  text-align: center;
+  font-size: 15px;
 }
 #click_1 /deep/ .el-icon-arrow-down:before {
   content: "";
@@ -552,7 +547,7 @@ font-size:  15px;
   overflow-y: auto;
   width: calc(100% - 200px);
   margin-left: 200px;
-  /* margin-top: 50px; */
+  margin-top: 50px;
   height: 100%;
 }
 .left[data-v-98c1a456],
@@ -575,7 +570,7 @@ font-size:  15px;
   width: 100%;
   background: #fff;
 }
-#i_color /deep/ i{
+#i_color /deep/ i {
   color: #e6563a !important;
 }
 #changeC {
@@ -597,9 +592,9 @@ font-size:  15px;
 .touxiang {
   display: inline-block;
   vertical-align: middle;
-    width: 50px;
+  width: 50px;
   height: 50px;
-    border: 1px solid white;
+  border: 1px solid white;
   border-radius: 50%;
   animation: run 8s linear 2s infinite;
 }
@@ -611,7 +606,7 @@ font-size:  15px;
     -webkit-transform: rotate(360deg);
   }
 }
-    /* .item {
+/* .item {
       margin: 4px;
     } */
 .main {
@@ -633,9 +628,9 @@ font-size:  15px;
 .users {
   float: right;
   /* width: 0px; */
-  margin-right:3%;
+  margin-right: 3%;
   line-height: 61px;
-  cursor:pointer;
+  cursor: pointer;
 }
 .el-menu-item {
   background-color: rgb(235, 232, 232) !important;
@@ -657,38 +652,35 @@ font-size:  15px;
   background: none !important;
 }
 
-
-
-
-
-.cal{
+.cal {
   font-size: 1.8rem;
-  font-family: 'Pacifico', cursive;
+  font-family: "Pacifico", cursive;
 }
 
-.author{
+.author {
   font-size: 1.5rem;
   width: 300px;
   display: inline-block;
   text-align: left;
-  color:#fff;
+  color: #fff;
 }
 
-.cal .author a{
+.cal .author a {
   text-decoration: none;
 }
 
-.cal , .calculator {
+.cal,
+.calculator {
   margin: auto;
   text-align: center;
 }
-html{
-   font-size:62.5%;  /* =10px */
+html {
+  font-size: 62.5%; /* =10px */
 }
-.calculator{
+.calculator {
   border: 0.8rem solid #f67373;
   width: 405px;
-  height:27rem;
+  height: 27rem;
   background-color: #f28080;
   font-size: 1.6rem;
   -webkit-border-radius: 1rem;
@@ -698,22 +690,19 @@ html{
   border-radius: 1rem;
   -webkit-box-shadow: 1rem 1rem 0.5rem #ccc;
   box-shadow: 1rem 1rem 0.5rem #ccc;
-  
 }
-.main /deep/ .el-dialog{
+.main /deep/ .el-dialog {
   /* background: rgba(0, 0, 0, 0); */
-  -webkit-box-shadow:rgba(12, 4, 4, 0);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0)
+  -webkit-box-shadow: rgba(12, 4, 4, 0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0);
 }
-.main /deep/ .el-dialog__body{
+.main /deep/ .el-dialog__body {
   /* padding:0; */
 }
- .main /deep/ .el-dialog__title {
-   margin-left:10px;
-    font-size: 16px;
-    /* color: #fff; */
+.main /deep/ .el-dialog__title {
+  margin-left: 10px;
+  font-size: 16px;
+  /* color: #fff; */
 }
-
-
 </style>
 

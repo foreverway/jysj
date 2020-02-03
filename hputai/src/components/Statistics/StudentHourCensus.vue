@@ -40,11 +40,11 @@
       placeholder="选择学生"
       v-model="params.student_id"
       filterable
-      :options="options"
+      :options="options1"
       clearable
       :props="{ expandTrigger: 'hover' }"
       :show-all-levels="false"
-      @change="handleChange_1"
+      @change="handleChange"
     ></el-cascader>
     <el-cascader
       placeholder="选择科目"
@@ -68,7 +68,13 @@
       @selection-change="handleSelectionChange"
       :header-cell-style="{background:'#f4f4f4'}"
     >
+      
       <el-table-column type="selection" fixed="left" @click="handleClick(scope.row)" width="55"></el-table-column>
+      <el-table-column
+ 
+      type="index"
+      width="50">
+    </el-table-column>
       <el-table-column :show-overflow-tooltip="true" align="center" label="学生姓名" width="150">
         <template slot-scope="scope">
           <span>{{ scope.row.username }}</span>
@@ -247,6 +253,8 @@ export default {
       },
       options_: [], //科目的原来数据
       options: [], //我们需要的科目数据
+            options_1: [], //学生的原来数据
+      options1: [], //我们需要的学生数据
       classMouth: [],
       ordinary_classhour: [],
       keepreading_classhour: [],
@@ -611,6 +619,11 @@ export default {
       this.params.subject_id = lastName;
       this.getadata();
       delete this.params.subject_ids;
+    },
+        handleChange(targetName) {
+      //选择学生
+      this.params.student_id = targetName.toString();
+      this.getadata();
     },
     changeEnd_2(event) {
       if (this.hadClick_2 == true) {
@@ -1032,10 +1045,19 @@ export default {
         console.log( this.msg )
       }
     });
+          this.$apis.students.students_list().then(res => {
+        if (res.data.code == 1) {
+          this.options_1 = res.data.data.list;
+          for (let i = 0; i < this.options_1.length; i++) {
+            var val = this.options_1[i];
+            this.options1.push({ value: val.id, label: val.username });
+          }
+        }
+      });
   }
 };
 </script>
-<style>
+<style scoped>
 .echarts_1 {
   display: flex;
   align-items: space-around;
@@ -1052,13 +1074,12 @@ export default {
   justify-content: space-around;
   margin-bottom: 10px;
 }
+
 .bgc {
   background-color: #fff;
   padding: 15px;
   margin: 10px;
   border-radius: 10px;
 }
-.near {
-  padding: 0 -16px!;
-}
+
 </style>

@@ -20,7 +20,15 @@
             :value="item.value"
           ></el-option>
         </el-select>
-
+        <el-select    @change="getadata"
+  clearable v-model="form.teaching_type" placeholder="授课类型">
+          <el-option
+            v-for="item in check_type"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
         <el-date-picker
           style="margin-left:60px"
           v-model="form.start_time"
@@ -73,7 +81,8 @@
       <el-table-column align="center" label="结束时间" prop="end_time"></el-table-column>
       <el-table-column align="center" label="已排课时" prop="classhour"></el-table-column>
       <el-table-column align="center" label="实上课时" prop="true_classhour"></el-table-column>
-           <el-table-column align="center" label="学生核准课时" width="120" prop="student_classhour"></el-table-column>
+      <el-table-column align="center" label="学生核准课时" width="120" prop="student_classhour"></el-table-column>
+      <el-table-column align="center" label="试听情况"  prop="audition_text"></el-table-column>
       <el-table-column align="center" label="状态" prop="attendance_status">
         <template slot-scope="scope">
           <span v-show="scope.row.attendance_status==2" style="color:red">已考勤-异常</span>
@@ -101,6 +110,12 @@
             v-if="checkTime(scope.row)"
             @click="fillFeedback_see(scope.row.course_id)"
           >查看反馈</el-button>
+                   <el-button
+            size="mini"
+            v-if="scope.row.course_txt=='一对一试听'&&scope.row.audition_text==''"
+            style="background-color:#409EFF;color:white;"
+            @click="audition(scope.row.course_id)"
+          >试听情况</el-button>
           <div
             v-show="scope.row.attendance_status==2&&scope.row.is_forward!==1"
             style="color:#169BD5"
@@ -124,9 +139,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <!-- <p style="margin-top:30px"><span>累计金额：</span><span style="color:red">{{msg.data.givenamount}}</span></p> -->
-    <!-- <el-button type="primary" @click="ifinputselect" style="margin-top:20px">审核</el-button> -->
-    <!-- 正常的弹出页面 -->
+
     <el-dialog
       title="正常页面"
       :close-on-click-modal="false"
@@ -471,6 +484,32 @@
         <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
       </span>
     </el-dialog>
+
+        <!-- 试听情况的弹出页面 -->
+    <el-dialog
+      :close-on-click-modal="false"
+      title="试听情况"
+      :visible.sync="audition_show"
+      center
+    >
+      <el-form  :model="audition_result" label-width="80px">
+          <el-form-item label="试听情况">
+    <el-radio-group v-model="audition_result.audition_status">
+      <el-radio :label='1' >试听成功</el-radio>
+      <el-radio :label='2' >视听失败</el-radio>
+    </el-radio-group>
+  </el-form-item>
+        <el-form-item label="备  注" >
+          <el-input v-model="audition_result.audition_remarks"></el-input>
+        </el-form-item>
+        
+      </el-form>
+   
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="audition_show = false">取 消</el-button>
+        <el-button type="primary" @click="audition_post()">确 定</el-button>
+      </span>
+    </el-dialog>
     <span v-if="msg.data">
       <el-pagination
         style="float:right;margin-bottom:30px"
@@ -500,6 +539,12 @@ export default {
          page: 1, //页码
         // attendance_status: null //考勤状态
       },
+      audition_result:{
+        course_id:'',
+        audition_status:1,
+        audition_remarks:''
+      },
+      audition_show:false,
       unnormalData: {
         //异常数据
         attendance_type: 2,
@@ -516,6 +561,11 @@ export default {
         { value: 0, label: "未考勤" },
         { value: 1, label: "已考勤-正常" },
         { value: 2, label: "已考勤-异常" }
+      ],
+            check_type: [
+        { value: 1, label: "正课" },
+        { value: 2, label: "试听" },
+        { value: 3, label: "辅导" }
       ],
       normalData: {
         attendance_type: 1,
@@ -674,6 +724,25 @@ export default {
         });
       }
     },
+        audition_post(result) {
+          // this.audition_result.course_id= result.row.course_id
+        this.$apis.common.audition_info(this.audition_result).then(res => {
+          if (res.data.code == 1) {
+            this.getadata();
+            this.audition_show = false;
+                      this.$message({
+              message: "提交成功",
+              type: "success"
+            });
+          } else {
+            this.$message({
+              message: "填写的视听有误，请核对",
+              type: "warning"
+            });
+          }
+        });
+
+    },
     // 查看详情
     seeMore(result) {
       //console.log(result)
@@ -772,11 +841,10 @@ export default {
           console.log(this.formLabelAlign)
         }
       });
-      //       this.$apis.common.course_feedback(parms).then(res => {
-      //   if (res.data.code == 1) {
-      //     this.formLabelAlign = res.data.data;
-      //   }
-      // });
+    },
+    audition(result){
+this.audition_show=true
+this.audition_result.course_id=result
     },
     getadata() {
       this.$apis.students.attendance_list(this.form).then(res => {

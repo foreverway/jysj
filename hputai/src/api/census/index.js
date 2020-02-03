@@ -49,5 +49,16 @@ export default {
         let url = '/api/api_get_parent_info'
         return shuju.getdata(url, params)
       },
-
+      teacher_classhour(params) { //教师课时统计
+        let url = '/api/api_teacher_classhour'
+        return shuju.getdata(url, params)
+      },
+      teacher_classhour_proportion(params) { //全职与兼职的课时占比情况(%)
+        let url = '/api/api_teacher_classhour_proportion'
+        return shuju.getdata(url, params)
+      },
+      screen_teacher_classhour(params) { //全职与兼职的课时占比情况(%)
+        let url = '/api/api_screen_teacher_classhour'
+        return shuju.getdata(url, params)
+      },
 }

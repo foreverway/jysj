@@ -985,7 +985,7 @@ fontsize:'16px',
   }
 };
 </script>
-<style>
+<style scoped>
 .echarts_1 {
   display: flex;
   align-items: space-around;
