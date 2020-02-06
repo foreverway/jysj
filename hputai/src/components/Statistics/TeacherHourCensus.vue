@@ -41,15 +41,12 @@
         placeholder="教师星级"
         @change="Change_sbuject"
       >
-        <el-option 
-        v-for="item in rateArr"
-        :key="item.value"
-      :label="item.label"
-      :value="item.value"
-        
+        <el-option
+          v-for="item in rateArr"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
         ></el-option>
-        
-        
       </el-select>
 
       <el-button type="primary" @click="recharge_export">导出</el-button>
@@ -63,12 +60,8 @@
         @selection-change="handleSelectionChange"
         :header-cell-style="{background:'#f4f4f4'}"
       >
-              <el-table-column type="selection" fixed="left" @click="handleClick(scope.row)" width="55"></el-table-column>
-    <el-table-column
- 
-      type="index"
-      width="50">
-    </el-table-column>
+        <el-table-column type="selection" fixed="left" @click="handleClick(scope.row)" width="55"></el-table-column>
+        <el-table-column type="index" width="50" label="序号"></el-table-column>
         <el-table-column :show-overflow-tooltip="true" align="center" label="教师名称" width="150">
           <template slot-scope="scope">
             <span>{{ scope.row.teacher_name }}</span>
@@ -112,17 +105,16 @@
             style="margin:0 -2px ;border-radius:5px 0 0  5px;"
             @click="showDay"
           >上月</el-button>
+          <el-button class="near" style="margin:0 -3px ;border-radius:0;" @click="showMouth">本月</el-button>
           <el-button
             class="near"
-            style="margin:0 -3px ;border-radius:0;"
-            @click="showMouth"
-          >本月</el-button>
-          <el-button class="near" style="margin:0 -2px ;border-radius:0 5px 5px  0;"  @click="showWeek">下月</el-button>
-
+            style="margin:0 -2px ;border-radius:0 5px 5px  0;"
+            @click="showWeek"
+          >下月</el-button>
         </div>
         <el-date-picker
-          @change="changeMouth_1"
-          v-model="changeMouth2"
+          @change="changeMouth"
+          v-model="changeMouth1"
           type="month"
           value-format="MM"
           placeholder="选择你想查看的月份"
@@ -177,24 +169,22 @@
     </div>
     <div class="session1">
       <div style="width:100%;" class="flex_div">
-        <div style="font-weight:900;">
-全职教师以及5星兼职教师课时统计</div>
+        <div style="font-weight:900;">全职教师以及5星兼职教师课时统计</div>
         <div>
           <el-button
             class="near"
             style="margin:0 -2px ;border-radius:5px 0 0  5px;"
             @click="showDay_2"
           >上月</el-button>
-          <el-button class="near"  style="margin:0 -3px ;border-radius:0;" @click="showMouth_2">本月</el-button>
+          <el-button class="near" style="margin:0 -3px ;border-radius:0;" @click="showMouth_2">本月</el-button>
           <el-button
             class="near"
-           
             style="margin:0 -2px ;border-radius:0 5px 5px  0;"
             @click="showWeek_2"
           >下月</el-button>
         </div>
 
-              <el-date-picker
+        <el-date-picker
           @change="changeMouth_1"
           v-model="changeMouth2"
           type="month"
@@ -292,12 +282,12 @@ export default {
         // teacher_type: "", //	教师类型1全职，2兼职
         // teacher_rate: "" //	教师星级1，2，3，4，5
       },
-      rateArr:[
-        {value:1,label:'一星级'},
-        {value:2,label:'二星级'},
-        {value:3,label:'三星级'},
-        {value:4,label:'四星级'},
-        {value:5,label:'五星级'},
+      rateArr: [
+        { value: 1, label: "一星级" },
+        { value: 2, label: "二星级" },
+        { value: 3, label: "三星级" },
+        { value: 4, label: "四星级" },
+        { value: 5, label: "五星级" }
       ],
       options_: [], //科目的原来数据
       options: [], //我们需要的科目数据
@@ -350,7 +340,7 @@ export default {
   },
   methods: {
     handleSelectionChange(result) {
-      console.log(result)
+      console.log(result);
       this.idArr = [];
       for (let i = 0; i < result.length; i++) {
         this.idArr.push(result[i].id);
@@ -359,11 +349,103 @@ export default {
     },
     indexMethod(index) {},
     changeMouth(value) {
-      this.changeMouth1 = value;
+            this.changeMouth1 = value;
+            //起止日期数组
+      var startStop = new Array();
+      //获取当前时间
+      var currentDate = new Date();
+      //获得当前月份0-11
+     var changeMouth=value.split('')[0]==0?value.split('')[1]:value
+      var currentMonth = value-1;
+      //获得当前年份4位年
+      var currentYear = currentDate.getFullYear();
+      //求出本月第一天
+      var firstDay = new Date(currentYear, currentMonth, 1); //本年月的第一天
+
+      //　month的值域为0～11，0代表1月，11表代表12月；
+      if (currentMonth == 11) {
+        //月份需要更新为0 也就是下一年的第一个月
+        currentYear++;
+        currentMonth = 0; //就为
+      } else {
+        //否则只是月份增加,以便求的下一月的第一天
+        currentMonth++;
+      }
+      //一天的毫秒数
+      var millisecond = 1000 * 60 * 60 * 24; //一天
+      //-
+      var nextMonthDayOne = new Date(currentYear, currentMonth, 1);
+      //求出上月的最后一天
+      var lastDay = new Date(nextMonthDayOne.getTime() - millisecond);
+      var sy = firstDay.getFullYear();
+      var sm = firstDay.getMonth()+1 ;
+      var sd = firstDay.getDate();
+
+      var ey = lastDay.getFullYear();
+      var em = lastDay.getMonth()+1 ;
+      var ed = lastDay.getDate();
+
+      var s = sy + "-" + this.add0(sm) + "-" + this.add0(sd) + " 00:00:00"; //开始
+      var e = ey + "-" +this.add0(em) + "-" + this.add0(ed) + " 23:59:59"; //结束
+      console.log(s,e)
+      var s1 = this.dateToMs(s)
+        .toString()
+        .substr(0, 10);
+      var e1 = this.dateToMs(e)
+        .toString()
+        .substr(0, 10);
+      this.params_1.begin_time = s1.toString();
+      this.params_1.end_time = e1.toString();
+      this.getadata_1();
     },
     changeMouth_1(value) {
       this.changeMouth2 = value;
-      console.log(value)
+            //起止日期数组
+      var startStop = new Array();
+      //获取当前时间
+      var currentDate = new Date();
+      //获得当前月份0-11
+     var changeMouth=value.split('')[0]==0?value.split('')[1]:value
+      var currentMonth = value-1;
+      //获得当前年份4位年
+      var currentYear = currentDate.getFullYear();
+      //求出本月第一天
+      var firstDay = new Date(currentYear, currentMonth, 1); //本年月的第一天
+
+      //　month的值域为0～11，0代表1月，11表代表12月；
+      if (currentMonth == 11) {
+        //月份需要更新为0 也就是下一年的第一个月
+        currentYear++;
+        currentMonth = 0; //就为
+      } else {
+        //否则只是月份增加,以便求的下一月的第一天
+        currentMonth++;
+      }
+      //一天的毫秒数
+      var millisecond = 1000 * 60 * 60 * 24; //一天
+      //-
+      var nextMonthDayOne = new Date(currentYear, currentMonth, 1);
+      //求出上月的最后一天
+      var lastDay = new Date(nextMonthDayOne.getTime() - millisecond);
+      var sy = firstDay.getFullYear();
+      var sm = firstDay.getMonth()+1 ;
+      var sd = firstDay.getDate();
+
+      var ey = lastDay.getFullYear();
+      var em = lastDay.getMonth()+1 ;
+      var ed = lastDay.getDate();
+
+      var s = sy + "-" + this.add0(sm) + "-" + this.add0(sd) + " 00:00:00"; //开始
+      var e = ey + "-" +this.add0(em) + "-" + this.add0(ed) + " 23:59:59"; //结束
+      var s1 = this.dateToMs(s)
+        .toString()
+        .substr(0, 10);
+      var e1 = this.dateToMs(e)
+        .toString()
+        .substr(0, 10);
+      this.params_2.begin_time = s1.toString();
+      this.params_2.end_time = e1.toString();
+      this.getadata_2();
     },
     changeMouth_2(value) {
       //  this.changeMouth2=value
@@ -388,67 +470,77 @@ export default {
       let result = new Date(date).getTime(); //getTime获取毫秒数
       return result;
     },
-    
+
     showDay() {
-   var startStop = new Array();
-    
-//返回上一个月的第一天Date类型
-         this.getPriorMonthFirstDay = function (year, month) {
-        //年份为0代表,是本年的第一月,所以不能减  
+      var startStop = new Array();
+
+      //返回上一个月的第一天Date类型
+      this.getPriorMonthFirstDay = function(year, month) {
+        //年份为0代表,是本年的第一月,所以不能减
         if (month == 0) {
-            month = 11; //月份为上年的最后月份  
-            year--; //年份减1  
-            return new Date(year, month, 1);
+          month = 11; //月份为上年的最后月份
+          year--; //年份减1
+          return new Date(year, month, 1);
         }
-        //否则,只减去月份  
+        //否则,只减去月份
         month--;
-        return new Date(year, month, 1);;
-    };
-   
-  //获得某年月的天数
-    this.getMonthDays = function (year, month) {
-        //本月第一天 1-31  
+        return new Date(year, month, 1);
+      };
+
+      //获得某年月的天数
+      this.getMonthDays = function(year, month) {
+        //本月第一天 1-31
         var relativeDate = new Date(year, month, 1);
-        //获得当前月份0-11  
+        //获得当前月份0-11
         var relativeMonth = relativeDate.getMonth();
-        //获得当前年份4位年  
+        //获得当前年份4位年
         var relativeYear = relativeDate.getFullYear();
 
-        //当为12月的时候年份需要加1  
-        //月份需要更新为0 也就是下一年的第一个月  
+        //当为12月的时候年份需要加1
+        //月份需要更新为0 也就是下一年的第一个月
         if (relativeMonth == 11) {
-            relativeYear++;
-            relativeMonth = 0;
+          relativeYear++;
+          relativeMonth = 0;
         } else {
-            //否则只是月份增加,以便求的下一月的第一天  
-            relativeMonth++;
+          //否则只是月份增加,以便求的下一月的第一天
+          relativeMonth++;
         }
-        //一天的毫秒数  
+        //一天的毫秒数
         var millisecond = 1000 * 60 * 60 * 24;
-        //下月的第一天  
+        //下月的第一天
         var nextMonthDayOne = new Date(relativeYear, relativeMonth, 1);
-        //返回得到上月的最后一天,也就是本月总天数  
+        //返回得到上月的最后一天,也就是本月总天数
         return new Date(nextMonthDayOne.getTime() - millisecond).getDate();
-    };
-     //获取当前时间
-     var currentDate = new Date();
-     //获得当前月份0-11
-     var currentMonth = currentDate.getMonth();
-     //获得当前年份4位年
-     var currentYear = currentDate.getFullYear();
-     //获得上一个月的第一天
-     var priorMonthFirstDay = this.getPriorMonthFirstDay(currentYear, currentMonth);
-     //获得上一月的最后一天
-     var priorMonthLastDay = new Date(priorMonthFirstDay.getFullYear(), priorMonthFirstDay.getMonth(), this.getMonthDays(priorMonthFirstDay.getFullYear(), priorMonthFirstDay.getMonth()));
-   
-   var sy = priorMonthFirstDay.getFullYear();  
-     var sm = priorMonthFirstDay.getMonth() + 1;
-     var sd = priorMonthFirstDay.getDate();
-     var ey = priorMonthLastDay.getFullYear();  
-     var em = priorMonthLastDay.getMonth() + 1;
-     var ed = priorMonthLastDay.getDate();
- 	var s = sy+'-'+this.add0(sm)+'-'+this.add0(sd)+' 00:00:00';//开始
- 	var e = ey+'-'+this.add0(em)+'-'+this.add0(ed)+' 23:59:59';//结束
+      };
+      //获取当前时间
+      var currentDate = new Date();
+      //获得当前月份0-11
+      var currentMonth = currentDate.getMonth();
+      //获得当前年份4位年
+      var currentYear = currentDate.getFullYear();
+      //获得上一个月的第一天
+      var priorMonthFirstDay = this.getPriorMonthFirstDay(
+        currentYear,
+        currentMonth
+      );
+      //获得上一月的最后一天
+      var priorMonthLastDay = new Date(
+        priorMonthFirstDay.getFullYear(),
+        priorMonthFirstDay.getMonth(),
+        this.getMonthDays(
+          priorMonthFirstDay.getFullYear(),
+          priorMonthFirstDay.getMonth()
+        )
+      );
+
+      var sy = priorMonthFirstDay.getFullYear();
+      var sm = priorMonthFirstDay.getMonth() + 1;
+      var sd = priorMonthFirstDay.getDate();
+      var ey = priorMonthLastDay.getFullYear();
+      var em = priorMonthLastDay.getMonth() + 1;
+      var ed = priorMonthLastDay.getDate();
+      var s = sy + "-" + this.add0(sm) + "-" + this.add0(sd) + " 00:00:00"; //开始
+      var e = ey + "-" + this.add0(em) + "-" + this.add0(ed) + " 23:59:59"; //结束
       var s1 = this.dateToMs(s)
         .toString()
         .substr(0, 10);
@@ -457,68 +549,78 @@ export default {
         .substr(0, 10);
       this.params_1.begin_time = s1.toString();
       this.params_1.end_time = e1.toString();
-    this.getadata_1() 
+      this.getadata_1();
     },
     showDay_2() {
-   var startStop = new Array();
-    
-//返回上一个月的第一天Date类型
-         this.getPriorMonthFirstDay = function (year, month) {
-        //年份为0代表,是本年的第一月,所以不能减  
+      var startStop = new Array();
+
+      //返回上一个月的第一天Date类型
+      this.getPriorMonthFirstDay = function(year, month) {
+        //年份为0代表,是本年的第一月,所以不能减
         if (month == 0) {
-            month = 11; //月份为上年的最后月份  
-            year--; //年份减1  
-            return new Date(year, month, 1);
+          month = 11; //月份为上年的最后月份
+          year--; //年份减1
+          return new Date(year, month, 1);
         }
-        //否则,只减去月份  
+        //否则,只减去月份
         month--;
-        return new Date(year, month, 1);;
-    };
-   
-  //获得某年月的天数
-    this.getMonthDays = function (year, month) {
-        //本月第一天 1-31  
+        return new Date(year, month, 1);
+      };
+
+      //获得某年月的天数
+      this.getMonthDays = function(year, month) {
+        //本月第一天 1-31
         var relativeDate = new Date(year, month, 1);
-        //获得当前月份0-11  
+        //获得当前月份0-11
         var relativeMonth = relativeDate.getMonth();
-        //获得当前年份4位年  
+        //获得当前年份4位年
         var relativeYear = relativeDate.getFullYear();
 
-        //当为12月的时候年份需要加1  
-        //月份需要更新为0 也就是下一年的第一个月  
+        //当为12月的时候年份需要加1
+        //月份需要更新为0 也就是下一年的第一个月
         if (relativeMonth == 11) {
-            relativeYear++;
-            relativeMonth = 0;
+          relativeYear++;
+          relativeMonth = 0;
         } else {
-            //否则只是月份增加,以便求的下一月的第一天  
-            relativeMonth++;
+          //否则只是月份增加,以便求的下一月的第一天
+          relativeMonth++;
         }
-        //一天的毫秒数  
+        //一天的毫秒数
         var millisecond = 1000 * 60 * 60 * 24;
-        //下月的第一天  
+        //下月的第一天
         var nextMonthDayOne = new Date(relativeYear, relativeMonth, 1);
-        //返回得到上月的最后一天,也就是本月总天数  
+        //返回得到上月的最后一天,也就是本月总天数
         return new Date(nextMonthDayOne.getTime() - millisecond).getDate();
-    };
-     //获取当前时间
-     var currentDate = new Date();
-     //获得当前月份0-11
-     var currentMonth = currentDate.getMonth();
-     //获得当前年份4位年
-     var currentYear = currentDate.getFullYear();
-     //获得上一个月的第一天
-     var priorMonthFirstDay = this.getPriorMonthFirstDay(currentYear, currentMonth);
-     //获得上一月的最后一天
-     var priorMonthLastDay = new Date(priorMonthFirstDay.getFullYear(), priorMonthFirstDay.getMonth(), this.getMonthDays(priorMonthFirstDay.getFullYear(), priorMonthFirstDay.getMonth()));
-   
-   var sy = priorMonthFirstDay.getFullYear();  
-     var sm = priorMonthFirstDay.getMonth() + 1;
-     var sd = priorMonthFirstDay.getDate();
-     var ey = priorMonthLastDay.getFullYear();  
-     var em = priorMonthLastDay.getMonth() + 1;
-     var ed = priorMonthLastDay.getDate();
- 	var s = sy+'-'+this.add0(sm)+'-'+this.add0(sd)+' 00:00:00';//开始
- 	var e = ey+'-'+this.add0(em)+'-'+this.add0(ed)+' 23:59:59';//结束
+      };
+      //获取当前时间
+      var currentDate = new Date();
+      //获得当前月份0-11
+      var currentMonth = currentDate.getMonth();
+      //获得当前年份4位年
+      var currentYear = currentDate.getFullYear();
+      //获得上一个月的第一天
+      var priorMonthFirstDay = this.getPriorMonthFirstDay(
+        currentYear,
+        currentMonth
+      );
+      //获得上一月的最后一天
+      var priorMonthLastDay = new Date(
+        priorMonthFirstDay.getFullYear(),
+        priorMonthFirstDay.getMonth(),
+        this.getMonthDays(
+          priorMonthFirstDay.getFullYear(),
+          priorMonthFirstDay.getMonth()
+        )
+      );
+
+      var sy = priorMonthFirstDay.getFullYear();
+      var sm = priorMonthFirstDay.getMonth() + 1;
+      var sd = priorMonthFirstDay.getDate();
+      var ey = priorMonthLastDay.getFullYear();
+      var em = priorMonthLastDay.getMonth() + 1;
+      var ed = priorMonthLastDay.getDate();
+      var s = sy + "-" + this.add0(sm) + "-" + this.add0(sd) + " 00:00:00"; //开始
+      var e = ey + "-" + this.add0(em) + "-" + this.add0(ed) + " 23:59:59"; //结束
       var s1 = this.dateToMs(s)
         .toString()
         .substr(0, 10);
@@ -527,68 +629,78 @@ export default {
         .substr(0, 10);
       this.params_2.begin_time = s1.toString();
       this.params_2.end_time = e1.toString();
-    this.getadata_2() 
+      this.getadata_2();
     },
     showWeek() {
-   var startStop = new Array();
-       
-//返回下个月的第一天Date类型
-         this.getNextMonthFirstDay = function (year, month) {
-        //年份为0代表,是本年的第一月,所以不能减  
+      var startStop = new Array();
+
+      //返回下个月的第一天Date类型
+      this.getNextMonthFirstDay = function(year, month) {
+        //年份为0代表,是本年的第一月,所以不能减
         if (month == 11) {
-            month = 0; //月份为上年的最后月份  
-            year++; //年份减1  
-            return new Date(year, month, 1);
+          month = 0; //月份为上年的最后月份
+          year++; //年份减1
+          return new Date(year, month, 1);
         }
-        //否则,只减去月份  
+        //否则,只减去月份
         month++;
-        return new Date(year, month, 1);;
-    };
+        return new Date(year, month, 1);
+      };
       //获得某年月的天数
-    this.getMonthDays = function (year, month) {
-        //本月第一天 1-31  
+      this.getMonthDays = function(year, month) {
+        //本月第一天 1-31
         var relativeDate = new Date(year, month, 1);
-        //获得当前月份0-11  
+        //获得当前月份0-11
         var relativeMonth = relativeDate.getMonth();
-        //获得当前年份4位年  
+        //获得当前年份4位年
         var relativeYear = relativeDate.getFullYear();
 
-        //当为12月的时候年份需要加1  
-        //月份需要更新为0 也就是下一年的第一个月  
+        //当为12月的时候年份需要加1
+        //月份需要更新为0 也就是下一年的第一个月
         if (relativeMonth == 11) {
-            relativeYear++;
-            relativeMonth = 0;
+          relativeYear++;
+          relativeMonth = 0;
         } else {
-            //否则只是月份增加,以便求的下一月的第一天  
-            relativeMonth++;
+          //否则只是月份增加,以便求的下一月的第一天
+          relativeMonth++;
         }
-        //一天的毫秒数  
+        //一天的毫秒数
         var millisecond = 1000 * 60 * 60 * 24;
-        //下月的第一天  
+        //下月的第一天
         var nextMonthDayOne = new Date(relativeYear, relativeMonth, 1);
-        //返回得到上月的最后一天,也就是本月总天数  
+        //返回得到上月的最后一天,也就是本月总天数
         return new Date(nextMonthDayOne.getTime() - millisecond).getDate();
-    };
-     //获取当前时间
-     var currentDate = new Date();
-     //获得当前月份0-11
-     var currentMonth = currentDate.getMonth();
-     //获得当前年份4位年
-     var currentYear = currentDate.getFullYear();
-     //获得上一个月的第一天
-     var priorMonthFirstDay = this.getNextMonthFirstDay(currentYear, currentMonth);
-     //获得上一月的最后一天
-     var priorMonthLastDay = new Date(priorMonthFirstDay.getFullYear(), priorMonthFirstDay.getMonth(), this.getMonthDays(priorMonthFirstDay.getFullYear(), priorMonthFirstDay.getMonth()));
-   
-   var sy = priorMonthFirstDay.getFullYear();  
-     var sm = priorMonthFirstDay.getMonth() + 1;
-     var sd = priorMonthFirstDay.getDate();
-     var ey = priorMonthLastDay.getFullYear();  
-     var em = priorMonthLastDay.getMonth() + 1;
-     var ed = priorMonthLastDay.getDate();
- 	var s = sy+'-'+this.add0(sm)+'-'+this.add0(sd)+' 00:00:00';//开始
-   var e = ey+'-'+this.add0(em)+'-'+this.add0(ed)+' 23:59:59';//结束
-   console.log(s,e)
+      };
+      //获取当前时间
+      var currentDate = new Date();
+      //获得当前月份0-11
+      var currentMonth = currentDate.getMonth();
+      //获得当前年份4位年
+      var currentYear = currentDate.getFullYear();
+      //获得上一个月的第一天
+      var priorMonthFirstDay = this.getNextMonthFirstDay(
+        currentYear,
+        currentMonth
+      );
+      //获得上一月的最后一天
+      var priorMonthLastDay = new Date(
+        priorMonthFirstDay.getFullYear(),
+        priorMonthFirstDay.getMonth(),
+        this.getMonthDays(
+          priorMonthFirstDay.getFullYear(),
+          priorMonthFirstDay.getMonth()
+        )
+      );
+
+      var sy = priorMonthFirstDay.getFullYear();
+      var sm = priorMonthFirstDay.getMonth() + 1;
+      var sd = priorMonthFirstDay.getDate();
+      var ey = priorMonthLastDay.getFullYear();
+      var em = priorMonthLastDay.getMonth() + 1;
+      var ed = priorMonthLastDay.getDate();
+      var s = sy + "-" + this.add0(sm) + "-" + this.add0(sd) + " 00:00:00"; //开始
+      var e = ey + "-" + this.add0(em) + "-" + this.add0(ed) + " 23:59:59"; //结束
+      console.log(s, e);
       var s1 = this.dateToMs(s)
         .toString()
         .substr(0, 10);
@@ -597,67 +709,77 @@ export default {
         .substr(0, 10);
       this.params_1.begin_time = s1.toString();
       this.params_1.end_time = e1.toString();
-    this.getadata_1() 
+      this.getadata_1();
     },
     showWeek_2() {
- var startStop = new Array();
-       
-//返回下个月的第一天Date类型
-         this.getNextMonthFirstDay = function (year, month) {
-        //年份为0代表,是本年的第一月,所以不能减  
+      var startStop = new Array();
+
+      //返回下个月的第一天Date类型
+      this.getNextMonthFirstDay = function(year, month) {
+        //年份为0代表,是本年的第一月,所以不能减
         if (month == 11) {
-            month = 0; //月份为上年的最后月份  
-            year++; //年份减1  
-            return new Date(year, month, 1);
+          month = 0; //月份为上年的最后月份
+          year++; //年份减1
+          return new Date(year, month, 1);
         }
-        //否则,只减去月份  
+        //否则,只减去月份
         month++;
-        return new Date(year, month, 1);;
-    };
+        return new Date(year, month, 1);
+      };
       //获得某年月的天数
-    this.getMonthDays = function (year, month) {
-        //本月第一天 1-31  
+      this.getMonthDays = function(year, month) {
+        //本月第一天 1-31
         var relativeDate = new Date(year, month, 1);
-        //获得当前月份0-11  
+        //获得当前月份0-11
         var relativeMonth = relativeDate.getMonth();
-        //获得当前年份4位年  
+        //获得当前年份4位年
         var relativeYear = relativeDate.getFullYear();
 
-        //当为12月的时候年份需要加1  
-        //月份需要更新为0 也就是下一年的第一个月  
+        //当为12月的时候年份需要加1
+        //月份需要更新为0 也就是下一年的第一个月
         if (relativeMonth == 11) {
-            relativeYear++;
-            relativeMonth = 0;
+          relativeYear++;
+          relativeMonth = 0;
         } else {
-            //否则只是月份增加,以便求的下一月的第一天  
-            relativeMonth++;
+          //否则只是月份增加,以便求的下一月的第一天
+          relativeMonth++;
         }
-        //一天的毫秒数  
+        //一天的毫秒数
         var millisecond = 1000 * 60 * 60 * 24;
-        //下月的第一天  
+        //下月的第一天
         var nextMonthDayOne = new Date(relativeYear, relativeMonth, 1);
-        //返回得到上月的最后一天,也就是本月总天数  
+        //返回得到上月的最后一天,也就是本月总天数
         return new Date(nextMonthDayOne.getTime() - millisecond).getDate();
-    };
-     //获取当前时间
-     var currentDate = new Date();
-     //获得当前月份0-11
-     var currentMonth = currentDate.getMonth();
-     //获得当前年份4位年
-     var currentYear = currentDate.getFullYear();
-     //获得上一个月的第一天
-     var priorMonthFirstDay = this.getNextMonthFirstDay(currentYear, currentMonth);
-     //获得上一月的最后一天
-     var priorMonthLastDay = new Date(priorMonthFirstDay.getFullYear(), priorMonthFirstDay.getMonth(), this.getMonthDays(priorMonthFirstDay.getFullYear(), priorMonthFirstDay.getMonth()));
-   
-   var sy = priorMonthFirstDay.getFullYear();  
-     var sm = priorMonthFirstDay.getMonth() + 1;
-     var sd = priorMonthFirstDay.getDate();
-     var ey = priorMonthLastDay.getFullYear();  
-     var em = priorMonthLastDay.getMonth() + 1;
-     var ed = priorMonthLastDay.getDate();
- 	var s = sy+'-'+this.add0(sm)+'-'+this.add0(sd)+' 00:00:00';//开始
-   var e = ey+'-'+this.add0(em)+'-'+this.add0(ed)+' 23:59:59';//结束
+      };
+      //获取当前时间
+      var currentDate = new Date();
+      //获得当前月份0-11
+      var currentMonth = currentDate.getMonth();
+      //获得当前年份4位年
+      var currentYear = currentDate.getFullYear();
+      //获得上一个月的第一天
+      var priorMonthFirstDay = this.getNextMonthFirstDay(
+        currentYear,
+        currentMonth
+      );
+      //获得上一月的最后一天
+      var priorMonthLastDay = new Date(
+        priorMonthFirstDay.getFullYear(),
+        priorMonthFirstDay.getMonth(),
+        this.getMonthDays(
+          priorMonthFirstDay.getFullYear(),
+          priorMonthFirstDay.getMonth()
+        )
+      );
+
+      var sy = priorMonthFirstDay.getFullYear();
+      var sm = priorMonthFirstDay.getMonth() + 1;
+      var sd = priorMonthFirstDay.getDate();
+      var ey = priorMonthLastDay.getFullYear();
+      var em = priorMonthLastDay.getMonth() + 1;
+      var ed = priorMonthLastDay.getDate();
+      var s = sy + "-" + this.add0(sm) + "-" + this.add0(sd) + " 00:00:00"; //开始
+      var e = ey + "-" + this.add0(em) + "-" + this.add0(ed) + " 23:59:59"; //结束
       var s1 = this.dateToMs(s)
         .toString()
         .substr(0, 10);
@@ -666,7 +788,7 @@ export default {
         .substr(0, 10);
       this.params_2.begin_time = s1.toString();
       this.params_2.end_time = e1.toString();
-    this.getadata_2() 
+      this.getadata_2();
     },
     showMouth() {
       //起止日期数组
@@ -678,10 +800,11 @@ export default {
       //获得当前年份4位年
       var currentYear = currentDate.getFullYear();
       //求出本月第一天
-      var firstDay = new Date(currentYear, currentMonth, 1);//本年月的第一天
+      var firstDay = new Date(currentYear, currentMonth, 1); //本年月的第一天
 
       //　month的值域为0～11，0代表1月，11表代表12月；
-      if (currentMonth == 11) {   //月份需要更新为0 也就是下一年的第一个月
+      if (currentMonth == 11) {
+        //月份需要更新为0 也就是下一年的第一个月
         currentYear++;
         currentMonth = 0; //就为
       } else {
@@ -689,7 +812,7 @@ export default {
         currentMonth++;
       }
       //一天的毫秒数
-      var millisecond = 1000 * 60 * 60 * 24;  //一天
+      var millisecond = 1000 * 60 * 60 * 24; //一天
       //-
       var nextMonthDayOne = new Date(currentYear, currentMonth, 1);
       //求出上月的最后一天
@@ -701,10 +824,9 @@ export default {
       var ey = lastDay.getFullYear();
       var em = lastDay.getMonth() + 1;
       var ed = lastDay.getDate();
-     
+
       var s = sy + "-" + this.add0(sm) + "-" + this.add0(sd) + " 00:00:00"; //开始
       var e = ey + "-" + this.add0(em) + "-" + this.add0(ed) + " 23:59:59"; //结束
-       console.log(s,e)
       var s1 = this.dateToMs(s)
         .toString()
         .substr(0, 10);
@@ -713,14 +835,13 @@ export default {
         .substr(0, 10);
       this.params_1.begin_time = s1.toString();
       this.params_1.end_time = e1.toString();
-    this.getadata_1() 
-
+      this.getadata_1();
     },
-    handleClick(result){
-console.log(result)
+    handleClick(result) {
+      console.log(result);
     },
     showMouth_2() {
- //起止日期数组
+      //起止日期数组
       var startStop = new Array();
       //获取当前时间
       var currentDate = new Date();
@@ -729,10 +850,11 @@ console.log(result)
       //获得当前年份4位年
       var currentYear = currentDate.getFullYear();
       //求出本月第一天
-      var firstDay = new Date(currentYear, currentMonth, 1);//本年月的第一天
+      var firstDay = new Date(currentYear, currentMonth, 1); //本年月的第一天
 
       //　month的值域为0～11，0代表1月，11表代表12月；
-      if (currentMonth == 11) {   //月份需要更新为0 也就是下一年的第一个月
+      if (currentMonth == 11) {
+        //月份需要更新为0 也就是下一年的第一个月
         currentYear++;
         currentMonth = 0; //就为
       } else {
@@ -740,7 +862,7 @@ console.log(result)
         currentMonth++;
       }
       //一天的毫秒数
-      var millisecond = 1000 * 60 * 60 * 24;  //一天
+      var millisecond = 1000 * 60 * 60 * 24; //一天
       //-
       var nextMonthDayOne = new Date(currentYear, currentMonth, 1);
       //求出上月的最后一天
@@ -762,7 +884,7 @@ console.log(result)
         .substr(0, 10);
       this.params_2.begin_time = s1.toString();
       this.params_2.end_time = e1.toString();
-    this.getadata_2() 
+      this.getadata_2();
     },
     changeStart(event) {
       if (this.hadClick == true) {
@@ -909,20 +1031,18 @@ console.log(result)
           }
         });
     },
-        getadata_2() {
-      this.$apis.census
-        .screen_teacher_classhour(this.params_2)
-        .then(res => {
-          this.tableData_2 = [];
-          if (
-            Object.prototype.toString.call(res.data.data.data).substr(8, 5) ==
-            Array
-          ) {
-            this.tableData_2 = res.data.data.data;
-          } else {
-            this.tableData_2 = [...res.data.data.data];
-          }
-        });
+    getadata_2() {
+      this.$apis.census.screen_teacher_classhour(this.params_2).then(res => {
+        this.tableData_2 = [];
+        if (
+          Object.prototype.toString.call(res.data.data.data).substr(8, 5) ==
+          Array
+        ) {
+          this.tableData_2 = res.data.data.data;
+        } else {
+          this.tableData_2 = [...res.data.data.data];
+        }
+      });
     },
     next() {
       this.params.page++;

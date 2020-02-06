@@ -496,7 +496,7 @@
           <el-form-item label="试听情况">
     <el-radio-group v-model="audition_result.audition_status">
       <el-radio :label='1' >试听成功</el-radio>
-      <el-radio :label='2' >视听失败</el-radio>
+      <el-radio :label='2' >试听失败</el-radio>
     </el-radio-group>
   </el-form-item>
         <el-form-item label="备  注" >
@@ -736,7 +736,7 @@ export default {
             });
           } else {
             this.$message({
-              message: "填写的视听有误，请核对",
+              message: "填写的试听有误，请核对",
               type: "warning"
             });
           }

@@ -70,11 +70,7 @@
     >
       
       <el-table-column type="selection" fixed="left" @click="handleClick(scope.row)" width="55"></el-table-column>
-      <el-table-column
- 
-      type="index"
-      width="50">
-    </el-table-column>
+  
       <el-table-column :show-overflow-tooltip="true" align="center" label="学生姓名" width="150">
         <template slot-scope="scope">
           <span>{{ scope.row.username }}</span>

@@ -61,4 +61,19 @@ export default {
         let url = '/api/api_screen_teacher_classhour'
         return shuju.getdata(url, params)
       },
+      
+      onlevel_subject(params) { //一级科目表格数据
+        let url = '/api/api_onlevel_subject'
+        return shuju.getdata(url, params)
+      },
+            
+      total_onlevel_subject(params) { //一级科目表格数据
+        let url = '/api/api_total_onlevel_subject'
+        return shuju.getdata(url, params)
+      },
+      
+      profit_info(params) { //今年和去年12个月的毛利
+        let url = '/api/api_profit_info'
+        return shuju.getdata(url, params)
+      },
 }
