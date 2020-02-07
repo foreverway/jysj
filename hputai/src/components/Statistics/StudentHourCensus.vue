@@ -780,7 +780,7 @@ export default {
         color: ["#5CBB7A"],
 
         title: {
-          text: "学生课时T15排行",
+          text: "学生课时TOP15排行",
           lineHeight: 40,
           // left: 'center',
           //  subtext: "三级科目Top15",
@@ -830,7 +830,7 @@ export default {
       let myLine = echarts.init(document.getElementById("main1"));
       myLine.setOption({
         title: {
-          text: "班主任课时T15排行",
+          text: "班主任课时TOP15排行",
           lineHeight: 40,
           // left: 'center',
           //  subtext: "三级科目Top15",

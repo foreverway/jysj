@@ -146,6 +146,16 @@
             <el-radio-button label="2">已上</el-radio-button>
             <el-radio-button label="3">待上</el-radio-button>
           </el-radio-group>
+              <el-cascader
+      placeholder="选择一级科目"
+      v-model="subject_id2"
+      filterable
+      :options="options"
+      clearable
+      :props="{ expandTrigger: 'hover' }"
+      :show-all-levels="false"
+      @change="handleChange_2"
+    ></el-cascader>
         </div>
         <div></div>
          <div>
@@ -222,17 +232,20 @@ export default {
       end_time_1: "", //自由选择时间的绑定值1
       begin_time_2: "", //自由选择时间的绑定值1
       end_time_2: "", //自由选择时间的绑定值1
+      subject_id2:'',//科目一的选择
        begin_time_3: "", //总数组的绑定值
       end_time_3: "", //总数组的绑定值
       one: {
         begin_time: "",
         end_time: "",
-        status: "1"
+        status: "1",
+        // subject_id:''
       },
       three: {
         begin_time: "",
         end_time: "",
-        status: "1"
+        status: "1",
+         subject_id:''
       },
       hadClick:false,
       hadClick_2:false,//是否点击了今天，本周，或本月
@@ -579,6 +592,13 @@ export default {
       this.getadata();
       delete  this.params.subject_ids
     },
+           handleChange_2(targetName) {
+      //选择科目
+      var lastName=targetName[0]?targetName[0]:''
+      this.three.subject_id = lastName;
+     this.lineChart2();
+      // delete  this.params.subject_ids
+    },
     changeEnd_2(event) {
       if( this.hadClick_2==true){
            this.three.begin_time = "";
@@ -742,10 +762,9 @@ export default {
         color: ["#5CBB7A"],
 
         title: {
-          text: "三级科目Top15",
+          text: "科目Top20",
           lineHeight: 40,
           // left: 'center',
-          //  subtext: "三级科目Top15",
           textStyle:{
 fontsize:'16px',
  fontWeight : 'bolder'

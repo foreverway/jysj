@@ -82,7 +82,13 @@
       <el-table-column align="center" label="已排课时" prop="classhour"></el-table-column>
       <el-table-column align="center" label="实上课时" prop="true_classhour"></el-table-column>
       <el-table-column align="center" label="学生核准课时" width="120" prop="student_classhour"></el-table-column>
-      <el-table-column align="center" label="试听情况"  prop="audition_text"></el-table-column>
+      <el-table-column align="center" label="试听情况"  width="120" prop="audition_text">
+        <template slot-scope="scope" >
+          <span v-show="scope.row.audition_text.slice(0,4)=='试听成功'" style="color:green">{{scope.row.audition_text}}</span>
+          <span v-show="scope.row.audition_text.slice(0,4)=='试听失败'" style="color:red">{{scope.row.audition_text}}</span>
+
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="状态" prop="attendance_status">
         <template slot-scope="scope">
           <span v-show="scope.row.attendance_status==2" style="color:red">已考勤-异常</span>
@@ -90,7 +96,7 @@
           <span v-show="scope.row.attendance_status==0" style>待考勤</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="操作" width="250px" fixed="right">
+      <el-table-column label="操作" width="250px" fixed="right">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -113,29 +119,30 @@
                    <el-button
             size="mini"
             v-if="scope.row.course_txt=='一对一试听'&&scope.row.audition_text==''"
-            style="background-color:#409EFF;color:white;"
+            style="background-color:#E6A23C;color:white;"
             @click="audition(scope.row.course_id)"
           >试听情况</el-button>
-          <div
-            v-show="scope.row.attendance_status==2&&scope.row.is_forward!==1"
-            style="color:#169BD5"
-          >
-            <el-button type="danger" size="mini" @click="payMoney(scope.row)">结转</el-button>
-          </div>
-          <div v-show="scope.row.attendance_status==1" style="color:#169BD5"></div>
-          <div v-show="scope.row.attendance_status==0">
+          <!-- <div
+          
+          > -->
+            <el-button   v-show="scope.row.attendance_status==2&&scope.row.is_forward!==1"
+            style="color:#169BD5" type="danger" size="mini" @click="payMoney(scope.row)">结转</el-button>
+          <!-- </div> -->
+          <!-- <div v-show="scope.row.attendance_status==1" style="color:#169BD5"></div> -->
+          <!-- <div v-show="scope.row.attendance_status==0" style="margin:0 10px;">  -->
             <el-button
               v-if="scope.row.is_feedback==1"
+              v-show="scope.row.attendance_status==0"
               size="mini"
               @click="normal(scope.row)"
               type="success"
             >正常</el-button>
-            <el-button size="mini" @click="unnormal(scope.row)" type="danger">异动</el-button>
-          </div>
+            <el-button size="mini" v-show="scope.row.attendance_status==0" @click="unnormal(scope.row)" type="danger">异动</el-button>
+          <!-- </div> -->
 
-          <span v-show="scope.row.is_forward==1" style="color:#169BD5">
-            <el-button @click="payMoney(scope.row)" type="info" disabled size="mini">结转</el-button>
-          </span>
+          <!-- <span v-show="scope.row.is_forward==1" style="color:#169BD5"> -->
+            <el-button @click="payMoney(scope.row)" v-show="scope.row.is_forward==1"  type="info" disabled size="mini">结转</el-button>
+          <!-- </span> -->
         </template>
       </el-table-column>
     </el-table>
@@ -563,6 +570,7 @@ export default {
         { value: 2, label: "已考勤-异常" }
       ],
             check_type: [
+              { value: 0, label: "全部" },
         { value: 1, label: "正课" },
         { value: 2, label: "试听" },
         { value: 3, label: "辅导" }
@@ -726,7 +734,8 @@ export default {
     },
         audition_post(result) {
           // this.audition_result.course_id= result.row.course_id
-        this.$apis.common.audition_info(this.audition_result).then(res => {
+          if(this.audition_result.audition_remarks){
+       this.$apis.common.audition_info(this.audition_result).then(res => {
           if (res.data.code == 1) {
             this.getadata();
             this.audition_show = false;
@@ -741,6 +750,13 @@ export default {
             });
           }
         });
+          }else{
+               this.$message({
+              message: "备注不可为空，请重试",
+              type: "warning"
+            })
+          }
+ 
 
     },
     // 查看详情
@@ -847,6 +863,7 @@ this.audition_show=true
 this.audition_result.course_id=result
     },
     getadata() {
+      this.form.page=1
       this.$apis.students.attendance_list(this.form).then(res => {
         if (res.data.code == 1) {
           this.msg = res.data;

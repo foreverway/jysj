@@ -24,6 +24,7 @@
       placeholder="选择学生类型"
       @change="Change_sbuject"
     >
+    <el-option label="全部" value="0"></el-option>
       <el-option label="VIP学生" value="3"></el-option>
       <el-option label="保读" value="2"></el-option>
         <el-option label="普通" value="1"></el-option>
