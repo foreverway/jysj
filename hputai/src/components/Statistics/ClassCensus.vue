@@ -136,7 +136,7 @@
         </div>
       </div>
 
-      <div id="main1" style="width:100%;height:400px;"></div>
+      <div id="main1" style="width:100%;height:600px;"></div>
     </div>
     <div class="bgc">
       <div class="flex_all">
@@ -188,7 +188,7 @@
           ></el-date-picker>
         </div>
       </div>
-      <div id="main3" style="width:100%;height:400px;"></div>
+      <div id="main3" style="width:100%;height:500px;"></div>
     </div>
   </div>
 </template>
@@ -222,6 +222,8 @@ export default {
       },
       options_:[],//科目的原来数据
       options:[],//我们需要的科目数据
+         options_11:[],//科目的原来数据
+      options11:[],//我们需要的科目数据
       classMouth: [],
       yipai_classhour: [],
       yishang_classhour: [],
@@ -794,11 +796,14 @@ fontsize:'16px',
       });
       this.$apis.census.subjects_ranking(this.three).then(res => {
         if (res.data.code == 1) {
+            this.top15_3=[]
           for (let i = 0; i < res.data.data.length; i++) {
-            this.top15_3[ i] = [];
-            this.top15_3[ i].unshift(res.data.data[i].subject_name);
-            this.top15_3[ i].unshift(res.data.data[i].classhour);
+            this.top15_3[i] = [];
+            this.top15_3[i].unshift(res.data.data[i].subject_name);
+            this.top15_3[i].unshift(res.data.data[i].classhour);
           }
+          console.log(this.top15_3)
+          console.log(res.data.data)
           myLine2.setOption({
             dataset: {
               source: this.top15_3
@@ -811,10 +816,8 @@ fontsize:'16px',
       let myLine = echarts.init(document.getElementById("main1"));
       myLine.setOption({
            title: {
-          text: "一级科目Top15",
+          text: "一级科目",
           lineHeight: 40,
-          // left: 'center',
-          //  subtext: "三级科目Top15",
           textStyle:{
 fontsize:'16px',
  fontWeight : 'bolder'
@@ -1000,7 +1003,19 @@ fontsize:'16px',
         this.tableData = res.data.data;
       }
     });
+       
+      //获取科目的数据
+      this.$apis.census.get_parent_info({subject_level:1}).then(res => {
+        if (res.data.code == 1) {
+          this.options_11=[]
 
+            for(let i=0;i<res.data.data.length;i++){
+               this.options_.push({value:res.data.data[i].id,label:res.data.data[i].subject_name})
+            }
+        this.options11 =  this.options_11
+        }
+    });
+  
   }
 };
 </script>

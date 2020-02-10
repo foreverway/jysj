@@ -67,7 +67,7 @@
       ></el-pagination>
     </span> -->
     <div class="echarts_1"  style='margin:20px 0;'>
-      <div style="width:35%;height:450px;" class="bgc">
+      <div style="width:44%;height:450px;" class="bgc">
         <div class="block" style="margin:auto;width:200px;">
           <el-date-picker
             @change="changeMouth"
