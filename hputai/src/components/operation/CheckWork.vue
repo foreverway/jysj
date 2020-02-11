@@ -836,13 +836,16 @@ export default {
       this.getadata();
     },
     next() {
-      this.form.page++;
+  
+      this.form.page+1;
+          console.log( this.form.page)
       this.getadata();
     },
     prev() {
       //上一页
       if (this.form.page > 1) {
-        this.form.page--;
+        this.form.page-1;
+        console.log( this.form.page)
         this.getadata();
       }
     },
@@ -863,7 +866,7 @@ this.audition_show=true
 this.audition_result.course_id=result
     },
     getadata() {
-      this.form.page=1
+      // this.form.page=1
       this.$apis.students.attendance_list(this.form).then(res => {
         if (res.data.code == 1) {
           this.msg = res.data;
