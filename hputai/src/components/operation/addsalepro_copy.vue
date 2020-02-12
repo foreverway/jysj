@@ -11,37 +11,18 @@
           <el-date-picker type="date" placeholder="选择日期" v-model="form.dtime"></el-date-picker>
         </el-col>
       </el-form-item>
-
-      <el-form-item label="跟进人" style="width:335px">
-          <el-select v-model="form.options_team" placeholder="请选择" filterable clearable>
-    <el-option
-      v-for="item in options_follow_man"
-      :key="item.id"
-      :label="item.admin_name"
-      :value="item.id">
-    </el-option>
-  </el-select>
+      <el-form-item label="数据更新时间
+      " style="width:335px">
+        <el-input v-model="form.week"></el-input>
       </el-form-item>
-      
-      <el-form-item label="所属战队" style="width:335px" v-if="form.options_team!==[]">
-                 <el-select v-model="form.options_" placeholder="请选择">
-    <el-option
-      v-for="item in options_team"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value">
-    </el-option>
-  </el-select>
+      <el-form-item label="跟进人" style="width:335px">
+        <el-input v-model="form.follow_man"></el-input>
+      </el-form-item>
+      <el-form-item label="所属战队" style="width:335px">
+        <el-input v-model="form.team"></el-input>
       </el-form-item>
       <el-form-item label="战队负责人" style="width:335px">
-  <el-select v-model="form.options_follow" placeholder="请选择" filterable clearable>
-    <el-option
-      v-for="item in options_team_leader"
-      :key="item.id"
-      :label="item.admin_name"
-      :value="item.id">
-    </el-option>
-  </el-select>
+        <el-input v-model="form.team_leader"></el-input>
       </el-form-item>
       <el-form-item label="编号" style="width:335px">
         <el-input v-model="form.data_number"></el-input>
@@ -123,7 +104,7 @@
       <el-form-item label="预收金额" style="width:50%;">
         <el-input v-model="form.advance_amount"></el-input>
       </el-form-item>
-      <el-form-item label="情况及客户反馈" style="width:50%;">
+      <el-form-item label="实际跟进情况" style="width:50%;">
         <el-input type="textarea" v-model="form.feedback"></el-input>
       </el-form-item>
       <el-form-item>
@@ -165,56 +146,12 @@ export default {
         advance_strategies: "",
         advance_subject: "",
         advance_amount: "",
-        feedback: "",
-        options_follow:'',
-        options_team:'',
-        options_:''
+        feedback: ""
       },
-              options_follow_man:[],//战队负责人
-        options_team_leader:[],//跟进人
-        options_team: [{
-          value: '柠檬战队',
-          label: '柠檬战队'
-        }, {
-          value: '车厘子战队',
-          label: '车厘子战队'
-        }, {
-          value: '哆啦A梦战队',
-          label: '哆啦A梦战队'
-        }],
       money: ""
     };
   },
-  created(){
-     this.$apis.operation
-        .team_leader()
-        .then(res => {
-          if (res.data.code == 1) {
-            // this.form.options_team_leader=[]
-            this.options_team_leader=res.data.data
-          }else{
-             this.$message({
-              message: res.data.msg,
-              type: "warning"
-            });
-          }
-        })
-    this.$apis.operation
-        .banzhuren_list()
-        .then(res => {
-          if (res.data.code == 1) {
-            this.options_follow_man=[]
-this.options_follow_man=res.data.data
-          }else{
-             this.$message({
-              message: res.data.msg,
-              type: "warning"
-            });
-          }
-        })
-  },
   methods: {
-
     aaa() {
       //  history.back(-1)
       this.$router.go(-1);
