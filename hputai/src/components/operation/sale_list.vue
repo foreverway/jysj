@@ -41,30 +41,30 @@
       :header-cell-style="{background:'#f4f4f4'}"
       style="margin-top:20px"
     >
-      <el-table-column label="序号" type="index"></el-table-column>
-      <el-table-column prop="dtime" width="130px" label="数据获取时间"></el-table-column>
-      <el-table-column prop="week" width="130px" sortable label="数据更新时间"></el-table-column>
+      <el-table-column label="序号" type="index" :index="indexMethod"></el-table-column>
+      <!-- <el-table-column prop="dtime" width="130px" label="数据获取时间"></el-table-column> -->
+      <!-- <el-table-column prop="week" width="130px" sortable label="数据更新时间"></el-table-column> -->
       <el-table-column prop="follow_man" label="跟进人"></el-table-column>
-      <el-table-column prop="team" label="	所属战队"></el-table-column>
-      <el-table-column prop="team_leader" label="战队负责人"></el-table-column>
-      <el-table-column prop="data_number" label="编号"></el-table-column>
+      <!-- <el-table-column prop="team" label="	所属战队"></el-table-column> -->
+      <!-- <el-table-column prop="team_leader" label="战队负责人"></el-table-column> -->
+      <el-table-column prop="data_number" label="数据编号"></el-table-column>
       <el-table-column prop="data_student_name" label="学生姓名"></el-table-column>
       <el-table-column prop="data_tag" label="数据标签"></el-table-column>
       <el-table-column prop="m1" label="建立了有效联系 "></el-table-column>
-      <el-table-column prop="m2" label="了解客户情况"></el-table-column>
+      <!-- <el-table-column prop="m2" label="了解客户情况"></el-table-column> -->
       <el-table-column prop="m3" label="明确数据需求"></el-table-column>
-      <el-table-column prop="m4" label="建立信任"></el-table-column>
-      <el-table-column prop="m5" label="规划"></el-table-column>
+      <!-- <el-table-column prop="m4" label="建立信任"></el-table-column> -->
+      <!-- <el-table-column prop="m5" label="规划"></el-table-column> -->
       <el-table-column prop="m6" label="试听"></el-table-column>
       <el-table-column prop="m7" label="缴费方案"></el-table-column>
-      <el-table-column prop="advance_strategies" label="预收策略"></el-table-column>
-      <el-table-column prop="advance_subject" label="预收科目"></el-table-column>
-      <el-table-column prop="advance_amount" label="预收金额"></el-table-column>
-      <el-table-column prop="feedback" label="客户反馈"></el-table-column>
-      <el-table-column fixed="right" prop label="操作" width="140">
+      <!-- <el-table-column prop="advance_strategies" label="预收策略"></el-table-column> -->
+      <!-- <el-table-column prop="advance_subject" label="预收科目"></el-table-column> -->
+      <!-- <el-table-column prop="advance_amount" label="预收金额"></el-table-column> -->
+      <!-- <el-table-column prop="feedback" label="客户反馈"></el-table-column> -->
+      <el-table-column fixed="right" prop label="操作" >
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="pushToEdit(scope.row.id)">编辑</el-button>
-          <el-button @click="salepro_del(scope.row)" type="text" size="small">删除</el-button>
+          <!-- <el-button @click="salepro_del(scope.row)" type="text" size="small">删除</el-button> -->
           <!-- <el-button type="text" size="small"  @click="dialogFormVisible1=1">复制链接</el-button> -->
         </template>
       </el-table-column>
@@ -163,14 +163,14 @@ export default {
     },
 
     //序号排列
-    // indexMethod(index) {
-    //   if (this.parms.page == 1) {
-    //     return index + 1;
-    //   } else {
-    //     let page = (this.parms.page - 1) * 10 + 1;
-    //     return index + page;
-    //   }
-    // },
+    indexMethod(index) {
+      if (this.parms.page == 1) {
+        return index + 1;
+      } else {
+        let page = (this.parms.page - 1) * 10 + 1;
+        return index + page;
+      }
+    },
     // 复制链接
     copyUrl(data) {
       let url = data + "/" + this.money;

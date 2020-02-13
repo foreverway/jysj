@@ -10,47 +10,23 @@
       <el-input  style="width:200px" v-model="money"  placeholder="请输入充值金额" ></el-input>
     <el-button type="primary" v-show="money>0" @click="copyUrl">生成并复制充值链接</el-button> -->
 <el-form ref="form" :model="form" label-width="120px">
-  <el-form-item label="数据获取时间">
+  <el-form-item label="日期">
     <el-col :span="11">
       <el-date-picker type="date" placeholder="选择日期" v-model="form.dtime" style="width: 100%;"></el-date-picker>
     </el-col>
   </el-form-item>
-  <!-- <el-form-item label="周次">
+  <el-form-item label="周次">
     <el-input v-model="form.week"></el-input>
-  </el-form-item> -->
-  <!-- <el-form-item label="跟进人">
+  </el-form-item>
+  <el-form-item label="跟进人">
     <el-input v-model="form.follow_man"></el-input>
-  </el-form-item> -->
-        <el-form-item label="跟进人" style="width:335px">
-          <el-select v-model="form.follow_man" placeholder="请选择" filterable clearable>
-    <el-option
-      v-for="item in options_follow_man"
-      :key="item.id"
-      :label="item.admin_name"
-      :value="item.id">
-    </el-option>
-  </el-select>
-      </el-form-item>
-      <el-form-item label="所属战队" style="width:335px" v-if="form.options_team!==[]">
-                 <el-select v-model="form.team" placeholder="请选择">
-    <el-option
-      v-for="item in options_team"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value">
-    </el-option>
-  </el-select>
-      </el-form-item>
-      <el-form-item label="战队负责人" style="width:335px">
-  <el-select v-model="form.team_leader" placeholder="请选择" filterable clearable>
-    <el-option
-      v-for="item in options_team_leader"
-      :key="item.id"
-      :label="item.admin_name"
-      :value="item.admin_name">
-    </el-option>
-  </el-select>
-      </el-form-item>
+  </el-form-item>
+  <el-form-item label="所属战队">
+    <el-input v-model="form.team"></el-input>
+  </el-form-item>
+  <el-form-item label="战队负责人">
+    <el-input v-model="form.team_leader"></el-input>
+  </el-form-item>
   <el-form-item label="编号">
     <el-input v-model="form.data_number"></el-input>
   </el-form-item>
@@ -132,7 +108,7 @@
   <el-form-item label="预收金额">
     <el-input v-model="form.advance_amount"></el-input>
   </el-form-item>
-  <el-form-item label="情况及客户反馈">
+  <el-form-item label="客户反馈">
     <el-input type="textarea" v-model="form.feedback"></el-input>
   </el-form-item>
   <el-form-item>
@@ -153,12 +129,12 @@ export default {
         return {
              form: {
          id:this.$route.query.id*1,
-          dtime: '', //日期
-          // week: '',//周次
-          follow_man: '',//跟进人
-          team: '', //所属战队
-          team_leader: "",//战队负责人
-          data_number: '',//数据信息
+          dtime: '',
+          week: '',
+          follow_man: '',
+          team: '',
+          team_leader: "",
+          data_number: '',
           data_student_name: '',
           data_tag: '',
           m1: '',
@@ -173,49 +149,12 @@ export default {
           advance_amount: '',
           feedback: '',
         },
-              options_follow_man:[],//战队负责人
-        options_team_leader:[],//跟进人
-        options_team: [{
-          value: '柠檬战队',
-          label: '柠檬战队'
-        }, {
-          value: '车厘子战队',
-          label: '车厘子战队'
-        }, {
-          value: '哆啦A梦战队',
-          label: '哆啦A梦战队'
-        }],
+
               money:'',
         }
     },
     created(){
           this.getdata()
-               this.$apis.operation
-        .team_leader()
-        .then(res => {
-          if (res.data.code == 1) {
-            // this.form.options_team_leader=[]
-            this.options_team_leader=res.data.data
-          }else{
-             this.$message({
-              message: res.data.msg,
-              type: "warning"
-            });
-          }
-        })
-    this.$apis.operation
-        .banzhuren_list()
-        .then(res => {
-          if (res.data.code == 1) {
-            this.options_follow_man=[]
-this.options_follow_man=res.data.data
-          }else{
-             this.$message({
-              message: res.data.msg,
-              type: "warning"
-            });
-          }
-        })
     },
     mounted(){
              

@@ -12,19 +12,27 @@
         </el-col>
       </el-form-item>
 
-      <el-form-item label="跟进人" style="width:335px">
-          <el-select v-model="form.options_team" placeholder="请选择" filterable clearable>
+      <el-form-item label="跟进人" style="width:335px"  >
+          <el-select v-model="form.follow_man" placeholder="请选择" filterable clearable v-if="ifTeam!==''" disabled>
     <el-option
       v-for="item in options_follow_man"
       :key="item.id"
       :label="item.admin_name"
-      :value="item.id">
+      :value="item.admin_name">
+    </el-option>
+  </el-select>
+         <el-select v-model="form.follow_man" placeholder="请选择" filterable clearable v-if="ifTeam==''">
+    <el-option
+      v-for="item in options_follow_man"
+      :key="item.id"
+      :label="item.admin_name"
+      :value="item.admin_name">
     </el-option>
   </el-select>
       </el-form-item>
-      
-      <el-form-item label="所属战队" style="width:335px" v-if="form.options_team!==[]">
-                 <el-select v-model="form.options_" placeholder="请选择">
+     
+      <el-form-item label="所属战队" style="width:335px" >
+                 <el-select v-model="form.team" placeholder="请选择" v-if="ifTeam" disabled>
     <el-option
       v-for="item in options_team"
       :key="item.value"
@@ -32,17 +40,36 @@
       :value="item.value">
     </el-option>
   </el-select>
+                   <el-select v-model="form.team" placeholder="请选择" v-if="ifTeam==''" >
+    <el-option
+      v-for="item in options_team"
+      :key="item.value"
+      :label="item.label"
+      :value="item.label">
+    </el-option>
+  </el-select>
       </el-form-item>
-      <el-form-item label="战队负责人" style="width:335px">
-  <el-select v-model="form.options_follow" placeholder="请选择" filterable clearable>
+  
+
+       <el-form-item label="战队负责人" style="width:335px">
+  <el-select v-model="form.team_leader" placeholder="请选择" filterable clearable  v-if="ifTeam==''">
     <el-option
       v-for="item in options_team_leader"
       :key="item.id"
       :label="item.admin_name"
-      :value="item.id">
+      :value="item.admin_name">
+    </el-option>
+  </el-select>
+    <el-select v-model="form.team_leader" placeholder="请选择" filterable clearable  v-if="ifTeam!==''" disabled>
+    <el-option
+      v-for="item in options_team_leader"
+      :key="item.id"
+      :label="item.admin_name"
+      :value="item.admin_name">
     </el-option>
   </el-select>
       </el-form-item>
+      
       <el-form-item label="编号" style="width:335px">
         <el-input v-model="form.data_number"></el-input>
       </el-form-item>
@@ -118,7 +145,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="预收科目" style="width:50%;">
-        <el-input v-model="form.advance_subject"></el-input>
+        <el-input v-model="form.advance_subject" width='100px'></el-input>
       </el-form-item>
       <el-form-item label="预收金额" style="width:50%;">
         <el-input v-model="form.advance_amount"></el-input>
@@ -148,7 +175,6 @@ export default {
     return {
       form: {
         dtime: "",
-        week: "",
         follow_man: "",
         team: "",
         team_leader: "",
@@ -166,9 +192,9 @@ export default {
         advance_subject: "",
         advance_amount: "",
         feedback: "",
-        options_follow:'',
-        options_team:'',
-        options_:''
+        team_leader:'',
+        follow_man:'',
+        team:''
       },
               options_follow_man:[],//战队负责人
         options_team_leader:[],//跟进人
@@ -182,10 +208,12 @@ export default {
           value: '哆啦A梦战队',
           label: '哆啦A梦战队'
         }],
-      money: ""
+      money: "",
+      ifTeam:''
     };
   },
   created(){
+    
      this.$apis.operation
         .team_leader()
         .then(res => {
@@ -212,9 +240,33 @@ this.options_follow_man=res.data.data
             });
           }
         })
+            this.$apis.menber
+        .admin_base({admin_id: this.getdataCookie("admin_id")})
+        .then(res => {
+          if (res.data.code == 1) {
+            console.log(res.data.data)
+
+        this.ifTeam= res.data.data.team
+     this.form.team_leader = res.data.data.captain_name
+     this.form.team = res.data.data.team
+    this.form.follow_man = res.data.data.admin_name
+          }
+        })
   },
   methods: {
-
+    getdataCookie(cname) {
+      // return 1
+      var name = cname + "=";
+      var ca = document.cookie.split(";");
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i].trim();
+        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+      }
+      // 路由跳转
+      // window.location.href = ''
+      this.$router.push({ path: "/login" });
+      // Router.push("/")
+    },
     aaa() {
       //  history.back(-1)
       this.$router.go(-1);

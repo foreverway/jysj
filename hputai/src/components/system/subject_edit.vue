@@ -20,18 +20,20 @@
   </el-select>
  </el-form-item>
   <el-form-item label="科目名称">
-    <el-input v-model="form.subject_name"></el-input>
+    <el-input v-model="form.subject_name" style="width:220px;"></el-input>
   </el-form-item>
   <el-form-item label="线上价格">
-    <el-input v-model="form.online_price"></el-input>
+    <el-input v-model="form.online_price" style="width:220px;"></el-input>
   </el-form-item>
   <el-form-item label="线下价格">
-    <el-input v-model="form.offline_price"></el-input>
+    <el-input v-model="form.offline_price" style="width:220px;"></el-input>
   </el-form-item>
-    <el-form-item label="排序">
-    <el-input v-model="form.short"></el-input>
+    <el-form-item label="排序" >
+    <el-input v-model="form.short" style="width:220px;"></el-input>
   </el-form-item>
-
+   <el-form-item label="体系" v-if="form.pid==0">
+    <el-input v-model="form.system" style="width:220px;"></el-input>
+  </el-form-item>
   <el-form-item>
     <el-button type="primary" @click="onSubmit">保存配置</el-button>
   
@@ -83,7 +85,7 @@
              this.$apis.sys.subject_edit(this.form).then(res=>{
               if(res.data.code==1){
                   this.form=res.data.data
-                 
+                 console.log(this.form)
               }
           })
       },
