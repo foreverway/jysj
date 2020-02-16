@@ -23,10 +23,10 @@ export default {
    },
 
       //班主任数据 /api_banzhuren_list
-      // banzhuren_list (params) {
-      //   let url='/api/api_banzhuren_list'
-      //   return shuju.getdata(url,params)
-      //  },
+      banzhuren_list (params) {
+        let url='/api/api_banzhuren_list'
+        return shuju.getdata(url,params)
+       },
    //添加直播平台 /api_live_add
    live_add (params) {
     let url='/api/api_live_add'

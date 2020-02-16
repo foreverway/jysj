@@ -5,78 +5,101 @@
     <!-- 
       <el-input  style="width:200px" v-model="money"  placeholder="请输入充值金额" ></el-input>
     <el-button type="primary" v-show="money>0" @click="copyUrl">生成并复制充值链接</el-button>-->
-    <el-form ref="form" :model="form" label-width="120px">
-      <el-form-item label="数据获取时间" style="width:335px">
-        <el-col :span="11">
-          <el-date-picker type="date" placeholder="选择日期" v-model="form.dtime"></el-date-picker>
-        </el-col>
+    <el-form ref="form" :model="form" label-width="120px" :rules="rules" class="demo-ruleForm">
+      <el-form-item label="数据获取时间" style="width:335px" prop="dtime">
+        <el-date-picker type="date" placeholder="选择日期" v-model="form.dtime"></el-date-picker>
       </el-form-item>
 
-      <el-form-item label="跟进人" style="width:335px"  >
-          <el-select v-model="form.follow_man" placeholder="请选择" filterable clearable v-if="ifTeam!==''" disabled>
-    <el-option
-      v-for="item in options_follow_man"
-      :key="item.id"
-      :label="item.admin_name"
-      :value="item.admin_name">
-    </el-option>
-  </el-select>
-         <el-select v-model="form.follow_man" placeholder="请选择" filterable clearable v-if="ifTeam==''">
-    <el-option
-      v-for="item in options_follow_man"
-      :key="item.id"
-      :label="item.admin_name"
-      :value="item.admin_name">
-    </el-option>
-  </el-select>
+      <el-form-item label="跟进人" style="width:335px" prop="follow_man">
+        <el-select
+          v-model="form.follow_man"
+          placeholder="请选择"
+          filterable
+          clearable
+          v-if="ifTeam!==''"
+          disabled
+        >
+          <el-option
+            v-for="item in options_follow_man"
+            :key="item.id"
+            :label="item.admin_name"
+            :value="item.admin_name"
+          ></el-option>
+        </el-select>
+        <el-select
+          v-model="form.follow_man"
+          placeholder="请选择"
+          filterable
+          clearable
+          v-if="ifTeam==''"
+        >
+          <el-option
+            v-for="item in options_follow_man"
+            :key="item.id"
+            :label="item.admin_name"
+            :value="item.admin_name"
+          ></el-option>
+        </el-select>
       </el-form-item>
-     
-      <el-form-item label="所属战队" style="width:335px" >
-                 <el-select v-model="form.team" placeholder="请选择" v-if="ifTeam" disabled>
-    <el-option
-      v-for="item in options_team"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value">
-    </el-option>
-  </el-select>
-                   <el-select v-model="form.team" placeholder="请选择" v-if="ifTeam==''" >
-    <el-option
-      v-for="item in options_team"
-      :key="item.value"
-      :label="item.label"
-      :value="item.label">
-    </el-option>
-  </el-select>
-      </el-form-item>
-  
 
-       <el-form-item label="战队负责人" style="width:335px">
-  <el-select v-model="form.team_leader" placeholder="请选择" filterable clearable  v-if="ifTeam==''">
-    <el-option
-      v-for="item in options_team_leader"
-      :key="item.id"
-      :label="item.admin_name"
-      :value="item.admin_name">
-    </el-option>
-  </el-select>
-    <el-select v-model="form.team_leader" placeholder="请选择" filterable clearable  v-if="ifTeam!==''" disabled>
-    <el-option
-      v-for="item in options_team_leader"
-      :key="item.id"
-      :label="item.admin_name"
-      :value="item.admin_name">
-    </el-option>
-  </el-select>
+      <el-form-item label="所属战队" style="width:335px" prop="team">
+        <el-select v-model="form.team" placeholder="请选择" v-if="ifTeam" disabled>
+          <el-option
+            v-for="item in options_team"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+        <el-select v-model="form.team" placeholder="请选择" v-if="ifTeam==''">
+          <el-option
+            v-for="item in options_team"
+            :key="item.value"
+            :label="item.label"
+            :value="item.label"
+          ></el-option>
+        </el-select>
       </el-form-item>
-      
-      <el-form-item label="编号" style="width:335px">
+
+      <el-form-item label="战队负责人" style="width:335px" prop="team_leader">
+        <el-select
+          v-model="form.team_leader"
+          placeholder="请选择"
+          filterable
+          clearable
+          v-if="ifTeam==''"
+        >
+          <el-option
+            v-for="item in options_team_leader"
+            :key="item.id"
+            :label="item.admin_name"
+            :value="item.admin_name"
+          ></el-option>
+        </el-select>
+        <el-select
+          v-model="form.team_leader"
+          placeholder="请选择"
+          filterable
+          clearable
+          v-if="ifTeam!==''"
+          disabled
+        >
+          <el-option
+            v-for="item in options_team_leader"
+            :key="item.id"
+            :label="item.admin_name"
+            :value="item.admin_name"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="编号" style="width:335px" prop="data_number">
         <el-input v-model="form.data_number"></el-input>
       </el-form-item>
-      <el-form-item label="学生姓名" style="width:335px">
+      <el-form-item label="学生姓名" style="width:335px" prop="data_student_name">
         <el-input v-model="form.data_student_name"></el-input>
       </el-form-item>
-      <el-form-item label="数据标签">
+      <el-form-item label="数据标签" prop="data_tag">
         <el-select v-model="form.data_tag" placeholder="请选择数据标签">
           <el-option label="弱需求" value="弱需求"></el-option>
           <el-option label="中需求" value="中需求"></el-option>
@@ -84,31 +107,30 @@
           <el-option label="七天跟进" value="七天跟进"></el-option>
           <el-option label="退回" value="退回"></el-option>
           <el-option label="无效" value="无效"></el-option>
-         <el-option label="已报名" value="已报名"></el-option>
-
+          <el-option label="已报名" value="已报名"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="建立了有效联系">
+      <el-form-item label="建立了有效联系" prop="m1">
         <el-select v-model="form.m1" placeholder="是否建立了有效联系">
           <el-option label="已建立" value="已建立"></el-option>
           <el-option label="未建立" value="未建立"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="了解客户情况">
+      <el-form-item label="了解客户情况" prop="m2">
         <el-select v-model="form.m2" placeholder="对客户的了解情况">
           <el-option label="全面了解" value="全面了解"></el-option>
           <el-option label="部分了解" value="部分了解"></el-option>
           <el-option label="很少了解" value="beijing"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="明确数据需求">
+      <el-form-item label="明确数据需求" prop="m3">
         <el-select v-model="form.m3" placeholder="是否明确客户需求">
           <el-option label="已明确" value="已明确"></el-option>
           <el-option label="确认中" value="确认中"></el-option>
           <el-option label="客户需求模糊" value="客户需求模糊"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="建立信任">
+      <el-form-item label="建立信任" prop="m4">
         <el-select v-model="form.m4" placeholder="是否建立信任感">
           <el-option label="信任度高" value="信任度高"></el-option>
           <el-option label="初步建立" value="初步建立"></el-option>
@@ -145,7 +167,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="预收科目" style="width:50%;">
-        <el-input v-model="form.advance_subject" width='100px'></el-input>
+        <el-input v-model="form.advance_subject"></el-input>
       </el-form-item>
       <el-form-item label="预收金额" style="width:50%;">
         <el-input v-model="form.advance_amount"></el-input>
@@ -157,7 +179,7 @@
         <el-button
           type="primary"
           style="background-color:#e6563a; border:none;"
-          @click="onSubmit"
+          @click="onSubmit('form')"
         >确定</el-button>
         <el-button @click="aaa">取消</el-button>
       </el-form-item>
@@ -192,66 +214,109 @@ export default {
         advance_subject: "",
         advance_amount: "",
         feedback: "",
-        team_leader:'',
-        follow_man:'',
-        team:''
+        team_leader: "",
+        follow_man: "",
+        team: ""
       },
-              options_follow_man:[],//战队负责人
-        options_team_leader:[],//跟进人
-        options_team: [{
-          value: '柠檬战队',
-          label: '柠檬战队'
-        }, {
-          value: '车厘子战队',
-          label: '车厘子战队'
-        }, {
-          value: '哆啦A梦战队',
-          label: '哆啦A梦战队'
-        }],
+      options_follow_man: [], //跟进人
+      options_team_leader: [], //战队负责人
+      options_team: [
+        {
+          value: "柠檬战队",
+          label: "柠檬战队"
+        },
+        {
+          value: "车厘子战队",
+          label: "车厘子战队"
+        },
+        {
+          value: "哆啦A梦战队",
+          label: "哆啦A梦战队"
+        },
+        {
+          value: "其他",
+          label: "其他"
+        },
+        {
+          value: "无",
+          label: "无"
+        }
+      ],
       money: "",
-      ifTeam:''
+      ifTeam: "",
+      rules: {
+        dtime: [
+          {
+            required: true,
+            type: "date",
+            message: "数据获取时间",
+            trigger: "change"
+          }
+          // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+        ],
+        follow_man: [
+          { required: true, message: "请选择跟进人", trigger: "change" }
+        ],
+        team: [
+          { required: true, message: "请选择所属战队", trigger: "change" }
+        ],
+        team_leader: [
+          { required: true, message: "请选择战队负责人", trigger: "change" }
+        ],
+        data_number: [
+          { required: true, message: "请填写编号", trigger: "blur" }
+        ],
+        data_student_name: [
+          { required: true, message: "请填写学生姓名", trigger: "blur" }
+        ],
+        data_tag: [
+          { required: true, message: "请选择数据标签", trigger: "change" }
+        ],
+        m1: [
+          { required: true, message: "是否建立了有效联系", trigger: "blur" }
+        ],
+        m2: [{ required: true, message: "是否了解客户情况", trigger: "blur" }],
+        m3: [{ required: true, message: "是否明确数据需求", trigger: "blur" }],
+        m4: [{ required: true, message: "是否建立信任", trigger: "blur" }]
+      }
     };
   },
-  created(){
-    
-     this.$apis.operation
-        .team_leader()
-        .then(res => {
-          if (res.data.code == 1) {
-            // this.form.options_team_leader=[]
-            this.options_team_leader=res.data.data
-          }else{
-             this.$message({
-              message: res.data.msg,
-              type: "warning"
-            });
-          }
-        })
-    this.$apis.operation
-        .banzhuren_list()
-        .then(res => {
-          if (res.data.code == 1) {
-            this.options_follow_man=[]
-this.options_follow_man=res.data.data
-          }else{
-             this.$message({
-              message: res.data.msg,
-              type: "warning"
-            });
-          }
-        })
-            this.$apis.menber
-        .admin_base({admin_id: this.getdataCookie("admin_id")})
-        .then(res => {
-          if (res.data.code == 1) {
-            console.log(res.data.data)
+  created() {
+    this.$apis.operation.team_leader().then(res => {
+      if (res.data.code == 1) {
+        // this.form.options_team_leader=[]
+        this.options_team_leader = res.data.data;
+         console.log(res.data.data)
+      } else {
+        this.$message({
+          message: res.data.msg,
+          type: "warning"
+        });
+      }
+    });
+    this.$apis.operation.banzhuren_list().then(res => {
+      if (res.data.code == 1) {
+        this.options_follow_man = [];
+        this.options_follow_man = res.data.data;
+       
+      } else {
+        this.$message({
+          message: res.data.msg,
+          type: "warning"
+        });
+      }
+    });
+    this.$apis.menber
+      .admin_base({ admin_id: this.getdataCookie("admin_id") })
+      .then(res => {
+        if (res.data.code == 1) {
 
-        this.ifTeam= res.data.data.team
-     this.form.team_leader = res.data.data.captain_name
-     this.form.team = res.data.data.team
-    this.form.follow_man = res.data.data.admin_name
-          }
-        })
+          this.ifTeam = res.data.data.team;
+          this.form.team_leader = res.data.data.captain_name;
+          this.form.team = res.data.data.team;
+          this.form.follow_man = res.data.data.admin_name;
+        }
+      });
   },
   methods: {
     getdataCookie(cname) {
@@ -271,30 +336,61 @@ this.options_follow_man=res.data.data
       //  history.back(-1)
       this.$router.go(-1);
     },
-    onSubmit(formName) {
-      this.$apis.common
-        .salepro_add(this.form)
-        .then(res => {
-          if (res.data.code == 1) {
-            this.$message({
-              message: "添加成功",
-              type: "success"
+    onSubmit(form) {
+      this.$refs[form].validate(valid => {
+        if (valid) {
+          this.$apis.common
+            .salepro_add(this.form)
+            .then(res => {
+              if (res.data.code == 1) {
+                this.$message({
+                  message: "添加成功",
+                  type: "success"
+                });
+                this.$router.push({ path: "/SalesList" });
+              } else {
+                this.$message({
+                  message: res.data.msg,
+                  type: "warning"
+                });
+              }
+            })
+            .catch(() => {
+              this.$message({
+                type: "info",
+                message: "添加失败"
+              });
             });
-            this.$router.push({ path: "/SalesList" });
-          }else{
-             this.$message({
-              message: res.data.msg,
-              type: "warning"
-            });
-          }
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "添加失败"
-          });
-        });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
+    // onSubmit(formName) {
+    //   this.$apis.common
+    //     .salepro_add(this.form)
+    //     .then(res => {
+    //       if (res.data.code == 1) {
+    //         this.$message({
+    //           message: "添加成功",
+    //           type: "success"
+    //         });
+    //         this.$router.push({ path: "/SalesList" });
+    //       }else{
+    //          this.$message({
+    //           message: res.data.msg,
+    //           type: "warning"
+    //         });
+    //       }
+    //     })
+    //     .catch(() => {
+    //       this.$message({
+    //         type: "info",
+    //         message: "添加失败"
+    //       });
+    //     });
+    // },
     goBack() {
       history.back(-1);
     }

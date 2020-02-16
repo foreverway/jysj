@@ -51,7 +51,8 @@
       <el-table-column prop="number" label="编号"></el-table-column>
       <el-table-column prop="title" label="排课需求"></el-table-column>
        <el-table-column prop="curriculum_type_name" label="课程性质"></el-table-column>
-      <el-table-column prop="amount" label="价格"></el-table-column>
+      <el-table-column prop="amount" label="金额"></el-table-column>
+       <el-table-column prop="classhour" label="课时"></el-table-column>
       <el-table-column prop="expiry_date" label="课程有效期"></el-table-column>
       <el-table-column prop="student_name" label="报名学员" width="100"></el-table-column>
             <el-table-column prop="teacher_name" label="讲师" width="100"></el-table-column>

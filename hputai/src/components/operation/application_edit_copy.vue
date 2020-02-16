@@ -57,7 +57,7 @@
             <el-input v-model="item.classhour" v-bind:id="'time' + i" placeholder="课时"></el-input>
           </p>
           <p>
-            <el-input v-model.number="item.price" v-bind:id="'mach' + i" placeholder="单价(元)"></el-input>
+            <el-input v-model.number="item.price" v-bind:id="'mach' + i" placeholder="单价(元)" disabled></el-input>
           </p>
               <p v-if="item.price&&item.classhour">
             {{item.price*item.classhour}}

@@ -18,7 +18,7 @@ export default {
         },
       //班主任顾问列表
       banzhuren_list(params){
-   let url='/api/api_banzhuren_list'
+   let url='/api/api_class_teacher'
    return shuju.getdata(url,params)
    },
 }

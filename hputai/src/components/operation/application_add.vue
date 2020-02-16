@@ -60,8 +60,9 @@
               placeholder="课时"
             ></el-input>
           </p>
-          <p>
-            <el-input v-model.number="item.price" v-bind:id="'mach' + i" placeholder="单价(元)"></el-input>
+          <p v-bind:id="'mach' + i">
+            <el-input v-model.number="item.price" v-bind:id="'mach' + i" placeholder="单价(元)" disabled></el-input>
+          
           </p>
           <p v-if="item.price&&item.classhour">{{item.price*item.classhour}}</p>
           <p v-if="item.price==''||item.classhour==''">待填充</p>
