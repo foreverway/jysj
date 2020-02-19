@@ -350,4 +350,9 @@ class_transfer_info(params) {
     let url = '/api/api_audition_info'
     return shuju.postdata(url, params)
   },
+  jiaowu_data(params) {
+    //此处的params是用户的账户id，用于获取用户的信息
+    let url = '/api/api_jiaowu_data'
+    return shuju.getdata(url, params)
+  },
 }

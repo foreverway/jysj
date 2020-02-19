@@ -4,6 +4,26 @@
     <el-form :rules="rules" :model="form" ref="form" label-width="100px">
       <el-form-item label="学员姓名：" style="width:1000px" prop="uname">
         <el-input v-model="form.uname" style="width:200px" @input="ifname"></el-input>
+                <el-select v-model="form.student_type" placeholder="调整学生类型 " v-if="ifBanzhuren=='班主任'"    filterable clearable @change="getdata">
+        <el-option
+          v-for="item in student_alevel"
+       
+          :key="item.value"
+       
+          :label="item.label"
+          :value="item.value"
+        ></el-option>
+      </el-select>
+              <el-select v-model="form.student_type" placeholder="调整学生类型 " v-if="ifBanzhuren!=='班主任'" disabled   filterable clearable @change="getdata">
+        <el-option
+          v-for="item in student_alevel"
+       
+          :key="item.value"
+       
+          :label="item.label"
+          :value="item.value"
+        ></el-option>
+      </el-select>
         <!-- <el-autocomplete
   v-model="state"
   :fetch-suggestions="querySearchAsync"
@@ -156,6 +176,8 @@ export default {
       teacher: "", //班主任数据
       financeId: "", //关联充值id
       form_banzhuren:'', //根据学生选择的班主任
+            ifBanzhuren:"",
+
       form: {
         uname: "", //用户名
         in_amount: "", //实收金额
@@ -169,8 +191,11 @@ export default {
         consultant1: "", //顾问1
         consultant2: "", //顾问2
         classproject: "", //报课项目
-        teacher: "" //班主任
+        teacher: "" ,//班主任
+        student_type:"普通学员",
       },
+      student_alevel:[{value:'普通学员',label:'普通学员'},{value:'保读学员',label:'保读学员'},{value:'VIP学员',label:'VIP学员'},{value:'潜在VIP',label:'潜在VIP'},{value:'试听学员',label:'试听学员'}],
+
       rules: {
         uname: [{ required: true, validator: this.YanuUname, trigger: "blur" }],
         in_amount: [
@@ -242,7 +267,14 @@ export default {
       this.$apis.common.basedata_list().then(res => {
         this.msg = res.data;
       });
-
+                this.$apis.menber
+      .admin_base({ admin_id: this.getdataCookie("admin_id") })
+      .then(res => {
+        if (res.data.code == 1) {
+console.log(res.data.data.role_name)
+        this.ifBanzhuren=res.data.data.role_name
+        }
+      });
       this.$apis.common.inpeople_list().then(res => {
         // 实收人数据
         if (res.data.code == 1) {

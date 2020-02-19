@@ -16,6 +16,13 @@
         <el-option label="兼职老师" value="2"></el-option>
         <el-option label="全职老师" value="1"></el-option>
       </el-select>
+                <el-select clearable v-model="form.teacher_rate" placeholder="老师推荐等级"  @change="getadata">
+        <el-option label="五星级" value="5"></el-option>
+        <el-option label="四星级" value="4"></el-option>
+        <el-option label="三星级" value="3"></el-option>
+        <el-option label="二星级" value="2"></el-option>
+        <el-option label="一星级" value="1"></el-option>
+      </el-select>
       </el-form>
     </div>
 
@@ -310,7 +317,7 @@ export default {
         search: "", //搜索老师条件
         page: 1, //页码
         // teacher_id: "", //教师id,
-    
+    teacher_rate:'',
         is_parttime:'',
       },
       options: [], //课程名称的数据

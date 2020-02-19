@@ -119,6 +119,8 @@
           value-format="MM"
           placeholder="选择你想查看的月份"
         ></el-date-picker>
+              <el-button type="primary" @click="recharge_export_2">导出</el-button>
+
       </div>
 
       <el-table
@@ -941,6 +943,24 @@ export default {
       window.location.href =
         url.urls + "/api_export_teacher_classhour" + "?" + parms;
     },
+        //导出2
+    recharge_export_2() {
+      this.$message({
+        type: "success",
+        message: "正在导出,请稍等..."
+      });
+      // let urls = "http://personal.test.hqjystudio.com";
+      let parms = "";
+      // // this.form.teacher='杨懿俊'
+      console.log(this.params);
+      for (var key in this.params1) {
+        if (this.params[key]) {
+      
+          parms += key + "=" + this.params[key] + "&";
+      }}
+      window.location.href = url.urls + "/api_export_teacher_proportion" + "?" + parms;
+    },
+    
     changeEnd(event) {
       if (this.hadClick == true) {
         this.one.begin_time = "";

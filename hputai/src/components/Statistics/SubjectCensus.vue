@@ -1,8 +1,11 @@
 <template>
   <div id="app">
     <zx-head title="业务核算"></zx-head>
-    <el-date-picker
-      style="margin-left:20px"
+    <div class="session1">
+      <h3>一级科目</h3>
+      <div>
+ <el-date-picker
+      style="margin:10px"
       v-model="begin_time_3"
       @change="changeStart_3"
       value-format="timestamp"
@@ -32,13 +35,13 @@
 
 
     <el-button type="primary" @click="recharge_export">导出</el-button>
+      </div>
+
 
     <el-table
       :data="tableData"
       height="500px"
-     
       border
-      
       class="table_set"
       @selection-change="handleSelectionChange"
       :header-cell-style="{background:'#f4f4f4'}"
@@ -54,21 +57,13 @@
       <el-table-column label="确认毛利金额(￥)" prop="profit"></el-table-column>
 
     </el-table>
-    <!-- <span v-if="msg.data">
-      <el-pagination
-        style="float:right;margin-top:20px;margin-bottom: 20px;"
-        background
-        layout="prev, pager, next"
-        @prev-click="prev"
-        @next-click="next"
-        @current-change="current"
-        :page-size="10"
-        :total="msg.data.total"
-      ></el-pagination>
-    </span> -->
+    </div>
+   
+    <div class="session1">
+     <h3>一级科目分析</h3>
     <div class="echarts_1"  style='margin:20px 0;'>
       <div style="width:44%;height:450px;" class="bgc">
-        <div class="block" style="margin:auto;width:200px;">
+        <div class="block" style="margin: 0 auto;width:446px;">
           <el-date-picker
             @change="changeMouth"
             v-model="changeMouth1"
@@ -102,7 +97,9 @@
         <div id="main2" style="width:100%;height:400px;"></div>
       </div>
     </div>
-    <div class="bgc" style="display:none;">
+   </div>
+    
+    <div class="bgc" >
       <div class="flex_all">
         <div>
           <el-radio-group v-model="one.status" @change="changeRadio1">
@@ -144,7 +141,7 @@
 
       <div id="main1" style="width:100%;height:400px;"></div>
     </div> 
-     <div class="bgc "  style="display:none;">
+     <div class="bgc " >
       <div class="flex_all">
         <div>
           <el-radio-group fill="#5CB87A" v-model="three.status" @change="changeRadio_1">
@@ -677,8 +674,11 @@ old_profit: [],//去年的毛利
     drawStudent() {
       let myDraw = echarts.init(document.getElementById("main2"));
       app.config = {
-        rotate: 45,
-        align: "left"
+  rotate: 0,
+    align: 'center',
+    verticalAlign: 'middle',
+    position: 'top',
+    distance: 15,
       };
       var labelOption = {
         show: true,
@@ -687,8 +687,8 @@ old_profit: [],//去年的毛利
         align: app.config.align,
         verticalAlign: app.config.verticalAlign,
         rotate: app.config.rotate,
-        formatter: "",
-        fontSize: 16,
+        formatter: "{c}  ",
+        fontSize: 12,
         rich: {
           name: {
             textBorderColor: "#fff"
@@ -699,8 +699,17 @@ old_profit: [],//去年的毛利
         color: ["#5CBB7A", "#409EFF", "#F56C6C", "#e5323e"],
         tooltip: {
           trigger: "axis",
+          // text: "月份情况",
           axisPointer: {
             type: "shadow"
+          }
+        },
+          title: {
+          text: "毛利情况",
+          lineHeight: 40,
+          textStyle:{
+fontsize:'16px',
+ fontWeight : 'bolder'
           }
         },
         legend: {
@@ -719,19 +728,22 @@ old_profit: [],//去年的毛利
             type: "value"
           }
         ],
+        
         series: [
           {
             name: "已排",
             type: "bar",
             barGap: 0,
             label: labelOption,
-            data: [320, 332, 301]
+            data: [320, 332, 301],
+ 
           },
           {
             name: "已上",
             type: "bar",
             label: labelOption,
-            data: [220, 182, 191]
+            data: [220, 182, 191],
+    
           },
 
         ]
@@ -752,6 +764,7 @@ old_profit: [],//去年的毛利
               legend: {
                 data: ["去年", "今年"]
               },
+   
               xAxis: [
                 {
                   type: "category",
@@ -764,7 +777,10 @@ old_profit: [],//去年的毛利
                   name: "去年",
                   type: "bar",
                   barGap: 0,
-                  label: labelOption,
+                      label: {
+              show: true,
+              position: "right",
+                      },
                   data: this.profit
                 },
                 {
@@ -889,6 +905,14 @@ old_profit: [],//去年的毛利
       // 指定图表的配置项和数据
       myChart.setOption({
         legend: {},
+                             title: {
+          text: "月份情况",
+          lineHeight: 40,
+          textStyle:{
+fontsize:'16px',
+ fontWeight : 'bolder'
+          }
+        },
         tooltip: {},
         dataset: {
           source: [
@@ -901,22 +925,28 @@ old_profit: [],//去年的毛利
         yAxis: {},
         // Declare several bar series, each will be mapped
         // to a column of dataset.source by default.
-        series: [{ type: "bar" }, { type: "bar" }],
-        toolbox: {
-          feature: {
-
-            myTool2: {
+        series: [{ type: "bar", label: {
               show: true,
-              title: "自定义扩展方法",
-              icon: "image://http://echarts.baidu.com/images/favicon.png",
-              onclick: function() {
-                alert("myToolHandler2");
-              }
-            },
-            saveAsImage: { show: true } //保存图片
+              position: "top"
+            } }, { type: "bar", label: {
+              show: true,
+              position: "top"
+            } }],
+        // toolbox: {
+        //   feature: {
+
+        //     myTool2: {
+        //       show: true,
+        //       title: "自定义扩展方法",
+        //       icon: "image://http://echarts.baidu.com/images/favicon.png",
+        //       onclick: function() {
+        //         alert("myToolHandler2");
+        //       }
+        //     },
+        //     saveAsImage: { show: true } //保存图片
  
-          }
-        }
+        //   }
+        // }
       });
 
       this.$apis.census
@@ -939,7 +969,7 @@ old_profit: [],//去年的毛利
 
               yAxis: [
                 {
-                  name: "课时"
+                  name: "金额"
                 }
               ],
               series: [
@@ -1051,5 +1081,10 @@ old_profit: [],//去年的毛利
   margin: 10px;
   border-radius: 10px;
 }
-
+.session1 {
+  background-color: #ddd;
+  padding: 15px;
+  margin: 10px 10px 40px 10px;
+  border-radius: 10px;
+}
 </style>

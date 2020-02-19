@@ -8,7 +8,43 @@
       clearable
       style="width:300px"
     ></el-input>
-    <el-button style="background-color:#e6563a; border:none;" type="primary">搜索</el-button>
+          <el-select v-model="parms.student_status" placeholder="选择学生状态"    filterable clearable @change="getdata">
+        <el-option
+          v-for="item in student_status"
+       
+          :key="item.value"
+       
+          :label="item.label"
+          :value="item.value"
+        ></el-option>
+      </el-select>
+         <el-select v-model="parms.alevel" placeholder="选择学生等级"    filterable clearable @change="getdata">
+        <el-option
+          v-for="item in student_alevel"
+       
+          :key="item.value"
+       
+          :label="item.label"
+          :value="item.value"
+        ></el-option>
+      </el-select>
+          <el-date-picker
+        style="margin-left:20px"
+        v-model="change_start_time"
+        @change="get_starttime"
+        type="datetime"
+        clearable
+        value-format='timestamp'
+        placeholder="选择日期时间"
+      ></el-date-picker>至
+      <el-date-picker
+        @change="getdata"
+        v-model="change_end_time"
+        type="datetime"
+        clearable
+        value-format='timestamp'
+        placeholder="选择日期时间"
+      ></el-date-picker>
     <router-link to="/StudentsList/StudentsAdd">
       <el-button type="primary" style="float:right;">新建学员账户</el-button>
     </router-link>
@@ -88,10 +124,19 @@ export default {
       dialogFormVisible1: false,
       copyurl1: "",
       msg: "",
+      change_end_time:'',
+      change_start_time:'',
       parms: {
         search: "",
-        page: 1
+        page: 1,
+        is_data:'',//	int	此参数用来表示获取的数据是否是下拉列表的学生数据，1表示是
+student_status	:'',//	int	学员状态，1在读，2已升学
+alevel	:'',//学员等级：普通学员，保读学员，VIP学员，潜在VIP，试听学员
+start_time	:'',//	int	时间戳，首次缴费开始时间
+end_time	:'',//	int	时间戳，首次缴费结束时间
       },
+student_status:[{value:1,label:'在读'},{value:2,label:'升学'}],
+student_alevel:[{value:'普通学员',label:'普通学员'},{value:'保读学员',label:'保读学员'},{value:'VIP学员',label:'VIP学员'},{value:'潜在VIP',label:'潜在VIP'},{value:'试听学员',label:'试听学员'}],
       tableData: [],
       thisMenu:[]
     };
@@ -103,6 +148,14 @@ export default {
 
   computed: mapState(["rolemenu"]),
   methods: {
+    get_starttime(){
+this.parms.start_time=this.change_start_time.toString().slice(0,10)*1
+this.getdata()
+    },
+    get_endtime(){
+this.parms.end_time=this.change_end_time.toString().slice(0,9)*1
+this.getdata()
+    },
     current(num) {
       this.parms.page = num;
       this.getdata();
@@ -238,6 +291,7 @@ export default {
           this.tableData = res.data.data.list;
         }
       });
+
     }
   }
 };

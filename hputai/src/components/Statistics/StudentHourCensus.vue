@@ -658,8 +658,11 @@ export default {
     drawStudent() {
       let myDraw = echarts.init(document.getElementById("main2"));
       app.config = {
-        rotate: 45,
-        align: "left"
+        rotate: 0,
+    align: 'center',
+    verticalAlign: 'middle',
+    position: 'top',
+    distance: 15,
       };
       var labelOption = {
         show: true,
@@ -668,9 +671,8 @@ export default {
         align: app.config.align,
         verticalAlign: app.config.verticalAlign,
         rotate: app.config.rotate,
-        // formatter: "{c}  {name|{a}}",
-        formatter: "",
-        fontSize: 16,
+         formatter: "{c}",
+        fontSize: 12,
         rich: {
           name: {
             textBorderColor: "#fff"
@@ -683,6 +685,14 @@ export default {
           trigger: "axis",
           axisPointer: {
             type: "shadow"
+          }
+        },
+                title: {
+          text: "学生课时年月份同比",
+          lineHeight: 40,
+          textStyle:{
+fontsize:'16px',
+ fontWeight : 'bolder'
           }
         },
         legend: {
@@ -737,6 +747,7 @@ export default {
                 res.data.data[i].keepreading_classhour;
               this.vip_classhour[i] = res.data.data[i].vip_classhour;
             }
+
 
             myDraw.setOption({
               legend: {
@@ -881,10 +892,40 @@ export default {
       //   let myChart = this.$echarts.init(document.getElementById("main"));全局引用的用法
       let myChart = echarts.init(document.getElementById("main"));
       var colors = ["#5793f3", "#d14a61", "#675bba"];
+            app.config = {
+  rotate: 0,
+    align: 'center',
+    verticalAlign: 'middle',
+    position: 'top',
+    distance: 15,
+      };
+      var labelOption = {
+        show: true,
+        position: app.config.position,
+        distance: app.config.distance,
+        align: app.config.align,
+        verticalAlign: app.config.verticalAlign,
+        rotate: app.config.rotate,
+        formatter: "{c}  ",
+        fontSize: 12,
+        rich: {
+          name: {
+            textBorderColor: "#fff"
+          }
+        }
+      };
       // 指定图表的配置项和数据
       myChart.setOption({
         legend: {},
         tooltip: {},
+             title: {
+          text: "已上课时",
+          lineHeight: 40,
+          textStyle:{
+fontsize:'16px',
+ fontWeight : 'bolder'
+          }
+        },
         dataset: {
           source: [
             ["product", "2015", "2016"],
@@ -908,14 +949,7 @@ export default {
                 this.showMouth1 = true;
               }
             },
-            myTool2: {
-              show: true,
-              title: "自定义扩展方法",
-              icon: "image://http://echarts.baidu.com/images/favicon.png",
-              onclick: function() {
-                alert("myToolHandler2");
-              }
-            },
+    
             saveAsImage: { show: true } //保存图片
             // dataView: { show: true, readOnly: false },
             // restore: { show: true }
@@ -966,18 +1000,21 @@ export default {
                 {
                   name: "普通",
                   type: "bar",
+                   label: labelOption,
                   data: this.ordinary_stu
                 },
                 {
                   name: "保读",
                   type: "bar",
                   yAxisIndex: 0,
+                   label: labelOption,
                   data: this.keepreading_stu
                 },
                 {
                   name: "VIP",
                   type: "bar",
                   yAxisIndex: 0,
+                   label: labelOption,
                   data: this.vip_stu
                 }
               ]
