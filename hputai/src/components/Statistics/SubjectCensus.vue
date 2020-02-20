@@ -4,102 +4,97 @@
     <div class="session1">
       <h3>一级科目</h3>
       <div>
- <el-date-picker
-      style="margin:10px"
-      v-model="begin_time_3"
-      @change="changeStart_3"
-      value-format="timestamp"
-      clearable
-      placeholder="选择日期时间"
-    ></el-date-picker>至
-    <el-date-picker
-      @change="changeEnd_3"
-      v-model="end_time_3"
-      value-format="timestamp"
-      clearable
-      placeholder="选择日期时间"
-    ></el-date-picker>
+        <el-date-picker
+          style="margin:10px"
+          v-model="begin_time_3"
+          @change="changeStart_3"
+          value-format="timestamp"
+          clearable
+          placeholder="选择日期时间"
+        ></el-date-picker>至
+        <el-date-picker
+          @change="changeEnd_3"
+          v-model="end_time_3"
+          value-format="timestamp"
+          clearable
+          placeholder="选择日期时间"
+        ></el-date-picker>
 
+        <el-select
+          clearable
+          v-model="params.student_type"
+          placeholder="选择学生类型"
+          @change="Change_sbuject"
+        >
+          <el-option label="全部" value="0"></el-option>
+          <el-option label="VIP学生" value="3"></el-option>
+          <el-option label="保读" value="2"></el-option>
+          <el-option label="普通" value="1"></el-option>
+        </el-select>
 
-    <el-select
-      clearable
-      v-model="params.student_type"
-      placeholder="选择学生类型"
-      @change="Change_sbuject"
-    >
-    <el-option label="全部" value="0"></el-option>
-      <el-option label="VIP学生" value="3"></el-option>
-      <el-option label="保读" value="2"></el-option>
-        <el-option label="普通" value="1"></el-option>
-    </el-select>
-
-
-    <el-button type="primary" @click="recharge_export">导出</el-button>
+        <el-button type="primary" @click="recharge_export">导出</el-button>
       </div>
 
+      <el-table
+        :data="tableData"
+        height="500px"
+        border
+        class="table_set"
+        @selection-change="handleSelectionChange"
+        :header-cell-style="{background:'#f4f4f4'}"
+      >
+        <el-table-column type="selection" fixed="left" @click="handleClick(scope.row)" width="40"></el-table-column>
 
-    <el-table
-      :data="tableData"
-      height="500px"
-      border
-      class="table_set"
-      @selection-change="handleSelectionChange"
-      :header-cell-style="{background:'#f4f4f4'}"
-    >
-      
-      <el-table-column type="selection" fixed="left" @click="handleClick(scope.row)" width="40"></el-table-column>
-  
-      <el-table-column label="科目名称" width="100" prop="subject_name"></el-table-column>
-      <el-table-column align="center" prop="student_type_name" label="学生类别" sortable></el-table-column>
-      <el-table-column align="center" prop="confirm_classhour" label="确认课时消耗量(小时)" sortable></el-table-column>
-      <el-table-column align="center" prop="student_amount" label="确认营业收入(￥)" sortable></el-table-column>
-      <el-table-column label="	确认课程成本(￥)" prop="teacher_amount"></el-table-column>
-      <el-table-column label="确认毛利金额(￥)" prop="profit"></el-table-column>
-
-    </el-table>
+        <el-table-column label="科目名称" width="100" prop="subject_name"></el-table-column>
+        <el-table-column align="center" prop="student_type_name" label="学生类别" sortable></el-table-column>
+        <el-table-column align="center" prop="confirm_classhour" label="确认课时消耗量(小时)" sortable></el-table-column>
+        <el-table-column align="center" prop="student_amount" label="确认营业收入(￥)" sortable></el-table-column>
+        <el-table-column label="	确认课程成本(￥)" prop="teacher_amount"></el-table-column>
+        <el-table-column label="确认毛利金额(￥)" prop="profit"></el-table-column>
+      </el-table>
     </div>
-   
+
     <div class="session1">
-     <h3>一级科目分析</h3>
-    <div class="echarts_1"  style='margin:20px 0;'>
-      <div style="width:44%;height:450px;" class="bgc">
-        <div class="block" style="margin: 0 auto;width:446px;">
-          <el-date-picker
-            @change="changeMouth"
-            v-model="changeMouth1"
-            type="month"
-            placeholder="选择你想查看的月份"
-          ></el-date-picker>
-             <el-cascader
-      placeholder="选择科目"
-      v-model="main_subject_id"
-      filterable
-      :options="options"
-      clearable
-      :props="{ expandTrigger: 'hover' }"
-      :show-all-levels="false"
-      @change="handleChange_1"
-    ></el-cascader>
+      <h3>一级科目分析</h3>
+      <div class="echarts_1" style="margin:20px 0;">
+        <div style="width:44%;height:450px;" class="bgc">
+          <div class="block" style="margin: 0 auto;width:446px;">
+            <el-date-picker
+              @change="changeMouth"
+              v-model="changeMouth1"
+              type="month"
+              placeholder="选择你想查看的月份"
+            ></el-date-picker>
+            <el-cascader
+              placeholder="选择科目"
+              v-model="main_subject_id"
+              filterable
+              :options="options"
+              clearable
+              :props="{ expandTrigger: 'hover' }"
+              :show-all-levels="false"
+              @change="handleChange_1"
+            ></el-cascader>
+          </div>
+          <div id="main" style="width:100%;height:400px;"></div>
         </div>
-        <div id="main" style="width:100%;height:400px;"></div>
-      </div>
 
-      <div style="width:55%;height:450px;" class="bgc">
-        <div class="block" style="margin:auto;width:200px;">
-          <el-date-picker
-            @change="changeMouth_1"
-            v-model="thisyear"
-            type="year"
-            value-format="yyyy"
-            placeholder="选择你想查看的年份"
-          ></el-date-picker>
+        <div style="width:55%;height:450px;" class="bgc">
+          <div class="block" style="margin:auto;width:200px;">
+            <el-date-picker
+              @change="changeMouth_1"
+              v-model="thisyear"
+              type="year"
+              value-format="yyyy"
+              placeholder="选择你想查看的年份"
+            ></el-date-picker>
+          </div>
+          <div id="main2" style="width:100%;height:400px;"></div>
         </div>
-        <div id="main2" style="width:100%;height:400px;"></div>
       </div>
     </div>
-   </div>
-    
-    <div class="bgc" >
+
+    <div class="bgc">
       <div class="flex_all">
         <div>
           <el-radio-group v-model="one.status" @change="changeRadio1">
@@ -140,8 +135,8 @@
       </div>
 
       <div id="main1" style="width:100%;height:400px;"></div>
-    </div> 
-     <div class="bgc " >
+    </div>
+    <div class="bgc">
       <div class="flex_all">
         <div>
           <el-radio-group fill="#5CB87A" v-model="three.status" @change="changeRadio_1">
@@ -202,37 +197,36 @@ export default {
       top15_1: [],
       top15_3: [],
       mouthData: [], //获取上一个月和前一年上一个月的数据
-      lastYear:[],
-      thisTear:[],
-      main_subject_id:'',//图表科目选择的
-      year_month:'',
+      lastYear: [],
+      thisTear: [],
+      main_subject_id: "", //图表科目选择的
+      year_month: "",
       // yearData: [],
       // ordinary_stu: [],
       // keepreading_stu: [],
       // vip_stu: [],
-      old_student_amount:"去年的收入",
-      student_amount:"	今年的收入",
-      old_teacher_amount:"去年的支出",
-      teacher_amount:"今年的支出",
-      old_profit:"去年的毛利",
-      profit:"今年的毛利",
+      old_student_amount: "去年的收入",
+      student_amount: "	今年的收入",
+      old_teacher_amount: "去年的支出",
+      teacher_amount: "今年的支出",
+      old_profit: "去年的毛利",
+      profit: "今年的毛利",
       idArr: [],
       params: {
-         student_type:'',
-         begin_time:'',
-         end_time:'',
-    
+        student_type: "",
+        begin_time: "",
+        end_time: ""
       },
       options_: [], //科目的原来数据
       options: [], //我们需要的科目数据
-            options_1: [], //学生的原来数据
+      options_1: [], //学生的原来数据
       options1: [], //我们需要的学生数据
       classMouth: [],
       // ordinary_classhour: [],
       // keepreading_classhour: [],
       // vip_classhour: [],
-      profit	: [],//今年的毛利
-old_profit: [],//去年的毛利
+      profit: [], //今年的毛利
+      old_profit: [], //去年的毛利
       msg: [],
       changeMouth1: "",
       thisyear: "",
@@ -275,22 +269,33 @@ old_profit: [],//去年的毛利
     }
   },
   methods: {
-        handleChange_1(targetName) {
+    handleChange_1(targetName) {
       //选择科目
       var lastName = targetName[0] ? targetName[0] : "";
       this.main_subject_id = lastName;
 
-       this.$apis.census
-        .total_onlevel_subject({ year_month: this.year_month,subject_id: this.main_subject_id})
+      this.$apis.census
+        .total_onlevel_subject({
+          year_month: this.year_month,
+          subject_id: this.main_subject_id
+        })
         .then(res => {
           if (res.data.code == 1) {
-         this.lastYear=[res.data.data[0].old_student_amount,res.data.data[1].old_teacher_amount,res.data.data[2].old_profit]
-        this.thisYear=[res.data.data[0].student_amount,res.data.data[1].teacher_amount,res.data.data[2].profit]
-        }
-        })
-              this.drawChart();
+            this.lastYear = [
+              res.data.data[0].old_student_amount,
+              res.data.data[1].old_teacher_amount,
+              res.data.data[2].old_profit
+            ];
+            this.thisYear = [
+              res.data.data[0].student_amount,
+              res.data.data[1].teacher_amount,
+              res.data.data[2].profit
+            ];
+          }
+        });
+      this.drawChart();
     },
-        getdata() {
+    getdata() {
       //获取科目的数据
       this.$apis.census
         .get_parent_info({
@@ -321,24 +326,35 @@ old_profit: [],//去年的毛利
     },
     indexMethod(index) {},
     changeMouth(value) {
-      var thisdate=new Date(this.changeMouth1)
-     var month1 =thisdate.getMonth()*1+1
-   var month =month1<10 ? "0"+month1:month1
-   
-      this.year_month =  thisdate.getFullYear()+"-"+month
-   console.log(this.year_month, thisdate.getFullYear(),month)
-             this.$apis.census
-        .total_onlevel_subject({ year_month: this.year_month,subject_id: this.main_subject_id})
+      var thisdate = new Date(this.changeMouth1);
+      var month1 = thisdate.getMonth() * 1 + 1;
+      var month = month1 < 10 ? "0" + month1 : month1;
+
+      this.year_month = thisdate.getFullYear() + "-" + month;
+      console.log(this.year_month, thisdate.getFullYear(), month);
+      this.$apis.census
+        .total_onlevel_subject({
+          year_month: this.year_month,
+          subject_id: this.main_subject_id
+        })
         .then(res => {
           if (res.data.code == 1) {
-         this.lastYear=[res.data.data[0].old_student_amount,res.data.data[1].old_teacher_amount,res.data.data[2].old_profit]
-        this.thisYear=[res.data.data[0].student_amount,res.data.data[1].teacher_amount,res.data.data[2].profit]
-        }
-        })
+            this.lastYear = [
+              res.data.data[0].old_student_amount,
+              res.data.data[1].old_teacher_amount,
+              res.data.data[2].old_profit
+            ];
+            this.thisYear = [
+              res.data.data[0].student_amount,
+              res.data.data[1].teacher_amount,
+              res.data.data[2].profit
+            ];
+          }
+        });
       this.drawChart();
     },
     changeMouth_1(value) {
-            console.log(this.thisyear)
+      console.log(this.thisyear);
 
       this.changeMouth2 = value;
       this.drawStudent();
@@ -674,11 +690,11 @@ old_profit: [],//去年的毛利
     drawStudent() {
       let myDraw = echarts.init(document.getElementById("main2"));
       app.config = {
-  rotate: 0,
-    align: 'center',
-    verticalAlign: 'middle',
-    position: 'top',
-    distance: 15,
+        rotate: 0,
+        align: "center",
+        verticalAlign: "middle",
+        position: "top",
+        distance: 15
       };
       var labelOption = {
         show: true,
@@ -704,12 +720,12 @@ old_profit: [],//去年的毛利
             type: "shadow"
           }
         },
-          title: {
+        title: {
           text: "毛利情况",
           lineHeight: 40,
-          textStyle:{
-fontsize:'16px',
- fontWeight : 'bolder'
+          textStyle: {
+            fontsize: "16px",
+            fontWeight: "bolder"
           }
         },
         legend: {
@@ -728,72 +744,76 @@ fontsize:'16px',
             type: "value"
           }
         ],
-        
+
         series: [
           {
             name: "已排",
             type: "bar",
             barGap: 0,
             label: labelOption,
-            data: [320, 332, 301],
- 
+            data: [320, 332, 301]
           },
           {
             name: "已上",
             type: "bar",
             label: labelOption,
-            data: [220, 182, 191],
-    
-          },
-
+            data: [220, 182, 191]
+          }
         ]
       });
-      this.$apis.census
-        .profit_info({ year: this.thisyear })
-        .then(res => {
-          if (res.data.code == 1) {
-            this.old_profit = [];
-            (this.profit = []);
-            for (let i = 0; i < res.data.data.length; i++) {
-              // this.classMouth.push(res.data.data[i].month);
-              this.profit[i] = res.data.data[i].profit;
-              this.old_profit[i] = res.data.data[i].old_profit;
-            }
-
-            myDraw.setOption({
-              legend: {
-                data: ["去年", "今年"]
-              },
-   
-              xAxis: [
-                {
-                  type: "category",
-                  axisTick: { show: false },
-                  data: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月',]
-                }
-              ],
-              series: [
-                {
-                  name: "去年",
-                  type: "bar",
-                  barGap: 0,
-                      label: {
-              show: true,
-              position: "right",
-                      },
-                  data: this.profit
-                },
-                {
-                  name: "今年",
-                  type: "bar",
-                  label: labelOption,
-                  data: this.old_profit
-                },
-
-              ]
-            });
+      this.$apis.census.profit_info({ year: this.thisyear }).then(res => {
+        if (res.data.code == 1) {
+          this.old_profit = [];
+          this.profit = [];
+          for (let i = 0; i < res.data.data.length; i++) {
+            // this.classMouth.push(res.data.data[i].month);
+            this.profit[i] = res.data.data[i].profit;
+            this.old_profit[i] = res.data.data[i].old_profit;
           }
-        });
+
+          myDraw.setOption({
+            legend: {
+              data: ["去年", "今年"]
+            },
+
+            xAxis: [
+              {
+                type: "category",
+                axisTick: { show: false },
+                data: [
+                  "1月",
+                  "2月",
+                  "3月",
+                  "4月",
+                  "5月",
+                  "6月",
+                  "7月",
+                  "8月",
+                  "9月",
+                  "10月",
+                  "11月",
+                  "12月"
+                ]
+              }
+            ],
+            series: [
+              {
+                name: "去年",
+                type: "bar",
+                barGap: 0,
+                label: labelOption,
+                data: this.profit
+              },
+              {
+                name: "今年",
+                type: "bar",
+                label: labelOption,
+                data: this.old_profit
+              }
+            ]
+          });
+        }
+      });
     },
     lineChart2() {
       let myLine2 = echarts.init(document.getElementById("main3"));
@@ -801,7 +821,7 @@ fontsize:'16px',
         color: ["#5CBB7A"],
 
         title: {
-          text: "学生课时T15排行",
+          text: "学生维度分析(占位)",
           lineHeight: 40,
           // left: 'center',
           //  subtext: "三级科目Top15",
@@ -851,7 +871,7 @@ fontsize:'16px',
       let myLine = echarts.init(document.getElementById("main1"));
       myLine.setOption({
         title: {
-          text: "班主任课时T15排行",
+          text: "体系维度分析（占位）",
           lineHeight: 40,
           // left: 'center',
           //  subtext: "三级科目Top15",
@@ -905,12 +925,12 @@ fontsize:'16px',
       // 指定图表的配置项和数据
       myChart.setOption({
         legend: {},
-                             title: {
+        title: {
           text: "月份情况",
           lineHeight: 40,
-          textStyle:{
-fontsize:'16px',
- fontWeight : 'bolder'
+          textStyle: {
+            fontsize: "16px",
+            fontWeight: "bolder"
           }
         },
         tooltip: {},
@@ -925,13 +945,22 @@ fontsize:'16px',
         yAxis: {},
         // Declare several bar series, each will be mapped
         // to a column of dataset.source by default.
-        series: [{ type: "bar", label: {
+        series: [
+          {
+            type: "bar",
+            label: {
               show: true,
               position: "top"
-            } }, { type: "bar", label: {
+            }
+          },
+          {
+            type: "bar",
+            label: {
               show: true,
               position: "top"
-            } }],
+            }
+          }
+        ]
         // toolbox: {
         //   feature: {
 
@@ -944,17 +973,28 @@ fontsize:'16px',
         //       }
         //     },
         //     saveAsImage: { show: true } //保存图片
- 
+
         //   }
         // }
       });
 
       this.$apis.census
-        .total_onlevel_subject({ year_month: this.year_month,subject_id: this.main_subject_id})
+        .total_onlevel_subject({
+          year_month: this.year_month,
+          subject_id: this.main_subject_id
+        })
         .then(res => {
           if (res.data.code == 1) {
-         this.lastYear=[res.data.data[0].old_student_amount,res.data.data[1].old_teacher_amount,res.data.data[2].old_profit]
-        this.thisYear=[res.data.data[0].student_amount,res.data.data[1].teacher_amount,res.data.data[2].profit]
+            this.lastYear = [
+              res.data.data[0].old_student_amount,
+              res.data.data[1].old_teacher_amount,
+              res.data.data[2].old_profit
+            ];
+            this.thisYear = [
+              res.data.data[0].student_amount,
+              res.data.data[1].teacher_amount,
+              res.data.data[2].profit
+            ];
 
             myChart.setOption({
               xAxis: [
@@ -963,7 +1003,7 @@ fontsize:'16px',
                   axisTick: {
                     alignWithLabel: true
                   },
-                  data:['确认营业收入','确认课程成本','确认毛利金额']
+                  data: ["确认营业收入", "确认课程成本", "确认毛利金额"]
                 }
               ],
 
@@ -983,8 +1023,7 @@ fontsize:'16px',
                   type: "bar",
                   yAxisIndex: 0,
                   data: this.thisYear
-                },
-
+                }
               ]
             });
           }
@@ -994,8 +1033,7 @@ fontsize:'16px',
       this.$apis.census.onlevel_subject(this.params).then(res => {
         this.tableData = [];
         if (
-          Object.prototype.toString.call(res.data.data).substr(8, 5) ==
-          Array
+          Object.prototype.toString.call(res.data.data).substr(8, 5) == Array
         ) {
           this.tableData = res.data.data;
         } else {
@@ -1007,7 +1045,7 @@ fontsize:'16px',
       this.params.page++;
       this.getadata();
     },
-       current(num) {
+    current(num) {
       //当前页数
       this.params.page = num;
       this.getadata();
@@ -1020,7 +1058,7 @@ fontsize:'16px',
       }
     }
   },
-  
+
   created() {
     this.getdata();
     this.$nextTick(function() {
@@ -1034,26 +1072,23 @@ fontsize:'16px',
   mounted() {
     this.$apis.census.onlevel_subject(this.params).then(res => {
       this.tableData = [];
-      if (
-        Object.prototype.toString.call(res.data.data).substr(8, 5) == Array
-      ) {
+      if (Object.prototype.toString.call(res.data.data).substr(8, 5) == Array) {
         this.tableData = res.data.data;
         this.msg = res.data;
-        
       } else {
         this.tableData = [...res.data.data];
         this.msg = res.data;
       }
     });
-          this.$apis.students.students_list().then(res => {
-        if (res.data.code == 1) {
-          this.options_1 = res.data.data.list;
-          for (let i = 0; i < this.options_1.length; i++) {
-            var val = this.options_1[i];
-            this.options1.push({ value: val.id, label: val.username });
-          }
+    this.$apis.students.students_list().then(res => {
+      if (res.data.code == 1) {
+        this.options_1 = res.data.data.list;
+        for (let i = 0; i < this.options_1.length; i++) {
+          var val = this.options_1[i];
+          this.options1.push({ value: val.id, label: val.username });
         }
-      });
+      }
+    });
   }
 };
 </script>

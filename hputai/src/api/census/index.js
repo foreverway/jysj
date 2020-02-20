@@ -76,4 +76,21 @@ export default {
         let url = '/api/api_profit_info'
         return shuju.getdata(url, params)
       },
+      fulltime_yipai_classhour(params) { //全职老师已排课时统计
+        let url = '/api/api_fulltime_yipai_classhour'
+        return shuju.getdata(url, params)
+      },
+      fulltime_upper_classhour(params) { //全职老师已上课时统计
+        let url = '/api/api_fulltime_upper_classhour'
+        return shuju.getdata(url, params)
+      },
+      fulltime_yipai_complete(params) { //全职教师已排课时目标完成度
+        let url = '/api/api_fulltime_yipai_complete'
+        return shuju.getdata(url, params)
+      },
+      fulltime_upper_complete(params) { //全职教师已上课时目标完成度
+        let url = '/api/api_fulltime_upper_complete'
+        return shuju.getdata(url, params)
+      },
+      
 }

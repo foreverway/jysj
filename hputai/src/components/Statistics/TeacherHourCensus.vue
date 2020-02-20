@@ -122,10 +122,9 @@
               <el-button type="primary" @click="recharge_export_2">导出</el-button>
 
       </div>
-
+<!-- 全职与兼职的课时占比情况 -->
       <el-table
         :data="tableData_1"
-        height="500px"
         style="margin:15px 0;"
         border
         class="table_set"
@@ -137,35 +136,37 @@
             <span>{{ scope.row.subject_name }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="总的已排课时" width="80">
+        <el-table-column label="总的已排课时"  v-if="params_1.is_today!==-1">
           <template slot-scope="scope">
             <p>{{ scope.row.total_yipai }}</p>
           </template>
         </el-table-column>
-        <el-table-column label="总的已上课时" width="100" prop="total_yishang"></el-table-column>
-        <el-table-column align="center" prop="total_daishang" label="总的待上课时" sortable></el-table-column>
-        <el-table-column align="center" prop="total_amount" label="课酬" sortable></el-table-column>
+        <el-table-column label="总的已上课时" v-if="params_1.is_today!==2" prop="total_yishang"></el-table-column>
+        <!-- <el-table-column align="center" prop="total_daishang" label="总的待上课时" sortable></el-table-column> -->
+        <el-table-column align="center" prop="total_amount" label="课酬金额" sortable v-if="params_1.is_today==-1"></el-table-column>
         <!-- <el-table-column align="center" prop="total_amount" label="待上课时" sortable></el-table-column> -->
-        <el-table-column label="全职已排占比" prop="quan_yipai_classhour"></el-table-column>
-        <el-table-column label="兼职已排占比" prop="jian_yipai_classhour"></el-table-column>
-        <el-table-column align="center" label="全职已上占比" prop="jian_yishang_classhour"></el-table-column>
-        <el-table-column align="center" label="全职待上占比" prop="quan_daishang_classhour"></el-table-column>
-        <el-table-column label="兼职待上占比" prop="jian_daishang_classhour"></el-table-column>
-        <el-table-column align="center" label="全职课酬占比" prop="quan_amount"></el-table-column>
-        <el-table-column label="兼职课酬占比" prop="jian_amount"></el-table-column>
-        <el-table-column align="center" label="全职平均单课酬" prop="quan_average_amount"></el-table-column>
-        <el-table-column align="center" label="兼职平均单课酬" prop="jian_average_amount"></el-table-column>
+        <el-table-column label="全职已排占比" prop="quan_yipai_classhour" v-if="params_1.is_today!==1"></el-table-column>
+        <el-table-column label="兼职已排占比" prop="jian_yipai_classhour" v-if="params_1.is_today!==1"></el-table-column>
+        <el-table-column align="center" label="全职已上占比" v-if="params_1.is_today!==2" prop="jian_yishang_classhour"></el-table-column>
+        <!-- <el-table-column align="center" label="全职待上占比" prop="quan_daishang_classhour"></el-table-column> -->
+        <!-- <el-table-column label="兼职待上占比" prop="jian_daishang_classhour"></el-table-column> -->
+        <el-table-column align="center" label="全职课酬占比" prop="quan_amount"  v-if="params_1.is_today!==2"></el-table-column>
+        <el-table-column label="兼职课酬占比" prop="jian_amount"  v-if="params_1.is_today!==2"></el-table-column>
+        <el-table-column align="center" label="全职平均单课酬" prop="quan_average_amount"  v-if="params_1.is_today==1"></el-table-column>
+        <el-table-column align="center" label="兼职平均单课酬" prop="jian_average_amount" v-if="params_1.is_today==1"></el-table-column>
+          <el-table-column align="center" label="全职平均课时成本" v-if="params_1.is_today==-1" prop="quan_average_amount"></el-table-column>
+            <el-table-column align="center" label="兼职平均课时成本" prop="jian_average_amount"  v-if="params_1.is_today==-1"></el-table-column>
       </el-table>
-      <span v-if="msg.data">
+      <span v-if="msg1.data">
         <el-pagination
           style="float:right;margin-top:20px;margin-bottom: 20px;"
           background
           layout="prev, pager, next"
-          @prev-click="prev"
-          @next-click="next"
-          @current-change="current"
+          @prev-click="prev_1"
+          @next-click="next_1"
+          @current-change="current_1"
           :page-size="10"
-          :total="msg.data.total"
+          :total="msg1.data.total"
         ></el-pagination>
       </span>
     </div>
@@ -223,9 +224,9 @@
         <el-table-column align="center" label="已上目标课时比例" prop="yishang_target"></el-table-column>
         <el-table-column align="center" label="待上目标课时比例" prop="daishang_target"></el-table-column>
       </el-table>
-      <span v-if="msg.data">
+      <div v-if="msg.data" style="display:block;">
         <el-pagination
-          style="float:right;margin-top:20px;margin-bottom: 20px;"
+          style="float:right;margin-top:20px;"
           background
           layout="prev, pager, next"
           @prev-click="prev"
@@ -234,7 +235,71 @@
           :page-size="10"
           :total="msg.data.total"
         ></el-pagination>
-      </span>
+      </div>
+    </div>
+
+          <div class="bgc">
+      <div class="flex_all">
+          <!-- <el-date-picker
+            v-model="begin_time_main1"
+            type="date"
+            value-format="timestamp"
+            @change="change_Start"
+            placeholder="选择你想查看的初始日期"
+          ></el-date-picker>至
+          <el-date-picker
+            v-model="end_time_main1"
+            @change="change_End"
+            value-format="timestamp"
+            type="date"
+            placeholder="选择你想查看的截止日期"
+          ></el-date-picker> -->
+                   <el-date-picker
+              @change="change_Start(1)"
+              v-model="year_month"
+              type="month"
+              placeholder="选择你想查看的月份"
+            ></el-date-picker>
+        </div>
+
+      <div id="main1" style="width:100%;height:400px;"></div>
+    </div>
+
+            <div class="bgc">
+      <div class="flex_all">
+          <el-date-picker
+              @change="change_Start(2)"
+              v-model="year_month1"
+              type="month"
+              placeholder="选择你想查看的月份"
+            ></el-date-picker>
+        </div>
+
+      <div id="main2" style="width:100%;height:400px;"></div>
+    </div>
+            <div class="bgc">
+      <div class="flex_all">
+    <el-date-picker
+              @change="change_Start(3)"
+              v-model="year_month2"
+              type="month"
+              placeholder="选择你想查看的月份"
+            ></el-date-picker>
+        </div>
+
+      <div id="main3" style="width:100%;height:400px;"></div>
+    </div>
+            <div class="bgc">
+      <div class="flex_all">
+          <el-date-picker
+              @change="change_Start(4)"
+              v-model="year_month3"
+              type="month"
+              placeholder="选择你想查看的月份"
+            ></el-date-picker>
+        </div>
+
+      <div id="main4" style="width:100%;height:400px;"></div>
     </div>
   </div>
 </template>
@@ -256,6 +321,8 @@ export default {
       options: [],
       top15_1: [],
       top15_3: [],
+       top15_2: [],
+      top15_4: [],
       mouthData: [], //获取上一个月和前一年上一个月的数据
 
       yearData: [],
@@ -274,7 +341,8 @@ export default {
       params_1: {
         page: "", //	页码
         begin_time: "", //	开始时间
-        end_time: "" //	结束时间
+        end_time: "" ,//	结束时间
+        is_today:1,//默认是当月，1当月，-1上月，2下月
       },
       params_2: {
         // keywords: "", //	老师名字搜索
@@ -300,6 +368,7 @@ export default {
       keepreading_classhour: [],
       vip_classhour: [],
       msg: [],
+      msg1: [],
       changeMouth1: "",
       changeMouth2: "",
       begin_time_1: "", //自由选择时间的绑定值1
@@ -308,20 +377,43 @@ export default {
       end_time_2: "", //自由选择时间的绑定值1
       begin_time_3: "", //总数组的绑定值
       end_time_3: "", //总数组的绑定值
+      begin_time_main1:'',
+         begin_time_main2:'',
+            begin_time_main3:'',
+               begin_time_main4:'',
+      end_time_main1:'',
+end_time_main2:'',
+end_time_main3:'',
+end_time_main4:'',
+year_month:'',
+year_month1:'',
+year_month2:'',
+year_month3:'',
       one: {
         begin_time: "",
         end_time: "",
-        status: "1"
+        year_month: ""
       },
-      three: {
+         two: {
         begin_time: "",
         end_time: "",
-        status: "1"
+        year_month: ""
+      },
+         three: {
+        begin_time: "",
+        end_time: "",
+        year_month: ""
+      },
+      four: {
+        begin_time: "",
+        end_time: "",
+        year_month: ""
       },
       hadClick: false,
       hadClick_2: false //是否点击了今天，本周，或本月
     };
   },
+
   watch: {
     begin_time_1: function(newVal, oldVal) {
       if (newVal == null) {
@@ -341,8 +433,197 @@ export default {
     }
   },
   methods: {
+    // 全职老师已排课时统计1
+          lineChart() {
+      let myLine = echarts.init(document.getElementById("main1"));
+      myLine.setOption({
+        title: {
+          text: "全职老师已排课时统计",
+          lineHeight: 40,
+          textStyle: {
+            fontsize: "16px",
+            fontWeight: "bolder"
+          }
+        },
+        dataset: {
+          source: []
+        },
+        series: [
+          {
+            type: "bar",
+            encode: {
+              x: "课时",
+              y: "product"
+            },
+            label: {
+              show: true,
+              position: "right"
+            }
+          }
+        ],
+        grid: { containLabel: true },
+        xAxis: { name: "课时" },
+        yAxis: { type: "category" }
+      });
+      this.$apis.census.fulltime_yipai_classhour(this.one).then(res => {
+        if (res.data.code == 1) {
+          this.top15_1 = [];
+          for (let i = 0; i < res.data.data.length; i++) {
+            this.top15_1[i] = [];
+            this.top15_1[i].push(res.data.data[i].yipai_classhour);
+            this.top15_1[i].push(res.data.data[i].teacher_name);
+          }
+          myLine.setOption({
+            dataset: {
+              source: this.top15_1
+            }
+          });
+        }
+      });
+    },
+    // 全职老师已上课时统计2
+     lineChart_1() {
+      let myLine = echarts.init(document.getElementById("main2"));
+      myLine.setOption({
+        title: {
+          text: "全职老师已上课时统计",
+          lineHeight: 40,
+          textStyle: {
+            fontsize: "16px",
+            fontWeight: "bolder"
+          }
+        },
+        dataset: {
+          source: []
+        },
+        series: [
+          {
+            type: "bar",
+            encode: {
+              x: "课时",
+              y: "product"
+            },
+            label: {
+              show: true,
+              position: "right"
+            }
+          }
+        ],
+        grid: { containLabel: true },
+        xAxis: { name: "课时" },
+        yAxis: { type: "category" }
+      });
+      this.$apis.census.fulltime_upper_classhour(this.two).then(res => {
+        if (res.data.code == 1) {
+          this.top15_2 = [];
+          for (let i = 0; i < res.data.data.length; i++) {
+            this.top15_2[i] = [];
+            this.top15_2[i].push(res.data.data[i].yishang_classhour);
+            this.top15_2[i].push(res.data.data[i].teacher_name);
+          }
+          myLine.setOption({
+            dataset: {
+              source: this.top15_2
+            }
+          });
+        }
+      });
+    },
+     lineChart_2() {
+      let myLine = echarts.init(document.getElementById("main3"));
+      myLine.setOption({
+        title: {
+          text: "全职教师已排课时目标完成度",
+          lineHeight: 40,
+          textStyle: {
+            fontsize: "16px",
+            fontWeight: "bolder"
+          }
+        },
+        dataset: {
+          source: []
+        },
+        series: [
+          {
+            type: "bar",
+            encode: {
+              x: "课时",
+              y: "product"
+            },
+            label: {
+              show: true,
+              position: "right"
+            }
+          }
+        ],
+        grid: { containLabel: true },
+        xAxis: { name: "课时" },
+        yAxis: { type: "category" }
+      });
+      this.$apis.census.fulltime_yipai_complete(this.three).then(res => {
+        if (res.data.code == 1) {
+          this.top15_3 = [];
+          for (let i = 0; i < res.data.data.length; i++) {
+            this.top15_3[i] = [];
+            this.top15_3[i].push(res.data.data[i].complete_classhour);
+            this.top15_3[i].push(res.data.data[i].teacher_name);
+          }
+          myLine.setOption({
+            dataset: {
+              source: this.top15_3
+            }
+          });
+        }
+      });
+    },
+     lineChart_3() {
+      let myLine = echarts.init(document.getElementById("main4"));
+      myLine.setOption({
+        title: {
+          text: "全职教师已上课时目标完成度",
+          lineHeight: 40,
+          textStyle: {
+            fontsize: "16px",
+            fontWeight: "bolder"
+          }
+        },
+        dataset: {
+          source: []
+        },
+        series: [
+          {
+            type: "bar",
+            encode: {
+              x: "课时",
+              y: "product"
+            },
+            label: {
+              show: true,
+              position: "right"
+            }
+          }
+        ],
+        grid: { containLabel: true },
+        xAxis: { name: "课时" },
+        yAxis: { type: "category" }
+      });
+      this.$apis.census.fulltime_upper_complete(this.four).then(res => {
+        if (res.data.code == 1) {
+          this.top15_4 = [];
+          for (let i = 0; i < res.data.data.length; i++) {
+            this.top15_4[i] = [];
+            this.top15_4[i].push(res.data.data[i].complete_classhour);
+            this.top15_4[i].push(res.data.data[i].teacher_name);
+          }
+          myLine.setOption({
+            dataset: {
+              source: this.top15_4
+            }
+          });
+        }
+      });
+    },
     handleSelectionChange(result) {
-      console.log(result);
       this.idArr = [];
       for (let i = 0; i < result.length; i++) {
         this.idArr.push(result[i].id);
@@ -389,7 +670,6 @@ export default {
 
       var s = sy + "-" + this.add0(sm) + "-" + this.add0(sd) + " 00:00:00"; //开始
       var e = ey + "-" +this.add0(em) + "-" + this.add0(ed) + " 23:59:59"; //结束
-      console.log(s,e)
       var s1 = this.dateToMs(s)
         .toString()
         .substr(0, 10);
@@ -551,6 +831,7 @@ export default {
         .substr(0, 10);
       this.params_1.begin_time = s1.toString();
       this.params_1.end_time = e1.toString();
+       this.params_1.is_today=-1
       this.getadata_1();
     },
     showDay_2() {
@@ -702,7 +983,6 @@ export default {
       var ed = priorMonthLastDay.getDate();
       var s = sy + "-" + this.add0(sm) + "-" + this.add0(sd) + " 00:00:00"; //开始
       var e = ey + "-" + this.add0(em) + "-" + this.add0(ed) + " 23:59:59"; //结束
-      console.log(s, e);
       var s1 = this.dateToMs(s)
         .toString()
         .substr(0, 10);
@@ -711,6 +991,7 @@ export default {
         .substr(0, 10);
       this.params_1.begin_time = s1.toString();
       this.params_1.end_time = e1.toString();
+      this.params_1.is_today=2
       this.getadata_1();
     },
     showWeek_2() {
@@ -837,10 +1118,10 @@ export default {
         .substr(0, 10);
       this.params_1.begin_time = s1.toString();
       this.params_1.end_time = e1.toString();
+       this.params_1.is_today =1
       this.getadata_1();
     },
     handleClick(result) {
-      console.log(result);
     },
     showMouth_2() {
       //起止日期数组
@@ -888,15 +1169,120 @@ export default {
       this.params_2.end_time = e1.toString();
       this.getadata_2();
     },
-    changeStart(event) {
+    // changeStart(event) {
+    //   if (this.hadClick == true) {
+    //     this.one.end_time = "";
+    //     this.one.begin_time = event ? event.toString().substr(0, 10) : "";
+    //     this.lineChart();
+    //     this.hadClick = false;
+    //   } else {
+    //     this.one.begin_time = event ? event.toString().substr(0, 10) : "";
+    //     this.lineChart();
+    //   }
+    // },
+        change_Start(value) {
+          switch (value) {
+            case 1:
+                    var thisdate = new Date(this.year_month);
+      var month1 = thisdate.getMonth() * 1 + 1;
+      var month = month1 < 10 ? "0" + month1 : month1;
+
+      this.year_month = thisdate.getFullYear() + "-" + month;
+      this.one.year_month=this.year_month
+       this.lineChart();
+              break;
+                  case 2:
+                    var thisdate = new Date(this.year_month);
+      var month1 = thisdate.getMonth() * 1 + 1;
+      var month = month1 < 10 ? "0" + month1 : month1;
+
+      this.year_month = thisdate.getFullYear() + "-" + month;
+      this.two.year_month=this.year_month1
+       this.lineChart_1();
+              break;        case 3:
+                    var thisdate = new Date(this.year_month);
+      var month1 = thisdate.getMonth() * 1 + 1;
+      var month = month1 < 10 ? "0" + month1 : month1;
+
+      this.year_month = thisdate.getFullYear() + "-" + month;
+      this.three.year_month=this.year_month2
+       this.lineChart_2();
+              break;        case 4:
+                    var thisdate = new Date(this.year_month);
+      var month1 = thisdate.getMonth() * 1 + 1;
+      var month = month1 < 10 ? "0" + month1 : month1;
+
+      this.year_month = thisdate.getFullYear() + "-" + month;
+      this.four.year_month=this.year_month3
+       this.lineChart_3();
+              break;
+            default:
+              break;
+          }
+
+      // this.$apis.census
+      //   .total_onlevel_subject({
+      //     year_month: this.year_month,
+      //     subject_id: this.main_subject_id
+      //   })
+      //   .then(res => {
+      //     if (res.data.code == 1) {
+      //       this.lastYear = [
+      //         res.data.data[0].old_student_amount,
+      //         res.data.data[1].old_teacher_amount,
+      //         res.data.data[2].old_profit
+      //       ];
+      //       this.thisYear = [
+      //         res.data.data[0].student_amount,
+      //         res.data.data[1].teacher_amount,
+      //         res.data.data[2].profit
+      //       ];
+      //     }
+      //   });
+
+    },
+    //     change_Start(event) {
+    //   if (this.hadClick == true) {
+    //     this.one.end_time = "";
+    //     this.one.begin_time = event ? event.toString().substr(0, 10) : "";
+    //     this.lineChart();
+    //     this.hadClick = false;
+    //   } else {
+    //     this.one.begin_time = event ? event.toString().substr(0, 10) : "";
+    //     this.lineChart();
+    //   }
+    // },
+        change_Start_1(event) {
       if (this.hadClick == true) {
-        this.one.end_time = "";
-        this.one.begin_time = event ? event.toString().substr(0, 10) : "";
-        this.lineChart();
+        this.two.end_time = "";
+        this.two.begin_time = event ? event.toString().substr(0, 10) : "";
+        this.lineChart_1();
         this.hadClick = false;
       } else {
-        this.one.begin_time = event ? event.toString().substr(0, 10) : "";
-        this.lineChart();
+        this.two.begin_time = event ? event.toString().substr(0, 10) : "";
+        this.lineChart_1();
+      }
+    },
+        change_Start_2(event) {
+      if (this.hadClick == true) {
+        this.three.end_time = "";
+        this.three.begin_time = event ? event.toString().substr(0, 10) : "";
+        this.lineChart_2();
+        this.hadClick = false;
+      } else {
+        this.three.begin_time = event ? event.toString().substr(0, 10) : "";
+        this.lineChart_2();
+      }
+    },
+            change_Start_3(event) {
+      if (this.hadClick == true) {
+        this.four.end_time = "";
+        this.four.begin_time = event ? event.toString().substr(0, 10) : "";
+        this.lineChart_3();
+        this.hadClick = false;
+      } else {
+        this.four.begin_time = event ? event.toString().substr(0, 10) : "";
+        this.lineChart_3();
       }
     },
     changeStart_3(event) {
@@ -931,7 +1317,6 @@ export default {
       // let urls = "http://personal.test.hqjystudio.com";
       let parms = "";
       // // this.form.teacher='杨懿俊'
-      console.log(this.params);
       for (var key in this.params) {
         if (key == "subject_ids" && this.params.index_ids) {
           parms += key + "=" + this.params[key];
@@ -952,16 +1337,15 @@ export default {
       // let urls = "http://personal.test.hqjystudio.com";
       let parms = "";
       // // this.form.teacher='杨懿俊'
-      console.log(this.params);
       for (var key in this.params1) {
-        if (this.params[key]) {
+        if (this.params[key]&&this.params!=='page') {
       
           parms += key + "=" + this.params[key] + "&";
       }}
       window.location.href = url.urls + "/api_export_teacher_proportion" + "?" + parms;
     },
     
-    changeEnd(event) {
+    change_End(event) {
       if (this.hadClick == true) {
         this.one.begin_time = "";
         this.one.end_time = event ? event.toString().substr(0, 10) : "";
@@ -970,6 +1354,39 @@ export default {
       } else {
         this.one.end_time = event ? event.toString().substr(0, 10) : "";
         this.lineChart();
+      }
+    },
+        change_End_1(event) {
+      if (this.hadClick == true) {
+        this.two.begin_time = "";
+        this.two.end_time = event ? event.toString().substr(0, 10) : "";
+        this.lineChart_1();
+        this.hadClick = false;
+      } else {
+        this.two.end_time = event ? event.toString().substr(0, 10) : "";
+        this.lineChart_1();
+      }
+    },
+        change_End_2(event) {
+      if (this.hadClick == true) {
+        this.three.begin_time = "";
+        this.three.end_time = event ? event.toString().substr(0, 10) : "";
+        this.lineChart_2();
+        this.hadClick = false;
+      } else {
+        this.three.end_time = event ? event.toString().substr(0, 10) : "";
+        this.lineChart_2();
+      }
+    },
+        change_End_3(event) {
+      if (this.hadClick == true) {
+        this.four.begin_time = "";
+        this.four.end_time = event ? event.toString().substr(0, 10) : "";
+        this.lineChart_3();
+        this.hadClick = false;
+      } else {
+        this.four.end_time = event ? event.toString().substr(0, 10) : "";
+        this.lineChart_3();
       }
     },
     Change_sbuject() {
@@ -1064,6 +1481,22 @@ export default {
         }
       });
     },
+        next_1() {
+      this.params_1.page++;
+      this.getadata_1();
+    },
+    current_1(num) {
+      //当前页数
+      this.params_1.page = num;
+      this.getadata_1();
+    },
+    prev_1() {
+      //上一页
+      if (this.params_1.page > 1) {
+        this.params_1.page--;
+        this.getadata_1();
+      }
+    },
     next() {
       this.params.page++;
       this.getadata();
@@ -1081,12 +1514,17 @@ export default {
       }
     }
   },
-
-  created() {
+    created() {
     this.getdata();
+   
   },
 
+
   mounted() {
+     this.lineChart() ;
+    this.lineChart_1() ;
+    this.lineChart_2() ;
+    this.lineChart_3() ;
     this.$apis.census.teacher_classhour(this.params).then(res => {
       this.tableData = [];
       if (
@@ -1105,10 +1543,10 @@ export default {
         Object.prototype.toString.call(res.data.data.data).substr(8, 5) == Array
       ) {
         this.tableData_1 = res.data.data.data;
-        this.msg = res.data;
+        this.msg1 = res.data;
       } else {
         this.tableData_1 = [...res.data.data.data];
-        this.msg = res.data;
+        this.msg1 = res.data;
       }
     });
     this.$apis.census.screen_teacher_classhour(this.params_2).then(res => {
@@ -1144,6 +1582,14 @@ export default {
   align-items: center;
   justify-content: space-around;
   margin-bottom: 10px;
+}
+.bgc {
+  background-color: #fff;
+  display:inline-block;
+  width:44.5%;
+  padding: 1%;
+  margin: 1%;
+  border-radius: 10px;
 }
 .flex_div {
   display: flex;

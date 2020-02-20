@@ -120,7 +120,8 @@
     v-model="inputmsg.collectiontype">
   </el-input>  <el-button size="mini" @click="adddata('collectiontype',inputmsg.collectiontype)"  type="primary" round>添加</el-button>
    <br>
- <h4>报课项目</h4>
+
+ <h4>报课项目配置</h4>
          <span v-if="msg.data">
 
         <span class="project1 reg" v-for="(item,index) in msg.data.classproject_list" :key="index" @click="dorp('classproject',item.id)">
@@ -138,7 +139,41 @@
   </el-input>  <el-button size="mini" @click="adddata('classproject',inputmsg.classproject)"  type="primary" round>添加</el-button>
    <br>
 
+ <h4>课程体系配置</h4>
+         <span v-if="msg.data">
 
+        <span class="project1 reg" v-for="(item,index) in msg.data.subjects_system_list" :key="index" @click="dorp('subjects_system',item.id)">
+            <el-badge value="x" class="item" >
+            <span >{{item.name}}</span>
+            </el-badge>
+        </span>
+         </span>
+
+        <br><br>
+         <el-input style="width:100px"
+    size="mini"
+    placeholder="请输入内容"
+    v-model="inputmsg.subjects_system">
+  </el-input>  <el-button size="mini" @click="adddata('subjects_system',inputmsg.subjects_system)"  type="primary" round>添加</el-button>
+   <br>
+
+    <h4>上课地址配置</h4>
+         <span v-if="msg.data">
+
+        <span class="project1 reg" v-for="(item,index) in msg.data.subjects_system_list" :key="index" @click="dorp('subjects_system',item.id)">
+            <el-badge value="x" class="item" >
+            <span >{{item.name}}</span>
+            </el-badge>
+        </span>
+         </span>
+
+        <br><br>
+         <el-input style="width:100px"
+    size="mini"
+    placeholder="暂无接口"
+    v-model="inputmsg.subjects_system">
+  </el-input>  <el-button size="mini" @click="adddata('subjects_system',inputmsg.subjects_system)"  type="primary" round>添加</el-button>
+   <br>
     </div>
 </template>
 <script>
@@ -155,6 +190,7 @@ export default {
                 collectionclass:'',//收款类别
                 collectiontype:'',//收款方式
                 classproject:'', //报课项目
+                subjects_system:'',//课程体系配置
             },
        
             form:{  //获取数据
@@ -185,6 +221,7 @@ export default {
        
 this.$apis.sys.basedata_list().then(res=>{
          this.msg=res.data
+         console.log(res.data)
 })
         },
 

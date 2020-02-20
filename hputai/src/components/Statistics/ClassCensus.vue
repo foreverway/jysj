@@ -17,7 +17,12 @@
       placeholder="选择日期时间"
     ></el-date-picker>
 
-    <el-select clearable v-model="params.subject_level" placeholder="选择科目等级" @change="Change_sbuject">
+    <el-select
+      clearable
+      v-model="params.subject_level"
+      placeholder="选择科目等级"
+      @change="Change_sbuject"
+    >
       <el-option label="一级科目" value="1"></el-option>
       <el-option label="二级科目" value="2"></el-option>
     </el-select>
@@ -43,13 +48,7 @@
       @selection-change="handleSelectionChange"
       :header-cell-style="{background:'#f4f4f4'}"
     >
-   
-     <el-table-column
-      type="selection"
-      fixed="left"
-      @click="handleClick(scope.row)"
-      width="55">
-    </el-table-column>
+      <el-table-column type="selection" fixed="left" @click="handleClick(scope.row)" width="55"></el-table-column>
       <el-table-column :show-overflow-tooltip="true" align="center" label="科目名称" width="150">
         <template slot-scope="scope">
           <span>{{ scope.row.subject_name }}</span>
@@ -146,19 +145,19 @@
             <el-radio-button label="2">已上</el-radio-button>
             <el-radio-button label="3">待上</el-radio-button>
           </el-radio-group>
-              <el-cascader
-      placeholder="选择一级科目"
-      v-model="subject_id2"
-      filterable
-      :options="options"
-      clearable
-      :props="{ expandTrigger: 'hover' }"
-      :show-all-levels="false"
-      @change="handleChange_2"
-    ></el-cascader>
+          <el-cascader
+            placeholder="选择一级科目"
+            v-model="subject_id2"
+            filterable
+            :options="options"
+            clearable
+            :props="{ expandTrigger: 'hover' }"
+            :show-all-levels="false"
+            @change="handleChange_2"
+          ></el-cascader>
         </div>
         <div></div>
-         <div>
+        <div>
           <el-button
             class="near"
             style="margin:0 -2px ;border-radius:5px 0 0  5px;"
@@ -196,7 +195,7 @@
 import echarts from "echarts";
 import vue from "vue";
 import url from "../../config/config.js";
-import shuju from '../../api/axios'
+import shuju from "../../api/axios";
 
 export default {
   data() {
@@ -212,18 +211,18 @@ export default {
       alreadyData: [],
       willData: [],
       yearData: [],
-      idArr:[],
-      params:{
+      idArr: [],
+      params: {
         // begin_time:'',
         // end_time:'',
         // subject_level:'',
         // subject_id:'',
         // subject_ids:[]
       },
-      options_:[],//科目的原来数据
-      options:[],//我们需要的科目数据
-         options_11:[],//科目的原来数据
-      options11:[],//我们需要的科目数据
+      options_: [], //科目的原来数据
+      options: [], //我们需要的科目数据
+      options_11: [], //科目的原来数据
+      options11: [], //我们需要的科目数据
       classMouth: [],
       yipai_classhour: [],
       yishang_classhour: [],
@@ -234,50 +233,50 @@ export default {
       end_time_1: "", //自由选择时间的绑定值1
       begin_time_2: "", //自由选择时间的绑定值1
       end_time_2: "", //自由选择时间的绑定值1
-      subject_id2:'',//科目一的选择
-       begin_time_3: "", //总数组的绑定值
+      subject_id2: "", //科目一的选择
+      begin_time_3: "", //总数组的绑定值
       end_time_3: "", //总数组的绑定值
       one: {
         begin_time: "",
         end_time: "",
-        status: "1",
+        status: "1"
         // subject_id:''
       },
       three: {
         begin_time: "",
         end_time: "",
         status: "1",
-         subject_id:''
+        subject_id: ""
       },
-      hadClick:false,
-      hadClick_2:false,//是否点击了今天，本周，或本月
+      hadClick: false,
+      hadClick_2: false //是否点击了今天，本周，或本月
     };
   },
   watch: {
     begin_time_1: function(newVal, oldVal) {
-      if(newVal==null){
-         this.one.begin_time=""
-         this.begin_time_1=''
-      }else{
-      this.one.begin_time = newVal.toString().substr(0, 10);
+      if (newVal == null) {
+        this.one.begin_time = "";
+        this.begin_time_1 = "";
+      } else {
+        this.one.begin_time = newVal.toString().substr(0, 10);
       }
     },
     end_time_1: function(newVal, oldVal) {
-          if(newVal==null){
-         this.one.begin_time=""
-         this.end_time_1=''
-      }else{
-      this.one.end_time = newVal.toString().substr(0, 10);
+      if (newVal == null) {
+        this.one.begin_time = "";
+        this.end_time_1 = "";
+      } else {
+        this.one.end_time = newVal.toString().substr(0, 10);
       }
     }
   },
   methods: {
-    handleSelectionChange(result){
-      this.idArr=[]
-      for(let i=0;i<result.length;i++){
-        this.idArr.push(result[i].id)
+    handleSelectionChange(result) {
+      this.idArr = [];
+      for (let i = 0; i < result.length; i++) {
+        this.idArr.push(result[i].id);
       }
-        this.params.subject_ids=this.idArr.toString()
+      this.params.subject_ids = this.idArr.toString();
     },
     indexMethod(index) {},
     changeMouth(value) {
@@ -328,9 +327,9 @@ export default {
       this.one.begin_time = s1.toString();
       this.one.end_time = e1.toString();
       this.lineChart();
-      this.hadClick=true
+      this.hadClick = true;
     },
-        showDay_2() {
+    showDay_2() {
       var todayDate = new Date();
       var y = todayDate.getFullYear();
       var m = todayDate.getMonth() + 1;
@@ -347,7 +346,7 @@ export default {
       this.three.begin_time = s1.toString();
       this.three.end_time = e1.toString();
       this.lineChart2();
-      this.hadClick_2=true
+      this.hadClick_2 = true;
     },
     showWeek() {
       var startStop = new Array();
@@ -383,9 +382,9 @@ export default {
       this.one.begin_time = s1.toString();
       this.one.end_time = e1.toString();
       this.lineChart();
-         this.hadClick=true
+      this.hadClick = true;
     },
-        showWeek_2() {
+    showWeek_2() {
       var startStop = new Array();
       //获取当前时间
       var currentDate = new Date();
@@ -419,7 +418,7 @@ export default {
       this.three.begin_time = s1.toString();
       this.three.end_time = e1.toString();
       this.lineChart2();
-         this.hadClick_2=true
+      this.hadClick_2 = true;
     },
     showMouth() {
       //起止日期数组
@@ -465,9 +464,9 @@ export default {
       this.one.begin_time = s1.toString();
       this.one.end_time = e1.toString();
       this.lineChart();
-         this.hadClick=true
+      this.hadClick = true;
     },
-        showMouth_2() {
+    showMouth_2() {
       //起止日期数组
       var startStop = new Array();
       //获取当前时间
@@ -511,128 +510,135 @@ export default {
       this.three.begin_time = s1.toString();
       this.three.end_time = e1.toString();
       this.lineChart2();
-         this.hadClick_2=true
+      this.hadClick_2 = true;
     },
     changeStart(event) {
-      if( this.hadClick==true){
-      this.one.end_time = "";
-            this.one.begin_time = event?event.toString().substr(0, 10):'';
-            this.lineChart();
-      this.hadClick=false
-      }else{
-            this.one.begin_time = event?event.toString().substr(0, 10):'';
-      this.lineChart();
+      if (this.hadClick == true) {
+        this.one.end_time = "";
+        this.one.begin_time = event ? event.toString().substr(0, 10) : "";
+        this.lineChart();
+        this.hadClick = false;
+      } else {
+        this.one.begin_time = event ? event.toString().substr(0, 10) : "";
+        this.lineChart();
       }
     },
-        changeStart_3(event) {
-            this.params.begin_time = event?event.toString().substr(0, 10):'';
-            this.getadata();
-          delete  this.params.subject_ids
+    changeStart_3(event) {
+      this.params.begin_time = event ? event.toString().substr(0, 10) : "";
+      this.getadata();
+      delete this.params.subject_ids;
     },
-        changeEnd_3(event) {
-     
-            this.params.end_time = event?event.toString().substr(0, 10):'';
-            this.getadata();
-          //  this.params.subject_ids=[]
-           delete  this.params.subject_ids
+    changeEnd_3(event) {
+      this.params.end_time = event ? event.toString().substr(0, 10) : "";
+      this.getadata();
+      //  this.params.subject_ids=[]
+      delete this.params.subject_ids;
     },
-        changeStart_2(event) {
-      if( this.hadClick_2==true){
-      this.three.end_time = "";
-            this.three.begin_time = event?event.toString().substr(0, 10):'';
-            this.lineChart();
-      this.hadClick_2=false
-      }else{
-            this.three.begin_time = event?event.toString().substr(0, 10):'';
-      this.lineChart2();
+    changeStart_2(event) {
+      if (this.hadClick_2 == true) {
+        this.three.end_time = "";
+        this.three.begin_time = event ? event.toString().substr(0, 10) : "";
+        this.lineChart();
+        this.hadClick_2 = false;
+      } else {
+        this.three.begin_time = event ? event.toString().substr(0, 10) : "";
+        this.lineChart2();
       }
     },
 
-        //导出
+    //导出
     recharge_export() {
       this.$message({
         type: "success",
         message: "正在导出,请稍等..."
       });
       // let urls = "http://personal.test.hqjystudio.com";
-       let parms = "";
+      let parms = "";
       // // this.form.teacher='杨懿俊'
-      console.log(this.params)
       for (var key in this.params) {
-        if(key=='subject_ids'&&this.params.subject_ids){
-    parms += key + "=" + this.params[key]
-        }else{
-       parms += key + "=" + this.params[key] + "&";   
+        if (key == "subject_ids" && this.params.subject_ids) {
+          parms += key + "=" + this.params[key];
+        } else {
+          parms += key + "=" + this.params[key] + "&";
         }
-    
-      };
+      }
 
- 
-         window.location.href = url.urls + "/api_export_subject_classhour" + "?" + parms;
+      window.location.href =
+        url.urls + "/api_export_subject_classhour" + "?" + parms;
     },
     changeEnd(event) {
-      if( this.hadClick==true){
-           this.one.begin_time = "";
-            this.one.end_time = event?event.toString().substr(0, 10):'';
-            this.lineChart();
-      this.hadClick=false
-      }else{
-            this.one.end_time = event?event.toString().substr(0, 10):'';
-      this.lineChart();
-
+      if (this.hadClick == true) {
+        this.one.begin_time = "";
+        this.one.end_time = event ? event.toString().substr(0, 10) : "";
+        this.lineChart();
+        this.hadClick = false;
+      } else {
+        this.one.end_time = event ? event.toString().substr(0, 10) : "";
+        this.lineChart();
       }
     },
-    Change_sbuject(){
+    Change_sbuject() {
       this.getdata();
       this.getadata();
-    delete  this.params.subject_ids
+      delete this.params.subject_ids;
     },
-       handleChange_1(targetName) {
+    handleChange_1(targetName) {
       //选择科目
-      var lastName=targetName[0]?targetName[0]:''
+      var lastName = targetName[0] ? targetName[0] : "";
       this.params.subject_id = lastName;
       this.getadata();
-      delete  this.params.subject_ids
+      delete this.params.subject_ids;
     },
-           handleChange_2(targetName) {
+    handleChange_2(targetName) {
       //选择科目
-      var lastName=targetName[0]?targetName[0]:''
+      var lastName = targetName[0] ? targetName[0] : "";
       this.three.subject_id = lastName;
-     this.lineChart2();
+      this.lineChart2();
       // delete  this.params.subject_ids
     },
     changeEnd_2(event) {
-      if( this.hadClick_2==true){
-           this.three.begin_time = "";
-            this.three.end_time = event?event.toString().substr(0, 10):'';
-            this.lineChart2();
-      this.hadClick=false
-      }else{
-            this.three.end_time = event?event.toString().substr(0, 10):'';
-      this.lineChart2();
-
+      if (this.hadClick_2 == true) {
+        this.three.begin_time = "";
+        this.three.end_time = event ? event.toString().substr(0, 10) : "";
+        this.lineChart2();
+        this.hadClick = false;
+      } else {
+        this.three.end_time = event ? event.toString().substr(0, 10) : "";
+        this.lineChart2();
       }
     },
-        getdata() {
+    getdata() {
       //获取科目的数据
-      this.$apis.census.get_parent_info({subject_level:this.params.subject_level?this.params.subject_level:1}).then(res => {
-        if (res.data.code == 1) {
-          this.options_=[]
+      this.$apis.census
+        .get_parent_info({
+          subject_level: this.params.subject_level
+            ? this.params.subject_level
+            : 1
+        })
+        .then(res => {
+          if (res.data.code == 1) {
+            this.options_ = [];
 
-            for(let i=0;i<res.data.data.length;i++){
-               this.options_.push({value:res.data.data[i].id,label:res.data.data[i].subject_name})
+            for (let i = 0; i < res.data.data.length; i++) {
+              this.options_.push({
+                value: res.data.data[i].id,
+                label: res.data.data[i].subject_name
+              });
             }
-        this.options =  this.options_
-        }
-    });
+            this.options = this.options_;
+          }
+        });
     },
     //普通学员
     drawStudent() {
       let myDraw = echarts.init(document.getElementById("main2"));
 
       app.config = {
-        rotate: 45,
-        align: "left"
+        rotate: 0,
+        align: "center",
+        verticalAlign: "middle",
+        position: "top",
+        distance: 15
       };
       var labelOption = {
         show: true,
@@ -641,9 +647,8 @@ export default {
         align: app.config.align,
         verticalAlign: app.config.verticalAlign,
         rotate: app.config.rotate,
-        // formatter: "{c}  {name|{a}}",
-        formatter: "",
-        fontSize: 16,
+        formatter: "{c}  ",
+        fontSize: 12,
         rich: {
           name: {
             textBorderColor: "#fff"
@@ -661,19 +666,14 @@ export default {
         legend: {
           data: ["请等待", "请等待", "请等待"]
         },
-        // toolbox: {
-        //     show: true,
-        //     orient: 'vertical',
-        //     left: 'right',
-        //     top: 'center',
-        //     feature: {
-        //         mark: {show: true},
-        //         dataView: {show: true, readOnly: false},
-        //         magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
-        //         restore: {show: true},
-        //         saveAsImage: {show: true}
-        //     }
-        // },
+        title: {
+          text: "科目课时环比条形图",
+          lineHeight: 40,
+          textStyle: {
+            fontsize: "16px",
+            fontWeight: "bolder"
+          }
+        },
         xAxis: [
           {
             type: "category",
@@ -767,9 +767,9 @@ export default {
           text: "科目Top20",
           lineHeight: 40,
           // left: 'center',
-          textStyle:{
-fontsize:'16px',
- fontWeight : 'bolder'
+          textStyle: {
+            fontsize: "16px",
+            fontWeight: "bolder"
           }
         },
         dataset: {
@@ -796,14 +796,13 @@ fontsize:'16px',
       });
       this.$apis.census.subjects_ranking(this.three).then(res => {
         if (res.data.code == 1) {
-            this.top15_3=[]
+          this.top15_3 = [];
           for (let i = 0; i < res.data.data.length; i++) {
             this.top15_3[i] = [];
             this.top15_3[i].unshift(res.data.data[i].subject_name);
             this.top15_3[i].unshift(res.data.data[i].classhour);
           }
-          console.log(this.top15_3)
-          console.log(res.data.data)
+
           myLine2.setOption({
             dataset: {
               source: this.top15_3
@@ -815,12 +814,12 @@ fontsize:'16px',
     lineChart() {
       let myLine = echarts.init(document.getElementById("main1"));
       myLine.setOption({
-           title: {
+        title: {
           text: "一级科目",
           lineHeight: 40,
-          textStyle:{
-fontsize:'16px',
- fontWeight : 'bolder'
+          textStyle: {
+            fontsize: "16px",
+            fontWeight: "bolder"
           }
         },
         dataset: {
@@ -865,10 +864,40 @@ fontsize:'16px',
       //   let myChart = this.$echarts.init(document.getElementById("main"));全局引用的用法
       let myChart = echarts.init(document.getElementById("main"));
       var colors = ["#5793f3", "#d14a61", "#675bba"];
+      app.config = {
+        rotate: 0,
+        align: "center",
+        verticalAlign: "middle",
+        position: "top",
+        distance: 15
+      };
+      var labelOption = {
+        show: true,
+        position: app.config.position,
+        distance: app.config.distance,
+        align: app.config.align,
+        verticalAlign: app.config.verticalAlign,
+        rotate: app.config.rotate,
+        formatter: "{c}  ",
+        fontSize: 12,
+        rich: {
+          name: {
+            textBorderColor: "#fff"
+          }
+        }
+      };
       // 指定图表的配置项和数据
       myChart.setOption({
         legend: {},
         tooltip: {},
+        title: {
+          text: "科目课时同比条形图",
+          lineHeight: 40,
+          textStyle: {
+            fontsize: "16px",
+            fontWeight: "bolder"
+          }
+        },
         dataset: {
           source: [
             ["product", "2015", "2016"],
@@ -880,7 +909,10 @@ fontsize:'16px',
         yAxis: {},
         // Declare several bar series, each will be mapped
         // to a column of dataset.source by default.
-        series: [{ type: "bar" }, { type: "bar" }],
+        series: [
+          { type: "bar", label: labelOption },
+          { type: "bar", label: labelOption }
+        ],
         toolbox: {
           feature: {
             myTool1: {
@@ -889,7 +921,6 @@ fontsize:'16px',
               icon:
                 "path://M432.45,595.444c0,2.177-4.661,6.82-11.305,6.82c-6.475,0-11.306-4.567-11.306-6.82s4.852-6.812,11.306-6.812C427.841,588.632,432.452,593.191,432.45,595.444L432.45,595.444z M421.155,589.876c-3.009,0-5.448,2.495-5.448,5.572s2.439,5.572,5.448,5.572c3.01,0,5.449-2.495,5.449-5.572C426.604,592.371,424.165,589.876,421.155,589.876L421.155,589.876z M421.146,591.891c-1.916,0-3.47,1.589-3.47,3.549c0,1.959,1.554,3.548,3.47,3.548s3.469-1.589,3.469-3.548C424.614,593.479,423.062,591.891,421.146,591.891L421.146,591.891zM421.146,591.891",
               onclick: function() {
-         
                 this.showMouth1 = true;
               }
             },
@@ -923,7 +954,7 @@ fontsize:'16px',
 
             for (let i = 0; i < res.data.data.length; i++) {
               if (i == 0) {
-                this.yearData[i] =  res.data.data[i].month ;
+                this.yearData[i] = res.data.data[i].month;
               } else {
                 this.yearData[i] = res.data.data[i].month;
               }
@@ -938,15 +969,15 @@ fontsize:'16px',
                   data: this.yearData
                 }
               ],
-//                       title: {
-//           text: "三级科目Top15",
-//           lineHeight: 30,
-      
-//           t0extStyle:{
-// fontsize:'16px',
-//  fontWeight : 'bolder'
-//           }
-//         },
+              //                       title: {
+              //           text: "三级科目Top15",
+              //           lineHeight: 30,
+
+              //           t0extStyle:{
+              // fontsize:'16px',
+              //  fontWeight : 'bolder'
+              //           }
+              //         },
               yAxis: [
                 {
                   name: "课时"
@@ -969,21 +1000,21 @@ fontsize:'16px',
           }
         });
     },
-    getadata(){
-          this.$apis.census.subject_classhour(this.params).then(res => {
-            this.tableData=[]
-        if(Object.prototype.toString.call(res.data.data).substr(8,5)==Array){
+    getadata() {
+      this.$apis.census.subject_classhour(this.params).then(res => {
+        this.tableData = [];
+        if (
+          Object.prototype.toString.call(res.data.data).substr(8, 5) == Array
+        ) {
           this.tableData = res.data.data;
-        }else{
-                this.tableData=[...res.data.data]
+        } else {
+          this.tableData = [...res.data.data];
         }
-    });
-
+      });
     }
-
   },
   created() {
-        this.getdata();
+    this.getdata();
     this.$nextTick(function() {
       this.drawChart();
       this.lineChart();
@@ -997,25 +1028,26 @@ fontsize:'16px',
   },
 
   mounted() {
-
     this.$apis.census.subject_classhour(this.params).then(res => {
       if (res.data.code == 1) {
         this.tableData = res.data.data;
       }
     });
-       
-      //获取科目的数据
-      this.$apis.census.get_parent_info({subject_level:1}).then(res => {
-        if (res.data.code == 1) {
-          this.options_11=[]
 
-            for(let i=0;i<res.data.data.length;i++){
-               this.options_.push({value:res.data.data[i].id,label:res.data.data[i].subject_name})
-            }
-        this.options11 =  this.options_11
+    //获取科目的数据
+    this.$apis.census.get_parent_info({ subject_level: 1 }).then(res => {
+      if (res.data.code == 1) {
+        this.options_11 = [];
+
+        for (let i = 0; i < res.data.data.length; i++) {
+          this.options_.push({
+            value: res.data.data[i].id,
+            label: res.data.data[i].subject_name
+          });
         }
+        this.options11 = this.options_11;
+      }
     });
-  
   }
 };
 </script>
