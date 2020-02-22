@@ -32,7 +32,7 @@
           :value="item.value"
         ></el-option>
       </el-select>
-      <el-select v-model="params.teacher_id" placeholder="选择老师"    filterable clearable @change="getadata">
+      <el-select v-model="params.teacher_id" placeholder="选择老师"    filterable clearable @change="getadata_teacher">
         <el-option
           v-for="item in teacher_options"
        
@@ -42,9 +42,10 @@
           :value="item.id"
         ></el-option>
       </el-select>
-
+       <el-button style="background-color:#409EFF;color:white;" v-if="params.teacher_id" @click="dis_class = true">查看{{this.show_teacher}}</el-button>
+      <br>
       <el-date-picker
-        style="margin-left:20px"
+        
         v-model="params.start_time"
         @change="getadata"
         type="datetime"
@@ -53,6 +54,7 @@
         placeholder="选择日期时间"
       ></el-date-picker>至
       <el-date-picker
+      style="margin:0 0 20px 10px"
         @change="getadata"
         v-model="params.end_time"
         type="datetime"
@@ -274,6 +276,47 @@
         <el-button type="primary" @click="close_feed">确 定</el-button>
       </span>
     </el-dialog>
+
+    <el-dialog
+  :title=this.show_teacher
+  :visible.sync="dis_class"
+  width="800px"
+>
+<div class="class_dia">
+  <el-calendar >
+  <!-- 这里使用的是 2.5 slot 语法，对于新项目请使用 2.6 slot 语法-->
+  <template
+    slot="dateCell"
+    slot-scope="{date, data}">
+    <p :class="data.isSelected ? 'is-selected' : ''">
+      {{ data.day.split('-').slice(2).join('-') }} {{ data.isSelected ? '✔️' : ''}}
+    </p>
+    <p>{{}}节课</p>
+  </template>
+</el-calendar>
+
+<div class="class_dia_div">
+  <h3>{{}}课程安排</h3>
+    <el-timeline>
+    <el-timeline-item
+      v-for="(activity, index) in activities"
+      :key="index"
+      :icon="activity.icon"
+      :type="activity.type"
+      :color="activity.color"
+      :size="activity.size"
+      :timestamp="activity.timestamp">
+      {{activity.content}}
+    </el-timeline-item>
+  </el-timeline>
+</div>
+</div>
+  
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="dis_class = false">取 消</el-button>
+    <el-button type="primary" @click="dis_class = false">确 定</el-button>
+  </span>
+</el-dialog>
     <span v-if="msg.data">
       <el-pagination
         style="margin-top:30px; float: right;"
@@ -303,6 +346,7 @@ export default {
       check_data: {}, //考勤数据
       feed_data: {}, //反馈数据
       value_sub: "",
+      dis_class:false,//课表弹出框
       params: {
         teacher_id: "",
         subject_id: "",
@@ -320,7 +364,54 @@ export default {
       feedopen: false, //反馈的弹出
       options_: [],
       options: [],
-      teacher_options: [] //老师数组
+      show_teacher:'',
+      teacher_options: [] ,//老师数组
+       activities: [{
+          content: '测试数据',
+          timestamp: '2018-04-12 20:46',
+          size: 'large',
+          type: 'primary',
+          icon: 'el-icon-video-camera-solid'
+        }, {
+          content: '测试数据',
+          timestamp: '2018-04-03 20:46',
+          color: '#0bbd87'
+        }, {
+          content: '测试数据',
+          timestamp: '2018-04-03 20:46',
+          size: 'large'
+        }, {
+          content: '测试数据',
+          timestamp: '2018-04-03 20:46'
+        },{
+          content: '测试数据',
+          timestamp: '2018-04-12 20:46',
+          size: 'large',
+          type: 'primary',
+          icon: 'el-icon-more'
+        }, {
+          content: '测试数据',
+          timestamp: '2018-04-03 20:46',
+          color: '#0bbd87'
+        }, {
+          content: '测试数据',
+          timestamp: '2018-04-03 20:46',
+          size: 'large'
+        }, {
+          content: '支持使用图标',
+          timestamp: '2018-04-12 20:46',
+          size: 'large',
+          type: 'primary',
+          icon: 'el-icon-more'
+        }, {
+          content: '支持自定义颜色',
+          timestamp: '2018-04-03 20:46',
+          color: '#0bbd87'
+        }, {
+          content: '支持自定义尺寸',
+          timestamp: '2018-04-03 20:46',
+          size: 'large'
+        }, ]
     };
   },
   created() {
@@ -486,8 +577,21 @@ parms += key + "=" + this.params[key] + "&";
       // console.log(this.params)
       this.getadata();
     },
+    getadata_teacher(a){
+  let teacher_name = this.teacher_options.filter(item=>
+  
+  
+    item.id==a)
+    
+    if(teacher_name.length!==0){
+this.show_teacher=teacher_name[0].teacher_name?teacher_name[0].teacher_name+"老师的课表":""
+    }else{
+      this.show_teacher=''
+    }
+    
+this.getadata()
+    },
     getadata() {
-      console.log(1);
       this.$apis.teacher.teaching_data(this.params).then(res => {
         this.tableData = res.data.data.list;
         this.msg = res.data;
@@ -518,6 +622,22 @@ parms += key + "=" + this.params[key] + "&";
 /* .so_input {
   width: 300px;
 } */
+.el-calendar {
+  width: 500px !important;
+  height: 450px !important;
+  border:1px silver solid;
+}
+
+.class_dia /deep/ .el-calendar-table .el-calendar-day {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 8px;
+  height: 52px ;
+}
+
+.prev .el-calendar-day {
+  height: 35px !important;
+}
 #beauty_p p {
   margin-left: 20px;
 }
@@ -574,5 +694,30 @@ parms += key + "=" + this.params[key] + "&";
   width: 69%;
   text-align: center;
   border: 1px solid #f5f5f5;
+}
+.class_dia{
+  width:100%;
+  display: grid;
+  grid-template-columns: 68% 32%;
+  align-items: center;
+  justify-content: space-around;
+}
+.class_dia_div{
+  width:220px;
+  margin-left: 10px;
+  height: 400px;
+  overflow-y: auto;
+  /* scroll-y:auto; */
+}
+.class_dia_div /deep/ .el-timeline-item__node--large{
+  left:2px;
+  height:20px;
+  width:20px;
+}
+.class_dia_div /deep/ .el-timeline-item__tail{
+  left:10px;
+}
+.class_dia_div /deep/ .el-timeline-item__node--normal{
+  left:5px;
 }
 </style>

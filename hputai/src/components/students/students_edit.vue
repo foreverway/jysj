@@ -388,7 +388,7 @@ export default {
   },
   methods: {
     showChange(value) {
-      this.form.consultant1 = value;
+      // this.form.consultant1 = value;
     },
     //       ifname(){
     //      if(this.form.username==''){

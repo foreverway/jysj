@@ -124,10 +124,11 @@
       </div>
 <!-- 全职与兼职的课时占比情况 -->
       <el-table
+      empty-text="正在获取数据，请稍等"
         :data="tableData_1"
         style="margin:15px 0;"
         border
-        class="table_set"
+        class="table_set table1"
         @selection-change="handleSelectionChange"
         :header-cell-style="{background:'#f4f4f4'}"
       >
@@ -754,6 +755,7 @@ year_month3:'',
     },
 
     showDay() {
+      this.tableData_1=[]
       var startStop = new Array();
 
       //返回上一个月的第一天Date类型
@@ -915,6 +917,12 @@ year_month3:'',
       this.getadata_2();
     },
     showWeek() {
+      // $(bodyDiv)[0].style.height = $(window).height() * 1 - 50 + "px";
+       let beforeHeight=$(".table1").height()
+      this.tableData_1=[]
+             console.log($(".table1").height())
+      $(".table1 tbody")[0].style.height=beforeHeight
+     console.log($(".table1").height())
       var startStop = new Array();
 
       //返回下个月的第一天Date类型
@@ -1074,6 +1082,7 @@ year_month3:'',
       this.getadata_2();
     },
     showMouth() {
+      this.tableData_1=[]
       //起止日期数组
       var startStop = new Array();
       //获取当前时间

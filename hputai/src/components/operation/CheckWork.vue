@@ -576,7 +576,7 @@ export default {
       form: {
          search: "", //搜索学员姓名条件
          page: 1, //页码
-         attendance_status: '' ,//考勤状态
+         attendance_status: -1 ,//考勤状态
          course_address:'',
       },
       audition_result:{
@@ -599,11 +599,14 @@ export default {
         remarks3: ""
       },
       check_status: [
+            { value: -1, label: "全部" },
         { value: 0, label: "未考勤" },
+          { value: 5, label: "已考勤-异常" },
         { value: 1, label: "已考勤-正常" },
         { value: 2, label: "已考勤-异常取消" },
-            { value: 3, label: "已考勤-异常反馈已填" },
-                { value: 4, label: "已考勤-异常反馈未填" }
+            { value: 3, label: "已考勤-异常反馈已填" }, 
+                { value: 4, label: "已考勤-异常反馈未填" },
+              
       ],
             check_type: [
               { value: 0, label: "全部" },
