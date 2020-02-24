@@ -281,6 +281,7 @@
   :title=this.show_teacher
   :visible.sync="dis_class"
   width="800px"
+  :close-on-click-modal="false"
 >
 <div class="class_dia">
   <el-calendar >

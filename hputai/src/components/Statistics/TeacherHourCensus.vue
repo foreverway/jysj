@@ -53,6 +53,7 @@
 
       <el-table
         :data="tableData"
+        empty-text="正在获取数据，请稍等"
         height="500px"
         style="margin:15px 0;"
         border
@@ -61,7 +62,7 @@
         :header-cell-style="{background:'#f4f4f4'}"
       >
         <el-table-column type="selection" fixed="left" @click="handleClick(scope.row)" width="55"></el-table-column>
-        <el-table-column type="index" width="50" label="序号"></el-table-column>
+        <el-table-column type="index" :index="indexMethod" width="50" label="序号"></el-table-column>
         <el-table-column :show-overflow-tooltip="true" align="center" label="教师名称" width="150">
           <template slot-scope="scope">
             <span>{{ scope.row.teacher_name }}</span>
@@ -132,29 +133,32 @@
         @selection-change="handleSelectionChange"
         :header-cell-style="{background:'#f4f4f4'}"
       >
-        <el-table-column :show-overflow-tooltip="true" align="center" label="	科目名称">
+        <el-table-column :show-overflow-tooltip="true" align="center" label="一级科目">
           <template slot-scope="scope">
             <span>{{ scope.row.subject_name }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="总的已排课时"  v-if="params_1.is_today!==-1">
+        <el-table-column label="已排课时"  v-if="params_1.is_today!==-1">
           <template slot-scope="scope">
             <p>{{ scope.row.total_yipai }}</p>
           </template>
         </el-table-column>
-        <el-table-column label="总的已上课时" v-if="params_1.is_today!==2" prop="total_yishang"></el-table-column>
+        <el-table-column label="已上课时" v-if="params_1.is_today!==2" prop="total_yishang"></el-table-column>
         <!-- <el-table-column align="center" prop="total_daishang" label="总的待上课时" sortable></el-table-column> -->
         <el-table-column align="center" prop="total_amount" label="课酬金额" sortable v-if="params_1.is_today==-1"></el-table-column>
         <!-- <el-table-column align="center" prop="total_amount" label="待上课时" sortable></el-table-column> -->
-        <el-table-column label="全职已排占比" prop="quan_yipai_classhour" v-if="params_1.is_today!==1"></el-table-column>
-        <el-table-column label="兼职已排占比" prop="jian_yipai_classhour" v-if="params_1.is_today!==1"></el-table-column>
-        <el-table-column align="center" label="全职已上占比" v-if="params_1.is_today!==2" prop="jian_yishang_classhour"></el-table-column>
+        <el-table-column label="全职已排" prop="quan_yipai_classhour" v-if="params_1.is_today==1"></el-table-column>
+        <el-table-column label="兼职已排" prop="jian_yipai_classhour" v-if="params_1.is_today==1"></el-table-column>
+        <el-table-column align="center" label="全职已上" v-if="params_1.is_today!==2" prop="jian_yishang_classhour"></el-table-column>
+                <el-table-column align="center" label="兼职已上" v-if="params_1.is_today!==2" prop="jian_yishang_classhour"></el-table-column>
+
         <!-- <el-table-column align="center" label="全职待上占比" prop="quan_daishang_classhour"></el-table-column> -->
         <!-- <el-table-column label="兼职待上占比" prop="jian_daishang_classhour"></el-table-column> -->
+               <el-table-column align="center" label="已上课酬占比" prop="total_amount"  v-if="params_1.is_today==1"></el-table-column>
         <el-table-column align="center" label="全职课酬占比" prop="quan_amount"  v-if="params_1.is_today!==2"></el-table-column>
         <el-table-column label="兼职课酬占比" prop="jian_amount"  v-if="params_1.is_today!==2"></el-table-column>
-        <el-table-column align="center" label="全职平均单课酬" prop="quan_average_amount"  v-if="params_1.is_today==1"></el-table-column>
-        <el-table-column align="center" label="兼职平均单课酬" prop="jian_average_amount" v-if="params_1.is_today==1"></el-table-column>
+        <el-table-column align="center" label="全职平均课酬" prop="quan_average_amount"  v-if="params_1.is_today==1"></el-table-column>
+        <el-table-column align="center" label="兼职平均课酬" prop="jian_average_amount" v-if="params_1.is_today==1"></el-table-column>
           <el-table-column align="center" label="全职平均课时成本" v-if="params_1.is_today==-1" prop="quan_average_amount"></el-table-column>
             <el-table-column align="center" label="兼职平均课时成本" prop="jian_average_amount"  v-if="params_1.is_today==-1"></el-table-column>
       </el-table>
@@ -263,7 +267,7 @@
             ></el-date-picker>
         </div>
 
-      <div id="main1" style="width:100%;height:400px;"></div>
+      <div id="main1" style="width:100%;height:500px;"></div>
     </div>
 
             <div class="bgc">
@@ -276,7 +280,7 @@
             ></el-date-picker>
         </div>
 
-      <div id="main2" style="width:100%;height:400px;"></div>
+      <div id="main2" style="width:100%;height:500px;"></div>
     </div>
             <div class="bgc">
       <div class="flex_all">
@@ -288,7 +292,7 @@
             ></el-date-picker>
         </div>
 
-      <div id="main3" style="width:100%;height:400px;"></div>
+      <div id="main3" style="width:100%;height:500px;"></div>
     </div>
             <div class="bgc">
       <div class="flex_all">
@@ -300,7 +304,7 @@
             ></el-date-picker>
         </div>
 
-      <div id="main4" style="width:100%;height:400px;"></div>
+      <div id="main4" style="width:100%;height:500px;"></div>
     </div>
   </div>
 </template>
@@ -333,7 +337,7 @@ export default {
       idArr: [],
       params: {
         // keywords: "", //	老师名字搜索
-        page: "" //	页码
+        page: 1, //	页码
         // begin_time: "", //	开始时间
         // end_time: "", //	结束时间
         // teacher_type: "", //	教师类型1全职，2兼职
@@ -463,7 +467,7 @@ year_month3:'',
           }
         ],
         grid: { containLabel: true },
-        xAxis: { name: "课时" },
+        xAxis: { name: "课时" ,nameTextStyle:{fontSize:16}  },
         yAxis: { type: "category" }
       });
       this.$apis.census.fulltime_yipai_classhour(this.one).then(res => {
@@ -1190,38 +1194,42 @@ year_month3:'',
     //   }
     // },
         change_Start(value) {
+            let newTime=new Date()
           switch (value) {
             case 1:
-                    var thisdate = new Date(this.year_month);
+            
+                    var thisdate = new Date(this.year_month?this.year_month:newTime);
       var month1 = thisdate.getMonth() * 1 + 1;
       var month = month1 < 10 ? "0" + month1 : month1;
 
       this.year_month = thisdate.getFullYear() + "-" + month;
       this.one.year_month=this.year_month
+      console.log(this.one.year_month)
        this.lineChart();
               break;
                   case 2:
-                    var thisdate = new Date(this.year_month);
+                     var thisdate = new Date(this.year_month1?this.year_month1:newTime);
+                    // var thisdate = new Date(this.year_month1);
       var month1 = thisdate.getMonth() * 1 + 1;
       var month = month1 < 10 ? "0" + month1 : month1;
 
-      this.year_month = thisdate.getFullYear() + "-" + month;
+      this.year_month1 = thisdate.getFullYear() + "-" + month;
       this.two.year_month=this.year_month1
        this.lineChart_1();
               break;        case 3:
-                    var thisdate = new Date(this.year_month);
+       var thisdate = new Date(this.year_month2?this.year_month2:newTime);
       var month1 = thisdate.getMonth() * 1 + 1;
       var month = month1 < 10 ? "0" + month1 : month1;
 
-      this.year_month = thisdate.getFullYear() + "-" + month;
+      this.year_month2 = thisdate.getFullYear() + "-" + month;
       this.three.year_month=this.year_month2
        this.lineChart_2();
               break;        case 4:
-                    var thisdate = new Date(this.year_month);
+          var thisdate = new Date(this.year_month3?this.year_month3:newTime);
       var month1 = thisdate.getMonth() * 1 + 1;
       var month = month1 < 10 ? "0" + month1 : month1;
 
-      this.year_month = thisdate.getFullYear() + "-" + month;
+      this.year_month3 = thisdate.getFullYear() + "-" + month;
       this.four.year_month=this.year_month3
        this.lineChart_3();
               break;
@@ -1261,6 +1269,15 @@ year_month3:'',
     //     this.lineChart();
     //   }
     // },
+        //序号排列
+    indexMethod(index) {
+      if (this.params.page == 1) {
+        return index + 1;
+      } else {
+        let page = (this.params.page - 1) * 10 + 1;
+        return index + page;
+      }
+    },
         change_Start_1(event) {
       if (this.hadClick == true) {
         this.two.end_time = "";
@@ -1301,6 +1318,7 @@ year_month3:'',
     },
     changeEnd_3(event) {
       this.params.end_time = event ? event.toString().substr(0, 10) : "";
+      this.tableData=[]
       this.getadata();
       //  this.params.subject_ids=[]
       delete this.params.subject_ids;
@@ -1400,6 +1418,7 @@ year_month3:'',
     },
     Change_sbuject() {
       // this.getdata();
+      this.tableData=[]
       this.getadata();
       delete this.params.subject_ids;
     },
@@ -1503,22 +1522,26 @@ year_month3:'',
       //上一页
       if (this.params_1.page > 1) {
         this.params_1.page--;
+        this.tableData=[]
         this.getadata_1();
       }
     },
     next() {
       this.params.page++;
+      this.tableData=[]
       this.getadata();
     },
     current(num) {
       //当前页数
       this.params.page = num;
+      this.tableData=[]
       this.getadata();
     },
     prev() {
       //上一页
       if (this.params.page > 1) {
         this.params.page--;
+        this.tableData=[]
         this.getadata();
       }
     }

@@ -614,9 +614,7 @@ export default {
       //获取科目的数据
       this.$apis.census
         .get_parent_info({
-          subject_level: this.params.subject_level
-            ? this.params.subject_level
-            : 1
+          subject_level: 1
         })
         .then(res => {
           if (res.data.code == 1) {

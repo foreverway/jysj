@@ -97,6 +97,16 @@ export default {
     let url='/api/api_attendance_list'
     return shuju.getdata(url,params)
    },
+      // 学生新日历课表列表
+      student_course_count (params) {
+        let url='/api/api_student_course_count'
+        return shuju.getdata(url,params)
+       },
+          // 学生新日历课表详情
+          student_course_info (params) {
+    let url='/api/api_student_course_info'
+    return shuju.getdata(url,params)
+   },
    // ------------------------------公共方法---------------------------------------------------------
   // 读取url上的参数
   getuilcode () {

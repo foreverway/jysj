@@ -57,7 +57,7 @@
     <div class="session1">
       <h3>一级科目分析</h3>
       <div class="echarts_1" style="margin:20px 0;">
-        <div style="width:44%;height:450px;" class="bgc">
+        <div style="width:39%;height:450px;" class="bgc">
           <div class="block" style="margin: 0 auto;width:446px;">
             <el-date-picker
               @change="changeMouth"
@@ -79,7 +79,7 @@
           <div id="main" style="width:100%;height:400px;"></div>
         </div>
 
-        <div style="width:55%;height:450px;" class="bgc">
+        <div style="width:60%;height:450px;" class="bgc">
           <div class="block" style="margin:auto;width:200px;">
             <el-date-picker
               @change="changeMouth_1"
@@ -720,6 +720,20 @@ export default {
             type: "shadow"
           }
         },
+    //         dataZoom: [
+    //     {
+    //         show: true,
+    //         realtime: true,
+    //         start: 35,
+    //         end: 85
+    //     },
+    //     {
+    //         type: 'inside',
+    //         realtime: true,
+    //         start: 35,
+    //         end: 85
+    //     }
+    // ],
         title: {
           text: "毛利情况",
           lineHeight: 40,
@@ -735,13 +749,23 @@ export default {
           {
             type: "category",
             axisTick: { show: false },
-            data: ["正在加载", "正在加载"]
+            data: ["正在加载", "正在加载"],
+           
           }
         ],
         yAxis: [
           {
-            name: "课时",
-            type: "value"
+            name: "金额(万元)",
+            type: "value",
+              axisLabel: {
+                    formatter: function (a) {
+                        a = +a;
+                        return isFinite(a)
+                            ? echarts.format.addCommas(+a / 10000)
+                            : '';
+                    }
+                },
+             nameTextStyle:{fontSize:12} 
           }
         ],
 
@@ -773,7 +797,7 @@ export default {
 
           myDraw.setOption({
             legend: {
-              data: ["去年", "今年"]
+              data: [ "去年","今年"]
             },
 
             xAxis: [
@@ -802,13 +826,13 @@ export default {
                 type: "bar",
                 barGap: 0,
                 label: labelOption,
-                data: this.profit
+                data: this.old_profit
               },
               {
                 name: "今年",
                 type: "bar",
                 label: labelOption,
-                data: this.old_profit
+                data: this.profit
               }
             ]
           });
@@ -936,7 +960,7 @@ export default {
         tooltip: {},
         dataset: {
           source: [
-            ["product", "今年", "去年"],
+            ["product", "去年", "今年"],
             ["模拟数据", 43.3, 85.8],
             ["模拟数据", 83.1, 73.4]
           ]
@@ -1014,16 +1038,17 @@ export default {
               ],
               series: [
                 {
-                  name: "去年",
-                  type: "bar",
-                  data: this.lastYear
-                },
-                {
                   name: "今年",
                   type: "bar",
                   yAxisIndex: 0,
                   data: this.thisYear
+                },
+                {
+                  name: "去年",
+                  type: "bar",
+                  data: this.lastYear
                 }
+                
               ]
             });
           }

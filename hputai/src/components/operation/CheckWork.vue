@@ -12,7 +12,7 @@
           @change="getadata"
           placeholder="请输入搜索内容"
         ></el-input>
-        <el-select style="width:180px;"   @change="getadata"
+        <el-select style="width:180px;"   @change="getadata" @clear="clear_choose"
   clearable v-model="form.attendance_status" placeholder="选择考勤状态">
           <el-option
             v-for="item in check_status"
@@ -116,8 +116,8 @@
           <span v-show="scope.row.attendance_status==0" style>待考勤</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="250px" fixed="right">
-        <template slot-scope="scope">
+      <el-table-column label="操作" width="250px" fixed="right" >
+        <template slot-scope="scope" class="delete_left">
           <el-button
             size="mini"
             style="background-color:#2adbcb;color:white;"
@@ -872,6 +872,9 @@ export default {
  
 
     },
+    clear_choose(){
+      this.form.attendance_status=-1
+    },
     // 查看详情
     seeMore(result) {
       //console.log(result)
@@ -994,6 +997,9 @@ this.audition_result.course_id=result
 /* p{
   text-align: center;
 } */
+.delete_left /deep/ .el-button {
+  margin-left:0;
+}
 .so_input {
   width: 300px;
   margin-bottom: 20px;
