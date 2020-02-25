@@ -116,31 +116,56 @@
       :close-on-click-modal="false"
       :title="this.show_student"
       :visible.sync="dis_class"
-      width="800px"
+      width="850px"
     >
       <div class="class_dia">
-        <el-calendar  v-model="value">
+        <el-calendar v-model="value">
           <!-- 这里使用的是 2.5 slot 语法，对于新项目请使用 2.6 slot 语法-->
           <template slot="dateCell" slot-scope="{date, data}">
             <p
               :class="data.isSelected ? 'is-selected' : ''"
             >{{ data.day.split('-').slice(2).join('-') }} {{ data.isSelected ? '✔️' : ''}}</p>
-            <p>{{handleSelected(data.day.split('-').slice(2).join('-'))}}</p>
+
+            <p
+              @click="click_daily( data.day)"
+              :class="data.isSelected ? 'is-change' : ''"
+              style=" border-radius:5px;border:1px solid silver;font-size:12px;text-align:center;line-height:20px;"
+            >
+              <span
+                v-if="handleSelected(data.day)>0"
+                style="color:red;"
+              >{{handleSelected(data.day)}}</span>
+              <span v-if="handleSelected(data.day)==0">{{handleSelected(data.day)}}</span>
+              课时
+            </p>
           </template>
         </el-calendar>
 
         <div class="class_dia_div">
-          <h3>{{}}课程安排</h3>
+          <h3>当日课程安排</h3>
+          <h2 v-if="info_data.length<1">今天暂没有安排课程</h2>
           <el-timeline>
             <el-timeline-item
-              v-for="(activity, index) in parms_info"
+              v-for="(activity, index) in info_data"
               :key="index"
-              :icon="activity.icon"
-              :type="activity.type"
-              :color="activity.color"
-              :size="activity.size"
-              :timestamp="activity.start_time+'至'+activity.end_time"
-            >{{activity.content}}</el-timeline-item>
+              icon="el-icon-video-camera"
+              type="primary"
+              color="#e6563a"
+              size="20px"
+            >
+              <ul>
+                <li style="color:orange;">{{activity.subject_name}}</li>
+                <li>开始:{{activity.start_time}}</li>
+                <li>结束:{{activity.end_time}}</li>
+                <li>课时:{{activity.classhour}}</li>
+                <li>学生:{{activity.username}}</li>
+                <li>讲师:{{activity.teacher_name}}</li>
+                <li>班主任:{{activity.banzhuren_name}}</li>
+                <li>类型:{{activity.course_txt}}</li>
+                <li>地点:{{activity.course_address}}</li>
+                <li>直播平台:{{activity.live_name}}</li>
+              </ul>
+            </el-timeline-item>
           </el-timeline>
         </div>
       </div>
@@ -164,8 +189,8 @@ export default {
       dialogFormVisible1: false,
       copyurl1: "",
       msg: "",
-      value:'',
-      parms_daily1:[],
+      value: "",
+      count_data1: [],
       dis_class: false, //课表弹出框
       change_end_time: "",
       change_start_time: "",
@@ -176,7 +201,7 @@ export default {
         student_id: "", //	学生id
         is_today: "" //	月份，不传默认是当月，当月1，上月是-1，下月是2
       },
-      daily_data: [],
+      count_data: [],
       info_data: [],
       parms_info: {
         //日历详情
@@ -204,6 +229,7 @@ export default {
         { value: "潜在VIP", label: "潜在VIP" },
         { value: "试听学员", label: "试听学员" }
       ],
+      this_data: "",
       tableData: [],
       thisMenu: []
     };
@@ -214,9 +240,36 @@ export default {
   },
 
   computed: mapState(["rolemenu"]),
+      watch:{
+            value: function(n_val,b_val) {
+              // console.log(b_val)
+              let this_time  = new Date()
+              let before_time=b_val?b_val!=='':this_time
+    console.log(before_time.getTime(),this.value.getTime())
+               switch (before_time.getTime(),this.value.getTime()) {
+                 case this.value.getTime()>this_time.getTime(): //如果这一次比本月份月份靠后
+                   console.log(2)
+                   break;
+                      case this.value.getTime()<this_time.getTime(): //如果上一次比这一次月份靠前
+                   console.log(-1)
+                   break;
+                 default:
+                   break;
+               }
+                // var year = this.value.getFullYear();
+                // var month = this.value.getMonth() + 1;
+                // if (month >= 1 && month <= 9) {
+                //     month = "0" + month;
+                // }
+                // console.log(year + '-' + month) // 打印出日历选中了哪年哪月
+          
+            }
+        },
   methods: {
     //获取学生id
+      // $('.el-button-group .el-button:first-child').click(function(){
 
+      // })
     getadata_student(a) {
       let student_name = this.tableData.filter(item => item.id == a);
       if (student_name.length !== 0) {
@@ -231,35 +284,57 @@ export default {
       //课堂日历
       this.$apis.students.student_course_count(this.parms_daily).then(res => {
         if (res.data.code == 1) {
-          this.parms_daily = res.data.data;
-         
-                 for(let i =0;i<this.parms_daily.length;i++){
- this.parms_daily1[i]={day:this.parms_daily[i].day*1< 10 ? ('0' + this.parms_daily[i].day)*1: this.parms_daily[i].day,number:this.parms_daily[i].number}
-            }
+          this.count_data = res.data.data;
         }
       });
       //课时详情
       this.$apis.students.student_course_info(this.parms_info).then(res => {
         if (res.data.code == 1) {
-          this.parms_info = res.data.data;
-         
-      };
-    })
-    },
-    handleSelected(day) {
-  //      console.log(this.parms_daily1,day*1)
-  // this.parms_daily1.filter(item=>
-  //   item.day==day*1
-  // )
-  this.parms_daily1.map(item => {
-        if (item.day==day*1) {
-         
-         
-          //  console.log(item.number)
-          return item.number;
+          this.info_data = res.data.data;
         }
       });
-    
+    },
+    click_daily(a) {
+      //点击日历之后
+      this.this_data = a;
+
+      this.parms_info.begin_time = startTime(a);
+      function startTime(time) {
+        const nowTimeDate = new Date(time);
+        let start_time = nowTimeDate.setHours(0, 0, 0, 0);
+        return start_time.toString().slice(0, 10);
+      }
+
+      this.parms_info.end_time = endTime(a);
+      function endTime(time) {
+        const nowTimeDate = new Date(time);
+        let end_time = nowTimeDate.setHours(23, 59, 59, 999);
+        return end_time.toString().slice(0, 10);
+      }
+      //课时详情
+      this.$apis.students.student_course_info(this.parms_info).then(res => {
+        if (res.data.code == 1) {
+          this.info_data = res.data.data;
+        }
+      });
+      // console.log(a)
+    },
+
+    handleSelected(day) {
+      // this.parms_daily1.filter(item=>
+      //   item.day==day*1
+      // )
+      let flag = 0; //默认显示为0
+      if (this.count_data.length > 0) {
+        this.count_data.forEach(item => {
+          if (item.day == day) {
+            flag = item.number;
+            return;
+          }
+        });
+      }
+
+      return flag;
     },
     get_starttime() {
       this.parms.start_time =
@@ -445,18 +520,25 @@ export default {
 }
 .class_dia_div {
   width: 220px;
-  margin-left: 10px;
+  margin-left: 20px;
   height: 400px;
   overflow-y: auto;
   /* scroll-y:auto; */
 }
+.is-change {
+  background-color: orange;
+  color: white;
+}
 .class_dia_div /deep/ .el-timeline-item__node--large {
-  left: 2px;
+  left: 6px;
   height: 20px;
   width: 20px;
 }
 .class_dia_div /deep/ .el-timeline-item__tail {
   left: 10px;
+}
+.class_dia_div /deep/ .el-timeline-item__icon {
+  font-size: 20px;
 }
 .class_dia_div /deep/ .el-timeline-item__node--normal {
   left: 5px;
@@ -468,8 +550,16 @@ export default {
   height: 52px;
 }
 .el-calendar {
-  width: 500px !important;
+  width: 550px !important;
   height: 450px !important;
   border: 1px silver solid;
+}
+li {
+  list-style: none;
+}
+.class_dia_div h3 {
+  position: absolute;
+  top: 75px;
+  right: 100px;
 }
 </style>
