@@ -33,7 +33,7 @@
 
       <div style="height:20px"></div>
 
-      <el-calendar>
+      <el-calendar class="calen_class">
         <template slot="dateCell" slot-scope="{date, data}">
           <p
             :class="data.isSelected ? 'is-selected' : ''"
@@ -1661,11 +1661,11 @@ handleSelect(item,index){
   height: 400px !important;
 }
 
-.el-calendar-table .el-calendar-day {
+.calen_class /deep/ .el-calendar-table .el-calendar-day {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   padding: 8px;
-  height: 35px !important;
+  height: 45px !important;
 }
 
 .prev .el-calendar-day {

@@ -755,17 +755,17 @@ export default {
         ],
         yAxis: [
           {
-            name: "金额(万元)",
+            name: "金额",
             type: "value",
-              axisLabel: {
-                    formatter: function (a) {
-                        a = +a;
-                        return isFinite(a)
-                            ? echarts.format.addCommas(+a / 10000)
-                            : '';
-                    }
-                },
-             nameTextStyle:{fontSize:12} 
+            //   axisLabel: {
+            //         formatter: function (a) {
+            //             a = +a;
+            //             return isFinite(a)
+            //                 ? echarts.format.addCommas(+a / 10000)
+            //                 : '';
+            //         }
+            //     },
+            //  nameTextStyle:{fontSize:12} 
           }
         ],
 

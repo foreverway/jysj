@@ -122,28 +122,35 @@
         <el-calendar v-model="value">
           <!-- 这里使用的是 2.5 slot 语法，对于新项目请使用 2.6 slot 语法-->
           <template slot="dateCell" slot-scope="{date, data}">
-            <p
-              :class="data.isSelected ? 'is-selected' : ''"
-            >{{ data.day.split('-').slice(2).join('-') }} {{ data.isSelected ? '✔️' : ''}}</p>
+            <div @click="click_daily( data.day)  " style="width:56px;height:36px;padding:8px;">
+              <p
+                :class="data.isSelected ? 'is-selected' : ''"
+              >{{ data.day.split('-').slice(2).join('-') }} {{ data.isSelected ? '✔️' : ''}}</p>
 
-            <p
-              @click="click_daily( data.day)"
-              :class="data.isSelected ? 'is-change' : ''"
-              style=" border-radius:5px;border:1px solid silver;font-size:12px;text-align:center;line-height:20px;"
-            >
-              <span
-                v-if="handleSelected(data.day)>0"
-                style="color:red;"
-              >{{handleSelected(data.day)}}</span>
-              <span v-if="handleSelected(data.day)==0">{{handleSelected(data.day)}}</span>
-              课时
-            </p>
+              <p
+                :class="data.isSelected ? 'is-change' : ''"
+                style=" border-radius:5px;border:1px solid silver;font-size:12px;text-align:center;line-height:20px;"
+                v-if="handleSelected(data.day)>0&&new Date(data.day).getTime()>=new Date().getTime()"
+              >
+                <span style="color:red;">{{handleSelected(data.day)}}</span>
+节课
+              </p>
+                  <p
+                :class="data.isSelected ? 'is-change' : ''"
+                style=" border-radius:5px;border:1px solid silver;background-color:silver;font-size:12px;text-align:center;line-height:20px;"
+                v-if="handleSelected(data.day)>0&&new Date(data.day).getTime()<new Date().getTime()"
+              >
+                <span style="color:red;">{{handleSelected(data.day)}}</span>
+节课
+              </p>
+              <p style=" height:20px;width:100%;" v-if="handleSelected(data.day)==0"></p>
+            </div>
           </template>
         </el-calendar>
 
         <div class="class_dia_div">
-          <h3>当日课程安排</h3>
-          <h2 v-if="info_data.length<1">今天暂没有安排课程</h2>
+          <h3>{{this_day}}课程安排</h3>
+          <h2 v-if="info_data.length<1" style="text-align:center;">暂没有安排课程</h2>
           <el-timeline>
             <el-timeline-item
               v-for="(activity, index) in info_data"
@@ -190,6 +197,7 @@ export default {
       copyurl1: "",
       msg: "",
       value: "",
+      this_day: "",
       count_data1: [],
       dis_class: false, //课表弹出框
       change_end_time: "",
@@ -240,48 +248,66 @@ export default {
   },
 
   computed: mapState(["rolemenu"]),
-      watch:{
-            value: function(n_val,b_val) {
-              // console.log(b_val)
-              let this_time  = new Date()
-              let before_time=b_val?b_val!=='':this_time
-    console.log(before_time.getTime(),this.value.getTime())
-               switch (before_time.getTime(),this.value.getTime()) {
-                 case this.value.getTime()>this_time.getTime(): //如果这一次比本月份月份靠后
-                   console.log(2)
-                   break;
-                      case this.value.getTime()<this_time.getTime(): //如果上一次比这一次月份靠前
-                   console.log(-1)
-                   break;
-                 default:
-                   break;
-               }
-                // var year = this.value.getFullYear();
-                // var month = this.value.getMonth() + 1;
-                // if (month >= 1 && month <= 9) {
-                //     month = "0" + month;
-                // }
-                // console.log(year + '-' + month) // 打印出日历选中了哪年哪月
-          
-            }
-        },
-  methods: {
-    //获取学生id
-      // $('.el-button-group .el-button:first-child').click(function(){
+  watch: {
+    value: function(n_val, b_val) {
+      //通过侦听
+      var year = this.value.getFullYear();
+      var month = this.value.getMonth() + 1;
+      var day1 = this.value.getDate();
+      const day = "01";
+      if (month >= 1 && month <= 9) {
+        month = "0" + month;
+      }
+      this.this_day = year + "-" + month + "-" + day1;
+      this.parms_daily.is_today = year + "-" + month + "-" + day;
+      // 给详情传入开始和结束时间
+      this.parms_info.begin_time = startTime(this.this_day);
+      function startTime(time) {
+        const nowTimeDate = new Date(time);
+        let start_time = nowTimeDate.setHours(0, 0, 0, 0);
+        return start_time.toString().slice(0, 10);
+      }
 
-      // })
+      this.parms_info.end_time = endTime(this.this_day);
+      function endTime(time) {
+        const nowTimeDate = new Date(time);
+        let end_time = nowTimeDate.setHours(23, 59, 59, 999);
+        return end_time.toString().slice(0, 10);
+      }
+      //学生新日历课表列表
+      this.$apis.students.student_course_count(this.parms_daily).then(res => {
+        if (res.data.code == 1) {
+          this.count_data = res.data.data;
+        }
+      });
+      //课时详情
+      this.$apis.students.student_course_info(this.parms_info).then(res => {
+        if (res.data.code == 1) {
+          this.info_data = res.data.data;
+        }
+      });
+    }
+  },
+  methods: {
     getadata_student(a) {
       let student_name = this.tableData.filter(item => item.id == a);
+      let this_day1 = new Date();
+      var year = this_day1.getFullYear();
+      var month = this_day1.getMonth() + 1;
+      var day = this_day1.getDate();
+      this.this_day = year + "-" + month + "-" + day;
+      this.parms_daily.is_today = "";
+      this.value = new Date(); //切换学生的时候，将今天的日期赋值给日历绑定的值
       if (student_name.length !== 0) {
         this.show_student = student_name[0].username
-          ? student_name[0].username + "的课表"
+          ? student_name[0].username + "同学的课表"
           : "";
       } else {
         this.show_student = "";
       }
       this.parms_daily.student_id = a;
       this.parms_info.student_id = a;
-      //课堂日历
+      //学生新日历课表列表
       this.$apis.students.student_course_count(this.parms_daily).then(res => {
         if (res.data.code == 1) {
           this.count_data = res.data.data;
@@ -297,7 +323,7 @@ export default {
     click_daily(a) {
       //点击日历之后
       this.this_data = a;
-
+      this.this_day = a;
       this.parms_info.begin_time = startTime(a);
       function startTime(time) {
         const nowTimeDate = new Date(time);
@@ -520,7 +546,7 @@ export default {
 }
 .class_dia_div {
   width: 220px;
-  margin-left: 20px;
+  margin-left: 25px;
   height: 400px;
   overflow-y: auto;
   /* scroll-y:auto; */
@@ -546,7 +572,7 @@ export default {
 .class_dia /deep/ .el-calendar-table .el-calendar-day {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  padding: 8px;
+  padding: 0px;
   height: 52px;
 }
 .el-calendar {
@@ -560,6 +586,6 @@ li {
 .class_dia_div h3 {
   position: absolute;
   top: 75px;
-  right: 100px;
+  right: 75px;
 }
 </style>

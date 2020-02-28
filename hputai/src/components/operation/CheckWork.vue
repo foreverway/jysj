@@ -88,6 +88,7 @@
         </template>
       </el-table-column>
       <el-table-column align="center" label="学生姓名" prop="student_name"></el-table-column>
+            <el-table-column align="center" label="添加者" prop="additive"></el-table-column>
       <el-table-column align="center" label="授课类型" prop="course_txt"></el-table-column>
       <el-table-column align="center" label="授课地点" prop="course_address"></el-table-column>
       <el-table-column align="center" label="开始时间" prop="start_time"></el-table-column>
@@ -99,6 +100,7 @@
         <template slot-scope="scope" >
           <span v-show="scope.row.audition_status==1" style="color:green">成功</span>
           <span v-show="scope.row.audition_status==2" style="color:red">失败</span>
+          <span v-show="scope.row.audition_status==3" style="color:orange" >待续费</span>
 
         </template>
       </el-table-column>
@@ -106,7 +108,7 @@
         <template slot-scope="scope" >
           <span v-show="scope.row.audition_status==1" style="color:green">{{scope.row.audition_remarks}}</span>
           <span v-show="scope.row.audition_status==2" style="color:red">{{scope.row.audition_remarks}}</span>
-
+ <span v-show="scope.row.audition_status==3" style="color:orange">{{scope.row.audition_remarks}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="状态" prop="attendance_status">
@@ -149,7 +151,13 @@
               >
                 <a @click="openVideo(scope.row.playback_url)">{{scope.row.ready_txt}}</a>
               </el-button>
-
+              <!-- <el-button
+                size="mini"
+                v-if="scope.row.attendance_status=='3'"
+                style="color:white;background-color:#409eff;"
+              >
+                <a @click="openVideo(scope.row.playback_url)">{{scope.row.ready_txt}}</a>
+              </el-button> -->
                    <el-button
                 size="mini"
                 v-if="scope.row.ready_txt=='直播中'"
@@ -536,10 +544,11 @@
     <el-radio-group v-model="audition_result.audition_status">
       <el-radio :label='1' >试听成功</el-radio>
       <el-radio :label='2' >试听失败</el-radio>
+        <el-radio :label='3' >待续费</el-radio>
     </el-radio-group>
   </el-form-item>
         <el-form-item label="备  注" >
-          <el-input v-model="audition_result.audition_remarks"></el-input>
+          <el-input style="width:50%;" v-model="audition_result.audition_remarks"></el-input>
         </el-form-item>
         
       </el-form>

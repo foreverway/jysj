@@ -24,7 +24,7 @@
             placeholder="请输入"
             @change="getadata"
           >
-            <el-option v-for="item in people" :key="item.id" :label="item.name" :value="item.name"></el-option>
+            <el-option v-for="item in people" :key="item.index" :label="item.name" :value="item.name"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="第二收款人">
@@ -57,7 +57,7 @@
           >
             <el-option
               v-for="item in banzhuren_list"
-              :key="item.id"
+              :key="item.index"
               :label="item.banzhuren"
               :value="item.id"
             ></el-option>
@@ -76,7 +76,7 @@
           >
             <el-option
               v-for="item in base_selct.data.inproject_list"
-              :key="item.id"
+              :key="item.index"
               :label="item.name"
               :value="item.name"
             ></el-option>
@@ -95,7 +95,7 @@
           >
             <el-option
               v-for="item in base_selct.data.inchannel_list"
-              :key="item.id"
+              :key="item.index"
               :label="item.name"
               :value="item.name"
             ></el-option>
@@ -114,7 +114,7 @@
           >
             <el-option
               v-for="item in base_selct.data.collectionclass_list"
-              :key="item.id"
+              :key="item.index"
               :label="item.name"
               :value="item.name"
             ></el-option>
@@ -132,7 +132,7 @@
           >
             <el-option
               v-for="item in base_selct.data.collectiontype_list"
-              :key="item.id"
+              :key="item.index"
               :label="item.name"
               :value="item.name"
             ></el-option>
@@ -151,7 +151,7 @@
           >
             <el-option
               v-for="item in base_selct.data.classproject_list"
-              :key="item.id"
+              :key="item.index"
               :label="item.name"
               :value="item.name"
             ></el-option>
@@ -169,7 +169,7 @@
           >
             <el-option
               v-for="item in base_selct.data.giventype_list"
-              :key="item.id"
+              :key="item.index"
               :label="item.name"
               :value="item.name"
             ></el-option>
@@ -187,7 +187,7 @@
           >
             <el-option
               v-for="item in student_alevel"
-              :key="item.label"
+              :key="item.index"
               :label="item.label"
               :value="item.label"
             ></el-option>

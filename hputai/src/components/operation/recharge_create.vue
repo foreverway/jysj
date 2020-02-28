@@ -7,9 +7,7 @@
                 <el-select v-model="form.student_type" placeholder="调整学生类型 " v-if="ifBanzhuren=='班主任'"    filterable clearable @change="getdata">
         <el-option
           v-for="item in student_alevel"
-       
           :key="item.value"
-       
           :label="item.label"
           :value="item.value"
         ></el-option>
@@ -176,7 +174,7 @@ export default {
       teacher: "", //班主任数据
       financeId: "", //关联充值id
       form_banzhuren:'', //根据学生选择的班主任
-            ifBanzhuren:"",
+      ifBanzhuren:"",
 
       form: {
         uname: "", //用户名
@@ -192,7 +190,7 @@ export default {
         consultant2: "", //顾问2
         classproject: "", //报课项目
         teacher: "" ,//班主任
-        student_type:"普通学员",
+        student_type:"",
       },
       student_alevel:[{value:'普通学员',label:'普通学员'},{value:'保读学员',label:'保读学员'},{value:'VIP学员',label:'VIP学员'},{value:'潜在VIP',label:'潜在VIP'},{value:'试听学员',label:'试听学员'}],
 
@@ -236,6 +234,7 @@ export default {
       }else{
       this.$apis.common.recharge_check(params).then(res => {
   if (res) {
+  this.form.student_type=res.data.data.alevel
           callback();
         } else {
           // if (res.data.code == 0) {
@@ -271,7 +270,6 @@ export default {
       .admin_base({ admin_id: this.getdataCookie("admin_id") })
       .then(res => {
         if (res.data.code == 1) {
-console.log(res.data.data.role_name)
         this.ifBanzhuren=res.data.data.role_name
         }
       });
