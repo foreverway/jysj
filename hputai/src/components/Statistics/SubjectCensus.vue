@@ -21,6 +21,7 @@
         ></el-date-picker>
 
         <el-select
+       
           clearable
           v-model="params.student_type"
           placeholder="选择学生类型"
@@ -60,12 +61,14 @@
         <div style="width:39%;height:450px;" class="bgc">
           <div class="block" style="margin: 0 auto;width:446px;">
             <el-date-picker
+             style="width:45%;"
               @change="changeMouth"
               v-model="changeMouth1"
               type="month"
               placeholder="选择你想查看的月份"
             ></el-date-picker>
             <el-cascader
+             style="width:45%;"
               placeholder="选择科目"
               v-model="main_subject_id"
               filterable
@@ -713,27 +716,6 @@ export default {
       };
       myDraw.setOption({
         color: ["#5CBB7A", "#409EFF", "#F56C6C", "#e5323e"],
-        tooltip: {
-          trigger: "axis",
-          // text: "月份情况",
-          axisPointer: {
-            type: "shadow"
-          }
-        },
-    //         dataZoom: [
-    //     {
-    //         show: true,
-    //         realtime: true,
-    //         start: 35,
-    //         end: 85
-    //     },
-    //     {
-    //         type: 'inside',
-    //         realtime: true,
-    //         start: 35,
-    //         end: 85
-    //     }
-    // ],
         title: {
           text: "毛利情况",
           lineHeight: 40,
@@ -755,17 +737,17 @@ export default {
         ],
         yAxis: [
           {
-            name: "金额",
+            name: "金额(万)",
             type: "value",
-            //   axisLabel: {
-            //         formatter: function (a) {
-            //             a = +a;
-            //             return isFinite(a)
-            //                 ? echarts.format.addCommas(+a / 10000)
-            //                 : '';
-            //         }
-            //     },
-            //  nameTextStyle:{fontSize:12} 
+              // axisLabel: {
+              //       formatter: function (a) {
+              //           a = +a;
+              //           return isFinite(a)
+              //               ? echarts.format.addCommas(+a / 10000)
+              //               : '';
+              //       }
+              //   },
+             nameTextStyle:{fontSize:12} 
           }
         ],
 
@@ -791,15 +773,30 @@ export default {
           this.profit = [];
           for (let i = 0; i < res.data.data.length; i++) {
             // this.classMouth.push(res.data.data[i].month);
-            this.profit[i] = res.data.data[i].profit;
-            this.old_profit[i] = res.data.data[i].old_profit;
+            // this.profit[i] = res.data.data[i].profit/10000;
+            // this.old_profit[i] = res.data.data[i].old_profit/10000;
+            this.profit[i] =  (Math.round(res.data.data[i].profit/10000 * 100) / 100);
+            this.old_profit[i] =(Math.round(res.data.data[i].old_profit/10000* 100) / 100); 
+            // this.formatter()
           }
-
           myDraw.setOption({
             legend: {
               data: [ "去年","今年"]
             },
-
+        tooltip: {
+           trigger: "axis",
+  
+                formatter:function (params) { //在此处直接用 formatter 属性
+                    // console.log(params[0].data,params[1].data)  // 打印数据
+                    var showdata = params[0].data;
+                     var showdata1 = params[1].data;
+                    // 根据自己的需求返回数据
+                    return `
+                            <div>去年：${showdata*10000}</div>
+                            <div>今年：${showdata1*10000}</div>
+                            `
+                }
+        },
             xAxis: [
               {
                 type: "category",
@@ -826,13 +823,13 @@ export default {
                 type: "bar",
                 barGap: 0,
                 label: labelOption,
-                data: this.old_profit
+                data: this.old_profit //数据数组
               },
               {
                 name: "今年",
                 type: "bar",
                 label: labelOption,
-                data: this.profit
+                data: this.profit 
               }
             ]
           });
@@ -957,7 +954,9 @@ export default {
             fontWeight: "bolder"
           }
         },
-        tooltip: {},
+        tooltip: {
+          
+        },
         dataset: {
           source: [
             ["product", "去年", "今年"],

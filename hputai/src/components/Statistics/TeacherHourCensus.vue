@@ -229,16 +229,16 @@
         <el-table-column align="center" label="已上目标课时比例" prop="yishang_target"></el-table-column>
         <el-table-column align="center" label="待上目标课时比例" prop="daishang_target"></el-table-column>
       </el-table>
-      <div v-if="msg.data" style="display:block;">
+      <div v-if="msg2.data" style="display:block;">
         <el-pagination
           style="float:right;margin-top:20px;"
           background
           layout="prev, pager, next"
-          @prev-click="prev"
-          @next-click="next"
-          @current-change="current"
+          @prev-click="prev_2"
+          @next-click="next_2"
+          @current-change="current_2"
           :page-size="10"
-          :total="msg.data.total"
+          :total="msg2.data.total"
         ></el-pagination>
       </div>
     </div>
@@ -374,6 +374,7 @@ export default {
       vip_classhour: [],
       msg: [],
       msg1: [],
+          msg2: [],
       changeMouth1: "",
       changeMouth2: "",
       begin_time_1: "", //自由选择时间的绑定值1
@@ -1526,6 +1527,23 @@ year_month3:'',
         this.getadata_1();
       }
     },
+            next_2() {
+      this.params_2.page++;
+      this.getadata_2();
+    },
+    current_2(num) {
+      //当前页数
+      this.params_2.page = num;
+      this.getadata_2();
+    },
+    prev_2() {
+      //上一页
+      if (this.params_2.page > 1) {
+        this.params_2.page--;
+        this.tableData=[]
+        this.getadata_2();
+      }
+    },
     next() {
       this.params.page++;
       this.tableData=[]
@@ -1587,10 +1605,11 @@ year_month3:'',
         Object.prototype.toString.call(res.data.data.data).substr(8, 5) == Array
       ) {
         this.tableData_2 = res.data.data.data;
-        this.msg = res.data;
+        this.msg2 = res.data;
       } else {
         this.tableData_2 = [...res.data.data.data];
-        this.msg = res.data;
+        // this.msg = res.data;
+        this.msg2 = res.data;
       }
     });
     this.$apis.students.students_list().then(res => {

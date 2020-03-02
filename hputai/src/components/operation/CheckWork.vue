@@ -151,13 +151,6 @@
               >
                 <a @click="openVideo(scope.row.playback_url)">{{scope.row.ready_txt}}</a>
               </el-button>
-              <!-- <el-button
-                size="mini"
-                v-if="scope.row.attendance_status=='3'"
-                style="color:white;background-color:#409eff;"
-              >
-                <a @click="openVideo(scope.row.playback_url)">{{scope.row.ready_txt}}</a>
-              </el-button> -->
                    <el-button
                 size="mini"
                 v-if="scope.row.ready_txt=='直播中'"
@@ -167,22 +160,18 @@
               </el-button>
             <el-button   v-show="scope.row.attendance_status==2&&scope.row.is_forward!==1"
             style="color:#169BD5" type="danger" size="mini" @click="payMoney(scope.row)">结转</el-button>
-          <!-- </div> -->
-          <!-- <div v-show="scope.row.attendance_status==1" style="color:#169BD5"></div> -->
-          <!-- <div v-show="scope.row.attendance_status==0" style="margin:0 10px;">  -->
+
             <el-button
-              v-if="scope.row.is_feedback==1"
-              v-show="scope.row.attendance_status==0"
+              v-if="scope.row.is_feedback==1||scope.row.attendance_status==0"
+              v-show="scope.row.is_audition!==1&&role_name!=='课程顾问'"
               size="mini"
               @click="normal(scope.row)"
               type="success"
             >正常</el-button>
-            <el-button size="mini" v-show="scope.row.attendance_status==0" @click="unnormal(scope.row)" type="danger">异动</el-button>
-          <!-- </div> -->
-
-          <!-- <span v-show="scope.row.is_forward==1" style="color:#169BD5"> -->
-            <el-button @click="payMoney(scope.row)" v-show="scope.row.is_forward==1"  type="info" disabled size="mini">结转</el-button>
-          <!-- </span> -->
+            <el-button size="mini" v-if="scope.row.is_audition!==1&&role_name!=='课程顾问'" v-show="scope.row.attendance_status==0" @click="unnormal(scope.row)" type="danger">
+              异动</el-button>
+            <el-button v-if="scope.row.is_audition!==1&&role_name!=='课程顾问'" @click="payMoney(scope.row)" v-show="scope.row.is_forward==1"  type="info" disabled size="mini">
+              结转</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -634,6 +623,7 @@ export default {
       }, //正常数据
       seeMoreData: {},
       msg: {},
+      role_name:'',//是否课程顾问
       dialogVisible: false, //查看课堂反馈
       centerDialogVisible_normal: false, //正常
       centerDialogVisible_unnormal: false, //异动
@@ -649,9 +639,28 @@ export default {
   created() {
     this.$apis.students.getuilcode();
     this.getadata();
+    this.$apis.menber
+        .admin_base({admin_id: this.getdataCookie("admin_id")})
+        .then(res => {
+          if (res.data.code == 1) {
+         this.role_name=res.data.data.role_name
+  
+   console.log( this.role_name)
+          }
+        })
     this.opration = this.rolemenu[1].children[4].children;
   },
   methods: {
+     getdataCookie(cname) {
+      // return 1
+      var name = cname + "=";
+      var ca = document.cookie.split(";");
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i].trim();
+        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+      }
+      this.$router.push({ path: "/login" });
+    },
         nowVideo(a) {
       //观看直播
       let parms = {
