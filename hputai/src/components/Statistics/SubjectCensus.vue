@@ -4,6 +4,22 @@
     <div class="session1">
       <h3>一级科目</h3>
       <div>
+            <el-date-picker
+             style="margin:10px"
+              @change="changeStart_3"
+              v-model="begin_time_3"
+              type="month"
+              value-format='timestamp'
+              placeholder="选择月份"
+            ></el-date-picker>至
+            <el-date-picker
+              @change="changeEnd_3"
+              v-model="end_time_3"
+                 value-format='timestamp'
+              type="month"
+              placeholder="选择月份"
+            ></el-date-picker>
+<!-- 
         <el-date-picker
           style="margin:10px"
           v-model="begin_time_3"
@@ -18,7 +34,7 @@
           value-format="timestamp"
           clearable
           placeholder="选择日期时间"
-        ></el-date-picker>
+        ></el-date-picker> -->
 
         <el-select
        
@@ -61,14 +77,14 @@
         <div style="width:39%;height:450px;" class="bgc">
           <div class="block" style="margin: 0 auto;width:446px;">
             <el-date-picker
-             style="width:45%;"
+             style="width:42%;"
               @change="changeMouth"
               v-model="changeMouth1"
               type="month"
-              placeholder="选择你想查看的月份"
+              placeholder="选择月份"
             ></el-date-picker>
             <el-cascader
-             style="width:45%;"
+             style="width:42%;"
               placeholder="选择科目"
               v-model="main_subject_id"
               filterable
@@ -192,9 +208,6 @@ import shuju from "../../api/axios";
 export default {
   data() {
     return {
-      // params: {
-      //   page: "1"
-      // },
       tableData: [],
       options: [],
       top15_1: [],
@@ -204,10 +217,6 @@ export default {
       thisTear: [],
       main_subject_id: "", //图表科目选择的
       year_month: "",
-      // yearData: [],
-      // ordinary_stu: [],
-      // keepreading_stu: [],
-      // vip_stu: [],
       old_student_amount: "去年的收入",
       student_amount: "	今年的收入",
       old_teacher_amount: "去年的支出",
@@ -225,9 +234,8 @@ export default {
       options_1: [], //学生的原来数据
       options1: [], //我们需要的学生数据
       classMouth: [],
-      // ordinary_classhour: [],
-      // keepreading_classhour: [],
-      // vip_classhour: [],
+       profit_math: [], //四舍五入今年的毛利
+      old_profit_math: [], //四舍五入去年的毛利
       profit: [], //今年的毛利
       old_profit: [], //去年的毛利
       msg: [],
@@ -600,10 +608,12 @@ export default {
     },
     changeStart_3(event) {
       this.params.begin_time = event ? event.toString().substr(0, 10) : "";
+      console.log(this.params.begin_time)
       this.getadata();
     },
     changeEnd_3(event) {
       this.params.end_time = event ? event.toString().substr(0, 10) : "";
+      console.log(this.params.end_time)
       this.getadata();
       //  this.params.subject_ids=[]
     },
@@ -724,6 +734,7 @@ export default {
             fontWeight: "bolder"
           }
         },
+
         legend: {
           data: ["请等待", "请等待"]
         },
@@ -773,21 +784,21 @@ export default {
           this.profit = [];
           for (let i = 0; i < res.data.data.length; i++) {
             // this.classMouth.push(res.data.data[i].month);
-            // this.profit[i] = res.data.data[i].profit/10000;
-            // this.old_profit[i] = res.data.data[i].old_profit/10000;
-            this.profit[i] =  (Math.round(res.data.data[i].profit/10000 * 100) / 100);
-            this.old_profit[i] =(Math.round(res.data.data[i].old_profit/10000* 100) / 100); 
-            // this.formatter()
+            this.profit[i] = res.data.data[i].profit/10000;
+            this.old_profit[i] = res.data.data[i].old_profit/10000;
+            this.profit_math[i] =  (Math.round(res.data.data[i].profit/10000 * 100) / 100);
+            this.profit_math[i] =(Math.round(res.data.data[i].old_profit/10000* 100) / 100);
+            //  myDraw.setOption.tooltip.formatter()
           }
           myDraw.setOption({
             legend: {
               data: [ "去年","今年"]
             },
-        tooltip: {
+                tooltip: {
            trigger: "axis",
   
                 formatter:function (params) { //在此处直接用 formatter 属性
-                    // console.log(params[0].data,params[1].data)  // 打印数据
+                    //  console.log(params)  // 打印数据
                     var showdata = params[0].data;
                      var showdata1 = params[1].data;
                     // 根据自己的需求返回数据
@@ -1009,14 +1020,15 @@ export default {
         .then(res => {
           if (res.data.code == 1) {
             this.lastYear = [
-              res.data.data[0].old_student_amount,
-              res.data.data[1].old_teacher_amount,
-              res.data.data[2].old_profit
+              res.data.data[0].old_student_amount*1,
+              res.data.data[1].old_teacher_amount*1,
+              res.data.data[2].old_profit*1
             ];
+            // console.log(res.data.data[1].teacher_amount,res.data.data[1].teacher_amount.replace(',','').toString())
             this.thisYear = [
-              res.data.data[0].student_amount,
-              res.data.data[1].teacher_amount,
-              res.data.data[2].profit
+              res.data.data[0].student_amount.toString().replace(',','').toString()*1,
+              res.data.data[1].teacher_amount.toString().replace(',','').toString()*1,
+              res.data.data[2].profit.toString().replace(',','').toString()*1
             ];
 
             myChart.setOption({

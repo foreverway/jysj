@@ -120,12 +120,11 @@
           value-format="MM"
           placeholder="选择你想查看的月份"
         ></el-date-picker>
-              <el-button type="primary" @click="recharge_export_2">导出</el-button>
-
+        <el-button type="primary" @click="recharge_export_2">导出</el-button>
       </div>
-<!-- 全职与兼职的课时占比情况 -->
+      <!-- 全职与兼职的课时占比情况 -->
       <el-table
-      empty-text="正在获取数据，请稍等"
+        empty-text="正在获取数据，请稍等"
         :data="tableData_1"
         style="margin:15px 0;"
         border
@@ -138,33 +137,80 @@
             <span>{{ scope.row.subject_name }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="已排课时"  v-if="params_1.is_today!==-1">
+        <el-table-column label="已排课时" v-if="params_1.is_today!==-1">
           <template slot-scope="scope">
             <p>{{ scope.row.total_yipai }}</p>
           </template>
         </el-table-column>
         <el-table-column label="已上课时" v-if="params_1.is_today!==2" prop="total_yishang"></el-table-column>
         <!-- <el-table-column align="center" prop="total_daishang" label="总的待上课时" sortable></el-table-column> -->
-        <el-table-column align="center" prop="total_amount" label="课酬金额" sortable v-if="params_1.is_today==-1"></el-table-column>
+        <el-table-column
+          align="center"
+          prop="total_amount"
+          label="课酬金额"
+          sortable
+          v-if="params_1.is_today==-1"
+        ></el-table-column>
         <!-- <el-table-column align="center" prop="total_amount" label="待上课时" sortable></el-table-column> -->
-        <el-table-column label="全职已排" prop="quan_yipai_classhour" v-if="params_1.is_today==1"></el-table-column>
-        <el-table-column label="兼职已排" prop="jian_yipai_classhour" v-if="params_1.is_today==1"></el-table-column>
-        <el-table-column align="center" label="全职已上" v-if="params_1.is_today!==2" prop="jian_yishang_classhour"></el-table-column>
-                <el-table-column align="center" label="兼职已上" v-if="params_1.is_today!==2" prop="jian_yishang_classhour"></el-table-column>
+        <el-table-column label="全职已排" prop="quan_yipai_classhour" v-if="params_1.is_today!==-1"></el-table-column>
+        <el-table-column label="兼职已排" prop="jian_yipai_classhour" v-if="params_1.is_today!==-1"></el-table-column>
+        <el-table-column
+          align="center"
+          label="全职已上"
+          v-if="params_1.is_today!==2"
+          prop="jian_yishang_classhour"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          label="兼职已上"
+          v-if="params_1.is_today!==2"
+          prop="jian_yishang_classhour"
+        ></el-table-column>
 
         <!-- <el-table-column align="center" label="全职待上占比" prop="quan_daishang_classhour"></el-table-column> -->
         <!-- <el-table-column label="兼职待上占比" prop="jian_daishang_classhour"></el-table-column> -->
-               <el-table-column align="center" label="已上课酬占比" prop="total_amount"  v-if="params_1.is_today==1"></el-table-column>
-        <el-table-column align="center" label="全职课酬占比" prop="quan_amount"  v-if="params_1.is_today!==2"></el-table-column>
-        <el-table-column label="兼职课酬占比" prop="jian_amount"  v-if="params_1.is_today!==2"></el-table-column>
-        <el-table-column align="center" label="全职平均课酬" prop="quan_average_amount"  v-if="params_1.is_today==1"></el-table-column>
-        <el-table-column align="center" label="兼职平均课酬" prop="jian_average_amount" v-if="params_1.is_today==1"></el-table-column>
-          <el-table-column align="center" label="全职平均课时成本" v-if="params_1.is_today==-1" prop="quan_average_amount"></el-table-column>
-            <el-table-column align="center" label="兼职平均课时成本" prop="jian_average_amount"  v-if="params_1.is_today==-1"></el-table-column>
+        <el-table-column
+          align="center"
+          label="已上课酬占比"
+          prop="total_amount"
+          v-if="params_1.is_today==1"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          label="全职课酬占比"
+          prop="quan_amount"
+          v-if="params_1.is_today!==2"
+        ></el-table-column>
+        <el-table-column label="兼职课酬占比" prop="jian_amount" v-if="params_1.is_today!==2"></el-table-column>
+        <el-table-column
+          align="center"
+          label="全职平均课酬"
+          prop="quan_average_amount"
+          v-if="params_1.is_today==1"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          label="兼职平均课酬"
+          prop="jian_average_amount"
+          v-if="params_1.is_today==1"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          label="全职平均课时成本"
+          v-if="params_1.is_today==-1"
+          prop="quan_average_amount"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          label="兼职平均课时成本"
+          prop="jian_average_amount"
+          v-if="params_1.is_today==-1"
+        ></el-table-column>
       </el-table>
-      <span v-if="msg1.data">
+       <div v-if="msg1.data" style="display:block;width:100%;" >
+     
         <el-pagination
-          style="float:right;margin-top:20px;margin-bottom: 20px;"
+          style="float:right;margin-top:20px;"
           background
           layout="prev, pager, next"
           @prev-click="prev_1"
@@ -172,10 +218,10 @@
           @current-change="current_1"
           :page-size="10"
           :total="msg1.data.total"
-        ></el-pagination>
-      </span>
+             ></el-pagination>
+     </div>
     </div>
-    <div class="session1">
+    <!-- <div class="session1">
       <div style="width:100%;" class="flex_div">
         <div style="font-weight:900;">全职教师以及5星兼职教师课时统计</div>
         <div>
@@ -241,11 +287,11 @@
           :total="msg2.data.total"
         ></el-pagination>
       </div>
-    </div>
+    </div> -->
 
-          <div class="bgc">
+    <div class="bgc">
       <div class="flex_all">
-          <!-- <el-date-picker
+        <!-- <el-date-picker
             v-model="begin_time_main1"
             type="date"
             value-format="timestamp"
@@ -258,51 +304,51 @@
             value-format="timestamp"
             type="date"
             placeholder="选择你想查看的截止日期"
-          ></el-date-picker> -->
-                   <el-date-picker
-              @change="change_Start(1)"
-              v-model="year_month"
-              type="month"
-              placeholder="选择你想查看的月份"
-            ></el-date-picker>
-        </div>
+        ></el-date-picker>-->
+        <el-date-picker
+          @change="change_Start(1)"
+          v-model="year_month"
+          type="month"
+          placeholder="选择你想查看的月份"
+        ></el-date-picker>
+      </div>
 
       <div id="main1" style="width:100%;height:500px;"></div>
     </div>
 
-            <div class="bgc">
+    <div class="bgc">
       <div class="flex_all">
-          <el-date-picker
-              @change="change_Start(2)"
-              v-model="year_month1"
-              type="month"
-              placeholder="选择你想查看的月份"
-            ></el-date-picker>
-        </div>
+        <el-date-picker
+          @change="change_Start(2)"
+          v-model="year_month1"
+          type="month"
+          placeholder="选择你想查看的月份"
+        ></el-date-picker>
+      </div>
 
       <div id="main2" style="width:100%;height:500px;"></div>
     </div>
-            <div class="bgc">
+    <div class="bgc">
       <div class="flex_all">
-    <el-date-picker
-              @change="change_Start(3)"
-              v-model="year_month2"
-              type="month"
-              placeholder="选择你想查看的月份"
-            ></el-date-picker>
-        </div>
+        <el-date-picker
+          @change="change_Start(3)"
+          v-model="year_month2"
+          type="month"
+          placeholder="选择你想查看的月份"
+        ></el-date-picker>
+      </div>
 
       <div id="main3" style="width:100%;height:500px;"></div>
     </div>
-            <div class="bgc">
+    <div class="bgc">
       <div class="flex_all">
-          <el-date-picker
-              @change="change_Start(4)"
-              v-model="year_month3"
-              type="month"
-              placeholder="选择你想查看的月份"
-            ></el-date-picker>
-        </div>
+        <el-date-picker
+          @change="change_Start(4)"
+          v-model="year_month3"
+          type="month"
+          placeholder="选择你想查看的月份"
+        ></el-date-picker>
+      </div>
 
       <div id="main4" style="width:100%;height:500px;"></div>
     </div>
@@ -326,7 +372,7 @@ export default {
       options: [],
       top15_1: [],
       top15_3: [],
-       top15_2: [],
+      top15_2: [],
       top15_4: [],
       mouthData: [], //获取上一个月和前一年上一个月的数据
 
@@ -337,7 +383,7 @@ export default {
       idArr: [],
       params: {
         // keywords: "", //	老师名字搜索
-        page: 1, //	页码
+        page: 1 //	页码
         // begin_time: "", //	开始时间
         // end_time: "", //	结束时间
         // teacher_type: "", //	教师类型1全职，2兼职
@@ -346,8 +392,8 @@ export default {
       params_1: {
         page: "", //	页码
         begin_time: "", //	开始时间
-        end_time: "" ,//	结束时间
-        is_today:1,//默认是当月，1当月，-1上月，2下月
+        end_time: "", //	结束时间
+        is_today: 1 //默认是当月，1当月，-1上月，2下月
       },
       params_2: {
         // keywords: "", //	老师名字搜索
@@ -374,7 +420,7 @@ export default {
       vip_classhour: [],
       msg: [],
       msg1: [],
-          msg2: [],
+      msg2: [],
       changeMouth1: "",
       changeMouth2: "",
       begin_time_1: "", //自由选择时间的绑定值1
@@ -383,29 +429,29 @@ export default {
       end_time_2: "", //自由选择时间的绑定值1
       begin_time_3: "", //总数组的绑定值
       end_time_3: "", //总数组的绑定值
-      begin_time_main1:'',
-         begin_time_main2:'',
-            begin_time_main3:'',
-               begin_time_main4:'',
-      end_time_main1:'',
-end_time_main2:'',
-end_time_main3:'',
-end_time_main4:'',
-year_month:'',
-year_month1:'',
-year_month2:'',
-year_month3:'',
+      begin_time_main1: "",
+      begin_time_main2: "",
+      begin_time_main3: "",
+      begin_time_main4: "",
+      end_time_main1: "",
+      end_time_main2: "",
+      end_time_main3: "",
+      end_time_main4: "",
+      year_month: "",
+      year_month1: "",
+      year_month2: "",
+      year_month3: "",
       one: {
         begin_time: "",
         end_time: "",
         year_month: ""
       },
-         two: {
+      two: {
         begin_time: "",
         end_time: "",
         year_month: ""
       },
-         three: {
+      three: {
         begin_time: "",
         end_time: "",
         year_month: ""
@@ -440,7 +486,7 @@ year_month3:'',
   },
   methods: {
     // 全职老师已排课时统计1
-          lineChart() {
+    lineChart() {
       let myLine = echarts.init(document.getElementById("main1"));
       myLine.setOption({
         title: {
@@ -468,7 +514,7 @@ year_month3:'',
           }
         ],
         grid: { containLabel: true },
-        xAxis: { name: "课时" ,nameTextStyle:{fontSize:16}  },
+        xAxis: { name: "课时", nameTextStyle: { fontSize: 16 } },
         yAxis: { type: "category" }
       });
       this.$apis.census.fulltime_yipai_classhour(this.one).then(res => {
@@ -488,7 +534,7 @@ year_month3:'',
       });
     },
     // 全职老师已上课时统计2
-     lineChart_1() {
+    lineChart_1() {
       let myLine = echarts.init(document.getElementById("main2"));
       myLine.setOption({
         title: {
@@ -535,7 +581,7 @@ year_month3:'',
         }
       });
     },
-     lineChart_2() {
+    lineChart_2() {
       let myLine = echarts.init(document.getElementById("main3"));
       myLine.setOption({
         title: {
@@ -582,7 +628,7 @@ year_month3:'',
         }
       });
     },
-     lineChart_3() {
+    lineChart_3() {
       let myLine = echarts.init(document.getElementById("main4"));
       myLine.setOption({
         title: {
@@ -638,14 +684,14 @@ year_month3:'',
     },
     indexMethod(index) {},
     changeMouth(value) {
-            this.changeMouth1 = value;
-            //起止日期数组
+      this.changeMouth1 = value;
+      //起止日期数组
       var startStop = new Array();
       //获取当前时间
       var currentDate = new Date();
       //获得当前月份0-11
-     var changeMouth=value.split('')[0]==0?value.split('')[1]:value
-      var currentMonth = value-1;
+      var changeMouth = value.split("")[0] == 0 ? value.split("")[1] : value;
+      var currentMonth = value - 1;
       //获得当前年份4位年
       var currentYear = currentDate.getFullYear();
       //求出本月第一天
@@ -667,15 +713,15 @@ year_month3:'',
       //求出上月的最后一天
       var lastDay = new Date(nextMonthDayOne.getTime() - millisecond);
       var sy = firstDay.getFullYear();
-      var sm = firstDay.getMonth()+1 ;
+      var sm = firstDay.getMonth() + 1;
       var sd = firstDay.getDate();
 
       var ey = lastDay.getFullYear();
-      var em = lastDay.getMonth()+1 ;
+      var em = lastDay.getMonth() + 1;
       var ed = lastDay.getDate();
 
       var s = sy + "-" + this.add0(sm) + "-" + this.add0(sd) + " 00:00:00"; //开始
-      var e = ey + "-" +this.add0(em) + "-" + this.add0(ed) + " 23:59:59"; //结束
+      var e = ey + "-" + this.add0(em) + "-" + this.add0(ed) + " 23:59:59"; //结束
       var s1 = this.dateToMs(s)
         .toString()
         .substr(0, 10);
@@ -688,13 +734,13 @@ year_month3:'',
     },
     changeMouth_1(value) {
       this.changeMouth2 = value;
-            //起止日期数组
+      //起止日期数组
       var startStop = new Array();
       //获取当前时间
       var currentDate = new Date();
       //获得当前月份0-11
-     var changeMouth=value.split('')[0]==0?value.split('')[1]:value
-      var currentMonth = value-1;
+      var changeMouth = value.split("")[0] == 0 ? value.split("")[1] : value;
+      var currentMonth = value - 1;
       //获得当前年份4位年
       var currentYear = currentDate.getFullYear();
       //求出本月第一天
@@ -716,15 +762,15 @@ year_month3:'',
       //求出上月的最后一天
       var lastDay = new Date(nextMonthDayOne.getTime() - millisecond);
       var sy = firstDay.getFullYear();
-      var sm = firstDay.getMonth()+1 ;
+      var sm = firstDay.getMonth() + 1;
       var sd = firstDay.getDate();
 
       var ey = lastDay.getFullYear();
-      var em = lastDay.getMonth()+1 ;
+      var em = lastDay.getMonth() + 1;
       var ed = lastDay.getDate();
 
       var s = sy + "-" + this.add0(sm) + "-" + this.add0(sd) + " 00:00:00"; //开始
-      var e = ey + "-" +this.add0(em) + "-" + this.add0(ed) + " 23:59:59"; //结束
+      var e = ey + "-" + this.add0(em) + "-" + this.add0(ed) + " 23:59:59"; //结束
       var s1 = this.dateToMs(s)
         .toString()
         .substr(0, 10);
@@ -760,7 +806,7 @@ year_month3:'',
     },
 
     showDay() {
-      this.tableData_1=[]
+      this.tableData_1 = [];
       var startStop = new Array();
 
       //返回上一个月的第一天Date类型
@@ -838,7 +884,7 @@ year_month3:'',
         .substr(0, 10);
       this.params_1.begin_time = s1.toString();
       this.params_1.end_time = e1.toString();
-       this.params_1.is_today=-1
+      this.params_1.is_today = -1;
       this.getadata_1();
     },
     showDay_2() {
@@ -923,11 +969,11 @@ year_month3:'',
     },
     showWeek() {
       // $(bodyDiv)[0].style.height = $(window).height() * 1 - 50 + "px";
-       let beforeHeight=$(".table1").height()
-      this.tableData_1=[]
-             console.log($(".table1").height())
-      $(".table1 tbody")[0].style.height=beforeHeight
-     console.log($(".table1").height())
+      let beforeHeight = $(".table1").height();
+      this.tableData_1 = [];
+      console.log($(".table1").height());
+      $(".table1 tbody")[0].style.height = beforeHeight;
+      console.log($(".table1").height());
       var startStop = new Array();
 
       //返回下个月的第一天Date类型
@@ -1004,7 +1050,7 @@ year_month3:'',
         .substr(0, 10);
       this.params_1.begin_time = s1.toString();
       this.params_1.end_time = e1.toString();
-      this.params_1.is_today=2
+      this.params_1.is_today = 2;
       this.getadata_1();
     },
     showWeek_2() {
@@ -1087,7 +1133,7 @@ year_month3:'',
       this.getadata_2();
     },
     showMouth() {
-      this.tableData_1=[]
+      this.tableData_1 = [];
       //起止日期数组
       var startStop = new Array();
       //获取当前时间
@@ -1132,11 +1178,10 @@ year_month3:'',
         .substr(0, 10);
       this.params_1.begin_time = s1.toString();
       this.params_1.end_time = e1.toString();
-       this.params_1.is_today =1
+      this.params_1.is_today = 1;
       this.getadata_1();
     },
-    handleClick(result) {
-    },
+    handleClick(result) {},
     showMouth_2() {
       //起止日期数组
       var startStop = new Array();
@@ -1194,49 +1239,56 @@ year_month3:'',
     //     this.lineChart();
     //   }
     // },
-        change_Start(value) {
-            let newTime=new Date()
-          switch (value) {
-            case 1:
-            
-                    var thisdate = new Date(this.year_month?this.year_month:newTime);
-      var month1 = thisdate.getMonth() * 1 + 1;
-      var month = month1 < 10 ? "0" + month1 : month1;
+    change_Start(value) {
+      let newTime = new Date();
+      switch (value) {
+        case 1:
+          var thisdate = new Date(this.year_month ? this.year_month : newTime);
+          var month1 = thisdate.getMonth() * 1 + 1;
+          var month = month1 < 10 ? "0" + month1 : month1;
 
-      this.year_month = thisdate.getFullYear() + "-" + month;
-      this.one.year_month=this.year_month
-      console.log(this.one.year_month)
-       this.lineChart();
-              break;
-                  case 2:
-                     var thisdate = new Date(this.year_month1?this.year_month1:newTime);
-                    // var thisdate = new Date(this.year_month1);
-      var month1 = thisdate.getMonth() * 1 + 1;
-      var month = month1 < 10 ? "0" + month1 : month1;
+          this.year_month = thisdate.getFullYear() + "-" + month;
+          this.one.year_month = this.year_month;
+          console.log(this.one.year_month);
+          this.lineChart();
+          break;
+        case 2:
+          var thisdate = new Date(
+            this.year_month1 ? this.year_month1 : newTime
+          );
+          // var thisdate = new Date(this.year_month1);
+          var month1 = thisdate.getMonth() * 1 + 1;
+          var month = month1 < 10 ? "0" + month1 : month1;
 
-      this.year_month1 = thisdate.getFullYear() + "-" + month;
-      this.two.year_month=this.year_month1
-       this.lineChart_1();
-              break;        case 3:
-       var thisdate = new Date(this.year_month2?this.year_month2:newTime);
-      var month1 = thisdate.getMonth() * 1 + 1;
-      var month = month1 < 10 ? "0" + month1 : month1;
+          this.year_month1 = thisdate.getFullYear() + "-" + month;
+          this.two.year_month = this.year_month1;
+          this.lineChart_1();
+          break;
+        case 3:
+          var thisdate = new Date(
+            this.year_month2 ? this.year_month2 : newTime
+          );
+          var month1 = thisdate.getMonth() * 1 + 1;
+          var month = month1 < 10 ? "0" + month1 : month1;
 
-      this.year_month2 = thisdate.getFullYear() + "-" + month;
-      this.three.year_month=this.year_month2
-       this.lineChart_2();
-              break;        case 4:
-          var thisdate = new Date(this.year_month3?this.year_month3:newTime);
-      var month1 = thisdate.getMonth() * 1 + 1;
-      var month = month1 < 10 ? "0" + month1 : month1;
+          this.year_month2 = thisdate.getFullYear() + "-" + month;
+          this.three.year_month = this.year_month2;
+          this.lineChart_2();
+          break;
+        case 4:
+          var thisdate = new Date(
+            this.year_month3 ? this.year_month3 : newTime
+          );
+          var month1 = thisdate.getMonth() * 1 + 1;
+          var month = month1 < 10 ? "0" + month1 : month1;
 
-      this.year_month3 = thisdate.getFullYear() + "-" + month;
-      this.four.year_month=this.year_month3
-       this.lineChart_3();
-              break;
-            default:
-              break;
-          }
+          this.year_month3 = thisdate.getFullYear() + "-" + month;
+          this.four.year_month = this.year_month3;
+          this.lineChart_3();
+          break;
+        default:
+          break;
+      }
 
       // this.$apis.census
       //   .total_onlevel_subject({
@@ -1257,7 +1309,6 @@ year_month3:'',
       //       ];
       //     }
       //   });
-
     },
     //     change_Start(event) {
     //   if (this.hadClick == true) {
@@ -1270,7 +1321,7 @@ year_month3:'',
     //     this.lineChart();
     //   }
     // },
-        //序号排列
+    //序号排列
     indexMethod(index) {
       if (this.params.page == 1) {
         return index + 1;
@@ -1279,7 +1330,7 @@ year_month3:'',
         return index + page;
       }
     },
-        change_Start_1(event) {
+    change_Start_1(event) {
       if (this.hadClick == true) {
         this.two.end_time = "";
         this.two.begin_time = event ? event.toString().substr(0, 10) : "";
@@ -1290,7 +1341,7 @@ year_month3:'',
         this.lineChart_1();
       }
     },
-        change_Start_2(event) {
+    change_Start_2(event) {
       if (this.hadClick == true) {
         this.three.end_time = "";
         this.three.begin_time = event ? event.toString().substr(0, 10) : "";
@@ -1301,7 +1352,7 @@ year_month3:'',
         this.lineChart_2();
       }
     },
-            change_Start_3(event) {
+    change_Start_3(event) {
       if (this.hadClick == true) {
         this.four.end_time = "";
         this.four.begin_time = event ? event.toString().substr(0, 10) : "";
@@ -1319,7 +1370,7 @@ year_month3:'',
     },
     changeEnd_3(event) {
       this.params.end_time = event ? event.toString().substr(0, 10) : "";
-      this.tableData=[]
+      this.tableData = [];
       this.getadata();
       //  this.params.subject_ids=[]
       delete this.params.subject_ids;
@@ -1356,7 +1407,7 @@ year_month3:'',
       window.location.href =
         url.urls + "/api_export_teacher_classhour" + "?" + parms;
     },
-        //导出2
+    //导出2
     recharge_export_2() {
       this.$message({
         type: "success",
@@ -1366,13 +1417,14 @@ year_month3:'',
       let parms = "";
       // // this.form.teacher='杨懿俊'
       for (var key in this.params1) {
-        if (this.params[key]&&this.params!=='page') {
-      
+        if (this.params[key] && this.params !== "page") {
           parms += key + "=" + this.params[key] + "&";
-      }}
-      window.location.href = url.urls + "/api_export_teacher_proportion" + "?" + parms;
+        }
+      }
+      window.location.href =
+        url.urls + "/api_export_teacher_proportion" + "?" + parms;
     },
-    
+
     change_End(event) {
       if (this.hadClick == true) {
         this.one.begin_time = "";
@@ -1384,7 +1436,7 @@ year_month3:'',
         this.lineChart();
       }
     },
-        change_End_1(event) {
+    change_End_1(event) {
       if (this.hadClick == true) {
         this.two.begin_time = "";
         this.two.end_time = event ? event.toString().substr(0, 10) : "";
@@ -1395,7 +1447,7 @@ year_month3:'',
         this.lineChart_1();
       }
     },
-        change_End_2(event) {
+    change_End_2(event) {
       if (this.hadClick == true) {
         this.three.begin_time = "";
         this.three.end_time = event ? event.toString().substr(0, 10) : "";
@@ -1406,7 +1458,7 @@ year_month3:'',
         this.lineChart_2();
       }
     },
-        change_End_3(event) {
+    change_End_3(event) {
       if (this.hadClick == true) {
         this.four.begin_time = "";
         this.four.end_time = event ? event.toString().substr(0, 10) : "";
@@ -1419,7 +1471,7 @@ year_month3:'',
     },
     Change_sbuject() {
       // this.getdata();
-      this.tableData=[]
+      this.tableData = [];
       this.getadata();
       delete this.params.subject_ids;
     },
@@ -1510,7 +1562,7 @@ year_month3:'',
         }
       });
     },
-        next_1() {
+    next_1() {
       this.params_1.page++;
       this.getadata_1();
     },
@@ -1523,11 +1575,11 @@ year_month3:'',
       //上一页
       if (this.params_1.page > 1) {
         this.params_1.page--;
-        this.tableData=[]
+        this.tableData = [];
         this.getadata_1();
       }
     },
-            next_2() {
+    next_2() {
       this.params_2.page++;
       this.getadata_2();
     },
@@ -1540,41 +1592,39 @@ year_month3:'',
       //上一页
       if (this.params_2.page > 1) {
         this.params_2.page--;
-        this.tableData=[]
+        this.tableData = [];
         this.getadata_2();
       }
     },
     next() {
       this.params.page++;
-      this.tableData=[]
+      this.tableData = [];
       this.getadata();
     },
     current(num) {
       //当前页数
       this.params.page = num;
-      this.tableData=[]
+      this.tableData = [];
       this.getadata();
     },
     prev() {
       //上一页
       if (this.params.page > 1) {
         this.params.page--;
-        this.tableData=[]
+        this.tableData = [];
         this.getadata();
       }
     }
   },
-    created() {
+  created() {
     this.getdata();
-   
   },
 
-
   mounted() {
-     this.lineChart() ;
-    this.lineChart_1() ;
-    this.lineChart_2() ;
-    this.lineChart_3() ;
+    this.lineChart();
+    this.lineChart_1();
+    this.lineChart_2();
+    this.lineChart_3();
     this.$apis.census.teacher_classhour(this.params).then(res => {
       this.tableData = [];
       if (
@@ -1636,8 +1686,8 @@ year_month3:'',
 }
 .bgc {
   background-color: #fff;
-  display:inline-block;
-  width:44.5%;
+  display: inline-block;
+  width: 44.5%;
   padding: 1%;
   margin: 1%;
   border-radius: 10px;
