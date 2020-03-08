@@ -93,4 +93,19 @@ export default {
         return shuju.getdata(url, params)
       },
       
+      business_system(params) { //业务核算—-业务体系列表
+        let url = '/api/api_business_system'
+        return shuju.getdata(url, params)
+      },
+      
+           
+      system_dimension(params) { //业务核算—-体系维度分析
+        let url = '/api/api_system_dimension'
+        return shuju.getdata(url, params)
+      },
+           
+      student_dimension(params) { //业务核算—-学生维度分析
+        let url = '/api/api_student_dimension'
+        return shuju.getdata(url, params)
+      },
 }

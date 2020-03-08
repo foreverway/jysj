@@ -94,7 +94,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column fixed="right" prop label="操作" width="300">
+      <el-table-column fixed="right" prop label="操作" width="220">
         <template slot-scope="scope">
           <!-- <span v-for="(item,index) in getRolenenu()" :key="index">
             <el-button

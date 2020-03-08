@@ -120,7 +120,7 @@
       </el-table-column>
       <el-table-column label="操作" width="250px" fixed="right" >
         <template slot-scope="scope" class="delete_left">
-          <el-button
+  <el-button
             size="mini"
             style="background-color:#2adbcb;color:white;"
             v-show="scope.row.attendance_status!==0"
@@ -160,18 +160,19 @@
               </el-button>
             <el-button   v-show="scope.row.attendance_status==2&&scope.row.is_forward!==1"
             style="color:#169BD5" type="danger" size="mini" @click="payMoney(scope.row)">结转</el-button>
-
+<!-- is_audition为1就是考勤  role_name当前人身份 -->
             <el-button
-              v-if="scope.row.is_feedback==1||scope.row.attendance_status==0"
-              v-show="scope.row.is_audition!==1&&role_name!=='课程顾问'"
+              v-show="checkTeacher(scope.row.is_audition,role_name)"
+              v-if="scope.row.is_feedback==1&&scope.row.attendance_status==0"
               size="mini"
               @click="normal(scope.row)"
               type="success"
             >正常</el-button>
-            <el-button size="mini" v-if="scope.row.is_audition!==1&&role_name!=='课程顾问'" v-show="scope.row.attendance_status==0" @click="unnormal(scope.row)" type="danger">
+            <el-button size="mini" v-if="checkTeacher(scope.row.is_audition,role_name)" v-show="scope.row.attendance_status==0" @click="unnormal(scope.row)" type="danger">
               异动</el-button>
-            <el-button v-if="scope.row.is_audition!==1&&role_name!=='课程顾问'" @click="payMoney(scope.row)" v-show="scope.row.is_forward==1"  type="info" disabled size="mini">
+            <el-button v-if="checkTeacher(scope.row.is_audition,role_name)" @click="payMoney(scope.row)" v-show="scope.row.is_forward==1"  type="info" disabled size="mini">
               结转</el-button>
+        
         </template>
       </el-table-column>
     </el-table>
@@ -827,7 +828,17 @@ export default {
         }
       });
     },
-
+    // scope.row.is_audition!==1&&role_name!=='课程顾问'
+    checkTeacher(a,b){
+     
+       let result =true
+       if(a!==1&&b=='课程顾问'){
+          //如果当前对象是课程顾问并且不是试听课程  就不显示
+          result=false
+       }else{
+         result=true
+       }
+return result     },
     unnormal(a) {
       this.unnormalData = {};
       (this.unnormalData.attendance_type = 2),

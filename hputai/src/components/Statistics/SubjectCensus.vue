@@ -4,40 +4,22 @@
     <div class="session1">
       <h3>一级科目</h3>
       <div>
-            <el-date-picker
-             style="margin:10px"
-              @change="changeStart_3"
-              v-model="begin_time_3"
-              type="month"
-              value-format='timestamp'
-              placeholder="选择月份"
-            ></el-date-picker>至
-            <el-date-picker
-              @change="changeEnd_3"
-              v-model="end_time_3"
-                 value-format='timestamp'
-              type="month"
-              placeholder="选择月份"
-            ></el-date-picker>
-<!-- 
         <el-date-picker
           style="margin:10px"
-          v-model="begin_time_3"
           @change="changeStart_3"
+          v-model="begin_time_3"
+          type="month"
           value-format="timestamp"
-          clearable
-          placeholder="选择日期时间"
+          placeholder="选择月份"
         ></el-date-picker>至
         <el-date-picker
           @change="changeEnd_3"
           v-model="end_time_3"
           value-format="timestamp"
-          clearable
-          placeholder="选择日期时间"
-        ></el-date-picker> -->
-
+          type="month"
+          placeholder="选择月份"
+        ></el-date-picker>
         <el-select
-       
           clearable
           v-model="params.student_type"
           placeholder="选择学生类型"
@@ -48,10 +30,8 @@
           <el-option label="保读" value="2"></el-option>
           <el-option label="普通" value="1"></el-option>
         </el-select>
-
         <el-button type="primary" @click="recharge_export">导出</el-button>
       </div>
-
       <el-table
         :data="tableData"
         height="500px"
@@ -77,17 +57,18 @@
         <div style="width:39%;height:450px;" class="bgc">
           <div class="block" style="margin: 0 auto;width:446px;">
             <el-date-picker
-             style="width:42%;"
+              style="width:42%;"
               @change="changeMouth"
               v-model="changeMouth1"
               type="month"
               placeholder="选择月份"
             ></el-date-picker>
             <el-cascader
-             style="width:42%;"
+              style="width:42%;"
               placeholder="选择科目"
               v-model="main_subject_id"
               filterable
+     
               :options="options"
               clearable
               :props="{ expandTrigger: 'hover' }"
@@ -112,90 +93,107 @@
         </div>
       </div>
     </div>
-
-    <div class="bgc">
-      <div class="flex_all">
-        <div>
-          <el-radio-group v-model="one.status" @change="changeRadio1">
-            <el-radio-button label="1">已排</el-radio-button>
-            <el-radio-button label="2">已上</el-radio-button>
-            <el-radio-button label="3">待上</el-radio-button>
-          </el-radio-group>
-        </div>
-        <div>
-          <el-button
-            class="near"
-            style="margin:0 -2px ;border-radius:5px 0 0  5px;"
-            @click="showDay"
-          >今天</el-button>
-          <el-button class="near" style="margin:0 -3px ;border-radius:0;" @click="showWeek">本周</el-button>
-          <el-button
-            class="near"
-            style="margin:0 -2px ;border-radius:0 5px 5px  0;"
-            @click="showMouth"
-          >本月</el-button>
-        </div>
-        <div>
-          <el-date-picker
-            v-model="begin_time_1"
-            type="date"
-            value-format="timestamp"
-            @change="changeStart"
-            placeholder="选择你想查看的初始日期"
-          ></el-date-picker>至
-          <el-date-picker
-            v-model="end_time_1"
-            @change="changeEnd"
-            value-format="timestamp"
-            type="date"
-            placeholder="选择你想查看的截止日期"
-          ></el-date-picker>
-        </div>
+    <!-- 业务体系 -->
+    <div class="session1">
+      <h3>业务体系</h3>
+      <div>
+        <el-date-picker
+          style="margin:10px"
+          @change="changeStart_system"
+          v-model="begin_time_system"
+          type="month"
+          value-format="timestamp"
+          placeholder="选择月份"
+        ></el-date-picker>至
+        <el-date-picker
+          @change="changeEnd_system"
+          v-model="end_time_system"
+          value-format="timestamp"
+          type="month"
+          placeholder="选择月份"
+        ></el-date-picker>
+        <el-select
+          clearable
+          v-model="params_system.student_type"
+          placeholder="选择学生类型"
+          @change="Change_sbuject_system"
+        >
+          <el-option label="全部" value="0"></el-option>
+          <el-option label="VIP学生" value="3"></el-option>
+          <el-option label="保读" value="2"></el-option>
+          <el-option label="普通" value="1"></el-option>
+        </el-select>
+        <el-button type="primary" @click="recharge_export_system">导出</el-button>
       </div>
+      <el-table
+        :data="tableData_system"
+        border
+        class="table_set"
+        @selection-change="handle_system"
+        :header-cell-style="{background:'#f4f4f4'}"
+      >
+        <el-table-column type="selection" fixed="left" @click="handleClick(scope.row)" width="40"></el-table-column>
 
-      <div id="main1" style="width:100%;height:400px;"></div>
+        <el-table-column label="业务体系" width="100" prop="system_name"></el-table-column>
+        <el-table-column align="center" prop="student_type_name" label="学生类别" sortable></el-table-column>
+        <el-table-column align="center" prop="confirm_classhour" label="确认课时消耗量(小时)" sortable></el-table-column>
+        <el-table-column align="center" prop="student_amount" label="确认营业收入(￥)" sortable></el-table-column>
+        <el-table-column label="	确认课程成本(￥)" prop="teacher_amount"></el-table-column>
+        <el-table-column label="确认毛利金额(￥)" prop="profit"></el-table-column>
+      </el-table>
     </div>
-    <div class="bgc">
-      <div class="flex_all">
-        <div>
-          <el-radio-group fill="#5CB87A" v-model="three.status" @change="changeRadio_1">
-            <el-radio-button label="1">已排</el-radio-button>
-            <el-radio-button label="2">已上</el-radio-button>
-            <el-radio-button label="3">待上</el-radio-button>
-          </el-radio-group>
+
+     <div class="session1">
+      <div class="echarts_1" style="margin:20px 0;">
+        <div style="width:48%;height:450px;" class="bgc">
+          <div class="block" style="margin: 0 auto;width:446px;">
+            <el-date-picker
+              style="width:42%;"
+              @change="changeMouth_system"
+              v-model="year_month_system"
+              type="month"
+              placeholder="选择月份"
+            ></el-date-picker>
+            <el-cascader
+              style="width:42%;"
+              placeholder="选择体系"
+              v-model="system_id"
+              filterable
+     
+              :options="options_subject"
+              clearable
+              :props="{ expandTrigger: 'hover' }"
+              :show-all-levels="false"
+              @change="handleChange_system"
+            ></el-cascader>
+          </div>
+          <div id="main_system" style="width:100%;height:400px;"></div>
         </div>
-        <div></div>
-        <div>
-          <el-button
-            class="near"
-            style="margin:0 -2px ;border-radius:5px 0 0  5px;"
-            @click="showDay_2"
-          >今天</el-button>
-          <el-button class="near" style="margin:0 -3px ;border-radius:0;" @click="showWeek_2">本周</el-button>
-          <el-button
-            class="near"
-            style="margin:0 -2px ;border-radius:0 5px 5px  0;"
-            @click="showMouth_2"
-          >本月</el-button>
-        </div>
-        <div>
-          <el-date-picker
-            v-model="begin_time_2"
-            type="date"
-            value-format="timestamp"
-            @change="changeStart_2"
-            placeholder="选择你想查看的初始日期"
-          ></el-date-picker>至
-          <el-date-picker
-            v-model="end_time_2"
-            @change="changeEnd_2"
-            value-format="timestamp"
-            type="date"
-            placeholder="选择你想查看的截止日期"
-          ></el-date-picker>
+
+        <div style="width:48%;height:450px;" class="bgc">
+          <div class="block" style="margin: 0 auto;width:446px;">
+            <el-date-picker
+              style="width:42%;"
+              @change="changeMouth_student"
+              v-model="year_month_student"
+              type="month"
+              placeholder="选择月份"
+            ></el-date-picker>
+             <el-select
+          clearable
+          v-model="main_subject_type"
+          placeholder="选择学生类型"
+          @change="handleChange_student"
+        >
+          <el-option label="全部" value="0"></el-option>
+          <el-option label="VIP学生" value="3"></el-option>
+          <el-option label="保读" value="2"></el-option>
+          <el-option label="普通" value="1"></el-option>
+        </el-select>
+          </div>
+          <div id="main_student" style="width:100%;height:400px;"></div>
         </div>
       </div>
-      <div id="main3" style="width:100%;height:400px;"></div>
     </div>
   </div>
 </template>
@@ -216,7 +214,14 @@ export default {
       lastYear: [],
       thisTear: [],
       main_subject_id: "", //图表科目选择的
+      system_id:'',//选择的体系id
+
+       year_month_system:'',//选择的体系时间
       year_month: "",
+
+      main_subject_type:'', //选择的学生类别
+      year_month_student:'', //学生类别选择的时间
+
       old_student_amount: "去年的收入",
       student_amount: "	今年的收入",
       old_teacher_amount: "去年的支出",
@@ -224,7 +229,14 @@ export default {
       old_profit: "去年的毛利",
       profit: "今年的毛利",
       idArr: [],
+      options_subject:[],//科目体系的数组
+      idArr_system:[],//体系选择的
       params: {
+        student_type: "",
+        begin_time: "",
+        end_time: ""
+      },
+            params_system: {
         student_type: "",
         begin_time: "",
         end_time: ""
@@ -234,31 +246,20 @@ export default {
       options_1: [], //学生的原来数据
       options1: [], //我们需要的学生数据
       classMouth: [],
-       profit_math: [], //四舍五入今年的毛利
+      profit_math: [], //四舍五入今年的毛利
       old_profit_math: [], //四舍五入去年的毛利
       profit: [], //今年的毛利
       old_profit: [], //去年的毛利
       msg: [],
       changeMouth1: "",
       thisyear: "",
-      begin_time_1: "", //自由选择时间的绑定值1
-      end_time_1: "", //自由选择时间的绑定值1
-      begin_time_2: "", //自由选择时间的绑定值1
-      end_time_2: "", //自由选择时间的绑定值1
       begin_time_3: "", //总数组的绑定值
       end_time_3: "", //总数组的绑定值
-      one: {
-        begin_time: "",
-        end_time: "",
-        status: "1"
-      },
-      three: {
-        begin_time: "",
-        end_time: "",
-        status: "1"
-      },
+      begin_time_system:'', //体系数组的开始时间绑定值
+      end_time_system:'',
       hadClick: false,
-      hadClick_2: false //是否点击了今天，本周，或本月
+      hadClick_2: false, //是否点击了今天，本周，或本月
+      tableData_system: [] //业务体系数据
     };
   },
   watch: {
@@ -306,6 +307,30 @@ export default {
         });
       this.drawChart();
     },
+    handleChange_system(targetName){
+          //选择科目
+      var lastName = targetName[0] ? targetName[0] : "";
+      this.system_id = lastName;
+       this.$apis.census
+        .system_dimension({
+          year_month: this.year_month_system,
+          system_id: this.system_id
+        })
+        
+      this.drawChart_system();
+    },
+        handleChange_student(targetName) {
+      //选择科目
+      var lastName = targetName[0] ? targetName[0] : "";
+      this.main_subject_type = lastName;
+
+            this.$apis.census.student_dimension({
+          year_month: this.year_month_student,
+          student_type: this.main_subject_type
+        })
+        
+      this.drawChart_student();
+    },
     getdata() {
       //获取科目的数据
       this.$apis.census
@@ -335,6 +360,13 @@ export default {
       }
       this.params.subject_ids = this.idArr.toString();
     },
+        handle_system(result) {
+      this.idArr_system = [];
+      for (let i = 0; i < result.length; i++) {
+        this.idArr_system.push(result[i].id);
+      }
+      this.params_system.subject_ids = this.idArr.toString();
+    },
     indexMethod(index) {},
     changeMouth(value) {
       var thisdate = new Date(this.changeMouth1);
@@ -342,7 +374,6 @@ export default {
       var month = month1 < 10 ? "0" + month1 : month1;
 
       this.year_month = thisdate.getFullYear() + "-" + month;
-      console.log(this.year_month, thisdate.getFullYear(), month);
       this.$apis.census
         .total_onlevel_subject({
           year_month: this.year_month,
@@ -364,28 +395,82 @@ export default {
         });
       this.drawChart();
     },
-    changeMouth_1(value) {
-      console.log(this.thisyear);
+    changeMouth_system(){
+            var thisdate = new Date(this.year_month_system);
+      var month1 = thisdate.getMonth() * 1 + 1;
+      var month = month1 < 10 ? "0" + month1 : month1;
 
+      this.year_month_system = thisdate.getFullYear() + "-" + month;
+              this.$apis.census
+        .system_dimension({
+          year_month: this.year_month_system,
+          system_id: this.system_id
+        })
+        .then(res => {
+          if (res.data.code == 1) {
+            this.lastYear = [
+              res.data.data[0].old_student_amount * 1,
+              res.data.data[1].old_teacher_amount * 1,
+              res.data.data[2].old_profit * 1
+            ];
+            this.thisYear = [
+              res.data.data[0].student_amount
+                .toString()
+                .replace(",", "")
+                .toString() * 1,
+              res.data.data[1].teacher_amount
+                .toString()
+                .replace(",", "")
+                .toString() * 1,
+              res.data.data[2].profit
+                .toString()
+                .replace(",", "")
+                .toString() * 1
+            ];}})
+      this.drawChart_system();
+    },
+    changeMouth_student(){
+            var thisdate = new Date(this.year_month_student);
+      var month1 = thisdate.getMonth() * 1 + 1;
+      var month = month1 < 10 ? "0" + month1 : month1;
+
+      this.year_month_student = thisdate.getFullYear() + "-" + month;
+     
+           this.$apis.census.student_dimension({
+          year_month: this.year_month_student,
+          student_type: this.main_subject_type
+        })
+        .then(res => {
+          if (res.data.code == 1) {
+            this.lastYear = [
+              res.data.data[0].old_student_amount * 1,
+              res.data.data[1].old_teacher_amount * 1,
+              res.data.data[2].old_profit * 1
+            ];
+            this.thisYear = [
+              res.data.data[0].student_amount
+                .toString()
+                .replace(",", "")
+                .toString() * 1,
+              res.data.data[1].teacher_amount
+                .toString()
+                .replace(",", "")
+                .toString() * 1,
+              res.data.data[2].profit
+                .toString()
+                .replace(",", "")
+                .toString() * 1
+            ];}})
+      this.drawChart_student();
+    },
+    changeMouth_1(value) {
       this.changeMouth2 = value;
       this.drawStudent();
     },
-    changeMouth_2(value) {
-      // this.changeMouth2=value
-      //  this.drawStudent();
-    },
-    changeRadio1(value) {
-      this.one.status = value;
-      this.lineChart(); //一级科目
-    },
-    changeRadio2(value) {
-      // this.one.begin_time=value
-      //    this.lineChart(); //一级科目
-    },
-    changeRadio_1(value) {
-      this.three.status = value;
-      this.lineChart2(); //一级科目
-    },
+
+
+
+
     add0(m) {
       return m < 10 ? "0" + m : m;
     },
@@ -393,240 +478,22 @@ export default {
       let result = new Date(date).getTime(); //getTime获取毫秒数
       return result;
     },
-    showDay() {
-      var todayDate = new Date();
-      var y = todayDate.getFullYear();
-      var m = todayDate.getMonth() + 1;
-      var d = todayDate.getDate();
-      var s = y + "-" + this.add0(m) + "-" + this.add0(d) + " 00:00:00"; //今日开始
-      var e = y + "-" + this.add0(m) + "-" + this.add0(d) + " 23:59:59"; //今日结束
-      var s1 = this.dateToMs(s)
-        .toString()
-        .substr(0, 10);
-      var e1 = this.dateToMs(e)
-        .toString()
-        .substr(0, 10);
 
-      this.one.begin_time = s1.toString();
-      this.one.end_time = e1.toString();
-      this.lineChart();
-      this.hadClick = true;
-    },
-    showDay_2() {
-      var todayDate = new Date();
-      var y = todayDate.getFullYear();
-      var m = todayDate.getMonth() + 1;
-      var d = todayDate.getDate();
-      var s = y + "-" + this.add0(m) + "-" + this.add0(d) + " 00:00:00"; //今日开始
-      var e = y + "-" + this.add0(m) + "-" + this.add0(d) + " 23:59:59"; //今日结束
-      var s1 = this.dateToMs(s)
-        .toString()
-        .substr(0, 10);
-      var e1 = this.dateToMs(e)
-        .toString()
-        .substr(0, 10);
-
-      this.three.begin_time = s1.toString();
-      this.three.end_time = e1.toString();
-      this.lineChart2();
-      this.hadClick_2 = true;
-    },
-    showWeek() {
-      var startStop = new Array();
-      //获取当前时间
-      var currentDate = new Date();
-      //返回date是一周中的某一天
-      var week = currentDate.getDay();
-      //返回date是一个月中的某一天
-      var month = currentDate.getDate();
-      //一天的毫秒数
-      var millisecond = 1000 * 60 * 60 * 24;
-      //减去的天数
-      var minusDay = week != 0 ? week - 1 : 6;
-      //alert(minusDay);
-      //本周 周一
-      var monday = new Date(currentDate.getTime() - minusDay * millisecond);
-      //本周 周日
-      var sunday = new Date(monday.getTime() + 6 * millisecond);
-      var sy = monday.getFullYear();
-      var sm = monday.getMonth() + 1;
-      var sd = monday.getDate();
-      var ey = sunday.getFullYear();
-      var em = sunday.getMonth() + 1;
-      var ed = sunday.getDate();
-      var s = sy + "-" + this.add0(sm) + "-" + this.add0(sd) + " 00:00:00"; //开始
-      var e = ey + "-" + this.add0(em) + "-" + this.add0(ed) + " 23:59:59"; //结束
-      var s1 = this.dateToMs(s)
-        .toString()
-        .substr(0, 10);
-      var e1 = this.dateToMs(e)
-        .toString()
-        .substr(0, 10);
-      this.one.begin_time = s1.toString();
-      this.one.end_time = e1.toString();
-      this.lineChart();
-      this.hadClick = true;
-    },
-    showWeek_2() {
-      var startStop = new Array();
-      //获取当前时间
-      var currentDate = new Date();
-      //返回date是一周中的某一天
-      var week = currentDate.getDay();
-      //返回date是一个月中的某一天
-      var month = currentDate.getDate();
-      //一天的毫秒数
-      var millisecond = 1000 * 60 * 60 * 24;
-      //减去的天数
-      var minusDay = week != 0 ? week - 1 : 6;
-      //alert(minusDay);
-      //本周 周一
-      var monday = new Date(currentDate.getTime() - minusDay * millisecond);
-      //本周 周日
-      var sunday = new Date(monday.getTime() + 6 * millisecond);
-      var sy = monday.getFullYear();
-      var sm = monday.getMonth() + 1;
-      var sd = monday.getDate();
-      var ey = sunday.getFullYear();
-      var em = sunday.getMonth() + 1;
-      var ed = sunday.getDate();
-      var s = sy + "-" + this.add0(sm) + "-" + this.add0(sd) + " 00:00:00"; //开始
-      var e = ey + "-" + this.add0(em) + "-" + this.add0(ed) + " 23:59:59"; //结束
-      var s1 = this.dateToMs(s)
-        .toString()
-        .substr(0, 10);
-      var e1 = this.dateToMs(e)
-        .toString()
-        .substr(0, 10);
-      this.three.begin_time = s1.toString();
-      this.three.end_time = e1.toString();
-      this.lineChart2();
-      this.hadClick_2 = true;
-    },
-    showMouth() {
-      //起止日期数组
-      var startStop = new Array();
-      //获取当前时间
-      var currentDate = new Date();
-      //获得当前月份0-11
-      var currentMonth = currentDate.getMonth();
-      //获得当前年份4位年
-      var currentYear = currentDate.getFullYear();
-      //求出本月第一天
-      var firstDay = new Date(currentYear, currentMonth, 1);
-
-      //当为12月的时候年份需要加1
-      //月份需要更新为0 也就是下一年的第一个月
-      if (currentMonth == 11) {
-        currentYear++;
-        currentMonth = 0; //就为
-      } else {
-        //否则只是月份增加,以便求的下一月的第一天
-        currentMonth++;
-      }
-      //一天的毫秒数
-      var millisecond = 1000 * 60 * 60 * 24;
-      //下月的第一天
-      var nextMonthDayOne = new Date(currentYear, currentMonth, 1);
-      //求出上月的最后一天
-      var lastDay = new Date(nextMonthDayOne.getTime() - millisecond);
-      var sy = firstDay.getFullYear();
-      var sm = firstDay.getMonth() + 1;
-      var sd = firstDay.getDate();
-      var ey = lastDay.getFullYear();
-      var em = lastDay.getMonth() + 1;
-      var ed = lastDay.getDate();
-      var s = sy + "-" + this.add0(sm) + "-" + this.add0(sd) + " 00:00:00"; //开始
-      var e = ey + "-" + this.add0(em) + "-" + this.add0(ed) + " 23:59:59"; //结束
-      var s1 = this.dateToMs(s)
-        .toString()
-        .substr(0, 10);
-      var e1 = this.dateToMs(e)
-        .toString()
-        .substr(0, 10);
-      this.one.begin_time = s1.toString();
-      this.one.end_time = e1.toString();
-      this.lineChart();
-      this.hadClick = true;
-    },
-    showMouth_2() {
-      //起止日期数组
-      var startStop = new Array();
-      //获取当前时间
-      var currentDate = new Date();
-      //获得当前月份0-11
-      var currentMonth = currentDate.getMonth();
-      //获得当前年份4位年
-      var currentYear = currentDate.getFullYear();
-      //求出本月第一天
-      var firstDay = new Date(currentYear, currentMonth, 1);
-
-      //当为12月的时候年份需要加1
-      //月份需要更新为0 也就是下一年的第一个月
-      if (currentMonth == 11) {
-        currentYear++;
-        currentMonth = 0; //就为
-      } else {
-        //否则只是月份增加,以便求的下一月的第一天
-        currentMonth++;
-      }
-      //一天的毫秒数
-      var millisecond = 1000 * 60 * 60 * 24;
-      //下月的第一天
-      var nextMonthDayOne = new Date(currentYear, currentMonth, 1);
-      //求出上月的最后一天
-      var lastDay = new Date(nextMonthDayOne.getTime() - millisecond);
-      var sy = firstDay.getFullYear();
-      var sm = firstDay.getMonth() + 1;
-      var sd = firstDay.getDate();
-      var ey = lastDay.getFullYear();
-      var em = lastDay.getMonth() + 1;
-      var ed = lastDay.getDate();
-      var s = sy + "-" + this.add0(sm) + "-" + this.add0(sd) + " 00:00:00"; //开始
-      var e = ey + "-" + this.add0(em) + "-" + this.add0(ed) + " 23:59:59"; //结束
-      var s1 = this.dateToMs(s)
-        .toString()
-        .substr(0, 10);
-      var e1 = this.dateToMs(e)
-        .toString()
-        .substr(0, 10);
-      this.three.begin_time = s1.toString();
-      this.three.end_time = e1.toString();
-      this.lineChart2();
-      this.hadClick_2 = true;
-    },
-    changeStart(event) {
-      if (this.hadClick == true) {
-        this.one.end_time = "";
-        this.one.begin_time = event ? event.toString().substr(0, 10) : "";
-        this.lineChart();
-        this.hadClick = false;
-      } else {
-        this.one.begin_time = event ? event.toString().substr(0, 10) : "";
-        this.lineChart();
-      }
-    },
     changeStart_3(event) {
       this.params.begin_time = event ? event.toString().substr(0, 10) : "";
-      console.log(this.params.begin_time)
       this.getadata();
+    },
+        changeStart_system(event) {
+      this.params_system.begin_time = event ? event.toString().substr(0, 10) : "";
+      this.get_system();
     },
     changeEnd_3(event) {
       this.params.end_time = event ? event.toString().substr(0, 10) : "";
-      console.log(this.params.end_time)
       this.getadata();
-      //  this.params.subject_ids=[]
     },
-    changeStart_2(event) {
-      if (this.hadClick_2 == true) {
-        this.three.end_time = "";
-        this.three.begin_time = event ? event.toString().substr(0, 10) : "";
-        this.lineChart();
-        this.hadClick_2 = false;
-      } else {
-        this.three.begin_time = event ? event.toString().substr(0, 10) : "";
-        this.lineChart2();
-      }
+        changeEnd_system(event) {
+      this.params_system.end_time = event ? event.toString().substr(0, 10) : "";
+      this.get_system();
     },
 
     //导出
@@ -650,32 +517,31 @@ export default {
       window.location.href =
         url.urls + "/api_export_onlevel_subject" + "?" + parms;
     },
-    changeEnd(event) {
-      if (this.hadClick == true) {
-        this.one.begin_time = "";
-        this.one.end_time = event ? event.toString().substr(0, 10) : "";
-        this.lineChart();
-        this.hadClick = false;
-      } else {
-        this.one.end_time = event ? event.toString().substr(0, 10) : "";
-        this.lineChart();
+    recharge_export_system() {
+      this.$message({
+        type: "success",
+        message: "正在导出,请稍等..."
+      });
+      // let urls = "http://personal.test.hqjystudio.com";
+      let parms = "";
+      // // this.form.teacher='杨懿俊'
+      for (var key in this.params_system) {
+        if (key == "subject_ids" && this.params_system.subject_ids) {
+          parms += key + "=" + this.params_system[key];
+        } else {
+          parms += key + "=" + this.params_system[key] + "&";
+        }
       }
+
+      window.location.href =
+        url.urls + "/api_export_business_system" + "?" + parms;
     },
     Change_sbuject() {
       this.getadata();
-      // delete this.params.subject_ids;
     },
 
-    changeEnd_2(event) {
-      if (this.hadClick_2 == true) {
-        this.three.begin_time = "";
-        this.three.end_time = event ? event.toString().substr(0, 10) : "";
-        this.lineChart2();
-        this.hadClick = false;
-      } else {
-        this.three.end_time = event ? event.toString().substr(0, 10) : "";
-        this.lineChart2();
-      }
+    Change_sbuject_system(){
+         this.get_system();
     },
     getdata() {
       //获取科目的数据
@@ -703,11 +569,11 @@ export default {
     drawStudent() {
       let myDraw = echarts.init(document.getElementById("main2"));
       app.config = {
-        rotate: 0,
-        align: "center",
-        verticalAlign: "middle",
-        position: "top",
-        distance: 15
+       rotate: 0,
+    align: 'center',
+    verticalAlign: 'middle',
+    position: 'top',
+    distance: 10,
       };
       var labelOption = {
         show: true,
@@ -742,23 +608,15 @@ export default {
           {
             type: "category",
             axisTick: { show: false },
-            data: ["正在加载", "正在加载"],
-           
+            data: ["正在加载", "正在加载"]
           }
         ],
         yAxis: [
           {
             name: "金额(万)",
             type: "value",
-              // axisLabel: {
-              //       formatter: function (a) {
-              //           a = +a;
-              //           return isFinite(a)
-              //               ? echarts.format.addCommas(+a / 10000)
-              //               : '';
-              //       }
-              //   },
-             nameTextStyle:{fontSize:12} 
+
+            nameTextStyle: { fontSize: 12 }
           }
         ],
 
@@ -784,30 +642,30 @@ export default {
           this.profit = [];
           for (let i = 0; i < res.data.data.length; i++) {
             // this.classMouth.push(res.data.data[i].month);
-            this.profit[i] = res.data.data[i].profit/10000;
-            this.old_profit[i] = res.data.data[i].old_profit/10000;
-            this.profit_math[i] =  (Math.round(res.data.data[i].profit/10000 * 100) / 100);
-            this.profit_math[i] =(Math.round(res.data.data[i].old_profit/10000* 100) / 100);
+            this.profit[i] = res.data.data[i].profit ;
+            this.old_profit[i] = res.data.data[i].old_profit ;
+            this.profit_math[i] =
+              Math.round((res.data.data[i].profit / 10000) * 100) / 100;
+            this.old_profit_math[i] =
+              Math.round((res.data.data[i].old_profit / 10000) * 100) / 100;
             //  myDraw.setOption.tooltip.formatter()
           }
           myDraw.setOption({
             legend: {
-              data: [ "去年","今年"]
+              data: ["去年", "今年"]
             },
-                tooltip: {
-           trigger: "axis",
-  
-                formatter:function (params) { //在此处直接用 formatter 属性
-                    //  console.log(params)  // 打印数据
-                    var showdata = params[0].data;
-                     var showdata1 = params[1].data;
-                    // 根据自己的需求返回数据
-                    return `
-                            <div>去年：${showdata*10000}</div>
-                            <div>今年：${showdata1*10000}</div>
-                            `
-                }
-        },
+            tooltip: {
+              trigger: "axis",
+              formatter: function(params) {
+                // console.log(params)
+                var showdata = params[0].data;
+                var showdata1 = params[1].data;
+                return `
+                            <div>去年：${showdata * 10000}</div>
+                            <div>今年：${showdata1 * 10000}</div>
+                            `;
+              }
+            },
             xAxis: [
               {
                 type: "category",
@@ -834,124 +692,21 @@ export default {
                 type: "bar",
                 barGap: 0,
                 label: labelOption,
-                data: this.old_profit //数据数组
+                data: this.old_profit_math //数据数组
               },
               {
                 name: "今年",
                 type: "bar",
                 label: labelOption,
-                data: this.profit 
+                data: this.profit_math
               }
             ]
           });
         }
       });
     },
-    lineChart2() {
-      let myLine2 = echarts.init(document.getElementById("main3"));
-      myLine2.setOption({
-        color: ["#5CBB7A"],
-
-        title: {
-          text: "学生维度分析(占位)",
-          lineHeight: 40,
-          // left: 'center',
-          //  subtext: "三级科目Top15",
-          textStyle: {
-            fontsize: "16px",
-            fontWeight: "bolder"
-          }
-        },
-        dataset: {
-          source: []
-        },
-        series: [
-          {
-            type: "bar",
-            encode: {
-              // Map the "amount" column to X axis.
-              x: "课时",
-              // Map the "product" column to Y axis
-              y: "product"
-            },
-            label: {
-              show: true,
-              position: "right"
-            }
-          }
-        ],
-        grid: { containLabel: true },
-        xAxis: { name: "课时" },
-        yAxis: { type: "category" }
-      });
-      this.$apis.census.student_classhour_ranking(this.three).then(res => {
-        if (res.data.code == 1) {
-          for (let i = 0; i < res.data.data.length; i++) {
-            this.top15_3[i] = [];
-            this.top15_3[i].unshift(res.data.data[i].username);
-            this.top15_3[i].unshift(res.data.data[i].classhour);
-          }
-          myLine2.setOption({
-            dataset: {
-              source: this.top15_3
-            }
-          });
-        }
-      });
-    },
-    lineChart() {
-      let myLine = echarts.init(document.getElementById("main1"));
-      myLine.setOption({
-        title: {
-          text: "体系维度分析（占位）",
-          lineHeight: 40,
-          // left: 'center',
-          //  subtext: "三级科目Top15",
-          textStyle: {
-            fontsize: "16px",
-            fontWeight: "bolder"
-          }
-        },
-        dataset: {
-          source: []
-        },
-        series: [
-          {
-            type: "bar",
-            encode: {
-              x: "课时",
-              y: "product"
-            },
-            label: {
-              show: true,
-              position: "right"
-            }
-          }
-        ],
-        grid: { containLabel: true },
-        xAxis: { name: "课时" },
-        yAxis: { type: "category" }
-      });
-      this.$apis.census.classteacher_classhour_ranking(this.one).then(res => {
-        if (res.data.code == 1) {
-          this.top15_1 = [];
-          for (let i = 0; i < res.data.data.length; i++) {
-            this.top15_1[i] = [];
-            this.top15_1[i].push(res.data.data[i].classhour);
-            this.top15_1[i].push(res.data.data[i].username);
-          }
-          myLine.setOption({
-            dataset: {
-              source: this.top15_1
-            }
-          });
-        }
-      });
-    },
 
     drawChart() {
-      // 基于准备好的dom，初始化echarts实例
-      //   let myChart = this.$echarts.init(document.getElementById("main"));全局引用的用法
       let myChart = echarts.init(document.getElementById("main"));
       var colors = ["#5793f3", "#d14a61", "#675bba"];
       // 指定图表的配置项和数据
@@ -965,9 +720,7 @@ export default {
             fontWeight: "bolder"
           }
         },
-        tooltip: {
-          
-        },
+        tooltip: {},
         dataset: {
           source: [
             ["product", "去年", "今年"],
@@ -977,8 +730,6 @@ export default {
         },
         xAxis: { type: "category" },
         yAxis: {},
-        // Declare several bar series, each will be mapped
-        // to a column of dataset.source by default.
         series: [
           {
             type: "bar",
@@ -995,21 +746,6 @@ export default {
             }
           }
         ]
-        // toolbox: {
-        //   feature: {
-
-        //     myTool2: {
-        //       show: true,
-        //       title: "自定义扩展方法",
-        //       icon: "image://http://echarts.baidu.com/images/favicon.png",
-        //       onclick: function() {
-        //         alert("myToolHandler2");
-        //       }
-        //     },
-        //     saveAsImage: { show: true } //保存图片
-
-        //   }
-        // }
       });
 
       this.$apis.census
@@ -1020,15 +756,24 @@ export default {
         .then(res => {
           if (res.data.code == 1) {
             this.lastYear = [
-              res.data.data[0].old_student_amount*1,
-              res.data.data[1].old_teacher_amount*1,
-              res.data.data[2].old_profit*1
+              res.data.data[0].old_student_amount * 1,
+              res.data.data[1].old_teacher_amount * 1,
+              res.data.data[2].old_profit * 1
             ];
             // console.log(res.data.data[1].teacher_amount,res.data.data[1].teacher_amount.replace(',','').toString())
             this.thisYear = [
-              res.data.data[0].student_amount.toString().replace(',','').toString()*1,
-              res.data.data[1].teacher_amount.toString().replace(',','').toString()*1,
-              res.data.data[2].profit.toString().replace(',','').toString()*1
+              res.data.data[0].student_amount
+                .toString()
+                .replace(",", "")
+                .toString() * 1,
+              res.data.data[1].teacher_amount
+                .toString()
+                .replace(",", "")
+                .toString() * 1,
+              res.data.data[2].profit
+                .toString()
+                .replace(",", "")
+                .toString() * 1
             ];
 
             myChart.setOption({
@@ -1059,7 +804,211 @@ export default {
                   type: "bar",
                   data: this.lastYear
                 }
-                
+              ]
+            });
+          }
+        });
+    },
+      drawChart_system() {
+      let myChart = echarts.init(document.getElementById("main_system"));
+      var colors = ["#5793f3", "#d14a61", "#675bba"];
+      // 指定图表的配置项和数据
+      myChart.setOption({
+        legend: {},
+        title: {
+          text: "体系维度分析",
+          lineHeight: 40,
+          textStyle: {
+            fontsize: "16px",
+            fontWeight: "bolder"
+          }
+        },
+        tooltip: {},
+        dataset: {
+          source: [
+            ["product", "去年", "今年"],
+            ["模拟数据", 43.3, 85.8],
+            ["模拟数据", 83.1, 73.4]
+          ]
+        },
+        xAxis: { type: "category" },
+        yAxis: {},
+        series: [
+          {
+            type: "bar",
+            label: {
+              show: true,
+              position: "top"
+            }
+          },
+          {
+            type: "bar",
+            label: {
+              show: true,
+              position: "top"
+            }
+          }
+        ]
+      });
+
+      this.$apis.census
+        .system_dimension({
+          year_month: this.year_month_system,
+          system_id: this.system_id
+        })
+        .then(res => {
+          if (res.data.code == 1) {
+            this.lastYear = [
+              res.data.data[0].old_student_amount * 1,
+              res.data.data[1].old_teacher_amount * 1,
+              res.data.data[2].old_profit * 1
+            ];
+            // console.log(res.data.data[1].teacher_amount,res.data.data[1].teacher_amount.replace(',','').toString())
+            this.thisYear = [
+              res.data.data[0].student_amount
+                .toString()
+                .replace(",", "")
+                .toString() * 1,
+              res.data.data[1].teacher_amount
+                .toString()
+                .replace(",", "")
+                .toString() * 1,
+              res.data.data[2].profit
+                .toString()
+                .replace(",", "")
+                .toString() * 1
+            ];
+
+            myChart.setOption({
+              xAxis: [
+                {
+                  type: "category",
+                  axisTick: {
+                    alignWithLabel: true
+                  },
+                  data: ["确认营业收入", "确认课程成本", "确认毛利金额"]
+                }
+              ],
+
+              yAxis: [
+                {
+                  name: "月份情况"
+                }
+              ],
+              series: [
+                {
+                  name: "今年",
+                  type: "bar",
+                  yAxisIndex: 0,
+                  data: this.thisYear
+                },
+                {
+                  name: "去年",
+                  type: "bar",
+                  data: this.lastYear
+                }
+              ]
+            });
+          }
+        });
+    },
+      drawChart_student() {
+      let myChart = echarts.init(document.getElementById("main_student"));
+      var colors = ["#67C23A", "#F56C6C", "#675bba"];
+      // 指定图表的配置项和数据
+      myChart.setOption({
+        legend: {},
+        title: {
+          text: "学生维度分析",
+          lineHeight: 40,
+          textStyle: {
+            fontsize: "16px",
+            fontWeight: "bolder"
+          }
+        },
+        tooltip: {},
+        dataset: {
+          source: [
+            ["product", "去年", "今年"],
+            ["模拟数据", 43.3, 85.8],
+            ["模拟数据", 83.1, 73.4]
+          ]
+        },
+        xAxis: { type: "category" },
+        yAxis: {},
+        series: [
+          {
+            type: "bar",
+            label: {
+              show: true,
+              position: "top"
+            }
+          },
+          {
+            type: "bar",
+            label: {
+              show: true,
+              position: "top"
+            }
+          }
+        ]
+      });
+
+      this.$apis.census.student_dimension({
+          year_month: this.year_month_student,
+          student_type: this.main_subject_type
+        })
+        .then(res => {
+          if (res.data.code == 1) {
+            this.lastYear = [
+              res.data.data[0].old_student_amount * 1,
+              res.data.data[1].old_teacher_amount * 1,
+              res.data.data[2].old_profit * 1
+            ];
+            // console.log(res.data.data[1].teacher_amount,res.data.data[1].teacher_amount.replace(',','').toString())
+            this.thisYear = [
+              res.data.data[0].student_amount
+                .toString()
+                .replace(",", "")
+                .toString() * 1,
+              res.data.data[1].teacher_amount
+                .toString()
+                .replace(",", "")
+                .toString() * 1,
+              res.data.data[2].profit
+                .toString()
+                .replace(",", "")
+                .toString() * 1
+            ];
+
+            myChart.setOption({
+              xAxis: [
+                {
+                  type: "category",
+                  axisTick: {
+                    alignWithLabel: true
+                  },
+                  data: ["确认营业收入", "确认课程成本", "确认毛利金额"]
+                }
+              ],
+
+              yAxis: [
+                {
+                  name: "金额"
+                }
+              ],
+              series: [
+                {
+                  name: "今年",
+                  type: "bar",
+                  yAxisIndex: 0,
+                  data: this.thisYear
+                },
+                {
+                  name: "去年",
+                  type: "bar",
+                  data: this.lastYear
+                }
               ]
             });
           }
@@ -1076,6 +1025,19 @@ export default {
           this.tableData = [...res.data.data];
         }
       });
+
+    },
+    get_system(){
+          this.$apis.census.business_system(this.params_system).then(res => {
+      this.tableData_system = [];
+      if (Object.prototype.toString.call(res.data.data).substr(8, 5) == Array) {
+        this.tableData_system = res.data.data;
+        this.msg_system = res.data;
+      } else {
+        this.tableData_system = [...res.data.data];
+        this.msg_system = res.data;
+      }
+    });
     },
     next() {
       this.params.page++;
@@ -1099,10 +1061,18 @@ export default {
     this.getdata();
     this.$nextTick(function() {
       this.drawChart();
-      this.lineChart();
       this.drawStudent();
-      this.lineChart2();
+      this.drawChart_system();
+      this.drawChart_student();
+            this.$apis.common.basedata_list().then(res => {
+      this.options_subject=[]
+        res.data.data.subjects_system_list.forEach(item=>{
+this.options_subject.push({value:item.id,label:item.name})
+        })
+         
+      });
     });
+   
   },
 
   mounted() {
@@ -1116,6 +1086,16 @@ export default {
         this.msg = res.data;
       }
     });
+    this.$apis.census.business_system(this.params_system).then(res => {
+      this.tableData_system = [];
+      if (Object.prototype.toString.call(res.data.data).substr(8, 5) == Array) {
+        this.tableData_system = res.data.data;
+        this.msg_system = res.data;
+      } else {
+        this.tableData_system = [...res.data.data];
+        this.msg_system = res.data;
+      }
+    });
     this.$apis.students.students_list().then(res => {
       if (res.data.code == 1) {
         this.options_1 = res.data.data.list;
@@ -1125,6 +1105,7 @@ export default {
         }
       }
     });
+
   }
 };
 </script>

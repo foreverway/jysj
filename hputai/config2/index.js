@@ -3,7 +3,7 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 
 const path = require('path')
-
+const { VueLoaderPlugin } = require('vue-loader')
 module.exports = {
   dev: {
 
@@ -12,8 +12,8 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-          target: 'http://personal.test.hqjystudio.com',
-       //target: 'http://api.hqjystudio.com',
+         target: 'http://personal.test.hqjystudio.com',
+       // target: 'http://api.hqjystudio.com',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''
@@ -21,9 +21,6 @@ module.exports = {
       }
     },
 
-
-
-    
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
