@@ -25,10 +25,11 @@
           filterable
         ></el-cascader>
       </el-form-item>
-      <el-form-item :inline="true" label="报读科目" prop="value">
+      <el-form-item :inline="true" label="报读科目"    prop="value">
         <el-cascader
           v-model="form.value"
           :options="options"
+          clearable
           filterable
           :props="{ expandTrigger: 'hover' }"
           :show-all-levels="false"
@@ -36,13 +37,13 @@
         ></el-cascader>
       </el-form-item>
 
-      <el-form-item :inline="true" label="已排课时">
+      <el-form-item :inline="true" label="已排课时" >
         <div class="add_ul">
           <p id="sss">科目</p>
           <p>课时</p>
           <p>单价(元)</p>
           <p>总额</p>
-          <p>课程性质</p>
+          <p style='width:9%;'>课程性质</p>
           <p>班课</p>
           <p>一对一</p>
           <p>自组班课</p>
@@ -60,17 +61,26 @@
               placeholder="课时"
             ></el-input>
           </p>
-          <p>
-            <el-input v-model.number="item.price" v-bind:id="'mach' + i" placeholder="单价(元)"></el-input>
+          <p v-bind:id="'mach' + i">
+            <el-input v-model.number="item.price" v-bind:id="'mach' + i" placeholder="单价(元)" disabled></el-input>
+          
           </p>
           <p v-if="item.price&&item.classhour">{{item.price*item.classhour}}</p>
           <p v-if="item.price==''||item.classhour==''">待填充</p>
           <!-- <p  v-bind:id="'all_mach' + i"  v-model=item.price>0</p> -->
-          <p>
-            <select v-model="item.course_type" v-bind:id="'attr' + i" placeholder="课程性质">
+          <p style='width:9%;'>
+            <!-- <select v-model="item.course_type" v-bind:id="'attr' + i" placeholder="请选择">
               <option label="试听" value="2"></option>
               <option label="正课" value="1"></option>
-            </select>
+            </select> -->
+              <el-select v-model="item.course_type"   v-bind:id="'attr' + i" clearable placeholder="请选择">
+                <el-option
+                  v-for="item in options_type"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
           </p>
           <p>
             <select v-model="item.course_id" v-bind:id="'clas' + i" placeholder="班课">
@@ -244,6 +254,7 @@ export default {
         value: [
           { required: true, message: "请选择报读科目", trigger: "change" }
         ],
+        course_type:[{ required: true, message: "请选择课程类型", trigger: "change" }],
         value_1: [
           { required: true, message: "请选择学生姓名", trigger: "change" }
         ],
@@ -284,6 +295,9 @@ export default {
         need_four: [{ required: true, message: "请填写反馈", trigger: "blur" }],
         need_one: [{ required: true, message: "请填写反馈", trigger: "blur" }]
       },
+      options_type:[
+        {value:'2',label:'试听'},  {value:'1',label:'正课'}
+      ],
       money: "",
       parms: {
         search: "",
@@ -489,7 +503,7 @@ export default {
             classhour: "",
             price: needArr.online_price,
             amount: "",
-            course_type: 1, //课程类型
+            course_type: '', //课程类型
             course_id: 0, //班课
             is_one: 1, //一对一？
             is_group: 0 //自主班课?
@@ -500,7 +514,7 @@ export default {
             classhour: "",
             price: needArr.offline_price,
             amount: "",
-            course_type: 1, //课程类型
+            course_type: '', //课程类型
             course_id: 0, //班课
             is_one: 1, //一对一？
             is_group: 0 //自主班课?
@@ -603,7 +617,7 @@ export default {
         this.$route.query.allMoney
       ) {
         this.$refs[form].validate(valid => {
-          if (valid) {
+          if (valid&&this.editableTabs_1[0].course_type) {
             this.editableTabs_1.forEach(item => {
               this.subjects_data.push({
                 subject_id: item.subject_id,
@@ -659,7 +673,7 @@ export default {
           } else {
             this.$message({
               type: "warning",
-              message: "请按照提示进行完善"
+              message: "请完善需求内容"
             });
             return false;
           }

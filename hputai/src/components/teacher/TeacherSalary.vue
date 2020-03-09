@@ -76,6 +76,8 @@
       <el-table-column label="课酬标准" prop="dollars_standar"></el-table-column>
       <el-table-column label="应上课时" prop="classhour"></el-table-column>
       <el-table-column label="教师核准课时" prop="haved_hour" width="120"></el-table-column>
+            <el-table-column label="学生核准课时" prop="student_classhour" width="120"></el-table-column>
+      <el-table-column label="确认课时费" prop="student_amount" width="120"></el-table-column>
       <el-table-column align="center" label="应得课酬" prop="due_to_dollars" fixed="right"></el-table-column>
     </el-table>
     <span v-if="msg.data">

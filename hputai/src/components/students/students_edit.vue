@@ -53,12 +53,12 @@
           </el-form-item>
         </div>
         <div class="input_1">
-          <el-form-item label="学校：" >
+          <el-form-item label="学校：">
             <el-input v-model="form.school"></el-input>
           </el-form-item>
         </div>
         <div class="input_1">
-          <el-form-item label="年级：" >
+          <el-form-item label="年级：">
             <el-input v-model="form.grade"></el-input>
           </el-form-item>
         </div>
@@ -137,7 +137,7 @@
           </el-form-item>
         </div>
         <div class="input_1">
-          <el-form-item label="进线渠道："  prop="inchannel">
+          <el-form-item label="进线渠道：" prop="inchannel">
             <el-select v-model="form.inchannel" placeholder="请选择" v-if="msg.data">
               <el-option
                 v-for="item in msg.data.inchannel_list"
@@ -162,7 +162,7 @@
         </div>
         <div class="input_1">
           <el-form-item label="班主任：">
-            <el-select v-model="form.banzhuren_id"  filterable placeholder="请选择">
+            <el-select v-model="form.banzhuren_id" filterable placeholder="请选择">
               <el-option
                 v-for="item in teacher"
                 :key="item.id"
@@ -172,46 +172,56 @@
             </el-select>
           </el-form-item>
         </div>
-        <div class="input_1" >
-          <el-form-item label="课程顾问：" v-if="form.isDisable==1">
+        <div class="input_1">
+          <el-form-item label="课程顾问：" >
             <el-select
-              v-model="form.consultant1"
+              v-if="form.isDisable==1"
+              v-model="form.add_admin_id"
               disabled
+              filterable
+              placeholder="请选择"
+              @change="showChange"
+            >
+              <el-option
+                v-for="item in adviser_li"
+                :key="item.id"
+                :label="item.adviser"
+                :value="item.id"
+              ></el-option>
+            </el-select>
+            <el-select
+              v-model="form.add_admin_id"
+              v-if="form.isDisable==0"
+              clearable
               filterable
               placeholder="请选择"
             >
               <el-option
-                v-for="item in adviser"
+                v-for="item in adviser_li"
                 :key="item.id"
                 :label="item.adviser"
                 :value="item.id"
               ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="课程顾问："  v-show="form.isDisable==0">
-            <el-select v-model="form.consultant1"  filterable placeholder="请选择">
-              <el-option
-                v-for="item in adviser"
-                :key="item.id"
-                :label="item.adviser"
-                :value="item.id"
-              ></el-option>
-            </el-select>
-          </el-form-item>
+
+          <!-- <el-form-item label="课程顾问：" >
+       
+          </el-form-item>-->
         </div>
       </div>
 
       <h4 style="clear: both;">咨询信息：</h4>
       <div class="input_2_main">
-        <el-form-item label="咨询缘由:" style="width:550px" >
+        <el-form-item label="咨询缘由:" style="width:550px">
           <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="form.reason"></el-input>
         </el-form-item>
 
-        <el-form-item label="升学目标:" style="width:550px" >
+        <el-form-item label="升学目标:" style="width:550px">
           <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="form.target"></el-input>
         </el-form-item>
 
-        <el-form-item label="需求:" style="width:550px" >
+        <el-form-item label="需求:" style="width:550px">
           <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="form.demand"></el-input>
         </el-form-item>
 
@@ -219,10 +229,10 @@
           <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="form.potential_demand"></el-input>
         </el-form-item>
 
-        <el-form-item label="客户性格:" style="width:550px" >
+        <el-form-item label="客户性格:" style="width:550px">
           <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="form.character"></el-input>
         </el-form-item>
-        <el-form-item label="在意偏好:" style="width:550px" >
+        <el-form-item label="在意偏好:" style="width:550px">
           <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="form.preferences"></el-input>
         </el-form-item>
       </div>
@@ -230,7 +240,7 @@
       <h4>账户等级评定：</h4>
       <div class="input_1_main">
         <div class="input_1">
-          <el-form-item label="用户等级评定：" prop='alevel'>
+          <el-form-item label="用户等级评定：" prop="alevel">
             <el-select v-model="form.alevel" placeholder="请选择" style="width:300px" v-if="msg.data">
               <el-option
                 v-for="item in msg.data.alevel_list"
@@ -275,7 +285,7 @@ export default {
       msg: "",
 
       classs: "", // 课程数据
-      adviser: "", //顾问数据
+      adviser_li: "", //顾问数据
       teacher: "", //班主任数据
       address: [], // 地址选择
       id: this.$route.params.id,
@@ -323,7 +333,7 @@ export default {
         inchannel: "", //进线渠道
         inpeople: "", //接入人
         banzhuren_id: "", //班主任
-        consultant1: "", //顾问
+        add_admin_id: "", //顾问
         reason: "", //咨询缘由
         target: "", //升学目标
         demand: "", //需求
@@ -333,12 +343,14 @@ export default {
         alevel: "" //用户等级评定
       },
       rules: {
-        username: [{ required: true, validator: Yanuusername, trigger: "blur" }],
+        username: [
+          { required: true, validator: Yanuusername, trigger: "blur" }
+        ],
         tel: [{ required: true, message: "请输入手机号", trigger: "blur" }],
         sex: [{ required: true, message: "此项不能为空", trigger: "blur" }],
         age: [{ required: true, validator: Yanuage, trigger: "blur" }],
         //school: [{ required: true, message: "此项不能为空", trigger: "blur" }],
-         alevel: [{ required: true, message: "此项不能为空", trigger: "blur" }],
+        alevel: [{ required: true, message: "此项不能为空", trigger: "blur" }],
         weixin_qq: [
           { required: true, message: "此项不能为空", trigger: "blur" }
         ],
@@ -358,13 +370,16 @@ export default {
           { required: true, message: "此项不能为空", trigger: "blur" }
         ],
         reason: [{ required: true, message: "此项不能为空", trigger: "blur" }],
-           grade: [{ required: true, message: "此项不能为空", trigger: "blur" }],
+        grade: [{ required: true, message: "此项不能为空", trigger: "blur" }],
         in_number: [
           { required: true, message: "此项不能为空", trigger: "blur" }
         ],
-          inproject: [{ required: true, message: "此项不能为空", trigger: "blur" }],
-           inchannel: [{ required: true, message: "此项不能为空", trigger: "blur" }],
-
+        inproject: [
+          { required: true, message: "此项不能为空", trigger: "blur" }
+        ],
+        inchannel: [
+          { required: true, message: "此项不能为空", trigger: "blur" }
+        ]
       }
     };
   },
@@ -372,6 +387,9 @@ export default {
     this.getdata();
   },
   methods: {
+    showChange(value) {
+      // this.form.consultant1 = value;
+    },
     //       ifname(){
     //      if(this.form.username==''){
     //        return false
@@ -390,66 +408,68 @@ export default {
     //      }
 
     //    },
-    //地区选择
-    handleChange(value) {
-    },
+
+    handleChange(value) {},
     // 返回上一页
     goback() {
       javascript: history.back(-1);
     },
     getdata() {
-      this.$apis.students.students_edit({id:this.$route.query.id}).then(res => {
-        if (res.data.code == 1) {
-          this.form = res.data.data;
-          this.form.home_area[0] = parseInt(res.data.data.home_area[0]);
-          this.form.home_area[1] = parseInt(res.data.data.home_area[1]);
-          this.form.always_area[0] = parseInt(res.data.data.always_area[0]);
-          this.form.always_area[1] = parseInt(res.data.data.always_area[1]);
+      this.$apis.students
+        .students_edit({ id: this.$route.query.id })
+        .then(res => {
+          if (res.data.code == 1) {
+            this.form = res.data.data;
+            this.form.home_area[0] = parseInt(res.data.data.home_area[0]);
+            this.form.home_area[1] = parseInt(res.data.data.home_area[1]);
+            this.form.always_area[0] = parseInt(res.data.data.always_area[0]);
+            this.form.always_area[1] = parseInt(res.data.data.always_area[1]);
+            this.form.add_admin_id = res.data.data.add_admin_id * 1;
 
-          let consultant1 = res.data.data.add_admin_id;
+            this.$apis.common.adviser_list().then(res => {
+              //获取顾问数据
+              if (res.data.code == 1) {
+                this.adviser_li = res.data.data.list;
+                // console.log(   this.adviser_li )
+                // let num1 =consultant1;
 
-          this.$apis.common.adviser_list().then(res => {
-            //获取顾问数据
-            if (res.data.code == 1) {
-              this.adviser = res.data.data.list;
-              let num1 = parseInt(consultant1);
-              for (var i = 0; i < this.adviser.length; i++) {
-                if (this.adviser[i].id == num1) {
-                  this.form.consultant1 = this.adviser[i].id;
+                // for (var i = 0; i < this.adviser_li.length; i++) {
+                //   if (this.adviser_list[i].id == num1) {
+                // this.form.consultant1 = num1
+                //   }
+                // }
+              }
+            });
+
+            this.$apis.common.banzhuren_list().then(res => {
+              // 获取班主任数据
+              if (res.data.code == 1) {
+                this.teacher = res.data.data.list;
+                let num = parseInt(this.getdataCookie("admin_uid"));
+                for (var i = 0; i < this.teacher.length; i++) {
+                  if (this.teacher[i].id == num) {
+                    this.form.teacher = this.teacher[i].banzhuren;
+                  }
                 }
               }
-            }
-          });
+            });
 
-          this.$apis.common.banzhuren_list().then(res => {
-            // 获取班主任数据
-            if (res.data.code == 1) {
-              this.teacher = res.data.data.list;
-              let num = parseInt(this.getdataCookie("admin_uid"));
-              for (var i = 0; i < this.teacher.length; i++) {
-                if (this.teacher[i].id == num) {
-                  this.form.teacher = this.teacher[i].banzhuren;
-                }
+            // 获取配置数据
+            this.$apis.common.basedata_list().then(res => {
+              if (res.data.code == 1) {
+                this.msg = res.data;
               }
-            }
-          });
+            });
 
-          // 获取配置数据
-          this.$apis.common.basedata_list().then(res => {
-            if (res.data.code == 1) {
-              this.msg = res.data;
-            }
-          });
-
-          this.$apis.common.region_list().then(res => {
-            if (res.data.code == 1) {
-              this.address = res.data.options;
-            }
-          });
-        } else {
-          this.$message.error(res.data.msg);
-        }
-      });
+            this.$apis.common.region_list().then(res => {
+              if (res.data.code == 1) {
+                this.address = res.data.options;
+              }
+            });
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        });
     },
     // 读取缓存
     getdataCookie(cname) {
@@ -466,22 +486,21 @@ export default {
       // Router.push("/")
     },
     ifphone() {
-      let parms={
-        tel:this.form.tel,
-        address_type:this.form.address_type
-      }
-        this.$apis.students.ifuserphone(parms )
-          .then(res => {
-            if (res.data.code == 1) {
-              this.loading = false;
-              this.$message({
-                message: res.data.msg,
-                type: "success"
-              });
-            } else {
-              this.$message.error(res.data.msg);
-            }
+      let parms = {
+        tel: this.form.tel,
+        address_type: this.form.address_type
+      };
+      this.$apis.students.ifuserphone(parms).then(res => {
+        if (res.data.code == 1) {
+          this.loading = false;
+          this.$message({
+            message: res.data.msg,
+            type: "success"
           });
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
     },
     onSubmit(formName) {
       this.$refs[formName].validate(valid => {
@@ -492,13 +511,12 @@ export default {
                 type: "success",
                 message: this.form.username + " 修改成功"
               });
-              this.$router.push({name:'StudentsList'});
+              this.$router.push({ name: "StudentsList" });
             } else {
               this.$message.error(res.data.msg);
             }
           });
         } else {
-         // console.log("error submit!!");
           return false;
         }
       });

@@ -10,6 +10,15 @@ export default {
    teacher_course(params){
     let url='/api/api_teacher_course'
     return shuju.getdata(url,params)
-   }
-
+   },
+      //战队负责人列表
+      team_leader(params){
+         let url='/api/api_team_leader'
+         return shuju.getdata(url,params)
+        },
+      //班主任顾问列表
+      banzhuren_list(params){
+   let url='/api/api_class_teacher'
+   return shuju.getdata(url,params)
+   },
 }

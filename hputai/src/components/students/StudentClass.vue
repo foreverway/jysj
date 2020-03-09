@@ -25,11 +25,15 @@
         <el-option label="兼职老师" value="2"></el-option>
         <el-option label="全职老师" value="1"></el-option>
       </el-select>
+            <el-select clearable v-model="is_feedback"  v-if="change_value=='2'" placeholder="是否填写反馈" @change="Change_feedback">
+        <el-option label="未填写反馈" value="2"></el-option>
+        <el-option label="已填反馈" value="1"></el-option>
+      </el-select>
       <el-button type="primary"  v-if='ifTeacher()' @click="recharge_export">导出</el-button>
 
       <div style="height:20px"></div>
 
-      <el-calendar>
+      <el-calendar class="calen_class">
         <template slot="dateCell" slot-scope="{date, data}">
           <p
             :class="data.isSelected ? 'is-selected' : ''"
@@ -963,6 +967,7 @@ export default {
           ],
       },
       thisMenu:[],//菜单的内容
+      is_feedback:[],//是否反馈
       value: "",
       labelPosition: "top", //其他方法进入直播排在顶部
       innerVisible: false, //内层弹框
@@ -1415,8 +1420,8 @@ export default {
         start_time: this.thisDay,
         student_id: this.stu_secrch.toString(),
         subject_id: this.sub_secrch,
-        is_parttime: this.is_parttime
-        // attendance_status:null
+        is_parttime: this.is_parttime,
+        is_feedback:this.is_feedback?this.is_feedback:'',
       };
       this.parms = parms;
       this.$apis.common.student_course(parms).then(res => {
@@ -1499,6 +1504,10 @@ handleSelect(item,index){
     },
     Change_teacher(value) {
       this.is_parttime = value;
+      this.getClassList();
+    },
+    Change_feedback(value){
+      this.is_feedback = value;
       this.getClassList();
     },
     searchDay(a) {
@@ -1652,11 +1661,11 @@ handleSelect(item,index){
   height: 400px !important;
 }
 
-.el-calendar-table .el-calendar-day {
+.calen_class /deep/ .el-calendar-table .el-calendar-day {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   padding: 8px;
-  height: 35px !important;
+  height: 45px !important;
 }
 
 .prev .el-calendar-day {

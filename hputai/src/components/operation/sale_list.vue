@@ -1,3 +1,4 @@
+
  <template>
   <div class="main">
     <zx-head title="销售跟进"></zx-head>
@@ -6,20 +7,20 @@
       placeholder="请输入搜索内容"
       v-model="parms.search"
       clearable
-      @change="getdata"
+      @change="getdata_change"
       style="width:300px"
     ></el-input>
     <el-date-picker
       style="margin-left:60px"
       v-model="parms.start_time"
-      @change="getdata"
+      @change="getdata_change"
       type="datetime"
       clearable
       value-format="yyyy-MM-dd HH:mm:ss"
       placeholder="选择日期时间"
     ></el-date-picker>至
     <el-date-picker
-      @change="getdata"
+      @change="getdata_change"
       v-model="parms.end_time"
       type="datetime"
       clearable
@@ -27,7 +28,7 @@
       placeholder="选择日期时间"
     ></el-date-picker>
 
-    <el-button type="success" @click="getdata">搜索</el-button>
+    <el-button type="success" @click="getdata_change">搜索</el-button>
     <el-button type="primary" @click="recharge_export">导出</el-button>
 
     <router-link to="/SalesList/Addsalepro">
@@ -41,31 +42,18 @@
       :header-cell-style="{background:'#f4f4f4'}"
       style="margin-top:20px"
     >
-      <el-table-column label="序号" type="index"></el-table-column>
-      <el-table-column prop="dtime" width="130px" label="数据获取时间"></el-table-column>
-      <el-table-column prop="week" width="130px" sortable label="数据更新时间"></el-table-column>
+      <el-table-column label="序号" type="index" :index="indexMethod"></el-table-column>
       <el-table-column prop="follow_man" label="跟进人"></el-table-column>
-      <el-table-column prop="team" label="	所属战队"></el-table-column>
-      <el-table-column prop="team_leader" label="战队负责人"></el-table-column>
-      <el-table-column prop="data_number" label="编号"></el-table-column>
+      <el-table-column prop="data_number" label="数据编号"></el-table-column>
       <el-table-column prop="data_student_name" label="学生姓名"></el-table-column>
       <el-table-column prop="data_tag" label="数据标签"></el-table-column>
       <el-table-column prop="m1" label="建立了有效联系 "></el-table-column>
-      <el-table-column prop="m2" label="了解客户情况"></el-table-column>
       <el-table-column prop="m3" label="明确数据需求"></el-table-column>
-      <el-table-column prop="m4" label="建立信任"></el-table-column>
-      <el-table-column prop="m5" label="规划"></el-table-column>
       <el-table-column prop="m6" label="试听"></el-table-column>
       <el-table-column prop="m7" label="缴费方案"></el-table-column>
-      <el-table-column prop="advance_strategies" label="预收策略"></el-table-column>
-      <el-table-column prop="advance_subject" label="预收科目"></el-table-column>
-      <el-table-column prop="advance_amount" label="预收金额"></el-table-column>
-      <el-table-column prop="feedback" label="客户反馈"></el-table-column>
-      <el-table-column fixed="right" prop label="操作" width="140">
+      <el-table-column fixed="right" prop label="操作" >
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="pushToEdit(scope.row.id)">编辑</el-button>
-          <el-button @click="salepro_del(scope.row)" type="text" size="small">删除</el-button>
-          <!-- <el-button type="text" size="small"  @click="dialogFormVisible1=1">复制链接</el-button> -->
         </template>
       </el-table-column>
     </el-table>
@@ -97,10 +85,13 @@ export default {
       msg: "",
       parms: {
         // search: "",
-        // page: 1,
+         page: 1,
         // admin_id:''
       },
       tableData: [],
+      showData:{
+        
+      },
       // form:{
       //   start_time:null,
       //   end_time:null
@@ -110,6 +101,17 @@ export default {
   },
   created() {
     this.getdata();
+                    this.$apis.menber
+        .admin_base({admin_id: this.getdataCookie("admin_id")})
+        .then(res => {
+          if (res.data.code == 1) {
+         this.showData.role_name=res.data.data.role_name
+         this.showData.is_captain=res.data.data.is_captain
+          this.showData.admin_name=res.data.data.admin_name
+  
+   
+          }
+        })
     // console.log( this.getdata())
   },
   mounted() {},
@@ -127,6 +129,13 @@ export default {
   //           }
   //   }
   // },
+//    updated(){
+//    if(this.msg.data.count*1<11){
+//         this.parms.page=1
+// localStorage.setItem('parms',JSON.stringify(this.parms));
+//  this.getdata()
+//       }
+//    },
   methods: {
     //导出
    recharge_export() {
@@ -134,28 +143,40 @@ export default {
         type: "success",
         message: "正在导出,请稍等..."
       });
-      // let urls = "http://personal.test.hqjystudio.com";
+
       let params = "";
-      for (var key in this.parms) {
-        params += key + "=" + this.parms[key] + "&";
+        
+                for (var key in this.showData) {
+        params += key + "=" + this.showData[key] + "&";
       }
-       window.location.href = url.urls + "/api_salepro_export" + "?" + params;
+            for (var key in this.parms) {
+        if(this.parms[key]!==null){
+        params += key + "=" + this.parms[key] + "&";
+        }else{
+        }
+      }
+           window.location.href = url.urls + "/api_salepro_export" + "?" + params;
+          
+
+  
+      console.log(params)
+   
     },
     //用于分页的一些设置
     current(num) {
       //当前页数
       this.parms.page = num;
-      this.getdata();
+      this.getdata_change();
     },
     next() {
       this.parms.page++;
-      this.getdata();
+      this.getdata_change();
     },
     prev() {
       //上一页
       if (this.parms.page > 1) {
         this.parms.page--;
-        this.getdata();
+        this.getdata_change();
       }
     },
     pushToEdit(a) {
@@ -163,14 +184,14 @@ export default {
     },
 
     //序号排列
-    // indexMethod(index) {
-    //   if (this.parms.page == 1) {
-    //     return index + 1;
-    //   } else {
-    //     let page = (this.parms.page - 1) * 10 + 1;
-    //     return index + page;
-    //   }
-    // },
+    indexMethod(index) {
+      if (this.parms.page == 1) {
+        return index + 1;
+      } else {
+        let page = (this.parms.page - 1) * 10 + 1;
+        return index + page;
+      }
+    },
     // 复制链接
     copyUrl(data) {
       let url = data + "/" + this.money;
@@ -216,6 +237,7 @@ export default {
           });
         });
     },
+   
     getdataCookie(cname) {
       // return 1
       var name = cname + "=";
@@ -226,10 +248,21 @@ export default {
       }
       this.$router.push({ path: "/login" });
     },
+    getdata_change(){
+   
+localStorage.setItem('parms',JSON.stringify(this.parms));
+ this.getdata()
+    },
+
     getdata() {
       this.parms.admin_id = this.getdataCookie("admin_id");
+         this.parms=JSON.parse(localStorage.getItem("parms"))?JSON.parse(localStorage.getItem("parms")):this.parms
       this.$apis.common.salepro_list(this.parms).then(res => {
         if (res.data.code == 1) {
+          // if(res.data.data.count*1<11){
+          //   this.parms.page=1
+          //   localStorage.setItem('parms',JSON.stringify(this.parms));
+          // }
           this.msg = res.data;
           function compare(p) {
             return function(m, n) {

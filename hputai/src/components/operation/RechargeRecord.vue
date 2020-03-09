@@ -24,7 +24,7 @@
             placeholder="请输入"
             @change="getadata"
           >
-            <el-option v-for="item in people" :key="item.id" :label="item.name" :value="item.name"></el-option>
+            <el-option v-for="item in people" :key="item.index" :label="item.name" :value="item.name"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="第二收款人">
@@ -57,7 +57,7 @@
           >
             <el-option
               v-for="item in banzhuren_list"
-              :key="item.id"
+              :key="item.index"
               :label="item.banzhuren"
               :value="item.id"
             ></el-option>
@@ -76,7 +76,7 @@
           >
             <el-option
               v-for="item in base_selct.data.inproject_list"
-              :key="item.id"
+              :key="item.index"
               :label="item.name"
               :value="item.name"
             ></el-option>
@@ -95,7 +95,7 @@
           >
             <el-option
               v-for="item in base_selct.data.inchannel_list"
-              :key="item.id"
+              :key="item.index"
               :label="item.name"
               :value="item.name"
             ></el-option>
@@ -114,7 +114,7 @@
           >
             <el-option
               v-for="item in base_selct.data.collectionclass_list"
-              :key="item.id"
+              :key="item.index"
               :label="item.name"
               :value="item.name"
             ></el-option>
@@ -132,7 +132,7 @@
           >
             <el-option
               v-for="item in base_selct.data.collectiontype_list"
-              :key="item.id"
+              :key="item.index"
               :label="item.name"
               :value="item.name"
             ></el-option>
@@ -151,7 +151,7 @@
           >
             <el-option
               v-for="item in base_selct.data.classproject_list"
-              :key="item.id"
+              :key="item.index"
               :label="item.name"
               :value="item.name"
             ></el-option>
@@ -169,16 +169,35 @@
           >
             <el-option
               v-for="item in base_selct.data.giventype_list"
-              :key="item.id"
+              :key="item.index"
               :label="item.name"
               :value="item.name"
             ></el-option>
           </el-select>
         </el-form-item>
+        
+                <el-form-item label="学员类别">
+          <el-select
+            clearable
+            style="width:150px"
+            
+            v-model="form.student_type"
+            placeholder="请选择"
+            @change="getadata"
+          >
+            <el-option
+              v-for="item in student_alevel"
+              :key="item.index"
+              :label="item.label"
+              :value="item.label"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+
         <el-form-item label="审核状态：">
           <el-select
             clearable
-            style="width:120px"
+            style="width:150px"
             v-model="form.status"
             placeholder="请选择"
             @change="getadata"
@@ -226,6 +245,11 @@
       <el-table-column :show-overflow-tooltip="true" align="center" label="学生姓名">
         <template slot-scope="scope">
           <span>{{ scope.row.uname }}</span>
+        </template>
+      </el-table-column>
+           <el-table-column align="center" label="学生类型">
+        <template slot-scope="scope">
+          <span>{{ scope.row.student_type }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="收款类别">
@@ -385,6 +409,8 @@ export default {
       adviser: "", //顾问数据
       banzhuren: "", //班主任数据
       consultant1: [], //顾问1
+      student_alevel:[{value:'普通学员',label:'普通学员'},{value:'保读学员',label:'保读学员'},{value:'VIP学员',label:'VIP学员'},{value:'潜在VIP',label:'潜在VIP'},{value:'试听学员',label:'试听学员'}],
+
       form: {
         // search: "", //搜索学员姓名条件
          page: 1,
@@ -446,7 +472,7 @@ export default {
           }
         } 
       });
-      
+
     },
         //序号排列
     indexMethod(index) {
@@ -550,13 +576,7 @@ export default {
           this.banzhuren=this.banzhuren_list
         }
       });
-      // this.$apis.common.teacher_list_only().then(res => {
-      //   // 获取班主任数据
-      //   if (res.data.code == 1) {
-      //     this.teacher = res.data.data.list;
-      //     console.log(this.teacher)
-      //   }
-      // });
+
       this.$apis.common.adviser_list().then(res => {
         //获取顾问数据
         if (res.data.code == 1) {

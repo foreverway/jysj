@@ -5,13 +5,14 @@
     <div class="so_main_left">
       <el-form :inline="true" :model="form" class="demo-form-inline">
         <el-input
+        style="width:180px;"
           class="so_input"
           clearable
           v-model="form.search"
           @change="getadata"
           placeholder="请输入搜索内容"
         ></el-input>
-        <el-select    @change="getadata"
+        <el-select style="width:180px;"   @change="getadata" @clear="clear_choose"
   clearable v-model="form.attendance_status" placeholder="选择考勤状态">
           <el-option
             v-for="item in check_status"
@@ -20,7 +21,7 @@
             :value="item.value"
           ></el-option>
         </el-select>
-        <el-select    @change="getadata"
+        <el-select    @change="getadata" style="width:180px;"
   clearable v-model="form.teaching_type" placeholder="授课类型">
           <el-option
             v-for="item in check_type"
@@ -29,8 +30,18 @@
             :value="item.value"
           ></el-option>
         </el-select>
-        <el-date-picker
-          style="margin-left:60px"
+                <el-select    @change="getadata" style="width:180px;"
+  clearable v-model="form.course_address" placeholder="授课地点">
+          <el-option
+            v-for="item in check_address"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+        <div style="display:inline;width:500px;height:60px;">
+             <el-date-picker
+          style="margin-left:20px"
           v-model="form.start_time"
           @change="getadata"
           type="datetime"
@@ -46,6 +57,8 @@
           value-format="yyyy-MM-dd H:mm:ss"
           placeholder="选择日期时间"
         ></el-date-picker>
+        </div>
+     
                   <el-button type="primary" @click="recharge_export">导出</el-button>
 
       </el-form>
@@ -75,6 +88,7 @@
         </template>
       </el-table-column>
       <el-table-column align="center" label="学生姓名" prop="student_name"></el-table-column>
+            <el-table-column align="center" label="添加者" prop="additive"></el-table-column>
       <el-table-column align="center" label="授课类型" prop="course_txt"></el-table-column>
       <el-table-column align="center" label="授课地点" prop="course_address"></el-table-column>
       <el-table-column align="center" label="开始时间" prop="start_time"></el-table-column>
@@ -82,11 +96,19 @@
       <el-table-column align="center" label="已排课时" prop="classhour"></el-table-column>
       <el-table-column align="center" label="实上课时" prop="true_classhour"></el-table-column>
       <el-table-column align="center" label="学生核准课时" width="120" prop="student_classhour"></el-table-column>
-      <el-table-column align="center" label="试听情况"  width="120" prop="audition_text">
+      <el-table-column align="center" label="试听结果"  width="120" prop="audition_status">
         <template slot-scope="scope" >
-          <span v-show="scope.row.audition_text.slice(0,4)=='试听成功'" style="color:green">{{scope.row.audition_text}}</span>
-          <span v-show="scope.row.audition_text.slice(0,4)=='试听失败'" style="color:red">{{scope.row.audition_text}}</span>
+          <span v-show="scope.row.audition_status==1" style="color:green">成功</span>
+          <span v-show="scope.row.audition_status==2" style="color:red">失败</span>
+          <span v-show="scope.row.audition_status==3" style="color:orange" >待续费</span>
 
+        </template>
+      </el-table-column>
+            <el-table-column align="center" label="试听备注"  width="120" prop="audition_remarks">
+        <template slot-scope="scope" >
+          <span v-show="scope.row.audition_status==1" style="color:green">{{scope.row.audition_remarks}}</span>
+          <span v-show="scope.row.audition_status==2" style="color:red">{{scope.row.audition_remarks}}</span>
+ <span v-show="scope.row.audition_status==3" style="color:orange">{{scope.row.audition_remarks}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="状态" prop="attendance_status">
@@ -96,9 +118,9 @@
           <span v-show="scope.row.attendance_status==0" style>待考勤</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="250px" fixed="right">
-        <template slot-scope="scope">
-          <el-button
+      <el-table-column label="操作" width="250px" fixed="right" >
+        <template slot-scope="scope" class="delete_left">
+  <el-button
             size="mini"
             style="background-color:#2adbcb;color:white;"
             v-show="scope.row.attendance_status!==0"
@@ -112,7 +134,7 @@
           >编辑考勤</el-button>
           <el-button
             size="mini"
-            style="background-color:#409EFF;color:white;"
+            style="background-color:steelblue;color:white;"
             v-if="checkTime(scope.row)"
             @click="fillFeedback_see(scope.row.course_id)"
           >查看反馈</el-button>
@@ -122,27 +144,35 @@
             style="background-color:#E6A23C;color:white;"
             @click="audition(scope.row.course_id)"
           >试听情况</el-button>
-          <!-- <div
-          
-          > -->
+                <el-button
+                size="mini"
+                v-if="scope.row.ready_txt=='观看回放'"
+                style="color:white;background-color:#409eff;"
+              >
+                <a @click="openVideo(scope.row.playback_url)">{{scope.row.ready_txt}}</a>
+              </el-button>
+                   <el-button
+                size="mini"
+                v-if="scope.row.ready_txt=='直播中'"
+                style="color:white;background-color:#409eff;"
+              >
+                <a @click="nowVideo(scope.row.course_id)">{{scope.row.ready_txt}}</a>
+              </el-button>
             <el-button   v-show="scope.row.attendance_status==2&&scope.row.is_forward!==1"
             style="color:#169BD5" type="danger" size="mini" @click="payMoney(scope.row)">结转</el-button>
-          <!-- </div> -->
-          <!-- <div v-show="scope.row.attendance_status==1" style="color:#169BD5"></div> -->
-          <!-- <div v-show="scope.row.attendance_status==0" style="margin:0 10px;">  -->
+<!-- is_audition为1就是考勤  role_name当前人身份 -->
             <el-button
-              v-if="scope.row.is_feedback==1"
-              v-show="scope.row.attendance_status==0"
+              v-show="checkTeacher(scope.row.is_audition,role_name)"
+              v-if="scope.row.is_feedback==1&&scope.row.attendance_status==0"
               size="mini"
               @click="normal(scope.row)"
               type="success"
             >正常</el-button>
-            <el-button size="mini" v-show="scope.row.attendance_status==0" @click="unnormal(scope.row)" type="danger">异动</el-button>
-          <!-- </div> -->
-
-          <!-- <span v-show="scope.row.is_forward==1" style="color:#169BD5"> -->
-            <el-button @click="payMoney(scope.row)" v-show="scope.row.is_forward==1"  type="info" disabled size="mini">结转</el-button>
-          <!-- </span> -->
+            <el-button size="mini" v-if="checkTeacher(scope.row.is_audition,role_name)" v-show="scope.row.attendance_status==0" @click="unnormal(scope.row)" type="danger">
+              异动</el-button>
+            <el-button v-if="checkTeacher(scope.row.is_audition,role_name)" @click="payMoney(scope.row)" v-show="scope.row.is_forward==1"  type="info" disabled size="mini">
+              结转</el-button>
+        
         </template>
       </el-table-column>
     </el-table>
@@ -422,13 +452,13 @@
             <el-form-item label="反馈类型:">
               <p v-if="formLabelAlign.feedback_type==2">日常上课反馈</p>
             </el-form-item>
-            <el-form-item label="上节课学生作业的完成情况及其知识点掌握情况">
+            <el-form-item label="上节课学生作业的完成情况及其知识点掌握情况:">
               <p>{{formLabelAlign.feedback2.details_1}}</p>
             </el-form-item>
             <el-form-item label="本次上课内容:">
               <span>{{formLabelAlign.feedback2.details_2}}</span>
             </el-form-item>
-            <el-form-item label="学生的课堂表现及学生本次课掌握不好的地方，学生课下复习的重点有哪些">
+            <el-form-item label="学生的课堂表现及学生本次课掌握不好的地方，学生课下复习的重点有哪些:">
               <p>{{formLabelAlign.feedback2.details_3}}</p>
             </el-form-item>
             <el-form-item label="本次课的课后作业:">
@@ -443,13 +473,13 @@
             <el-form-item label="反馈类型:">
               <p v-if="formLabelAlign.feedback_type==3">阶段性上课反馈</p>
             </el-form-item>
-            <el-form-item label="总结此阶段的学习内容">
+            <el-form-item label="总结此阶段的学习内容:">
               <p>{{formLabelAlign.feedback3.details_1}}</p>
             </el-form-item>
             <el-form-item label="总结此阶段学生作业的完成情况及其知识点掌握情况:">
               <span>{{formLabelAlign.feedback3.details_2}}</span>
             </el-form-item>
-            <el-form-item label="指出学生接下来需要提升的若干点">
+            <el-form-item label="指出学生接下来需要提升的若干点:">
               <p>{{formLabelAlign.feedback3.details_3}}</p>
             </el-form-item>
             <el-form-item label="授课老师接下来的课程计划:">
@@ -464,13 +494,13 @@
             <el-form-item label="反馈类型:">
               <p v-if="formLabelAlign.feedback_type==4">结课总结</p>
             </el-form-item>
-            <el-form-item label="总结此整个课程学习内容">
+            <el-form-item label="总结此整个课程学习内容:">
               <p>{{formLabelAlign.feedback4.details_1}}</p>
             </el-form-item>
             <el-form-item label="总结此课程教学过程中学生作业的完成情况及其知识点掌握情况:">
               <span>{{formLabelAlign.feedback4.details_2}}</span>
             </el-form-item>
-            <el-form-item label="指出学生接下来需要提升的若干点">
+            <el-form-item label="指出学生接下来需要提升的若干点:">
               <p>{{formLabelAlign.feedback4.details_3}}</p>
             </el-form-item>
             <el-form-item label="授课老师接下来对学生后续学习此科目或课程的建议:">
@@ -504,10 +534,11 @@
     <el-radio-group v-model="audition_result.audition_status">
       <el-radio :label='1' >试听成功</el-radio>
       <el-radio :label='2' >试听失败</el-radio>
+        <el-radio :label='3' >待续费</el-radio>
     </el-radio-group>
   </el-form-item>
         <el-form-item label="备  注" >
-          <el-input v-model="audition_result.audition_remarks"></el-input>
+          <el-input style="width:50%;" v-model="audition_result.audition_remarks"></el-input>
         </el-form-item>
         
       </el-form>
@@ -542,15 +573,17 @@ export default {
 
       tableData: [],
       form: {
-        // search: "", //搜索学员姓名条件
+         search: "", //搜索学员姓名条件
          page: 1, //页码
-        // attendance_status: null //考勤状态
+         attendance_status: -1 ,//考勤状态
+         course_address:'',
       },
       audition_result:{
         course_id:'',
         audition_status:1,
         audition_remarks:''
       },
+      check_address:[{label:'线上',value:1},{label:'线下',value:2}],
       audition_show:false,
       unnormalData: {
         //异常数据
@@ -565,9 +598,14 @@ export default {
         remarks3: ""
       },
       check_status: [
+            { value: -1, label: "全部" },
         { value: 0, label: "未考勤" },
+          { value: 5, label: "已考勤-异常" },
         { value: 1, label: "已考勤-正常" },
-        { value: 2, label: "已考勤-异常" }
+        { value: 2, label: "已考勤-异常取消" },
+            { value: 3, label: "已考勤-异常反馈已填" }, 
+                { value: 4, label: "已考勤-异常反馈未填" },
+              
       ],
             check_type: [
               { value: 0, label: "全部" },
@@ -586,6 +624,7 @@ export default {
       }, //正常数据
       seeMoreData: {},
       msg: {},
+      role_name:'',//是否课程顾问
       dialogVisible: false, //查看课堂反馈
       centerDialogVisible_normal: false, //正常
       centerDialogVisible_unnormal: false, //异动
@@ -601,9 +640,102 @@ export default {
   created() {
     this.$apis.students.getuilcode();
     this.getadata();
+    this.$apis.menber
+        .admin_base({admin_id: this.getdataCookie("admin_id")})
+        .then(res => {
+          if (res.data.code == 1) {
+         this.role_name=res.data.data.role_name
+  
+   console.log( this.role_name)
+          }
+        })
     this.opration = this.rolemenu[1].children[4].children;
   },
   methods: {
+     getdataCookie(cname) {
+      // return 1
+      var name = cname + "=";
+      var ca = document.cookie.split(";");
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i].trim();
+        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+      }
+      this.$router.push({ path: "/login" });
+    },
+        nowVideo(a) {
+      //观看直播
+      let parms = {
+        course_id: a
+      };
+      this.$message({
+        type: "success",
+        message: "正在创建链接,请稍等片刻"
+      });
+      this.$apis.common.enter_classroom(parms).then(res => {
+        if (res.data.code == 1) {
+          let client_url = res.data.data.client_url;
+          var iWidth = 1000;
+          var iHeight = 600;
+          var iTop = (window.screen.height - 30 - iHeight) / 2; //获得窗口的垂直位置;
+          var iLeft = (window.screen.width - 10 - iWidth) / 2; //获得窗口的水平位置;
+          window.open(
+            client_url,
+            name,
+            "height=" +
+              iHeight +
+              ",innerHeight=" +
+              iHeight +
+              ",width=" +
+              iWidth +
+              ",innerWidth=" +
+              iWidth +
+              ",top=" +
+              iTop +
+              ",left=" +
+              iLeft +
+              ",toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no"
+          );
+        } else {
+          this.$message({
+            type: "warnning",
+            message: "数据获取出错"
+          });
+        }
+      });
+    },
+    openVideo(a) {
+      //观看录播
+      //  var iWidth=$(window).width();                         //弹出窗口的宽度;
+      if (a == "0") {
+        this.$message({
+          type: "warning",
+          message: "我们的直播数据还在生成中,你可以稍后再来",
+          duration: 4000
+        });
+      } else {
+        var iWidth = 1000;
+        var iHeight = 600;
+        var iTop = (window.screen.height - 30 - iHeight) / 2; //获得窗口的垂直位置;
+        var iLeft = (window.screen.width - 10 - iWidth) / 2; //获得窗口的水平位置;
+        window.open(
+          a,
+          name,
+          "height=" +
+            iHeight +
+            ",innerHeight=" +
+            iHeight +
+            ",width=" +
+            iWidth +
+            ",innerWidth=" +
+            iWidth +
+            ",top=" +
+            iTop +
+            ",left=" +
+            iLeft +
+            ",toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no"
+        );
+      }
+    },
     recharge_export(){
             this.$message({
         type: "success",
@@ -696,7 +828,17 @@ export default {
         }
       });
     },
-
+    // scope.row.is_audition!==1&&role_name!=='课程顾问'
+    checkTeacher(a,b){
+     
+       let result =true
+       if(a!==1&&b=='课程顾问'){
+          //如果当前对象是课程顾问并且不是试听课程  就不显示
+          result=false
+       }else{
+         result=true
+       }
+return result     },
     unnormal(a) {
       this.unnormalData = {};
       (this.unnormalData.attendance_type = 2),
@@ -758,6 +900,9 @@ export default {
           }
  
 
+    },
+    clear_choose(){
+      this.form.attendance_status=-1
     },
     // 查看详情
     seeMore(result) {
@@ -881,6 +1026,9 @@ this.audition_result.course_id=result
 /* p{
   text-align: center;
 } */
+.delete_left /deep/ .el-button {
+  margin-left:0;
+}
 .so_input {
   width: 300px;
   margin-bottom: 20px;

@@ -16,6 +16,13 @@
         <el-option label="兼职老师" value="2"></el-option>
         <el-option label="全职老师" value="1"></el-option>
       </el-select>
+                <el-select clearable v-model="form.teacher_rate" placeholder="老师推荐等级"  @change="getadata">
+        <el-option label="五星级" value="5"></el-option>
+        <el-option label="四星级" value="4"></el-option>
+        <el-option label="三星级" value="3"></el-option>
+        <el-option label="二星级" value="2"></el-option>
+        <el-option label="一星级" value="1"></el-option>
+      </el-select>
       </el-form>
     </div>
 
@@ -43,7 +50,11 @@
         <span :class="[scope.row.eval_average*1>=4?'prefectC':scope.row.eval_average*1>=3&&scope.row.eval_average*1<4?'goodC':'bedC']">{{scope.row.eval_average?scope.row.eval_average+"分":'待评价'}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="teach_subjects" width="150px" label="科目"></el-table-column>
+      <el-table-column align="center"  width="150px" :show-overflow-tooltip="true"  label="科目">
+        <template slot-scope="scope">
+          <span style="cursor: pointer;">{{scope.row.teach_subjects}}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" prop="studying" label="在读学员"></el-table-column>
       <el-table-column align="center" prop="haved_hour" label="已上课时"></el-table-column>
       <el-table-column align="center" prop="waiting_hour" label="待上课时"></el-table-column>
@@ -221,6 +232,21 @@
         <el-form-item label="目标课时">
           <el-input v-model="editTeacher.target_classhour"></el-input>
         </el-form-item>
+
+                <el-form-item label="底薪" v-if="editTeacher.part_time==1">
+          <el-input v-model="editTeacher.base_salary"></el-input>
+        </el-form-item>
+   
+         <el-form-item label="底薪课时" v-if="editTeacher.part_time==1">
+          <el-input v-model="editTeacher.base_salary_hour"></el-input>
+        </el-form-item>
+         <el-form-item label="课时单价1" v-if="editTeacher.part_time==1">
+          <el-input v-model="editTeacher.time_price1"></el-input>
+        </el-form-item>
+                <el-form-item label="课时单价2" v-if="editTeacher.part_time==1">
+          <el-input v-model="editTeacher.time_price2"></el-input>
+        </el-form-item>
+
          <el-form-item label="功能定位">
           <el-input v-model="editTeacher.teacher_location"></el-input>
         </el-form-item>
@@ -291,7 +317,7 @@ export default {
         search: "", //搜索老师条件
         page: 1, //页码
         // teacher_id: "", //教师id,
-    
+    teacher_rate:'',
         is_parttime:'',
       },
       options: [], //课程名称的数据
@@ -317,7 +343,11 @@ export default {
         teacher_id: "",
         teacher_rate: 5,
         recruiter:'',
-        target_classhour:''
+        target_classhour:'',
+        base_salary	:'',
+base_salary_hour:'',
+time_price1	:'',
+time_price2:'',
       },
       // ],//根据科目生成的教师数据
       table: {
@@ -719,6 +749,12 @@ export default {
 };
 </script>
 <style scoped>
+/* 超出隐藏的设置 */
+ .el-tooltip__popper{max-width:20%;}
+  .el-tooltip__popper,.el-tooltip__popper.is-dark{background:#f5f5f5 !important;
+
+    color: #303133 !important;}
+
 .so_input {
   width: 300px;
   margin-bottom: 20px;

@@ -41,7 +41,7 @@
     }
   }
 </script>
-<style>
+<style scoped>
   .el-calendar-table .el-calendar-day {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;

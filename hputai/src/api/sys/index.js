@@ -23,10 +23,10 @@ export default {
    },
 
       //班主任数据 /api_banzhuren_list
-      // banzhuren_list (params) {
-      //   let url='/api/api_banzhuren_list'
-      //   return shuju.getdata(url,params)
-      //  },
+      banzhuren_list (params) {
+        let url='/api/api_banzhuren_list'
+        return shuju.getdata(url,params)
+       },
    //添加直播平台 /api_live_add
    live_add (params) {
     let url='/api/api_live_add'
@@ -47,7 +47,12 @@ export default {
     let url='/api/api_live_edit'
     return shuju.putdata(url,params)
    },
+   //基础数据的数据获取/api_basedata_list
 
+   get_basedata_list (params) {
+    let url='/api/api_basedata_list'
+    return shuju.getdata(url,params)
+   },
 
    // 添加编辑获取上级科目数据 /api_subject_plist
    subject_plist (params) {

@@ -76,4 +76,36 @@ export default {
         let url = '/api/api_profit_info'
         return shuju.getdata(url, params)
       },
+      fulltime_yipai_classhour(params) { //全职老师已排课时统计
+        let url = '/api/api_fulltime_yipai_classhour'
+        return shuju.getdata(url, params)
+      },
+      fulltime_upper_classhour(params) { //全职老师已上课时统计
+        let url = '/api/api_fulltime_upper_classhour'
+        return shuju.getdata(url, params)
+      },
+      fulltime_yipai_complete(params) { //全职教师已排课时目标完成度
+        let url = '/api/api_fulltime_yipai_complete'
+        return shuju.getdata(url, params)
+      },
+      fulltime_upper_complete(params) { //全职教师已上课时目标完成度
+        let url = '/api/api_fulltime_upper_complete'
+        return shuju.getdata(url, params)
+      },
+      
+      business_system(params) { //业务核算—-业务体系列表
+        let url = '/api/api_business_system'
+        return shuju.getdata(url, params)
+      },
+      
+           
+      system_dimension(params) { //业务核算—-体系维度分析
+        let url = '/api/api_system_dimension'
+        return shuju.getdata(url, params)
+      },
+           
+      student_dimension(params) { //业务核算—-学生维度分析
+        let url = '/api/api_student_dimension'
+        return shuju.getdata(url, params)
+      },
 }

@@ -34,6 +34,14 @@
         :value="item.value"
       ></el-option>
     </el-select>
+        <el-select v-model="parms.examine_id" clearable @change="getdata" placeholder="选择审核人">
+      <el-option
+        v-for="item in jiaowu_list"
+        :key="item.id"
+        :label="item.jiaowu_name"
+        :value="item.id"
+      ></el-option>
+    </el-select>
     <el-button type="primary" style="background-color:#e6563a; border:none;" @click="getdata">搜索</el-button>
     <router-link to="/StudentsList/ApplicationAdd">
       <!-- <el-button type="primary" style="float:right;background-color:#e6563a; border:none;">新建报名需求</el-button> -->
@@ -51,13 +59,16 @@
       <el-table-column prop="number" label="编号"></el-table-column>
       <el-table-column prop="title" label="排课需求"></el-table-column>
        <el-table-column prop="curriculum_type_name" label="课程性质"></el-table-column>
-      <el-table-column prop="amount" label="价格"></el-table-column>
-      <el-table-column prop="expiry_date" label="课程有效期"></el-table-column>
+      <el-table-column prop="amount" label="金额"></el-table-column>
+       <el-table-column prop="classhour" label="课时"></el-table-column>
+      <!-- <el-table-column prop="expiry_date" label="课程有效期"></el-table-column> -->
       <el-table-column prop="student_name" label="报名学员" width="100"></el-table-column>
             <el-table-column prop="teacher_name" label="讲师" width="100"></el-table-column>
 
       <el-table-column prop="admin_name" label="添加者" width="100"></el-table-column>
-      <el-table-column prop="examine_info" label="审核情况"></el-table-column>
+      <el-table-column prop="examine_name" label="审核人"></el-table-column>
+            <el-table-column prop="remarks" label="审核备注"></el-table-column>
+
       <el-table-column prop="addtime" label="添加时间"></el-table-column>
       <el-table-column prop="app_status" class="status_color" label="状态" width="100">
         <template slot-scope="scope">
@@ -83,7 +94,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column fixed="right" prop label="操作" width="300">
+      <el-table-column fixed="right" prop label="操作" width="220">
         <template slot-scope="scope">
           <!-- <span v-for="(item,index) in getRolenenu()" :key="index">
             <el-button
@@ -379,6 +390,7 @@ export default {
       helpTeacher_live: "",
       parms: {
         search: "",
+        examine_id:'',
         page: 1,
         app_status: "",
         add_admin_id: "" ,//选择的
@@ -396,7 +408,7 @@ export default {
       gridData_class: [], //排课的数组
       seeapplytable: {}, //报名表数据
       seeclassneeds: {}, //弹出排课需求数据
-
+jiaowu_list:[],
       dialogTableVisible_table: false,
       shenghe_value: "", //审核的输入框
       msg: "",
@@ -448,7 +460,7 @@ export default {
     this.getdata();
     this.getAdviser();
     this.getRolenenu();
-
+    this.getShenghe()
     let params = {
       admin_id: this.getdataCookie("admin_id")
     }; //
@@ -457,6 +469,11 @@ export default {
       url: "/api/api_banzhuren_list",
       params
     });
+    //     this.get_banzhuren_list({
+    //   //获取审核人列表
+    //   url: "/api/api_banzhuren_list",
+    //   params
+    // });
     this.get_live_list({
       //获取直播列表
       url: "/api/api_live_list",
@@ -505,6 +522,11 @@ export default {
         let page = (this.parms.page - 1) * 10 + 1;
         return index + page;
       }
+    },
+    getShenghe(){
+       this.$apis.common.jiaowu_data().then(res => {
+         this.jiaowu_list=res.data.data.list
+       })
     },
     tongguo(num) {
       let shenghe = {
