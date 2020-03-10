@@ -171,7 +171,7 @@
         <!-- <el-table-column label="兼职待上占比" prop="jian_daishang_classhour"></el-table-column> -->
         <el-table-column
           align="center"
-          label="已上课酬占比"
+          label="已上课酬金额"
           prop="total_amount"
           v-if="params_1.is_today==1"
         ></el-table-column>
@@ -221,90 +221,11 @@
              ></el-pagination>
      </div>
     </div>
-    <!-- <div class="session1">
-      <div style="width:100%;" class="flex_div">
-        <div style="font-weight:900;">全职教师以及5星兼职教师课时统计</div>
-        <div>
-          <el-button
-            class="near"
-            style="margin:0 -2px ;border-radius:5px 0 0  5px;"
-            @click="showDay_2"
-          >上月</el-button>
-          <el-button class="near" style="margin:0 -3px ;border-radius:0;" @click="showMouth_2">本月</el-button>
-          <el-button
-            class="near"
-            style="margin:0 -2px ;border-radius:0 5px 5px  0;"
-            @click="showWeek_2"
-          >下月</el-button>
-        </div>
 
-        <el-date-picker
-          @change="changeMouth_1"
-          v-model="changeMouth2"
-          type="month"
-          value-format="MM"
-          placeholder="选择你想查看的月份"
-        ></el-date-picker>
-      </div>
-
-      <el-table
-        :data="tableData_2"
-        height="500px"
-        style="margin:15px 0;"
-        border
-        class="table_set"
-        @selection-change="handleSelectionChange"
-        :header-cell-style="{background:'#f4f4f4'}"
-      >
-        <el-table-column :show-overflow-tooltip="true" align="center" label="	教师姓名">
-          <template slot-scope="scope">
-            <span>{{ scope.row.teacher_name }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="教师属性" width="80">
-          <template slot-scope="scope">
-            <p>{{ scope.row.teacher_type }}</p>
-          </template>
-        </el-table-column>
-        <el-table-column label="已排课时" width="100" prop="yipai_classhour"></el-table-column>
-        <el-table-column align="center" prop="yishang_classhour" label="已上课时" sortable></el-table-column>
-        <el-table-column align="center" prop="daishang_classhour" label="待上课时" sortable></el-table-column>
-        <el-table-column align="center" prop="target_classhour" label="目标课时" sortable></el-table-column>
-        <el-table-column label="课酬" prop="amount"></el-table-column>
-        <el-table-column label="平均单课酬" prop="average_price"></el-table-column>
-        <el-table-column align="center" label="已上目标课时比例" prop="yishang_target"></el-table-column>
-        <el-table-column align="center" label="待上目标课时比例" prop="daishang_target"></el-table-column>
-      </el-table>
-      <div v-if="msg2.data" style="display:block;">
-        <el-pagination
-          style="float:right;margin-top:20px;"
-          background
-          layout="prev, pager, next"
-          @prev-click="prev_2"
-          @next-click="next_2"
-          @current-change="current_2"
-          :page-size="10"
-          :total="msg2.data.total"
-        ></el-pagination>
-      </div>
-    </div> -->
 
     <div class="bgc">
       <div class="flex_all">
-        <!-- <el-date-picker
-            v-model="begin_time_main1"
-            type="date"
-            value-format="timestamp"
-            @change="change_Start"
-            placeholder="选择你想查看的初始日期"
-          ></el-date-picker>至
-          <el-date-picker
-            v-model="end_time_main1"
-            @change="change_End"
-            value-format="timestamp"
-            type="date"
-            placeholder="选择你想查看的截止日期"
-        ></el-date-picker>-->
+
         <el-date-picker
           @change="change_Start(1)"
           v-model="year_month"
@@ -1529,8 +1450,10 @@ export default {
           Array
         ) {
           this.tableData = res.data.data.data;
+           this.msg = res.data;
         } else {
           this.tableData = [...res.data.data.data];
+           this.msg = res.data;
         }
       });
     },
@@ -1544,8 +1467,10 @@ export default {
             Array
           ) {
             this.tableData_1 = res.data.data.data;
+            this.msg1 = res.data;
           } else {
             this.tableData_1 = [...res.data.data.data];
+            this.msg1 = res.data;
           }
         });
     },

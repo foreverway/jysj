@@ -605,7 +605,7 @@ export default {
         { value: 2, label: "已考勤-异常取消" },
             { value: 3, label: "已考勤-异常反馈已填" }, 
                 { value: 4, label: "已考勤-异常反馈未填" },
-              
+               { value: 6, label: "已考勤-异常未转结" },
       ],
             check_type: [
               { value: 0, label: "全部" },
