@@ -25,17 +25,16 @@
         <el-rate v-model="form.rate" show-text :texts="['失望', '一般', '满意', '喜欢', '完美']"></el-rate>
       </el-form-item>
       <el-button type="primary" class="assess" @click="goBack">返回</el-button>
-      <el-button type="success" class="assess1" @click="forAssess('form')">评价</el-button>
+      <el-button type="success" class="assess1" @click="forAssess('form')">{{assessed}}{{assessed==true?"追评":'评价'}}</el-button>
     </el-form>
     <p>评价列表</p>
     <ul class="infinite-list" v-infinite-scroll="load" style="overflow:auto">
       <li
-        style="margin:.5rem 10%;"
+        style="margin:0 10%;"
         v-for="i in assessList"
         class="infinite-list-item"
         :key="i.contents"
       >
-      <div class="say_flex">
         <el-image
           :src="i.head_url"
           style="width:50px;height:50px;margin-top:20px;border:1px white solid;border-radius:50%;"
@@ -48,19 +47,10 @@
               alt
             />
           </div>
-               
         </el-image>
-        <div class="right_content">
-            <span style="height:1rem;line-height:1rem;margin:0 .5rem;">{{i.username}}</span>
-           
-            <el-rate  v-model="i.rate*1" disabled></el-rate>
- <el-button size="mini" style="color:white;background-color:#409EFF;margin:0 .5rem;" v-if="i.is_evaluate">追评</el-button>
-   
-        <p  style="">{{i.contents}}</p>
-        </div>
-
-      </div>
-<!-- <hr style="color:silver;"> -->
+        <span>{{i.username}}</span>
+        <el-rate v-model="i.rate*1" disabled></el-rate>
+        <p style="margin-left:60px;">{{i.contents}}</p>
       </li>
     </ul>
   </div>
@@ -72,8 +62,7 @@ export default {
       form: {
         contents: "",
         rate: 5,
-        teacher_id: this.$route.params.id,
-        head_url:''
+        teacher_id: this.$route.params.id
       },
       assessed: true, //你是否评价过
       assessList: "",
@@ -89,34 +78,10 @@ export default {
   },
   created() {
     this.getAssessList();
-        this.$apis.menber
-        .admin_base({admin_id: this.getdataCookie("admin_id")})
-        .then(res => {
-          if (res.data.code == 1) {
-         this.admin_head=res.data.data.admin_head
-  
-   this.form.head_url= this.admin_head
-   console.log(this.head_url)
-          }
-        })
   },
   methods: {
     load() {
       //this.count += 2
-    },
-        // 读取缓存
-    getdataCookie(cname) {
-      // return 1
-      var name = cname + "=";
-      var ca = document.cookie.split(";");
-      for (var i = 0; i < ca.length; i++) {
-        var c = ca[i].trim();
-        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
-      }
-      // 路由跳转
-      // window.location.href = ''
-      this.$router.push({ path: "/login" });
-      // Router.push("/")
     },
     goBack() {
       this.$router.go(-1);
@@ -136,9 +101,20 @@ export default {
         .then(res => {
           if (res.data.code == 1) {
             this.assessList = res.data.data;
+            console.log( this.assessList)
             if (this.$route.params.eval_status == "已评") {
               this.assessed = false;
             }
+            // //获取现在的用户名对比评论数据
+            //   if(this.assessList.length!==0){
+            //     var result=this.assessList.filter((item)=>{
+            //      return item.username==this.getdataCookie("admin_name")
+            //     })
+            //   }
+            //   if(result.length>0){
+            //
+            //   }
+            //console.log(typeof this.assessList[0].rate)
           } else {
             this.$message({
               message: res.data.msg,
@@ -199,24 +175,4 @@ li {
   width: 9%;
   margin-left: 2%;
 }
-.say_flex{
-  width:100%;
-  height: 5rem;
-  display:flex;
-  align-items: center;
-  justify-content: space-around;
-}
-.say_flex .right_content{
-  width:85%;
-    /* height: 5rem;
-      display:flex;
-      flex-direction: column;
-  align-items: center;
-  justify-content: space-around; */
-}
-/* .top_content{
-    display:flex;
-  align-items: center;
-  justify-content: space-around;
-} */
 </style>
