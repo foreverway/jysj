@@ -605,7 +605,7 @@ export default {
         { value: 2, label: "已考勤-异常取消" },
             { value: 3, label: "已考勤-异常反馈已填" }, 
                 { value: 4, label: "已考勤-异常反馈未填" },
-               { value: 6, label: "已考勤-异常未转结" },
+               { value: 6, label: "已考勤-异常未结转" },
       ],
             check_type: [
               { value: 0, label: "全部" },
@@ -646,7 +646,6 @@ export default {
           if (res.data.code == 1) {
          this.role_name=res.data.data.role_name
   
-   console.log( this.role_name)
           }
         })
     this.opration = this.rolemenu[1].children[4].children;

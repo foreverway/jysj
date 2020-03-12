@@ -1078,7 +1078,7 @@ fontsize:'16px',
         console.log( this.msg )
       }
     });
-          this.$apis.students.students_list().then(res => {
+          this.$apis.students.students_list({is_data:1}).then(res => {
         if (res.data.code == 1) {
           this.options_1 = res.data.data.list;
           for (let i = 0; i < this.options_1.length; i++) {
