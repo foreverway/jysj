@@ -3,37 +3,175 @@
   <div class="main">
     <zx-head title="销售跟进"></zx-head>
 
-    <el-input
-      placeholder="请输入搜索内容"
-      v-model="parms.search"
-      clearable
-      @change="getdata_change"
-      style="width:300px"
-    ></el-input>
-    <el-date-picker
-      style="margin-left:60px"
-      v-model="parms.start_time"
-      @change="getdata_change"
-      type="datetime"
-      clearable
-      value-format="yyyy-MM-dd HH:mm:ss"
-      placeholder="选择日期时间"
-    ></el-date-picker>至
-    <el-date-picker
-      @change="getdata_change"
-      v-model="parms.end_time"
-      type="datetime"
-      clearable
-      value-format="yyyy-MM-dd HH:mm:ss"
-      placeholder="选择日期时间"
-    ></el-date-picker>
+    <div class="so_main_left">
+      <el-form :inline="true" :model="parms" label-width="120px">
+        <el-form-item label="模糊搜索：">
+          <el-input
+            placeholder="模糊搜索"
+            v-model="parms.search"
+            clearable
+            @change="getdata_change"
+            style="width:150px;"
+          ></el-input>
+        </el-form-item>
+      
 
-    <el-button type="success" @click="getdata_change">搜索</el-button>
+        <el-form-item label="跟进人：">
+          <el-select
+            clearable
+            style="width:150px"
+            v-model="parms.follow_man"
+            filterable
+            placeholder="搜索选择"
+            @change="getdata_change"
+          >
+            <el-option
+              v-for="item in follow_man_list"
+              :key="item.index"
+              :label="item.admin_name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="所属战队：">
+          <el-select
+            clearable
+            style="width:150px"
+            v-model="parms.team"
+            @change="getdata_change"
+            filterable
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="item in team_list"
+              :key="item.index"
+              :label="item.value"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="建立有效联系：">
+          <el-select
+            clearable
+            style="width:150px"
+            v-model="parms.m1"
+            placeholder="请选择"
+            @change="getdata_change"
+          >
+            <el-option
+              v-for="item in m1_list"
+              :key="item.index"
+              :label="item.value"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="明确数据需求：">
+          <el-select
+            clearable
+            style="width:150px"
+            v-model="parms.m3"
+            placeholder="请选择"
+            @change="getdata_change"
+          >
+            <el-option
+              v-for="item in m3_list"
+              :key="item.index"
+              :label="item.value"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="建立信任：">
+          <el-select
+            clearable
+            style="width:150px"
+            v-model="parms.m4"
+            placeholder="请选择"
+            @change="getdata_change"
+          >
+            <el-option
+              v-for="item in m4_list"
+              :key="item.index"
+              :label="item.value"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="试听：">
+          <el-select
+            clearable
+            style="width:150px"
+            v-model="parms.m6"
+            placeholder="请选择"
+            @change="getdata_change"
+          >
+            <el-option
+              v-for="item in m6_list"
+              :key="item.index"
+              :label="item.value"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+    
+  <el-form-item label="数据获取时间">
+          <el-date-picker
+            style="margin: 0 5px;width:150px"
+            v-model="parms.start_time"
+            @change="getdata_change"
+            type="date"
+            clearable
+            value-format="yyyy-MM-dd "
+            placeholder="选择日期时间"
+          ></el-date-picker>至
+          <el-date-picker
+            @change="getdata_change"
+            v-model="parms.end_time"
+            style="margin: 0 5px;width:150px"
+              type="date"
+            clearable
+            value-format="yyyy-MM-dd "
+            placeholder="选择日期时间"
+          ></el-date-picker>
+        </el-form-item>
+
+        <el-form-item label="最近更新时间">
+          <el-date-picker
+   style="margin: 0 5px;width:150px"
+               v-model="parms.update_start_time"
+            @change="getdata_change"
+              type="date"
+            clearable
+            value-format="yyyy-MM-dd "
+            placeholder="选择日期时间"
+          ></el-date-picker>至
+          <el-date-picker
+            @change="getdata_change"
+               style="margin: 0 5px;width:150px"
+            v-model="parms.update_end_time"
+         type="date"
+            clearable
+            value-format="yyyy-MM-dd "
+            placeholder="选择日期时间"
+          ></el-date-picker>
+        </el-form-item>
+          <div class="flex_button">
+     <el-button type="success" @click="getdata_change">查看销售跟进统计表</el-button>
     <el-button type="primary" @click="recharge_export">导出</el-button>
-
     <router-link to="/SalesList/Addsalepro">
-      <el-button type="primary" style="float:right;background-color:#e6563a; border:none;">新建销售情况列表</el-button>
+      <el-button type="primary" style="background-color:#409EFF; margin: 0 10px;border:none;">新建销售情况列表</el-button>
     </router-link>
+</div>
+      </el-form>
+
+    </div>
+
+
+   
 
     <el-table
       :data="tableData"
@@ -51,7 +189,7 @@
       <el-table-column prop="m3" label="明确数据需求"></el-table-column>
       <el-table-column prop="m6" label="试听"></el-table-column>
       <el-table-column prop="m7" label="缴费方案"></el-table-column>
-      <el-table-column fixed="right" prop label="操作" >
+      <el-table-column fixed="right" prop label="操作">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="pushToEdit(scope.row.id)">编辑</el-button>
         </template>
@@ -74,7 +212,7 @@
 </template>
 
   <script>
-  import url from '../../config/config.js'
+import url from "../../config/config.js";
 
 export default {
   data() {
@@ -84,83 +222,97 @@ export default {
       copyurl1: "",
       msg: "",
       parms: {
-        // search: "",
-         page: 1,
-        // admin_id:''
+        search: "", //		搜索条件
+        start_time: "", //	获取数据开始时间
+        end_time: "", //	获取数据结束时间
+        update_start_time: "", //	数据更新开始时间
+        update_end_time: "", //	数据更新结束时间
+        follow_man: "", //	跟进人
+        team: "", //	所属战队
+        m1: "", //	建立了有效联系
+        m3: "", //	明确数据需求
+        m4: "", //	建立信任
+        m6: "", //	试听
+        page: "" //页码
       },
       tableData: [],
-      showData:{
-        
-      },
-      // form:{
-      //   start_time:null,
-      //   end_time:null
-      // },
+      showData: {},
+      follow_man_list: [],
+      m1_list: [
+        { value: "已建立", label: "已建立" },
+        { value: "未建立", label: "未建立" }
+      ],
+      m3_list: [
+        { value: "客户需求模糊", label: "客户需求模糊" },
+        { value: "确认中", label: "确认中" },
+        { value: "哆啦A梦战队", label: "哆啦A梦战队" }
+      ],
+      m4_list: [
+        { value: "未建立", label: "未建立" },
+        { value: "初步建立", label: "初步建立" },
+        { value: "信任度高", label: "信任度高" }
+      ],
+      m6_list: [
+        { value: "推进中", label: "推进中" },
+        { value: "已缴费", label: "已缴费" },
+        { value: "已试听", label: "已试听" },
+        { value: "已反馈", label: "已反馈" }
+      ],
+      team_list: [
+        { value: "柠檬战队", label: "柠檬战队" },
+        { value: "车厘子战队", label: "车厘子战队" },
+        { value: "哆啦A梦战队", label: "哆啦A梦战队" }
+      ],
+
       value1: ""
     };
   },
   created() {
     this.getdata();
-                    this.$apis.menber
-        .admin_base({admin_id: this.getdataCookie("admin_id")})
-        .then(res => {
-          if (res.data.code == 1) {
-         this.showData.role_name=res.data.data.role_name
-         this.showData.is_captain=res.data.data.is_captain
-          this.showData.admin_name=res.data.data.admin_name
-  
-   
-          }
-        })
-    // console.log( this.getdata())
+    this.$apis.menber
+      .admin_base({ admin_id: this.getdataCookie("admin_id") })
+      .then(res => {
+        if (res.data.code == 1) {
+          this.showData.role_name = res.data.data.role_name;
+          this.showData.is_captain = res.data.data.is_captain;
+          this.showData.admin_name = res.data.data.admin_name;
+        }
+      });
+        this.$apis.operation.banzhuren_list().then(res => {
+      if (res.data.code == 1) {
+        this.follow_man_list = [];
+        this.follow_man_list = res.data.data;
+       
+      } else {
+        this.$message({
+          message: res.data.msg,
+          type: "warning"
+        });
+      }
+    });
   },
   mounted() {},
-  // watch:{
-  //   form:function(before,after){
-  //       if(this.form.end_time!==""){
-  //             this.tableData = res.data.data.list
-  //             console.log(this.tableData)
-  //           }else if (this.form.start_time!==""){
-  //           new_arr=res.data.data.list.filter(item=>item.dtime>this.form.start_time)
-  //              this.tableData = new_arr
-  //           }else{
-  //           new_arr=res.data.data.list.filter(item=>item.dtime<this.form.end_time)
-  //              this.tableData = new_arr
-  //           }
-  //   }
-  // },
-//    updated(){
-//    if(this.msg.data.count*1<11){
-//         this.parms.page=1
-// localStorage.setItem('parms',JSON.stringify(this.parms));
-//  this.getdata()
-//       }
-//    },
+
   methods: {
     //导出
-   recharge_export() {
+    recharge_export() {
       this.$message({
         type: "success",
         message: "正在导出,请稍等..."
       });
 
       let params = "";
-        
-                for (var key in this.showData) {
+
+      for (var key in this.showData) {
         params += key + "=" + this.showData[key] + "&";
       }
-            for (var key in this.parms) {
-        if(this.parms[key]!==null){
-        params += key + "=" + this.parms[key] + "&";
-        }else{
+      for (var key in this.parms) {
+        if (this.parms[key] !== null) {
+          params += key + "=" + this.parms[key] + "&";
+        } else {
         }
       }
-           window.location.href = url.urls + "/api_salepro_export" + "?" + params;
-          
-
-  
-      console.log(params)
-   
+      window.location.href = url.urls + "/api_salepro_export" + "?" + params;
     },
     //用于分页的一些设置
     current(num) {
@@ -237,7 +389,7 @@ export default {
           });
         });
     },
-   
+
     getdataCookie(cname) {
       // return 1
       var name = cname + "=";
@@ -248,15 +400,16 @@ export default {
       }
       this.$router.push({ path: "/login" });
     },
-    getdata_change(){
-   
-localStorage.setItem('parms',JSON.stringify(this.parms));
- this.getdata()
+    getdata_change() {
+      localStorage.setItem("parms", JSON.stringify(this.parms));
+      this.getdata();
     },
 
     getdata() {
       this.parms.admin_id = this.getdataCookie("admin_id");
-         this.parms=JSON.parse(localStorage.getItem("parms"))?JSON.parse(localStorage.getItem("parms")):this.parms
+      this.parms = JSON.parse(localStorage.getItem("parms"))
+        ? JSON.parse(localStorage.getItem("parms"))
+        : this.parms;
       this.$apis.common.salepro_list(this.parms).then(res => {
         if (res.data.code == 1) {
           // if(res.data.data.count*1<11){
@@ -281,4 +434,12 @@ localStorage.setItem('parms',JSON.stringify(this.parms));
 };
 </script>
 <style scoped>
+.flex_button{
+  float: right;
+  width: 420px;
+  margin:10px 0;
+  display:flex;
+  align-items: center;
+  justify-content:space-around;
+}
 </style>

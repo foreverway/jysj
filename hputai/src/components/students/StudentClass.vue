@@ -1604,7 +1604,6 @@ handleSelect(item,index){
           };
           addWord(this.options_);
           this.options = this.options_;
-          console.log(this.options_)
         }
       });
     },

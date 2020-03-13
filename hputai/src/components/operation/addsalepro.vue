@@ -1,7 +1,9 @@
 <template>
   <div class="main">
     <!-- 设置充值链接 -->
-    <el-page-header @back="goBack" content="添加销售进程管控"></el-page-header>
+        <!-- <zx-head title="添加销售进程管控" @back="goBack"></zx-head> -->
+
+    <el-page-header @back="goBack" style="margin:15px 0 ;" content="添加销售进程管控"></el-page-header>
     <!-- 
       <el-input  style="width:200px" v-model="money"  placeholder="请输入充值金额" ></el-input>
     <el-button type="primary" v-show="money>0" @click="copyUrl">生成并复制充值链接</el-button>-->
@@ -130,6 +132,25 @@
           <el-option label="客户需求模糊" value="客户需求模糊"></el-option>
         </el-select>
       </el-form-item>
+
+      <el-form-item label="进线渠道" prop="incoming_line">
+        <el-select
+          v-model="form.incoming_line"
+          placeholder="请选择"
+          filterable
+          clearable
+          v-if="ifTeam!==''"
+          disabled
+        >
+          <el-option
+            v-for="item in options_team_leader"
+            :key="item.id"
+            :label="item.admin_name"
+            :value="item.admin_name"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+
       <el-form-item label="建立信任" prop="m4">
         <el-select v-model="form.m4" placeholder="是否建立信任感">
           <el-option label="信任度高" value="信任度高"></el-option>
@@ -166,15 +187,18 @@
           <el-option label="多科规划VIP" value="多科规划VIP"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="预收科目" style="width:50%;">
+      <el-form-item label="预收科目" style="width:335px">
         <el-input v-model="form.advance_subject"></el-input>
       </el-form-item>
-      <el-form-item label="预收金额" style="width:50%;">
+      <el-form-item label="预收金额" style="width:335px">
         <el-input v-model="form.advance_amount"></el-input>
       </el-form-item>
-      <el-form-item label="情况及客户反馈" style="width:50%;">
+      <el-form-item label="情况及客户反馈" style="width:335px">
         <el-input type="textarea" v-model="form.feedback"></el-input>
       </el-form-item>
+      <el-form-item label="一周内收单重点" style="width:335px">
+<el-radio v-model="form.is_stress" label="1">备选项</el-radio>   
+   </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -216,7 +240,9 @@ export default {
         feedback: "",
         team_leader: "",
         follow_man: "",
-        team: ""
+        team: "",
+        incoming_line:'',
+        is_stress:'',
       },
       options_follow_man: [], //跟进人
       options_team_leader: [], //战队负责人

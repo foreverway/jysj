@@ -172,7 +172,6 @@ export default {
         if (res.data.code == 1) {
           this.msg = res.data;
           this.tableData = res.data.data.list;
-          console.log(this.tableData)
         }
       });
     }
