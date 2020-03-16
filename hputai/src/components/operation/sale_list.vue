@@ -160,7 +160,7 @@
           ></el-date-picker>
         </el-form-item>
           <div class="flex_button">
-     <el-button type="success" @click="getdata_change">查看销售跟进统计表</el-button>
+     <el-button type="success" @click="show_sale">查看销售跟进统计表</el-button>
     <el-button type="primary" @click="recharge_export">导出</el-button>
     <router-link to="/SalesList/Addsalepro">
       <el-button type="primary" style="background-color:#409EFF; margin: 0 10px;border:none;">新建销售情况列表</el-button>
@@ -171,7 +171,19 @@
     </div>
 
 
-   
+   <el-dialog
+  title="提示"
+  :visible.sync="show_list"
+  width="50%"
+>
+  <span>这是一段信息</span>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="show_list = false">取 消</el-button>
+    <el-button type="primary" @click="show_list = false">确 定</el-button>
+  </span>
+</el-dialog>
+
+
 
     <el-table
       :data="tableData"
@@ -235,6 +247,7 @@ export default {
         m6: "", //	试听
         page: "" //页码
       },
+      show_list:false,//是否显示dialog
       tableData: [],
       showData: {},
       follow_man_list: [],
@@ -294,6 +307,22 @@ export default {
   mounted() {},
 
   methods: {
+    //显示销售跟进人数据
+    show_sale(){
+      this.show_list=true
+      
+                this.$apis.common.sale_statistics().then(res => {
+            if (res.data.code == 1) {
+              // this.$message({
+              //   type: "success",
+              //   message:  " 已删除成功"
+              // });
+              console.log(res.data.data)
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          });
+    },
     //导出
     recharge_export() {
       this.$message({

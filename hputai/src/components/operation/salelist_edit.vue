@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <!-- 设置充值链接 -->
-    <el-page-header @back="goBack" content="编辑销售情况表"></el-page-header>
+    <el-page-header @back="goBack" style="margin:15px 0 ;" content="编辑销售情况表"></el-page-header>
     <!-- <div >
 
     </div>-->
@@ -98,6 +98,21 @@
           <el-option label="客户需求模糊" value="客户需求模糊"></el-option>
         </el-select>
       </el-form-item>
+            <el-form-item label="进线渠道" prop="incoming_line">
+        <el-select
+          v-model="form.incoming_line"
+          placeholder="请选择"
+          filterable
+          clearable
+        >
+          <el-option
+            v-for="item in incoming_line_list"
+            :key="item.id"
+            :label="item.name"
+            :value="item.name"
+          ></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="建立信任" prop="m4">
         <el-select v-model="form.m4" placeholder="是否建立信任感">
           <el-option label="信任度高" value="信任度高"></el-option>
@@ -143,6 +158,10 @@
       <el-form-item label="情况及客户反馈" style="width:50%;">
         <el-input type="textarea" v-model="form.feedback"></el-input>
       </el-form-item>
+            <el-form-item label="一周内收单重点" style="width:335px">
+<el-radio v-model="form.is_stress" :label="1" >是</el-radio>   
+<el-radio v-model="form.is_stress" :label="0">否</el-radio>  
+   </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -181,10 +200,14 @@ export default {
         advance_strategies: "",
         advance_subject: "",
         advance_amount: "",
-        feedback: ""
+        feedback: "",
+             incoming_line:'',
+        is_stress:'',
       },
       options_follow_man: [], //战队负责人
       options_team_leader: [], //跟进人
+            incoming_line_list:[],//进线渠道列表
+
       options_team: [
         {
           value: "柠檬战队",
@@ -268,9 +291,39 @@ export default {
         });
       }
     });
+        this.$apis.menber
+      .admin_base({ admin_id: this.getdataCookie("admin_id") })
+      .then(res => {
+        if (res.data.code == 1) {
+
+          this.ifTeam = res.data.data.team;
+          this.form.team_leader = res.data.data.captain_name;
+          this.form.team = res.data.data.team;
+          this.form.follow_man = res.data.data.admin_name;
+           this.form.is_stress = res.data.data.is_stress*1;
+        }
+      });
+        this.$apis.common
+      .basedata_list({ admin_id: this.getdataCookie("admin_id") })
+      .then(res => {
+        if (res.data.code == 1) {
+
+       this.incoming_line_list=res.data.data.inproject_list
+        }
+      });
   },
   mounted() {},
   methods: {
+        getdataCookie(cname) {
+      var name = cname + "=";
+      var ca = document.cookie.split(";");
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i].trim();
+        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+      }
+      // 路由跳转
+      this.$router.push({ path: "/login" });
+    },
     onSubmit(form) {
       this.$refs[form].validate(valid => {
         if (valid) {

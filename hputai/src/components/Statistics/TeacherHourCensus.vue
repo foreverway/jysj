@@ -158,7 +158,7 @@
           align="center"
           label="全职已上"
           v-if="params_1.is_today!==2"
-          prop="jian_yishang_classhour"
+          prop="quan_yishang_classhour"
         ></el-table-column>
         <el-table-column
           align="center"

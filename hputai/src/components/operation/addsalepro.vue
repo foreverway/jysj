@@ -139,14 +139,12 @@
           placeholder="请选择"
           filterable
           clearable
-          v-if="ifTeam!==''"
-          disabled
         >
           <el-option
-            v-for="item in options_team_leader"
+            v-for="item in incoming_line_list"
             :key="item.id"
-            :label="item.admin_name"
-            :value="item.admin_name"
+            :label="item.name"
+            :value="item.name"
           ></el-option>
         </el-select>
       </el-form-item>
@@ -197,7 +195,8 @@
         <el-input type="textarea" v-model="form.feedback"></el-input>
       </el-form-item>
       <el-form-item label="一周内收单重点" style="width:335px">
-<el-radio v-model="form.is_stress" label="1">备选项</el-radio>   
+<el-radio v-model="form.is_stress" label="1">是</el-radio>   
+<el-radio v-model="form.is_stress" label="">否</el-radio>  
    </el-form-item>
       <el-form-item>
         <el-button
@@ -221,7 +220,6 @@ export default {
     return {
       form: {
         dtime: "",
-        follow_man: "",
         team: "",
         team_leader: "",
         data_number: "",
@@ -238,14 +236,13 @@ export default {
         advance_subject: "",
         advance_amount: "",
         feedback: "",
-        team_leader: "",
         follow_man: "",
-        team: "",
         incoming_line:'',
         is_stress:'',
       },
       options_follow_man: [], //跟进人
       options_team_leader: [], //战队负责人
+      incoming_line_list:[],//进线渠道列表
       options_team: [
         {
           value: "柠檬战队",
@@ -343,10 +340,17 @@ export default {
           this.form.follow_man = res.data.data.admin_name;
         }
       });
+        this.$apis.common
+      .basedata_list({ admin_id: this.getdataCookie("admin_id") })
+      .then(res => {
+        if (res.data.code == 1) {
+
+       this.incoming_line_list=res.data.data.inproject_list
+        }
+      });
   },
   methods: {
     getdataCookie(cname) {
-      // return 1
       var name = cname + "=";
       var ca = document.cookie.split(";");
       for (var i = 0; i < ca.length; i++) {
@@ -354,12 +358,9 @@ export default {
         if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
       }
       // 路由跳转
-      // window.location.href = ''
       this.$router.push({ path: "/login" });
-      // Router.push("/")
     },
     aaa() {
-      //  history.back(-1)
       this.$router.go(-1);
     },
     onSubmit(form) {
@@ -388,7 +389,6 @@ export default {
               });
             });
         } else {
-          console.log("error submit!!");
           return false;
         }
       });
@@ -420,22 +420,7 @@ export default {
     goBack() {
       history.back(-1);
     }
-    // // 复制链接
-    //       copyUrl(){
 
-    //  let url = studens_url.student_url+'login/1/'+this.money;
-    //         let oInput = document.createElement('input');
-    //         oInput.value = url;
-    //         document.body.appendChild(oInput);
-    //         oInput.select(); // 选择对象;
-    //         document.execCommand("Copy"); // 执行浏览器复制命令
-    //         this.$message({
-    //           message: url +'已成功复制到剪切板',
-    //           type: 'success'
-    //         });
-    //         this.money=''
-    //         oInput.remove()
-    //       },
   }
 };
 </script>

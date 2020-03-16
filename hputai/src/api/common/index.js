@@ -340,6 +340,13 @@ class_transfer_info(params) {
     let url='/api/api_live_list'
     return shuju.getdata(url,params)
    },
+
+      // 获取直播平台数据 /api_live_list
+      get_live_list (params) {
+        let url='/api/api_live_list'
+        return shuju.getdata(url,params)
+       },
+
    subject_classhour(params) {
     //此处的params是用户的账户id，用于获取用户的信息
     let url = '/api/api_subject_classhour'
@@ -355,4 +362,10 @@ class_transfer_info(params) {
     let url = '/api/api_jiaowu_data'
     return shuju.getdata(url, params)
   },
+  sale_statistics(params) {
+    //此处的params是用户的账户id，用于获取用户的信息
+    let url = '/api/api_sale_statistics'
+    return shuju.getdata(url, params)
+  },
+  
 }
