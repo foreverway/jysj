@@ -300,6 +300,7 @@ export default {
         ],
         m2: [{ required: true, message: "是否了解客户情况", trigger: "blur" }],
         m3: [{ required: true, message: "是否明确数据需求", trigger: "blur" }],
+        incoming_line:[{ required: true, message: "选择进线渠道", trigger: "blur" }],
         m4: [{ required: true, message: "是否建立信任", trigger: "blur" }]
       }
     };

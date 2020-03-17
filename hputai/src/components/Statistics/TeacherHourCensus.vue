@@ -207,8 +207,7 @@
           v-if="params_1.is_today==-1"
         ></el-table-column>
       </el-table>
-       <div v-if="msg1.data" style="display:block;width:100%;" >
-     
+      <div v-if="msg1.data" style="display:block;width:100%;">
         <el-pagination
           style="float:right;margin-top:20px;"
           background
@@ -218,14 +217,12 @@
           @current-change="current_1"
           :page-size="10"
           :total="msg1.data.total"
-             ></el-pagination>
-     </div>
+        ></el-pagination>
+      </div>
     </div>
-
 
     <div class="bgc">
       <div class="flex_all">
-
         <el-date-picker
           @change="change_Start(1)"
           v-model="year_month"
@@ -436,7 +433,7 @@ export default {
         ],
         grid: { containLabel: true },
         xAxis: { name: "课时", nameTextStyle: { fontSize: 16 } },
-        yAxis: { type: "category" ,name: "教师姓名"}
+        yAxis: { type: "category", name: "教师姓名" }
       });
       this.$apis.census.fulltime_yipai_classhour(this.one).then(res => {
         if (res.data.code == 1) {
@@ -478,13 +475,20 @@ export default {
             },
             label: {
               show: true,
-              position: "right"
+              position: "right",
             }
-          }
+          },
+          // label: {
+          //   normal: {
+          //     show: true,
+          //     position: "top",
+          //     formatter: "{c} ℃"
+          //   }
+          // }
         ],
         grid: { containLabel: true },
         xAxis: { name: "课时" },
-        yAxis: { type: "category" ,name: "教师姓名"}
+        yAxis: { type: "category", name: "教师姓名" }
       });
       this.$apis.census.fulltime_upper_classhour(this.two).then(res => {
         if (res.data.code == 1) {
@@ -525,20 +529,22 @@ export default {
             },
             label: {
               show: true,
-              position: "right"
+              position: "right",
+              formatter: '{c}%'
             }
           }
         ],
         grid: { containLabel: true },
         xAxis: { name: "%" },
-        yAxis: { type: "category" ,name: "老师姓名"}
+        yAxis: { type: "category", name: "老师姓名" }
       });
       this.$apis.census.fulltime_yipai_complete(this.three).then(res => {
         if (res.data.code == 1) {
           this.top15_3 = [];
           for (let i = 0; i < res.data.data.length; i++) {
             this.top15_3[i] = [];
-            this.top15_3[i].push(res.data.data[i].complete_classhour*1);
+            
+            this.top15_3[i].push(res.data.data[i].complete_classhour );
             this.top15_3[i].push(res.data.data[i].teacher_name);
           }
           myLine.setOption({
@@ -578,7 +584,7 @@ export default {
         ],
         grid: { containLabel: true },
         xAxis: { name: "%" },
-        yAxis: { type: "category" ,name: "老师姓名"}
+        yAxis: { type: "category", name: "老师姓名" }
       });
       this.$apis.census.fulltime_upper_complete(this.four).then(res => {
         if (res.data.code == 1) {
@@ -1450,10 +1456,10 @@ export default {
           Array
         ) {
           this.tableData = res.data.data.data;
-           this.msg = res.data;
+          this.msg = res.data;
         } else {
           this.tableData = [...res.data.data.data];
-           this.msg = res.data;
+          this.msg = res.data;
         }
       });
     },

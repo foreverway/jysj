@@ -36,6 +36,7 @@
         :data="tableData"
         height="500px"
         border
+        empty-text="正在获取数据，请稍等"
         class="table_set"
         @selection-change="handleSelectionChange"
         :header-cell-style="{background:'#f4f4f4'}"
@@ -47,6 +48,8 @@
         <el-table-column align="center" prop="confirm_classhour" label="确认课时消耗量(小时)" sortable></el-table-column>
         <el-table-column align="center" prop="student_amount" label="确认营业收入(￥)" sortable></el-table-column>
         <el-table-column label="	确认课程成本(￥)" prop="teacher_amount"></el-table-column>
+        <el-table-column label="	确认课程成本占比（%）" prop="ratio_amount"></el-table-column>
+
         <el-table-column label="确认毛利金额(￥)" prop="profit"></el-table-column>
       </el-table>
     </div>
@@ -54,7 +57,7 @@
     <div class="session1">
       <h3>一级科目分析</h3>
       <div class="echarts_1" style="margin:20px 0;">
-        <div style="width:39%;height:450px;" class="bgc">
+        <div style="width:45%;height:450px;" class="bgc">
           <div class="block" style="margin: 0 auto;width:446px;">
             <el-date-picker
               style="width:42%;"
@@ -68,7 +71,6 @@
               placeholder="选择科目"
               v-model="main_subject_id"
               filterable
-     
               :options="options"
               clearable
               :props="{ expandTrigger: 'hover' }"
@@ -79,7 +81,7 @@
           <div id="main" style="width:100%;height:400px;"></div>
         </div>
 
-        <div style="width:60%;height:450px;" class="bgc">
+        <div style="width:54%;height:450px;" class="bgc">
           <div class="block" style="margin:auto;width:200px;">
             <el-date-picker
               @change="changeMouth_1"
@@ -138,12 +140,16 @@
         <el-table-column align="center" prop="student_type_name" label="学生类别" sortable></el-table-column>
         <el-table-column align="center" prop="confirm_classhour" label="确认课时消耗量(小时)" sortable></el-table-column>
         <el-table-column align="center" prop="student_amount" label="确认营业收入(￥)" sortable></el-table-column>
+
         <el-table-column label="	确认课程成本(￥)" prop="teacher_amount"></el-table-column>
+        <el-table-column label="	确认课程成本占比(%)" prop="ratio_amount">
+          <template slot-scope="scope">{{scope.row.ratio_amount+"%"}}</template>
+        </el-table-column>
         <el-table-column label="确认毛利金额(￥)" prop="profit"></el-table-column>
       </el-table>
     </div>
 
-     <div class="session1">
+    <div class="session1">
       <div class="echarts_1" style="margin:20px 0;">
         <div style="width:48%;height:450px;" class="bgc">
           <div class="block" style="margin: 0 auto;width:446px;">
@@ -159,7 +165,6 @@
               placeholder="选择体系"
               v-model="system_id"
               filterable
-     
               :options="options_subject"
               clearable
               :props="{ expandTrigger: 'hover' }"
@@ -179,17 +184,17 @@
               type="month"
               placeholder="选择月份"
             ></el-date-picker>
-             <el-select
-          clearable
-          v-model="main_subject_type"
-          placeholder="选择学生类型"
-          @change="handleChange_student"
-        >
-          <el-option label="全部" value="0"></el-option>
-          <el-option label="VIP学生" value="3"></el-option>
-          <el-option label="保读" value="2"></el-option>
-          <el-option label="普通" value="1"></el-option>
-        </el-select>
+            <el-select
+              clearable
+              v-model="main_subject_type"
+              placeholder="选择学生类型"
+              @change="handleChange_student"
+            >
+              <el-option label="全部" value="0"></el-option>
+              <el-option label="VIP学生" value="3"></el-option>
+              <el-option label="保读" value="2"></el-option>
+              <el-option label="普通" value="1"></el-option>
+            </el-select>
           </div>
           <div id="main_student" style="width:100%;height:400px;"></div>
         </div>
@@ -214,13 +219,13 @@ export default {
       lastYear: [],
       thisTear: [],
       main_subject_id: "", //图表科目选择的
-      system_id:'',//选择的体系id
+      system_id: "", //选择的体系id
 
-       year_month_system:'',//选择的体系时间
+      year_month_system: "", //选择的体系时间
       year_month: "",
 
-      main_subject_type:'', //选择的学生类别
-      year_month_student:'', //学生类别选择的时间
+      main_subject_type: "", //选择的学生类别
+      year_month_student: "", //学生类别选择的时间
 
       old_student_amount: "去年的收入",
       student_amount: "	今年的收入",
@@ -229,14 +234,14 @@ export default {
       old_profit: "去年的毛利",
       profit: "今年的毛利",
       idArr: [],
-      options_subject:[],//科目体系的数组
-      idArr_system:[],//体系选择的
+      options_subject: [], //科目体系的数组
+      idArr_system: [], //体系选择的
       params: {
         student_type: "",
         begin_time: "",
         end_time: ""
       },
-            params_system: {
+      params_system: {
         student_type: "",
         begin_time: "",
         end_time: ""
@@ -255,8 +260,8 @@ export default {
       thisyear: "",
       begin_time_3: "", //总数组的绑定值
       end_time_3: "", //总数组的绑定值
-      begin_time_system:'', //体系数组的开始时间绑定值
-      end_time_system:'',
+      begin_time_system: "", //体系数组的开始时间绑定值
+      end_time_system: "",
       hadClick: false,
       hadClick_2: false, //是否点击了今天，本周，或本月
       tableData_system: [] //业务体系数据
@@ -307,28 +312,27 @@ export default {
         });
       this.drawChart();
     },
-    handleChange_system(targetName){
-          //选择科目
+    handleChange_system(targetName) {
+      //选择科目
       var lastName = targetName[0] ? targetName[0] : "";
       this.system_id = lastName;
-       this.$apis.census
-        .system_dimension({
-          year_month: this.year_month_system,
-          system_id: this.system_id
-        })
-        
+      this.$apis.census.system_dimension({
+        year_month: this.year_month_system,
+        system_id: this.system_id
+      });
+
       this.drawChart_system();
     },
-        handleChange_student(targetName) {
+    handleChange_student(targetName) {
       //选择科目
       var lastName = targetName[0] ? targetName[0] : "";
       this.main_subject_type = lastName;
 
-            this.$apis.census.student_dimension({
-          year_month: this.year_month_student,
-          student_type: this.main_subject_type
-        })
-        
+      this.$apis.census.student_dimension({
+        year_month: this.year_month_student,
+        student_type: this.main_subject_type
+      });
+
       this.drawChart_student();
     },
     getdata() {
@@ -360,7 +364,7 @@ export default {
       }
       this.params.subject_ids = this.idArr.toString();
     },
-        handle_system(result) {
+    handle_system(result) {
       this.idArr_system = [];
       for (let i = 0; i < result.length; i++) {
         this.idArr_system.push(result[i].id);
@@ -395,13 +399,13 @@ export default {
         });
       this.drawChart();
     },
-    changeMouth_system(){
-            var thisdate = new Date(this.year_month_system);
+    changeMouth_system() {
+      var thisdate = new Date(this.year_month_system);
       var month1 = thisdate.getMonth() * 1 + 1;
       var month = month1 < 10 ? "0" + month1 : month1;
 
       this.year_month_system = thisdate.getFullYear() + "-" + month;
-              this.$apis.census
+      this.$apis.census
         .system_dimension({
           year_month: this.year_month_system,
           system_id: this.system_id
@@ -426,17 +430,20 @@ export default {
                 .toString()
                 .replace(",", "")
                 .toString() * 1
-            ];}})
+            ];
+          }
+        });
       this.drawChart_system();
     },
-    changeMouth_student(){
-            var thisdate = new Date(this.year_month_student);
+    changeMouth_student() {
+      var thisdate = new Date(this.year_month_student);
       var month1 = thisdate.getMonth() * 1 + 1;
       var month = month1 < 10 ? "0" + month1 : month1;
 
       this.year_month_student = thisdate.getFullYear() + "-" + month;
-     
-           this.$apis.census.student_dimension({
+
+      this.$apis.census
+        .student_dimension({
           year_month: this.year_month_student,
           student_type: this.main_subject_type
         })
@@ -460,16 +467,15 @@ export default {
                 .toString()
                 .replace(",", "")
                 .toString() * 1
-            ];}})
+            ];
+          }
+        });
       this.drawChart_student();
     },
     changeMouth_1(value) {
       this.changeMouth2 = value;
       this.drawStudent();
     },
-
-
-
 
     add0(m) {
       return m < 10 ? "0" + m : m;
@@ -483,15 +489,17 @@ export default {
       this.params.begin_time = event ? event.toString().substr(0, 10) : "";
       this.getadata();
     },
-        changeStart_system(event) {
-      this.params_system.begin_time = event ? event.toString().substr(0, 10) : "";
+    changeStart_system(event) {
+      this.params_system.begin_time = event
+        ? event.toString().substr(0, 10)
+        : "";
       this.get_system();
     },
     changeEnd_3(event) {
       this.params.end_time = event ? event.toString().substr(0, 10) : "";
       this.getadata();
     },
-        changeEnd_system(event) {
+    changeEnd_system(event) {
       this.params_system.end_time = event ? event.toString().substr(0, 10) : "";
       this.get_system();
     },
@@ -540,8 +548,8 @@ export default {
       this.getadata();
     },
 
-    Change_sbuject_system(){
-         this.get_system();
+    Change_sbuject_system() {
+      this.get_system();
     },
     getdata() {
       //获取科目的数据
@@ -569,11 +577,11 @@ export default {
     drawStudent() {
       let myDraw = echarts.init(document.getElementById("main2"));
       app.config = {
-       rotate: 0,
-    align: 'center',
-    verticalAlign: 'middle',
-    position: 'top',
-    distance: 10,
+        rotate: 0,
+        align: "center",
+        verticalAlign: "middle",
+        position: "top",
+        distance: 10
       };
       var labelOption = {
         show: true,
@@ -642,8 +650,8 @@ export default {
           this.profit = [];
           for (let i = 0; i < res.data.data.length; i++) {
             // this.classMouth.push(res.data.data[i].month);
-            this.profit[i] = res.data.data[i].profit ;
-            this.old_profit[i] = res.data.data[i].old_profit ;
+            this.profit[i] = res.data.data[i].profit;
+            this.old_profit[i] = res.data.data[i].old_profit;
             this.profit_math[i] =
               Math.round((res.data.data[i].profit / 10000) * 100) / 100;
             this.old_profit_math[i] =
@@ -720,7 +728,18 @@ export default {
             fontWeight: "bolder"
           }
         },
-        tooltip: {},
+        tooltip: {
+          trigger: "axis",
+          formatter: function(params) {
+            // console.log(params)
+            var showdata = params[0].data;
+            var showdata1 = params[1].data;
+            return `
+                            <div>去年：${showdata}</div>
+                            <div>今年：${showdata1}</div>
+                            `;
+          }
+        },
         dataset: {
           source: [
             ["product", "去年", "今年"],
@@ -755,10 +774,12 @@ export default {
         })
         .then(res => {
           if (res.data.code == 1) {
+            console.log(res.data.data);
             this.lastYear = [
               res.data.data[0].old_student_amount * 1,
               res.data.data[1].old_teacher_amount * 1,
-              res.data.data[2].old_profit * 1
+              res.data.data[2].old_profit * 1,
+              res.data.data[3].old_ratio_amount * 1
             ];
             // console.log(res.data.data[1].teacher_amount,res.data.data[1].teacher_amount.replace(',','').toString())
             this.thisYear = [
@@ -773,6 +794,10 @@ export default {
               res.data.data[2].profit
                 .toString()
                 .replace(",", "")
+                .toString() * 1,
+              res.data.data[3].ratio_amount
+                .toString()
+                .replace(",", "")
                 .toString() * 1
             ];
 
@@ -783,7 +808,12 @@ export default {
                   axisTick: {
                     alignWithLabel: true
                   },
-                  data: ["确认营业收入", "确认课程成本", "确认毛利金额"]
+                  data: [
+                    "确认营业收入",
+                    "确认课程成本",
+                    "确认毛利金额",
+                    "确认课程成本占比%"
+                  ]
                 }
               ],
 
@@ -809,9 +839,9 @@ export default {
           }
         });
     },
-      drawChart_system() {
+    drawChart_system() {
       let myChart = echarts.init(document.getElementById("main_system"));
-      var colors = ["#5793f3", "#d14a61", "#675bba"];
+      var colors = ["rgba(22, 155, 213, 1)", "rgba(22, 155, 213, 1)", "rgba(22, 155, 213, 1)"];
       // 指定图表的配置项和数据
       myChart.setOption({
         legend: {},
@@ -861,9 +891,10 @@ export default {
             this.lastYear = [
               res.data.data[0].old_student_amount * 1,
               res.data.data[1].old_teacher_amount * 1,
-              res.data.data[2].old_profit * 1
+              res.data.data[2].old_profit * 1,
+              res.data.data[3].old_ratio_amount * 1
+
             ];
-            // console.log(res.data.data[1].teacher_amount,res.data.data[1].teacher_amount.replace(',','').toString())
             this.thisYear = [
               res.data.data[0].student_amount
                 .toString()
@@ -876,6 +907,10 @@ export default {
               res.data.data[2].profit
                 .toString()
                 .replace(",", "")
+                .toString() * 1,
+              res.data.data[3].ratio_amount
+                .toString()
+                .replace(",", "")
                 .toString() * 1
             ];
 
@@ -886,14 +921,32 @@ export default {
                   axisTick: {
                     alignWithLabel: true
                   },
-                  data: ["确认营业收入", "确认课程成本", "确认毛利金额"]
+                  data: ["确认营业收入", "确认课程成本", "确认毛利金额" ,  "确认课程成本占比%"]
                 }
               ],
 
               yAxis: [
-                {
-                  name: "月份情况"
-                }
+                // {
+                //   name: "月份情况"
+                // }
+                   {
+            type: 'value',
+            name: '月份情况',
+            // axisLabel: {
+            //     formatter: 'value'
+            // }
+        },
+        {
+            type: 'value',
+            name: '占比',
+            min: 0,
+            max: 100,
+            interval: 20,
+            yAxisIndex: 3,
+            axisLabel: {
+                formatter: '{value} %'
+            }
+        }
               ],
               series: [
                 {
@@ -912,7 +965,7 @@ export default {
           }
         });
     },
-      drawChart_student() {
+    drawChart_student() {
       let myChart = echarts.init(document.getElementById("main_student"));
       var colors = ["#67C23A", "#F56C6C", "#675bba"];
       // 指定图表的配置项和数据
@@ -954,7 +1007,8 @@ export default {
         ]
       });
 
-      this.$apis.census.student_dimension({
+      this.$apis.census
+        .student_dimension({
           year_month: this.year_month_student,
           student_type: this.main_subject_type
         })
@@ -1025,19 +1079,20 @@ export default {
           this.tableData = [...res.data.data];
         }
       });
-
     },
-    get_system(){
-          this.$apis.census.business_system(this.params_system).then(res => {
-      this.tableData_system = [];
-      if (Object.prototype.toString.call(res.data.data).substr(8, 5) == Array) {
-        this.tableData_system = res.data.data;
-        this.msg_system = res.data;
-      } else {
-        this.tableData_system = [...res.data.data];
-        this.msg_system = res.data;
-      }
-    });
+    get_system() {
+      this.$apis.census.business_system(this.params_system).then(res => {
+        this.tableData_system = [];
+        if (
+          Object.prototype.toString.call(res.data.data).substr(8, 5) == Array
+        ) {
+          this.tableData_system = res.data.data;
+          this.msg_system = res.data;
+        } else {
+          this.tableData_system = [...res.data.data];
+          this.msg_system = res.data;
+        }
+      });
     },
     next() {
       this.params.page++;
@@ -1064,15 +1119,13 @@ export default {
       this.drawStudent();
       this.drawChart_system();
       this.drawChart_student();
-            this.$apis.common.basedata_list().then(res => {
-      this.options_subject=[]
-        res.data.data.subjects_system_list.forEach(item=>{
-this.options_subject.push({value:item.id,label:item.name})
-        })
-         
+      this.$apis.common.basedata_list().then(res => {
+        this.options_subject = [];
+        res.data.data.subjects_system_list.forEach(item => {
+          this.options_subject.push({ value: item.id, label: item.name });
+        });
       });
     });
-   
   },
 
   mounted() {
@@ -1105,7 +1158,6 @@ this.options_subject.push({value:item.id,label:item.name})
         }
       }
     });
-
   }
 };
 </script>

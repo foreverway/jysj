@@ -14,7 +14,6 @@
             style="width:150px;"
           ></el-input>
         </el-form-item>
-      
 
         <el-form-item label="跟进人：">
           <el-select
@@ -117,8 +116,8 @@
             ></el-option>
           </el-select>
         </el-form-item>
-    
-  <el-form-item label="数据获取时间">
+
+        <el-form-item label="数据获取时间">
           <el-date-picker
             style="margin: 0 5px;width:150px"
             v-model="parms.start_time"
@@ -132,7 +131,7 @@
             @change="getdata_change"
             v-model="parms.end_time"
             style="margin: 0 5px;width:150px"
-              type="date"
+            type="date"
             clearable
             value-format="yyyy-MM-dd "
             placeholder="选择日期时间"
@@ -141,42 +140,49 @@
 
         <el-form-item label="最近更新时间">
           <el-date-picker
-   style="margin: 0 5px;width:150px"
-               v-model="parms.update_start_time"
+            style="margin: 0 5px;width:150px"
+            v-model="parms.update_start_time"
             @change="getdata_change"
-              type="date"
+            type="date"
             clearable
             value-format="yyyy-MM-dd "
             placeholder="选择日期时间"
           ></el-date-picker>至
           <el-date-picker
             @change="getdata_change"
-               style="margin: 0 5px;width:150px"
+            style="margin: 0 5px;width:150px"
             v-model="parms.update_end_time"
-         type="date"
+            type="date"
             clearable
             value-format="yyyy-MM-dd "
             placeholder="选择日期时间"
           ></el-date-picker>
         </el-form-item>
-          <div class="flex_button">
-     <el-button type="success" @click="show_sale">查看销售跟进统计表</el-button>
-    <el-button type="primary" @click="recharge_export">导出</el-button>
-    <router-link to="/SalesList/Addsalepro">
-      <el-button type="primary" style="background-color:#409EFF; margin: 0 10px;border:none;">新建销售情况列表</el-button>
-    </router-link>
-</div>
+        <div class="flex_button">
+          <el-button type="success" @click="show_sale">查看销售跟进统计表</el-button>
+          <el-button type="primary" @click="recharge_export">导出</el-button>
+          <router-link to="/SalesList/Addsalepro">
+            <el-button
+              type="primary"
+              style="background-color:#409EFF; margin: 0 10px;border:none;"
+            >新建销售情况列表</el-button>
+          </router-link>
+        </div>
       </el-form>
-
     </div>
 
-
-   <el-dialog
-  title="提示"
-  :visible.sync="show_list"
-  width="50%"
->
-  <span>这是一段信息</span>
+    <el-dialog title="跟进人销售统计数据" :visible.sync="show_list" width="50%" :close-on-click-modal="false">
+      <template>
+        <el-table :data="tshow_listData" border style="width: 100%">
+          <el-table-column prop="follow_man" label="跟进人" ></el-table-column>
+          <el-table-column prop="established" label="有效联系数" ></el-table-column>
+          <el-table-column prop="explicit" label="明确数据需求数"></el-table-column>
+                <el-table-column prop="credibility" label="建立信任数" ></el-table-column>
+          <el-table-column prop="audition" label="试听数" ></el-table-column>
+          <el-table-column prop="acquiring" label="一周内收单重点数"></el-table-column>
+        </el-table>
+      </template>
+ 
   <span slot="footer" class="dialog-footer">
     <el-button @click="show_list = false">取 消</el-button>
     <el-button type="primary" @click="show_list = false">确 定</el-button>
@@ -201,10 +207,18 @@
       <el-table-column prop="m3" label="明确数据需求"></el-table-column>
       <el-table-column prop="m6" label="试听"></el-table-column>
       <el-table-column prop="m7" label="缴费方案"></el-table-column>
+           <el-table-column prop="dtime" label="数据获取时间 "></el-table-column>
+      <el-table-column prop="update_time" label="最近更新时间"></el-table-column>
+      <el-table-column prop="incoming_line" label="进线渠道"></el-table-column>
+      <el-table-column prop="is_stress" label="一周内收单重点">
+        <template slot-scope="scope">
+          {{scope.row.is_stress==1?"是":"否"}}
+        </template>
+      </el-table-column>
       <el-table-column fixed="right" prop label="操作">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="pushToEdit(scope.row.id)">编辑</el-button>
-        </template>
+  <el-button type="primary" size="small" @click="pushToEdit(scope.row.id)">编辑</el-button>
+</template>
       </el-table-column>
     </el-table>
     <!-- 分页 -->
@@ -247,7 +261,7 @@ export default {
         m6: "", //	试听
         page: "" //页码
       },
-      show_list:false,//是否显示dialog
+      show_list: false, //是否显示dialog
       tableData: [],
       showData: {},
       follow_man_list: [],
@@ -258,7 +272,7 @@ export default {
       m3_list: [
         { value: "客户需求模糊", label: "客户需求模糊" },
         { value: "确认中", label: "确认中" },
-        { value: "哆啦A梦战队", label: "哆啦A梦战队" }
+        { value: "已明确", label: "已明确" }
       ],
       m4_list: [
         { value: "未建立", label: "未建立" },
@@ -276,7 +290,7 @@ export default {
         { value: "车厘子战队", label: "车厘子战队" },
         { value: "哆啦A梦战队", label: "哆啦A梦战队" }
       ],
-
+      tshow_listData: [],
       value1: ""
     };
   },
@@ -291,11 +305,10 @@ export default {
           this.showData.admin_name = res.data.data.admin_name;
         }
       });
-        this.$apis.operation.banzhuren_list().then(res => {
+    this.$apis.operation.banzhuren_list().then(res => {
       if (res.data.code == 1) {
         this.follow_man_list = [];
         this.follow_man_list = res.data.data;
-       
       } else {
         this.$message({
           message: res.data.msg,
@@ -308,20 +321,20 @@ export default {
 
   methods: {
     //显示销售跟进人数据
-    show_sale(){
-      this.show_list=true
-      
-                this.$apis.common.sale_statistics().then(res => {
-            if (res.data.code == 1) {
-              // this.$message({
-              //   type: "success",
-              //   message:  " 已删除成功"
-              // });
-              console.log(res.data.data)
-            } else {
-              this.$message.error(res.data.msg);
-            }
-          });
+    show_sale() {
+      this.show_list = true;
+
+      this.$apis.common.sale_statistics().then(res => {
+        if (res.data.code == 1) {
+          // this.$message({
+          //   type: "success",
+          //   message:  " 已删除成功"
+          // });
+          this.tshow_listData = res.data.data;
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      });
     },
     //导出
     recharge_export() {
@@ -463,12 +476,12 @@ export default {
 };
 </script>
 <style scoped>
-.flex_button{
+.flex_button {
   float: right;
   width: 420px;
-  margin:10px 0;
-  display:flex;
+  margin: 10px 0;
+  display: flex;
   align-items: center;
-  justify-content:space-around;
+  justify-content: space-around;
 }
 </style>

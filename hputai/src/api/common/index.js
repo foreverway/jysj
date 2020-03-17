@@ -363,7 +363,6 @@ class_transfer_info(params) {
     return shuju.getdata(url, params)
   },
   sale_statistics(params) {
-    //此处的params是用户的账户id，用于获取用户的信息
     let url = '/api/api_sale_statistics'
     return shuju.getdata(url, params)
   },
