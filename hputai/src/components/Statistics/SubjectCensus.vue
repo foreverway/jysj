@@ -774,14 +774,12 @@ export default {
         })
         .then(res => {
           if (res.data.code == 1) {
-            console.log(res.data.data);
             this.lastYear = [
               res.data.data[0].old_student_amount * 1,
               res.data.data[1].old_teacher_amount * 1,
               res.data.data[2].old_profit * 1,
               res.data.data[3].old_ratio_amount * 1
             ];
-            // console.log(res.data.data[1].teacher_amount,res.data.data[1].teacher_amount.replace(',','').toString())
             this.thisYear = [
               res.data.data[0].student_amount
                 .toString()
@@ -841,7 +839,11 @@ export default {
     },
     drawChart_system() {
       let myChart = echarts.init(document.getElementById("main_system"));
-      var colors = ["rgba(22, 155, 213, 1)", "rgba(22, 155, 213, 1)", "rgba(22, 155, 213, 1)"];
+      var colors = [
+        "rgba(22, 155, 213, 1)",
+        "rgba(22, 155, 213, 1)",
+        "rgba(22, 155, 213, 1)"
+      ];
       // 指定图表的配置项和数据
       myChart.setOption({
         legend: {},
@@ -893,7 +895,6 @@ export default {
               res.data.data[1].old_teacher_amount * 1,
               res.data.data[2].old_profit * 1,
               res.data.data[3].old_ratio_amount * 1
-
             ];
             this.thisYear = [
               res.data.data[0].student_amount
@@ -921,44 +922,49 @@ export default {
                   axisTick: {
                     alignWithLabel: true
                   },
-                  data: ["确认营业收入", "确认课程成本", "确认毛利金额" ,  "确认课程成本占比%"]
+                  data: [
+                    "确认营业收入",
+                    "确认课程成本",
+                    "确认毛利金额",
+                    "确认课程成本占比%"
+                  ]
                 }
               ],
 
               yAxis: [
-                // {
-                //   name: "月份情况"
-                // }
-                   {
-            type: 'value',
-            name: '月份情况',
-            // axisLabel: {
-            //     formatter: 'value'
-            // }
-        },
-        {
-            type: 'value',
-            name: '占比',
-            min: 0,
-            max: 100,
-            interval: 20,
-            yAxisIndex: 3,
-            axisLabel: {
-                formatter: '{value} %'
-            }
-        }
+                {
+                  type: "value",
+                  name: "月份情况"
+                },
+                {
+                  type: "value",
+                  name: "占比",
+                  axisLabel: {
+                    formatter: "{value} %"
+                  }
+                }
               ],
               series: [
                 {
-                  name: "今年",
+                  name: "确定营业收入",
                   type: "bar",
-                  yAxisIndex: 0,
                   data: this.thisYear
                 },
                 {
-                  name: "去年",
+                  name: "确定课程成本",
                   type: "bar",
-                  data: this.lastYear
+                  data: this.thisYear
+                },
+                {
+                  name: "确认毛利金额",
+                  type: "bar",
+                  data: this.thisYear
+                },
+                {
+                  name: "确认课程成本占比%",
+                  yAxisIndex: 1,
+                  type: "bar",
+                  data: this.thisYear
                 }
               ]
             });

@@ -476,8 +476,9 @@ export default {
             label: {
               show: true,
               position: "right",
+            
             }
-          },
+          }
           // label: {
           //   normal: {
           //     show: true,
@@ -530,7 +531,7 @@ export default {
             label: {
               show: true,
               position: "right",
-              formatter: '{c}%'
+              formatter: "{@0}%"
             }
           }
         ],
@@ -543,8 +544,8 @@ export default {
           this.top15_3 = [];
           for (let i = 0; i < res.data.data.length; i++) {
             this.top15_3[i] = [];
-            
-            this.top15_3[i].push(res.data.data[i].complete_classhour );
+
+            this.top15_3[i].push(res.data.data[i].complete_classhour);
             this.top15_3[i].push(res.data.data[i].teacher_name);
           }
           myLine.setOption({
@@ -578,7 +579,8 @@ export default {
             },
             label: {
               show: true,
-              position: "right"
+              position: "right",
+                formatter: "{@0}%"
             }
           }
         ],

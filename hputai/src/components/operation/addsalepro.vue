@@ -9,7 +9,11 @@
     <el-button type="primary" v-show="money>0" @click="copyUrl">生成并复制充值链接</el-button>-->
     <el-form ref="form" :model="form" label-width="120px" :rules="rules" class="demo-ruleForm">
       <el-form-item label="数据获取时间" style="width:335px" prop="dtime">
-        <el-date-picker type="date" placeholder="选择日期" v-model="form.dtime"></el-date-picker>
+        <el-date-picker
+         type="date" 
+         value-format="yyyy-MM-dd" 
+         placeholder="选择日期"
+          v-model="form.dtime"></el-date-picker>
       </el-form-item>
 
       <el-form-item label="跟进人" style="width:335px" prop="follow_man">
@@ -271,7 +275,6 @@ export default {
         dtime: [
           {
             required: true,
-            type: "date",
             message: "数据获取时间",
             trigger: "change"
           }
