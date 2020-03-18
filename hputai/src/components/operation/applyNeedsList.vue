@@ -683,6 +683,16 @@ this.seeapplytable =res.data.data
                 let parms = {
                   app_id: b.id
                 };
+    this.fullscreenLoading = true;
+      const loading = this.$loading({
+          lock: true,
+          text: '稍等片刻，正在获取确认结果',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        setTimeout(() => {
+            loading.close();
+        }, 2000);
                 this.$apis.menber.application_operate(parms).then(res => {
                   if (res.data.code == 1) {
                     this.$message({
@@ -695,6 +705,7 @@ this.seeapplytable =res.data.data
                   }
                 });
               })
+
               .catch(() => {
                 this.$message({
                   type: "info",

@@ -150,8 +150,8 @@
     </div>
 
     <div class="session1">
-      <div class="echarts_1" style="margin:20px 0;">
-        <div style="width:48%;height:450px;" class="bgc">
+      <!-- <div class="echarts_1" style="margin:20px 0;"> -->
+        <div style="height:450px;" class="bgc">
           <div class="block" style="margin: 0 auto;width:446px;">
             <el-date-picker
               style="width:42%;"
@@ -175,7 +175,7 @@
           <div id="main_system" style="width:100%;height:400px;"></div>
         </div>
 
-        <div style="width:48%;height:450px;" class="bgc">
+        <div style="height:450px;" class="bgc">
           <div class="block" style="margin: 0 auto;width:446px;">
             <el-date-picker
               style="width:42%;"
@@ -199,7 +199,7 @@
           <div id="main_student" style="width:100%;height:400px;"></div>
         </div>
       </div>
-    </div>
+    <!-- </div> -->
   </div>
 </template>
 <script>
@@ -891,10 +891,11 @@ export default {
         .then(res => {
           if (res.data.code == 1) {
             this.lastYear = [
-              res.data.data[0].old_student_amount * 1,
-              res.data.data[1].old_teacher_amount * 1,
-              res.data.data[2].old_profit * 1,
-              res.data.data[3].old_ratio_amount * 1
+              // res.data.data[0].old_student_amount * 1,
+              // res.data.data[1].old_teacher_amount * 1,
+              // res.data.data[2].old_profit * 1,
+              323456,576765,754333
+              // res.data.data[3].old_ratio_amount * 1
             ];
             this.thisYear = [
               res.data.data[0].student_amount
@@ -909,12 +910,15 @@ export default {
                 .toString()
                 .replace(",", "")
                 .toString() * 1,
-              res.data.data[3].ratio_amount
+             
+            ];
+           this.lastYear_ratio =[0,0,0,res.data.data[3].old_ratio_amount * 1]
+          //  
+           this.thisYear_ratio =[0,0,0,     res.data.data[3].ratio_amount
                 .toString()
                 .replace(",", "")
-                .toString() * 1
-            ];
-
+                .toString() * 1]
+       console.log(this.lastYear,this.thisYear,this.lastYear_ratio,this.thisYear_ratio )
             myChart.setOption({
               xAxis: [
                 {
@@ -923,10 +927,10 @@ export default {
                     alignWithLabel: true
                   },
                   data: [
-                    "确认营业收入",
-                    "确认课程成本",
+                    "确定营业收入",
+                    "确定课程成本",
                     "确认毛利金额",
-                    "确认课程成本占比%"
+                    "确认课程成本占比"
                   ]
                 }
               ],
@@ -946,25 +950,26 @@ export default {
               ],
               series: [
                 {
-                  name: "确定营业收入",
+                  name: "去年",
+                  type: "bar",
+                  data: this.lastYear
+                },
+                {
+                  name: "今年",
                   type: "bar",
                   data: this.thisYear
                 },
                 {
-                  name: "确定课程成本",
+                  name: "去年占比",
+                   yAxisIndex: 1,
                   type: "bar",
-                  data: this.thisYear
+                  data: this.lastYear_ratio
                 },
                 {
-                  name: "确认毛利金额",
-                  type: "bar",
-                  data: this.thisYear
-                },
-                {
-                  name: "确认课程成本占比%",
+                  name: "今年占比",
                   yAxisIndex: 1,
                   type: "bar",
-                  data: this.thisYear
+                  data: this.thisYear_ratio
                 }
               ]
             });

@@ -1179,7 +1179,7 @@
   font-size: 14px;
   border-radius: 4px; }
   .el-button + .el-button {
-    margin-left: 10px; }
+    margin-left: 0px; }
   .el-button.is-round {
     padding: 12px 20px; }
   .el-button:hover, .el-button:focus {
